@@ -19,3 +19,4 @@ DerivedData
 Carthage/
 Pods/
 Podfile.lock
+*.xcworkspace

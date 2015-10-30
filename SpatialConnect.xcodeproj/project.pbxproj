@@ -199,6 +199,7 @@
 		5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */; };
 		5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */; };
 		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
+		564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
 		DF02A838B0370B96D3EAC5A3 /* libPods-SpatialConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */; };
 		E69A3564EB7B3CEE3B67F262 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -415,6 +416,7 @@
 		5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
 		5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_500_11_20m.json; sourceTree = "<group>"; };
 		8F2710B15F6E9F16E1932224 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SpatialConnectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4FE33BD43CC3F9192E57448 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -659,6 +661,7 @@
 		5649B4A11BE27C6A009947EF /* SpatialConnectTests */ = {
 			isa = PBXGroup;
 			children = (
+				564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */,
 				5649B4AF1BE28079009947EF /* all.geojson */,
 				5649B4B01BE28079009947EF /* feature.json */,
 				5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */,
@@ -913,6 +916,7 @@
 				5649B4C51BE28079009947EF /* feature.json in Resources */,
 				5649B4D31BE28079009947EF /* simple.json in Resources */,
 				5649B4C61BE28079009947EF /* gz_2010_us_050_00_500k.json in Resources */,
+				564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */,
 				5649B4D61BE28079009947EF /* tests.scfg in Resources */,
 				5649B4C41BE28079009947EF /* all.geojson in Resources */,
 			);
