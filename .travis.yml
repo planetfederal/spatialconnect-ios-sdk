@@ -1,0 +1,5 @@
+language: objective-c
+xcode_project: SpatialConnect.xcodeproj
+xcode_scheme: SpatialConnectTests
+
+osx_image: xcode7.1

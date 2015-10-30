@@ -1,0 +1,1300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D7D9D727DECA781AFD4CE68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
+		5649B4971BE27C6A009947EF /* SpatialConnect-Prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4961BE27C6A009947EF /* SpatialConnect-Prefix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5649B49E1BE27C6A009947EF /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
+		5649B4AE1BE28011009947EF /* Vendor in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4AD1BE28011009947EF /* Vendor */; };
+		5649B4C41BE28079009947EF /* all.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4AF1BE28079009947EF /* all.geojson */; };
+		5649B4C51BE28079009947EF /* feature.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4B01BE28079009947EF /* feature.json */; };
+		5649B4C61BE28079009947EF /* gz_2010_us_050_00_500k.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */; };
+		5649B4C71BE28079009947EF /* LocalFilterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B21BE28079009947EF /* LocalFilterTests.m */; };
+		5649B4C81BE28079009947EF /* SCCreateFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B31BE28079009947EF /* SCCreateFeature.m */; };
+		5649B4C91BE28079009947EF /* SCDeleteFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B41BE28079009947EF /* SCDeleteFeature.m */; };
+		5649B4CA1BE28079009947EF /* SCGeoJSONParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B51BE28079009947EF /* SCGeoJSONParserTest.m */; };
+		5649B4CB1BE28079009947EF /* SCGeoJSONWriterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B61BE28079009947EF /* SCGeoJSONWriterTest.m */; };
+		5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B81BE28079009947EF /* SCGeometryHelper.m */; };
+		5649B4CD1BE28079009947EF /* SCMultiPointTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B91BE28079009947EF /* SCMultiPointTest.m */; };
+		5649B4CE1BE28079009947EF /* SCMultiPolygonTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BA1BE28079009947EF /* SCMultiPolygonTest.m */; };
+		5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BB1BE28079009947EF /* SCPointTest.m */; };
+		5649B4D01BE28079009947EF /* SCPolygonTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BC1BE28079009947EF /* SCPolygonTest.m */; };
+		5649B4D11BE28079009947EF /* SCQueryFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BD1BE28079009947EF /* SCQueryFilterTest.m */; };
+		5649B4D21BE28079009947EF /* SCUpdateFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BE1BE28079009947EF /* SCUpdateFeature.m */; };
+		5649B4D31BE28079009947EF /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4BF1BE28079009947EF /* simple.json */; };
+		5649B4D41BE28079009947EF /* SpatialConnectAutoConfigTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C01BE28079009947EF /* SpatialConnectAutoConfigTest.m */; };
+		5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
+		5649B4D61BE28079009947EF /* tests.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4C31BE28079009947EF /* tests.scfg */; };
+		5649B57C1BE280D6009947EF /* GeoJSONAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4D71BE280D5009947EF /* GeoJSONAdapter.h */; };
+		5649B57D1BE280D6009947EF /* GeoJSONAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4D81BE280D5009947EF /* GeoJSONAdapter.m */; };
+		5649B57E1BE280D6009947EF /* GeoJSONStorageConnector.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */; };
+		5649B57F1BE280D6009947EF /* GeoJSONStorageConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */; };
+		5649B5801BE280D6009947EF /* GeoJSONStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4DB1BE280D5009947EF /* GeoJSONStore.h */; };
+		5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4DC1BE280D5009947EF /* GeoJSONStore.m */; };
+		5649B5841BE280D6009947EF /* SCBoundingBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4DF1BE280D5009947EF /* SCBoundingBox.h */; };
+		5649B5851BE280D6009947EF /* SCBoundingBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E01BE280D5009947EF /* SCBoundingBox.m */; };
+		5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E11BE280D5009947EF /* SCBoundingBox+MapKit.h */; };
+		5649B5871BE280D6009947EF /* SCBoundingBox+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E21BE280D5009947EF /* SCBoundingBox+MapKit.m */; };
+		5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E31BE280D5009947EF /* SCComparisonPredicate.h */; };
+		5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E41BE280D5009947EF /* SCComparisonPredicate.m */; };
+		5649B58A1BE280D6009947EF /* SCCompoundPredicate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E51BE280D5009947EF /* SCCompoundPredicate.h */; };
+		5649B58B1BE280D6009947EF /* SCCompoundPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E61BE280D5009947EF /* SCCompoundPredicate.m */; };
+		5649B58C1BE280D6009947EF /* SCDataAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E71BE280D5009947EF /* SCDataAdapter.h */; };
+		5649B58D1BE280D6009947EF /* SCDataAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E81BE280D5009947EF /* SCDataAdapter.m */; };
+		5649B58E1BE280D6009947EF /* SCDataService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E91BE280D5009947EF /* SCDataService.h */; };
+		5649B58F1BE280D6009947EF /* SCDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4EA1BE280D5009947EF /* SCDataService.m */; };
+		5649B5901BE280D6009947EF /* SCDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4EB1BE280D5009947EF /* SCDataStore.h */; };
+		5649B5911BE280D6009947EF /* SCDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4EC1BE280D5009947EF /* SCDataStore.m */; };
+		5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4ED1BE280D5009947EF /* SCDataStoreLifeCycle.h */; };
+		5649B5931BE280D6009947EF /* SCFileUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4EE1BE280D5009947EF /* SCFileUtils.h */; };
+		5649B5941BE280D6009947EF /* SCFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4EF1BE280D5009947EF /* SCFileUtils.m */; };
+		5649B5951BE280D6009947EF /* SCFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4F01BE280D5009947EF /* SCFilter.h */; };
+		5649B5961BE280D6009947EF /* SCFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4F11BE280D5009947EF /* SCFilter.m */; };
+		5649B5971BE280D6009947EF /* SCFilterBetween.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4F21BE280D5009947EF /* SCFilterBetween.h */; };
+		5649B5981BE280D6009947EF /* SCFilterBetween.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4F31BE280D5009947EF /* SCFilterBetween.m */; };
+		5649B5991BE280D6009947EF /* SCFilterEqual.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4F41BE280D5009947EF /* SCFilterEqual.h */; };
+		5649B59A1BE280D6009947EF /* SCFilterEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4F51BE280D5009947EF /* SCFilterEqual.m */; };
+		5649B59B1BE280D6009947EF /* SCFilterGreaterThan.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4F61BE280D5009947EF /* SCFilterGreaterThan.h */; };
+		5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4F71BE280D5009947EF /* SCFilterGreaterThan.m */; };
+		5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4F81BE280D5009947EF /* SCFilterGreaterThanEqual.h */; };
+		5649B59E1BE280D6009947EF /* SCFilterGreaterThanEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4F91BE280D5009947EF /* SCFilterGreaterThanEqual.m */; };
+		5649B59F1BE280D6009947EF /* SCFilterIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4FA1BE280D5009947EF /* SCFilterIn.h */; };
+		5649B5A01BE280D6009947EF /* SCFilterIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4FB1BE280D5009947EF /* SCFilterIn.m */; };
+		5649B5A11BE280D6009947EF /* SCFilterLessThan.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4FC1BE280D5009947EF /* SCFilterLessThan.h */; };
+		5649B5A21BE280D6009947EF /* SCFilterLessThan.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4FD1BE280D5009947EF /* SCFilterLessThan.m */; };
+		5649B5A31BE280D6009947EF /* SCFilterLessThanEqual.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4FE1BE280D5009947EF /* SCFilterLessThanEqual.h */; };
+		5649B5A41BE280D6009947EF /* SCFilterLessThanEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4FF1BE280D5009947EF /* SCFilterLessThanEqual.m */; };
+		5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5001BE280D5009947EF /* SCFilterLike.h */; };
+		5649B5A61BE280D6009947EF /* SCFilterLike.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5011BE280D5009947EF /* SCFilterLike.m */; };
+		5649B5A71BE280D6009947EF /* SCFilterNotBetween.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5021BE280D5009947EF /* SCFilterNotBetween.h */; };
+		5649B5A81BE280D6009947EF /* SCFilterNotBetween.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5031BE280D5009947EF /* SCFilterNotBetween.m */; };
+		5649B5A91BE280D6009947EF /* SCFilterNotEqual.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5041BE280D5009947EF /* SCFilterNotEqual.h */; };
+		5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5051BE280D5009947EF /* SCFilterNotEqual.m */; };
+		5649B5AB1BE280D6009947EF /* SCFilterNotIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5061BE280D5009947EF /* SCFilterNotIn.h */; };
+		5649B5AC1BE280D6009947EF /* SCFilterNotIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5071BE280D5009947EF /* SCFilterNotIn.m */; };
+		5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5081BE280D5009947EF /* SCFilterNotLike.h */; };
+		5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5091BE280D5009947EF /* SCFilterNotLike.m */; };
+		5649B5AF1BE280D6009947EF /* SCFilterProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B50A1BE280D5009947EF /* SCFilterProtocol.h */; };
+		5649B5B01BE280D6009947EF /* SCGeoFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B50B1BE280D5009947EF /* SCGeoFilter.h */; };
+		5649B5B11BE280D6009947EF /* SCGeoFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B50C1BE280D5009947EF /* SCGeoFilter.m */; };
+		5649B5B21BE280D6009947EF /* SCGeoFilterContains.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B50D1BE280D5009947EF /* SCGeoFilterContains.h */; };
+		5649B5B31BE280D6009947EF /* SCGeoFilterContains.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B50E1BE280D5009947EF /* SCGeoFilterContains.m */; };
+		5649B5B41BE280D6009947EF /* SCGeoFilterDisjoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B50F1BE280D5009947EF /* SCGeoFilterDisjoint.h */; };
+		5649B5B51BE280D6009947EF /* SCGeoFilterDisjoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5101BE280D5009947EF /* SCGeoFilterDisjoint.m */; };
+		5649B5B61BE280D6009947EF /* SCGeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5111BE280D5009947EF /* SCGeoJSON.h */; };
+		5649B5B71BE280D6009947EF /* SCGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5121BE280D5009947EF /* SCGeoJSON.m */; };
+		5649B5B81BE280D6009947EF /* SCGeoJSONExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5131BE280D5009947EF /* SCGeoJSONExtensions.h */; };
+		5649B5B91BE280D6009947EF /* SCGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5141BE280D5009947EF /* SCGeometry.h */; };
+		5649B5BA1BE280D6009947EF /* SCGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5151BE280D5009947EF /* SCGeometry.m */; };
+		5649B5BB1BE280D6009947EF /* SCGeometry+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5161BE280D5009947EF /* SCGeometry+GeoJSON.h */; };
+		5649B5BC1BE280D6009947EF /* SCGeometry+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5171BE280D5009947EF /* SCGeometry+GeoJSON.m */; };
+		5649B5BD1BE280D6009947EF /* SCGeometry+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5181BE280D5009947EF /* SCGeometry+MapKit.h */; };
+		5649B5BE1BE280D6009947EF /* SCGeometry+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5191BE280D5009947EF /* SCGeometry+MapKit.m */; };
+		5649B5BF1BE280D6009947EF /* SCGeometryCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B51A1BE280D5009947EF /* SCGeometryCollection.h */; };
+		5649B5C01BE280D6009947EF /* SCGeometryCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B51B1BE280D5009947EF /* SCGeometryCollection.m */; };
+		5649B5C11BE280D6009947EF /* SCGeometryCollection+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B51C1BE280D5009947EF /* SCGeometryCollection+GeoJSON.h */; };
+		5649B5C21BE280D6009947EF /* SCGeometryCollection+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B51D1BE280D5009947EF /* SCGeometryCollection+GeoJSON.m */; };
+		5649B5C31BE280D6009947EF /* SCGeometryCollection+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B51E1BE280D5009947EF /* SCGeometryCollection+MapKit.h */; };
+		5649B5C41BE280D6009947EF /* SCGeometryCollection+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B51F1BE280D6009947EF /* SCGeometryCollection+MapKit.m */; };
+		5649B5C51BE280D6009947EF /* SCJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5201BE280D6009947EF /* SCJavascriptBridge.h */; };
+		5649B5C61BE280D6009947EF /* SCJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5211BE280D6009947EF /* SCJavascriptBridge.m */; };
+		5649B5C71BE280D6009947EF /* SCJavascriptBridgeAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5221BE280D6009947EF /* SCJavascriptBridgeAPI.h */; };
+		5649B5C81BE280D6009947EF /* SCJavascriptBridgeAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5231BE280D6009947EF /* SCJavascriptBridgeAPI.m */; };
+		5649B5C91BE280D6009947EF /* SCJavascriptCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5241BE280D6009947EF /* SCJavascriptCommands.h */; };
+		5649B5CA1BE280D6009947EF /* SCLinearRing.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5251BE280D6009947EF /* SCLinearRing.h */; };
+		5649B5CB1BE280D6009947EF /* SCLinearRing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5261BE280D6009947EF /* SCLinearRing.m */; };
+		5649B5CC1BE280D6009947EF /* SCLinearRing+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5271BE280D6009947EF /* SCLinearRing+GeoJSON.h */; };
+		5649B5CD1BE280D6009947EF /* SCLinearRing+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5281BE280D6009947EF /* SCLinearRing+GeoJSON.m */; };
+		5649B5CE1BE280D6009947EF /* SCLinearRing+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5291BE280D6009947EF /* SCLinearRing+MapKit.h */; };
+		5649B5CF1BE280D6009947EF /* SCLinearRing+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B52A1BE280D6009947EF /* SCLinearRing+MapKit.m */; };
+		5649B5D01BE280D6009947EF /* SCLineString.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B52B1BE280D6009947EF /* SCLineString.h */; };
+		5649B5D11BE280D6009947EF /* SCLineString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B52C1BE280D6009947EF /* SCLineString.m */; };
+		5649B5D21BE280D6009947EF /* SCLineString+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B52D1BE280D6009947EF /* SCLineString+GeoJSON.h */; };
+		5649B5D31BE280D6009947EF /* SCLineString+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B52E1BE280D6009947EF /* SCLineString+GeoJSON.m */; };
+		5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B52F1BE280D6009947EF /* SCLineString+MapKit.h */; };
+		5649B5D51BE280D6009947EF /* SCLineString+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5301BE280D6009947EF /* SCLineString+MapKit.m */; };
+		5649B5D61BE280D6009947EF /* SCLocalWebApp.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5311BE280D6009947EF /* SCLocalWebApp.h */; };
+		5649B5D71BE280D6009947EF /* SCLocalWebApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5321BE280D6009947EF /* SCLocalWebApp.m */; };
+		5649B5D81BE280D6009947EF /* SCLoggingAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5331BE280D6009947EF /* SCLoggingAssertionHandler.h */; };
+		5649B5D91BE280D6009947EF /* SCLoggingAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5341BE280D6009947EF /* SCLoggingAssertionHandler.m */; };
+		5649B5DA1BE280D6009947EF /* SCMapKitExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5351BE280D6009947EF /* SCMapKitExtensions.h */; };
+		5649B5DB1BE280D6009947EF /* SCMultiLineString.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5361BE280D6009947EF /* SCMultiLineString.h */; };
+		5649B5DC1BE280D6009947EF /* SCMultiLineString.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5371BE280D6009947EF /* SCMultiLineString.m */; };
+		5649B5DD1BE280D6009947EF /* SCMultiLineString+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5381BE280D6009947EF /* SCMultiLineString+GeoJSON.h */; };
+		5649B5DE1BE280D6009947EF /* SCMultiLineString+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5391BE280D6009947EF /* SCMultiLineString+GeoJSON.m */; };
+		5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B53A1BE280D6009947EF /* SCMultiLineString+MapKit.h */; };
+		5649B5E01BE280D6009947EF /* SCMultiLineString+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B53B1BE280D6009947EF /* SCMultiLineString+MapKit.m */; };
+		5649B5E11BE280D6009947EF /* SCMultiPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B53C1BE280D6009947EF /* SCMultiPoint.h */; };
+		5649B5E21BE280D6009947EF /* SCMultiPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B53D1BE280D6009947EF /* SCMultiPoint.m */; };
+		5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B53E1BE280D6009947EF /* SCMultiPoint+GeoJSON.h */; };
+		5649B5E41BE280D6009947EF /* SCMultiPoint+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B53F1BE280D6009947EF /* SCMultiPoint+GeoJSON.m */; };
+		5649B5E51BE280D6009947EF /* SCMultiPoint+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5401BE280D6009947EF /* SCMultiPoint+MapKit.h */; };
+		5649B5E61BE280D6009947EF /* SCMultiPoint+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5411BE280D6009947EF /* SCMultiPoint+MapKit.m */; };
+		5649B5E71BE280D6009947EF /* SCMultiPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5421BE280D6009947EF /* SCMultiPolygon.h */; };
+		5649B5E81BE280D6009947EF /* SCMultiPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5431BE280D6009947EF /* SCMultiPolygon.m */; };
+		5649B5E91BE280D6009947EF /* SCMultiPolygon+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5441BE280D6009947EF /* SCMultiPolygon+GeoJSON.h */; };
+		5649B5EA1BE280D6009947EF /* SCMultiPolygon+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5451BE280D6009947EF /* SCMultiPolygon+GeoJSON.m */; };
+		5649B5EB1BE280D6009947EF /* SCMultiPolygon+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5461BE280D6009947EF /* SCMultiPolygon+MapKit.h */; };
+		5649B5EC1BE280D6009947EF /* SCMultiPolygon+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5471BE280D6009947EF /* SCMultiPolygon+MapKit.m */; };
+		5649B5ED1BE280D6009947EF /* SCNetworkService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5481BE280D6009947EF /* SCNetworkService.h */; };
+		5649B5EE1BE280D6009947EF /* SCNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5491BE280D6009947EF /* SCNetworkService.m */; };
+		5649B5EF1BE280D6009947EF /* SCOpenStreetMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B54A1BE280D6009947EF /* SCOpenStreetMapSource.h */; };
+		5649B5F01BE280D6009947EF /* SCOpenStreetMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B54B1BE280D6009947EF /* SCOpenStreetMapSource.m */; };
+		5649B5F11BE280D6009947EF /* SCPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B54C1BE280D6009947EF /* SCPoint.h */; };
+		5649B5F21BE280D6009947EF /* SCPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B54D1BE280D6009947EF /* SCPoint.m */; };
+		5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B54E1BE280D6009947EF /* SCPoint+GeoJSON.h */; };
+		5649B5F41BE280D6009947EF /* SCPoint+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B54F1BE280D6009947EF /* SCPoint+GeoJSON.m */; };
+		5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5501BE280D6009947EF /* SCPoint+MapKit.h */; };
+		5649B5F61BE280D6009947EF /* SCPoint+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5511BE280D6009947EF /* SCPoint+MapKit.m */; };
+		5649B5F71BE280D6009947EF /* SCPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5521BE280D6009947EF /* SCPolygon.h */; };
+		5649B5F81BE280D6009947EF /* SCPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5531BE280D6009947EF /* SCPolygon.m */; };
+		5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5541BE280D6009947EF /* SCPolygon+GeoJSON.h */; };
+		5649B5FA1BE280D6009947EF /* SCPolygon+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5551BE280D6009947EF /* SCPolygon+GeoJSON.m */; };
+		5649B5FB1BE280D6009947EF /* SCPolygon+MapKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5561BE280D6009947EF /* SCPolygon+MapKit.h */; };
+		5649B5FC1BE280D6009947EF /* SCPolygon+MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5571BE280D6009947EF /* SCPolygon+MapKit.m */; };
+		5649B5FD1BE280D6009947EF /* SCPredicate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5581BE280D6009947EF /* SCPredicate.h */; };
+		5649B5FE1BE280D6009947EF /* SCPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5591BE280D6009947EF /* SCPredicate.m */; };
+		5649B5FF1BE280D6009947EF /* SCPrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55A1BE280D6009947EF /* SCPrefixHeader.pch */; };
+		5649B6001BE280D6009947EF /* SCQueryFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55B1BE280D6009947EF /* SCQueryFilter.h */; };
+		5649B6011BE280D6009947EF /* SCQueryFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B55C1BE280D6009947EF /* SCQueryFilter.m */; };
+		5649B6021BE280D6009947EF /* SCRasterService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55D1BE280D6009947EF /* SCRasterService.h */; };
+		5649B6031BE280D6009947EF /* SCRasterService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B55E1BE280D6009947EF /* SCRasterService.m */; };
+		5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55F1BE280D6009947EF /* SCRasterSource.h */; };
+		5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5601BE280D6009947EF /* SCRasterSource.m */; };
+		5649B6061BE280D6009947EF /* SCRasterTileStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5611BE280D6009947EF /* SCRasterTileStore.h */; };
+		5649B6071BE280D6009947EF /* SCSensorService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5621BE280D6009947EF /* SCSensorService.h */; };
+		5649B6081BE280D6009947EF /* SCSensorService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5631BE280D6009947EF /* SCSensorService.m */; };
+		5649B6091BE280D6009947EF /* SCService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5641BE280D6009947EF /* SCService.h */; };
+		5649B60A1BE280D6009947EF /* SCService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5651BE280D6009947EF /* SCService.m */; };
+		5649B60B1BE280D6009947EF /* SCServiceDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5661BE280D6009947EF /* SCServiceDelegate.h */; };
+		5649B60C1BE280D6009947EF /* SCServiceLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5671BE280D6009947EF /* SCServiceLifecycle.h */; };
+		5649B60D1BE280D6009947EF /* SCServiceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5681BE280D6009947EF /* SCServiceManager.h */; };
+		5649B60E1BE280D6009947EF /* SCServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5691BE280D6009947EF /* SCServiceManager.m */; };
+		5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B56A1BE280D6009947EF /* SCSpatialFeature.h */; };
+		5649B6101BE280D6009947EF /* SCSpatialFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B56B1BE280D6009947EF /* SCSpatialFeature.m */; };
+		5649B6111BE280D6009947EF /* SCSpatialStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B56C1BE280D6009947EF /* SCSpatialStore.h */; };
+		5649B6121BE280D6009947EF /* SCStoreConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B56D1BE280D6009947EF /* SCStoreConfig.h */; };
+		5649B6131BE280D6009947EF /* SCStoreConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B56E1BE280D6009947EF /* SCStoreConfig.m */; };
+		5649B6141BE280D6009947EF /* SCStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B56F1BE280D6009947EF /* SCStyle.h */; };
+		5649B6151BE280D6009947EF /* SCStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5701BE280D6009947EF /* SCStyle.m */; };
+		5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5711BE280D6009947EF /* SCTileMapSource.h */; };
+		5649B6171BE280D6009947EF /* SCTileMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5721BE280D6009947EF /* SCTileMapSource.m */; };
+		5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5731BE280D6009947EF /* SCTileOverlay.h */; };
+		5649B6191BE280D6009947EF /* SCTileOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5741BE280D6009947EF /* SCTileOverlay.m */; };
+		5649B61A1BE280D6009947EF /* SCTileOverlayRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5751BE280D6009947EF /* SCTileOverlayRenderer.h */; };
+		5649B61B1BE280D6009947EF /* SCTileOverlayRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5761BE280D6009947EF /* SCTileOverlayRenderer.m */; };
+		5649B61C1BE280D6009947EF /* SCUserPrefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5771BE280D6009947EF /* SCUserPrefs.h */; };
+		5649B61D1BE280D6009947EF /* SCUserPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5781BE280D6009947EF /* SCUserPrefs.m */; };
+		5649B61E1BE280D6009947EF /* SCWebAppZipLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5791BE280D6009947EF /* SCWebAppZipLoader.h */; };
+		5649B61F1BE280D6009947EF /* SCWebAppZipLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */; };
+		5649B6201BE280D6009947EF /* SpatialConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B57B1BE280D6009947EF /* SpatialConnect.m */; };
+		5649B6221BE283EC009947EF /* SpatialConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B6211BE283EC009947EF /* SpatialConnect.h */; };
+		5649B6631BE2A00E009947EF /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B65B1BE2A00E009947EF /* JSONKit.h */; };
+		5649B6641BE2A00E009947EF /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B65C1BE2A00E009947EF /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */; };
+		5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */; };
+		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
+		DF02A838B0370B96D3EAC5A3 /* libPods-SpatialConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */; };
+		E69A3564EB7B3CEE3B67F262 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5649B49F1BE27C6A009947EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5649B48A1BE27C6A009947EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5649B4921BE27C6A009947EF;
+			remoteInfo = SpatialConnect;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		38EFC21C69482B839F799B4C /* Pods-SpatialConnectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpatialConnectTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpatialConnectTests/Pods-SpatialConnectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		51459E170E45B8FA2EA8CD4E /* Pods-SpatialConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpatialConnectTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpatialConnectTests/Pods-SpatialConnectTests.release.xcconfig"; sourceTree = "<group>"; };
+		55DA13B20A74E1C7FBC7E0D6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		5649B4931BE27C6A009947EF /* SpatialConnect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SpatialConnect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5649B4961BE27C6A009947EF /* SpatialConnect-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SpatialConnect-Prefix.h"; sourceTree = "<group>"; };
+		5649B4981BE27C6A009947EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5649B4A41BE27C6A009947EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5649B4AD1BE28011009947EF /* Vendor */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vendor; path = "/Users/wesr/Development/boundless/SC/spatialconnect-ios/SpatialConnect/Vendor"; sourceTree = "<absolute>"; };
+		5649B4AF1BE28079009947EF /* all.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = all.geojson; sourceTree = "<group>"; };
+		5649B4B01BE28079009947EF /* feature.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feature.json; sourceTree = "<group>"; };
+		5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_050_00_500k.json; sourceTree = "<group>"; };
+		5649B4B21BE28079009947EF /* LocalFilterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalFilterTests.m; sourceTree = "<group>"; };
+		5649B4B31BE28079009947EF /* SCCreateFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCCreateFeature.m; sourceTree = "<group>"; };
+		5649B4B41BE28079009947EF /* SCDeleteFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDeleteFeature.m; sourceTree = "<group>"; };
+		5649B4B51BE28079009947EF /* SCGeoJSONParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoJSONParserTest.m; sourceTree = "<group>"; };
+		5649B4B61BE28079009947EF /* SCGeoJSONWriterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoJSONWriterTest.m; sourceTree = "<group>"; };
+		5649B4B71BE28079009947EF /* SCGeometryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeometryHelper.h; sourceTree = "<group>"; };
+		5649B4B81BE28079009947EF /* SCGeometryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeometryHelper.m; sourceTree = "<group>"; };
+		5649B4B91BE28079009947EF /* SCMultiPointTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMultiPointTest.m; sourceTree = "<group>"; };
+		5649B4BA1BE28079009947EF /* SCMultiPolygonTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMultiPolygonTest.m; sourceTree = "<group>"; };
+		5649B4BB1BE28079009947EF /* SCPointTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPointTest.m; sourceTree = "<group>"; };
+		5649B4BC1BE28079009947EF /* SCPolygonTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPolygonTest.m; sourceTree = "<group>"; };
+		5649B4BD1BE28079009947EF /* SCQueryFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCQueryFilterTest.m; sourceTree = "<group>"; };
+		5649B4BE1BE28079009947EF /* SCUpdateFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCUpdateFeature.m; sourceTree = "<group>"; };
+		5649B4BF1BE28079009947EF /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
+		5649B4C01BE28079009947EF /* SpatialConnectAutoConfigTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnectAutoConfigTest.m; sourceTree = "<group>"; };
+		5649B4C11BE28079009947EF /* SpatialConnectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectHelper.h; sourceTree = "<group>"; };
+		5649B4C21BE28079009947EF /* SpatialConnectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnectHelper.m; sourceTree = "<group>"; };
+		5649B4C31BE28079009947EF /* tests.scfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tests.scfg; sourceTree = "<group>"; };
+		5649B4D71BE280D5009947EF /* GeoJSONAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONAdapter.h; sourceTree = "<group>"; };
+		5649B4D81BE280D5009947EF /* GeoJSONAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONAdapter.m; sourceTree = "<group>"; };
+		5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONStorageConnector.h; sourceTree = "<group>"; };
+		5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONStorageConnector.m; sourceTree = "<group>"; };
+		5649B4DB1BE280D5009947EF /* GeoJSONStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONStore.h; sourceTree = "<group>"; };
+		5649B4DC1BE280D5009947EF /* GeoJSONStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONStore.m; sourceTree = "<group>"; };
+		5649B4DF1BE280D5009947EF /* SCBoundingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCBoundingBox.h; sourceTree = "<group>"; };
+		5649B4E01BE280D5009947EF /* SCBoundingBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCBoundingBox.m; sourceTree = "<group>"; };
+		5649B4E11BE280D5009947EF /* SCBoundingBox+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCBoundingBox+MapKit.h"; sourceTree = "<group>"; };
+		5649B4E21BE280D5009947EF /* SCBoundingBox+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCBoundingBox+MapKit.m"; sourceTree = "<group>"; };
+		5649B4E31BE280D5009947EF /* SCComparisonPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCComparisonPredicate.h; sourceTree = "<group>"; };
+		5649B4E41BE280D5009947EF /* SCComparisonPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCComparisonPredicate.m; sourceTree = "<group>"; };
+		5649B4E51BE280D5009947EF /* SCCompoundPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCCompoundPredicate.h; sourceTree = "<group>"; };
+		5649B4E61BE280D5009947EF /* SCCompoundPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCCompoundPredicate.m; sourceTree = "<group>"; };
+		5649B4E71BE280D5009947EF /* SCDataAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDataAdapter.h; sourceTree = "<group>"; };
+		5649B4E81BE280D5009947EF /* SCDataAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDataAdapter.m; sourceTree = "<group>"; };
+		5649B4E91BE280D5009947EF /* SCDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDataService.h; sourceTree = "<group>"; };
+		5649B4EA1BE280D5009947EF /* SCDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDataService.m; sourceTree = "<group>"; };
+		5649B4EB1BE280D5009947EF /* SCDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDataStore.h; sourceTree = "<group>"; };
+		5649B4EC1BE280D5009947EF /* SCDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDataStore.m; sourceTree = "<group>"; };
+		5649B4ED1BE280D5009947EF /* SCDataStoreLifeCycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDataStoreLifeCycle.h; sourceTree = "<group>"; };
+		5649B4EE1BE280D5009947EF /* SCFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFileUtils.h; sourceTree = "<group>"; };
+		5649B4EF1BE280D5009947EF /* SCFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFileUtils.m; sourceTree = "<group>"; };
+		5649B4F01BE280D5009947EF /* SCFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilter.h; sourceTree = "<group>"; };
+		5649B4F11BE280D5009947EF /* SCFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilter.m; sourceTree = "<group>"; };
+		5649B4F21BE280D5009947EF /* SCFilterBetween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterBetween.h; sourceTree = "<group>"; };
+		5649B4F31BE280D5009947EF /* SCFilterBetween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterBetween.m; sourceTree = "<group>"; };
+		5649B4F41BE280D5009947EF /* SCFilterEqual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterEqual.h; sourceTree = "<group>"; };
+		5649B4F51BE280D5009947EF /* SCFilterEqual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterEqual.m; sourceTree = "<group>"; };
+		5649B4F61BE280D5009947EF /* SCFilterGreaterThan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterGreaterThan.h; sourceTree = "<group>"; };
+		5649B4F71BE280D5009947EF /* SCFilterGreaterThan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterGreaterThan.m; sourceTree = "<group>"; };
+		5649B4F81BE280D5009947EF /* SCFilterGreaterThanEqual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterGreaterThanEqual.h; sourceTree = "<group>"; };
+		5649B4F91BE280D5009947EF /* SCFilterGreaterThanEqual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterGreaterThanEqual.m; sourceTree = "<group>"; };
+		5649B4FA1BE280D5009947EF /* SCFilterIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterIn.h; sourceTree = "<group>"; };
+		5649B4FB1BE280D5009947EF /* SCFilterIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterIn.m; sourceTree = "<group>"; };
+		5649B4FC1BE280D5009947EF /* SCFilterLessThan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterLessThan.h; sourceTree = "<group>"; };
+		5649B4FD1BE280D5009947EF /* SCFilterLessThan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterLessThan.m; sourceTree = "<group>"; };
+		5649B4FE1BE280D5009947EF /* SCFilterLessThanEqual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterLessThanEqual.h; sourceTree = "<group>"; };
+		5649B4FF1BE280D5009947EF /* SCFilterLessThanEqual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterLessThanEqual.m; sourceTree = "<group>"; };
+		5649B5001BE280D5009947EF /* SCFilterLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterLike.h; sourceTree = "<group>"; };
+		5649B5011BE280D5009947EF /* SCFilterLike.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterLike.m; sourceTree = "<group>"; };
+		5649B5021BE280D5009947EF /* SCFilterNotBetween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterNotBetween.h; sourceTree = "<group>"; };
+		5649B5031BE280D5009947EF /* SCFilterNotBetween.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterNotBetween.m; sourceTree = "<group>"; };
+		5649B5041BE280D5009947EF /* SCFilterNotEqual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterNotEqual.h; sourceTree = "<group>"; };
+		5649B5051BE280D5009947EF /* SCFilterNotEqual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterNotEqual.m; sourceTree = "<group>"; };
+		5649B5061BE280D5009947EF /* SCFilterNotIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterNotIn.h; sourceTree = "<group>"; };
+		5649B5071BE280D5009947EF /* SCFilterNotIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterNotIn.m; sourceTree = "<group>"; };
+		5649B5081BE280D5009947EF /* SCFilterNotLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterNotLike.h; sourceTree = "<group>"; };
+		5649B5091BE280D5009947EF /* SCFilterNotLike.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterNotLike.m; sourceTree = "<group>"; };
+		5649B50A1BE280D5009947EF /* SCFilterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterProtocol.h; sourceTree = "<group>"; };
+		5649B50B1BE280D5009947EF /* SCGeoFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeoFilter.h; sourceTree = "<group>"; };
+		5649B50C1BE280D5009947EF /* SCGeoFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoFilter.m; sourceTree = "<group>"; };
+		5649B50D1BE280D5009947EF /* SCGeoFilterContains.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeoFilterContains.h; sourceTree = "<group>"; };
+		5649B50E1BE280D5009947EF /* SCGeoFilterContains.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoFilterContains.m; sourceTree = "<group>"; };
+		5649B50F1BE280D5009947EF /* SCGeoFilterDisjoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeoFilterDisjoint.h; sourceTree = "<group>"; };
+		5649B5101BE280D5009947EF /* SCGeoFilterDisjoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoFilterDisjoint.m; sourceTree = "<group>"; };
+		5649B5111BE280D5009947EF /* SCGeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeoJSON.h; sourceTree = "<group>"; };
+		5649B5121BE280D5009947EF /* SCGeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoJSON.m; sourceTree = "<group>"; };
+		5649B5131BE280D5009947EF /* SCGeoJSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeoJSONExtensions.h; sourceTree = "<group>"; };
+		5649B5141BE280D5009947EF /* SCGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeometry.h; sourceTree = "<group>"; };
+		5649B5151BE280D5009947EF /* SCGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeometry.m; sourceTree = "<group>"; };
+		5649B5161BE280D5009947EF /* SCGeometry+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGeometry+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B5171BE280D5009947EF /* SCGeometry+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCGeometry+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B5181BE280D5009947EF /* SCGeometry+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGeometry+MapKit.h"; sourceTree = "<group>"; };
+		5649B5191BE280D5009947EF /* SCGeometry+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCGeometry+MapKit.m"; sourceTree = "<group>"; };
+		5649B51A1BE280D5009947EF /* SCGeometryCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeometryCollection.h; sourceTree = "<group>"; };
+		5649B51B1BE280D5009947EF /* SCGeometryCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeometryCollection.m; sourceTree = "<group>"; };
+		5649B51C1BE280D5009947EF /* SCGeometryCollection+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGeometryCollection+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B51D1BE280D5009947EF /* SCGeometryCollection+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCGeometryCollection+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B51E1BE280D5009947EF /* SCGeometryCollection+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGeometryCollection+MapKit.h"; sourceTree = "<group>"; };
+		5649B51F1BE280D6009947EF /* SCGeometryCollection+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCGeometryCollection+MapKit.m"; sourceTree = "<group>"; };
+		5649B5201BE280D6009947EF /* SCJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCJavascriptBridge.h; sourceTree = "<group>"; };
+		5649B5211BE280D6009947EF /* SCJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCJavascriptBridge.m; sourceTree = "<group>"; };
+		5649B5221BE280D6009947EF /* SCJavascriptBridgeAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCJavascriptBridgeAPI.h; sourceTree = "<group>"; };
+		5649B5231BE280D6009947EF /* SCJavascriptBridgeAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCJavascriptBridgeAPI.m; sourceTree = "<group>"; };
+		5649B5241BE280D6009947EF /* SCJavascriptCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCJavascriptCommands.h; sourceTree = "<group>"; };
+		5649B5251BE280D6009947EF /* SCLinearRing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCLinearRing.h; sourceTree = "<group>"; };
+		5649B5261BE280D6009947EF /* SCLinearRing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCLinearRing.m; sourceTree = "<group>"; };
+		5649B5271BE280D6009947EF /* SCLinearRing+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCLinearRing+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B5281BE280D6009947EF /* SCLinearRing+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCLinearRing+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B5291BE280D6009947EF /* SCLinearRing+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCLinearRing+MapKit.h"; sourceTree = "<group>"; };
+		5649B52A1BE280D6009947EF /* SCLinearRing+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCLinearRing+MapKit.m"; sourceTree = "<group>"; };
+		5649B52B1BE280D6009947EF /* SCLineString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCLineString.h; sourceTree = "<group>"; };
+		5649B52C1BE280D6009947EF /* SCLineString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCLineString.m; sourceTree = "<group>"; };
+		5649B52D1BE280D6009947EF /* SCLineString+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCLineString+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B52E1BE280D6009947EF /* SCLineString+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCLineString+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B52F1BE280D6009947EF /* SCLineString+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCLineString+MapKit.h"; sourceTree = "<group>"; };
+		5649B5301BE280D6009947EF /* SCLineString+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCLineString+MapKit.m"; sourceTree = "<group>"; };
+		5649B5311BE280D6009947EF /* SCLocalWebApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCLocalWebApp.h; sourceTree = "<group>"; };
+		5649B5321BE280D6009947EF /* SCLocalWebApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCLocalWebApp.m; sourceTree = "<group>"; };
+		5649B5331BE280D6009947EF /* SCLoggingAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCLoggingAssertionHandler.h; sourceTree = "<group>"; };
+		5649B5341BE280D6009947EF /* SCLoggingAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCLoggingAssertionHandler.m; sourceTree = "<group>"; };
+		5649B5351BE280D6009947EF /* SCMapKitExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMapKitExtensions.h; sourceTree = "<group>"; };
+		5649B5361BE280D6009947EF /* SCMultiLineString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMultiLineString.h; sourceTree = "<group>"; };
+		5649B5371BE280D6009947EF /* SCMultiLineString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMultiLineString.m; sourceTree = "<group>"; };
+		5649B5381BE280D6009947EF /* SCMultiLineString+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCMultiLineString+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B5391BE280D6009947EF /* SCMultiLineString+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCMultiLineString+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B53A1BE280D6009947EF /* SCMultiLineString+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCMultiLineString+MapKit.h"; sourceTree = "<group>"; };
+		5649B53B1BE280D6009947EF /* SCMultiLineString+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCMultiLineString+MapKit.m"; sourceTree = "<group>"; };
+		5649B53C1BE280D6009947EF /* SCMultiPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMultiPoint.h; sourceTree = "<group>"; };
+		5649B53D1BE280D6009947EF /* SCMultiPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMultiPoint.m; sourceTree = "<group>"; };
+		5649B53E1BE280D6009947EF /* SCMultiPoint+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCMultiPoint+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B53F1BE280D6009947EF /* SCMultiPoint+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCMultiPoint+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B5401BE280D6009947EF /* SCMultiPoint+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCMultiPoint+MapKit.h"; sourceTree = "<group>"; };
+		5649B5411BE280D6009947EF /* SCMultiPoint+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCMultiPoint+MapKit.m"; sourceTree = "<group>"; };
+		5649B5421BE280D6009947EF /* SCMultiPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMultiPolygon.h; sourceTree = "<group>"; };
+		5649B5431BE280D6009947EF /* SCMultiPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMultiPolygon.m; sourceTree = "<group>"; };
+		5649B5441BE280D6009947EF /* SCMultiPolygon+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCMultiPolygon+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B5451BE280D6009947EF /* SCMultiPolygon+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCMultiPolygon+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B5461BE280D6009947EF /* SCMultiPolygon+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCMultiPolygon+MapKit.h"; sourceTree = "<group>"; };
+		5649B5471BE280D6009947EF /* SCMultiPolygon+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCMultiPolygon+MapKit.m"; sourceTree = "<group>"; };
+		5649B5481BE280D6009947EF /* SCNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNetworkService.h; sourceTree = "<group>"; };
+		5649B5491BE280D6009947EF /* SCNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNetworkService.m; sourceTree = "<group>"; };
+		5649B54A1BE280D6009947EF /* SCOpenStreetMapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCOpenStreetMapSource.h; sourceTree = "<group>"; };
+		5649B54B1BE280D6009947EF /* SCOpenStreetMapSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCOpenStreetMapSource.m; sourceTree = "<group>"; };
+		5649B54C1BE280D6009947EF /* SCPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPoint.h; sourceTree = "<group>"; };
+		5649B54D1BE280D6009947EF /* SCPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPoint.m; sourceTree = "<group>"; };
+		5649B54E1BE280D6009947EF /* SCPoint+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCPoint+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B54F1BE280D6009947EF /* SCPoint+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCPoint+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B5501BE280D6009947EF /* SCPoint+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCPoint+MapKit.h"; sourceTree = "<group>"; };
+		5649B5511BE280D6009947EF /* SCPoint+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCPoint+MapKit.m"; sourceTree = "<group>"; };
+		5649B5521BE280D6009947EF /* SCPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPolygon.h; sourceTree = "<group>"; };
+		5649B5531BE280D6009947EF /* SCPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPolygon.m; sourceTree = "<group>"; };
+		5649B5541BE280D6009947EF /* SCPolygon+GeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCPolygon+GeoJSON.h"; sourceTree = "<group>"; };
+		5649B5551BE280D6009947EF /* SCPolygon+GeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCPolygon+GeoJSON.m"; sourceTree = "<group>"; };
+		5649B5561BE280D6009947EF /* SCPolygon+MapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCPolygon+MapKit.h"; sourceTree = "<group>"; };
+		5649B5571BE280D6009947EF /* SCPolygon+MapKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SCPolygon+MapKit.m"; sourceTree = "<group>"; };
+		5649B5581BE280D6009947EF /* SCPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPredicate.h; sourceTree = "<group>"; };
+		5649B5591BE280D6009947EF /* SCPredicate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPredicate.m; sourceTree = "<group>"; };
+		5649B55A1BE280D6009947EF /* SCPrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPrefixHeader.pch; sourceTree = "<group>"; };
+		5649B55B1BE280D6009947EF /* SCQueryFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCQueryFilter.h; sourceTree = "<group>"; };
+		5649B55C1BE280D6009947EF /* SCQueryFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCQueryFilter.m; sourceTree = "<group>"; };
+		5649B55D1BE280D6009947EF /* SCRasterService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterService.h; sourceTree = "<group>"; };
+		5649B55E1BE280D6009947EF /* SCRasterService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRasterService.m; sourceTree = "<group>"; };
+		5649B55F1BE280D6009947EF /* SCRasterSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterSource.h; sourceTree = "<group>"; };
+		5649B5601BE280D6009947EF /* SCRasterSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRasterSource.m; sourceTree = "<group>"; };
+		5649B5611BE280D6009947EF /* SCRasterTileStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterTileStore.h; sourceTree = "<group>"; };
+		5649B5621BE280D6009947EF /* SCSensorService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSensorService.h; sourceTree = "<group>"; };
+		5649B5631BE280D6009947EF /* SCSensorService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSensorService.m; sourceTree = "<group>"; };
+		5649B5641BE280D6009947EF /* SCService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCService.h; sourceTree = "<group>"; };
+		5649B5651BE280D6009947EF /* SCService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCService.m; sourceTree = "<group>"; };
+		5649B5661BE280D6009947EF /* SCServiceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServiceDelegate.h; sourceTree = "<group>"; };
+		5649B5671BE280D6009947EF /* SCServiceLifecycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServiceLifecycle.h; sourceTree = "<group>"; };
+		5649B5681BE280D6009947EF /* SCServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServiceManager.h; sourceTree = "<group>"; };
+		5649B5691BE280D6009947EF /* SCServiceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCServiceManager.m; sourceTree = "<group>"; };
+		5649B56A1BE280D6009947EF /* SCSpatialFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSpatialFeature.h; sourceTree = "<group>"; };
+		5649B56B1BE280D6009947EF /* SCSpatialFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSpatialFeature.m; sourceTree = "<group>"; };
+		5649B56C1BE280D6009947EF /* SCSpatialStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSpatialStore.h; sourceTree = "<group>"; };
+		5649B56D1BE280D6009947EF /* SCStoreConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreConfig.h; sourceTree = "<group>"; };
+		5649B56E1BE280D6009947EF /* SCStoreConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreConfig.m; sourceTree = "<group>"; };
+		5649B56F1BE280D6009947EF /* SCStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStyle.h; sourceTree = "<group>"; };
+		5649B5701BE280D6009947EF /* SCStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStyle.m; sourceTree = "<group>"; };
+		5649B5711BE280D6009947EF /* SCTileMapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTileMapSource.h; sourceTree = "<group>"; };
+		5649B5721BE280D6009947EF /* SCTileMapSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTileMapSource.m; sourceTree = "<group>"; };
+		5649B5731BE280D6009947EF /* SCTileOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTileOverlay.h; sourceTree = "<group>"; };
+		5649B5741BE280D6009947EF /* SCTileOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTileOverlay.m; sourceTree = "<group>"; };
+		5649B5751BE280D6009947EF /* SCTileOverlayRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTileOverlayRenderer.h; sourceTree = "<group>"; };
+		5649B5761BE280D6009947EF /* SCTileOverlayRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTileOverlayRenderer.m; sourceTree = "<group>"; };
+		5649B5771BE280D6009947EF /* SCUserPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCUserPrefs.h; sourceTree = "<group>"; };
+		5649B5781BE280D6009947EF /* SCUserPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCUserPrefs.m; sourceTree = "<group>"; };
+		5649B5791BE280D6009947EF /* SCWebAppZipLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCWebAppZipLoader.h; sourceTree = "<group>"; };
+		5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWebAppZipLoader.m; sourceTree = "<group>"; };
+		5649B57B1BE280D6009947EF /* SpatialConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnect.m; sourceTree = "<group>"; };
+		5649B6211BE283EC009947EF /* SpatialConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnect.h; sourceTree = "<group>"; };
+		5649B65A1BE2A00E009947EF /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		5649B65B1BE2A00E009947EF /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		5649B65C1BE2A00E009947EF /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		5649B65D1BE2A00E009947EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
+		5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		8F2710B15F6E9F16E1932224 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SpatialConnectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4FE33BD43CC3F9192E57448 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5649B48F1BE27C6A009947EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D7D9D727DECA781AFD4CE68 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5649B49A1BE27C6A009947EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5649B49E1BE27C6A009947EF /* SpatialConnect.framework in Frameworks */,
+				DF02A838B0370B96D3EAC5A3 /* libPods-SpatialConnectTests.a in Frameworks */,
+				E69A3564EB7B3CEE3B67F262 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06CFEC7C9DF859EA15828C77 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				55DA13B20A74E1C7FBC7E0D6 /* Pods.debug.xcconfig */,
+				8F2710B15F6E9F16E1932224 /* Pods.release.xcconfig */,
+				38EFC21C69482B839F799B4C /* Pods-SpatialConnectTests.debug.xcconfig */,
+				51459E170E45B8FA2EA8CD4E /* Pods-SpatialConnectTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		0B5FE958508C82B8D8FF4D5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C4FE33BD43CC3F9192E57448 /* libPods.a */,
+				979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5649B4891BE27C6A009947EF = {
+			isa = PBXGroup;
+			children = (
+				5649B4951BE27C6A009947EF /* SpatialConnect */,
+				5649B4A11BE27C6A009947EF /* SpatialConnectTests */,
+				5649B4941BE27C6A009947EF /* Products */,
+				06CFEC7C9DF859EA15828C77 /* Pods */,
+				0B5FE958508C82B8D8FF4D5C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5649B4941BE27C6A009947EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5649B4931BE27C6A009947EF /* SpatialConnect.framework */,
+				5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5649B4951BE27C6A009947EF /* SpatialConnect */ = {
+			isa = PBXGroup;
+			children = (
+				5649B6371BE29E7A009947EF /* Vendor */,
+				5649B4D71BE280D5009947EF /* GeoJSONAdapter.h */,
+				5649B4D81BE280D5009947EF /* GeoJSONAdapter.m */,
+				5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */,
+				5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */,
+				5649B4DB1BE280D5009947EF /* GeoJSONStore.h */,
+				5649B4DC1BE280D5009947EF /* GeoJSONStore.m */,
+				5649B4DF1BE280D5009947EF /* SCBoundingBox.h */,
+				5649B4E01BE280D5009947EF /* SCBoundingBox.m */,
+				5649B4E11BE280D5009947EF /* SCBoundingBox+MapKit.h */,
+				5649B4E21BE280D5009947EF /* SCBoundingBox+MapKit.m */,
+				5649B4E31BE280D5009947EF /* SCComparisonPredicate.h */,
+				5649B4E41BE280D5009947EF /* SCComparisonPredicate.m */,
+				5649B4E51BE280D5009947EF /* SCCompoundPredicate.h */,
+				5649B4E61BE280D5009947EF /* SCCompoundPredicate.m */,
+				5649B4E71BE280D5009947EF /* SCDataAdapter.h */,
+				5649B4E81BE280D5009947EF /* SCDataAdapter.m */,
+				5649B4E91BE280D5009947EF /* SCDataService.h */,
+				5649B4EA1BE280D5009947EF /* SCDataService.m */,
+				5649B4EB1BE280D5009947EF /* SCDataStore.h */,
+				5649B4EC1BE280D5009947EF /* SCDataStore.m */,
+				5649B4ED1BE280D5009947EF /* SCDataStoreLifeCycle.h */,
+				5649B4EE1BE280D5009947EF /* SCFileUtils.h */,
+				5649B4EF1BE280D5009947EF /* SCFileUtils.m */,
+				5649B4F01BE280D5009947EF /* SCFilter.h */,
+				5649B4F11BE280D5009947EF /* SCFilter.m */,
+				5649B4F21BE280D5009947EF /* SCFilterBetween.h */,
+				5649B4F31BE280D5009947EF /* SCFilterBetween.m */,
+				5649B4F41BE280D5009947EF /* SCFilterEqual.h */,
+				5649B4F51BE280D5009947EF /* SCFilterEqual.m */,
+				5649B4F61BE280D5009947EF /* SCFilterGreaterThan.h */,
+				5649B4F71BE280D5009947EF /* SCFilterGreaterThan.m */,
+				5649B4F81BE280D5009947EF /* SCFilterGreaterThanEqual.h */,
+				5649B4F91BE280D5009947EF /* SCFilterGreaterThanEqual.m */,
+				5649B4FA1BE280D5009947EF /* SCFilterIn.h */,
+				5649B4FB1BE280D5009947EF /* SCFilterIn.m */,
+				5649B4FC1BE280D5009947EF /* SCFilterLessThan.h */,
+				5649B4FD1BE280D5009947EF /* SCFilterLessThan.m */,
+				5649B4FE1BE280D5009947EF /* SCFilterLessThanEqual.h */,
+				5649B4FF1BE280D5009947EF /* SCFilterLessThanEqual.m */,
+				5649B5001BE280D5009947EF /* SCFilterLike.h */,
+				5649B5011BE280D5009947EF /* SCFilterLike.m */,
+				5649B5021BE280D5009947EF /* SCFilterNotBetween.h */,
+				5649B5031BE280D5009947EF /* SCFilterNotBetween.m */,
+				5649B5041BE280D5009947EF /* SCFilterNotEqual.h */,
+				5649B5051BE280D5009947EF /* SCFilterNotEqual.m */,
+				5649B5061BE280D5009947EF /* SCFilterNotIn.h */,
+				5649B5071BE280D5009947EF /* SCFilterNotIn.m */,
+				5649B5081BE280D5009947EF /* SCFilterNotLike.h */,
+				5649B5091BE280D5009947EF /* SCFilterNotLike.m */,
+				5649B50A1BE280D5009947EF /* SCFilterProtocol.h */,
+				5649B50B1BE280D5009947EF /* SCGeoFilter.h */,
+				5649B50C1BE280D5009947EF /* SCGeoFilter.m */,
+				5649B50D1BE280D5009947EF /* SCGeoFilterContains.h */,
+				5649B50E1BE280D5009947EF /* SCGeoFilterContains.m */,
+				5649B50F1BE280D5009947EF /* SCGeoFilterDisjoint.h */,
+				5649B5101BE280D5009947EF /* SCGeoFilterDisjoint.m */,
+				5649B5111BE280D5009947EF /* SCGeoJSON.h */,
+				5649B5121BE280D5009947EF /* SCGeoJSON.m */,
+				5649B5131BE280D5009947EF /* SCGeoJSONExtensions.h */,
+				5649B5141BE280D5009947EF /* SCGeometry.h */,
+				5649B5151BE280D5009947EF /* SCGeometry.m */,
+				5649B5161BE280D5009947EF /* SCGeometry+GeoJSON.h */,
+				5649B5171BE280D5009947EF /* SCGeometry+GeoJSON.m */,
+				5649B5181BE280D5009947EF /* SCGeometry+MapKit.h */,
+				5649B5191BE280D5009947EF /* SCGeometry+MapKit.m */,
+				5649B51A1BE280D5009947EF /* SCGeometryCollection.h */,
+				5649B51B1BE280D5009947EF /* SCGeometryCollection.m */,
+				5649B51C1BE280D5009947EF /* SCGeometryCollection+GeoJSON.h */,
+				5649B51D1BE280D5009947EF /* SCGeometryCollection+GeoJSON.m */,
+				5649B51E1BE280D5009947EF /* SCGeometryCollection+MapKit.h */,
+				5649B51F1BE280D6009947EF /* SCGeometryCollection+MapKit.m */,
+				5649B5201BE280D6009947EF /* SCJavascriptBridge.h */,
+				5649B5211BE280D6009947EF /* SCJavascriptBridge.m */,
+				5649B5221BE280D6009947EF /* SCJavascriptBridgeAPI.h */,
+				5649B5231BE280D6009947EF /* SCJavascriptBridgeAPI.m */,
+				5649B5241BE280D6009947EF /* SCJavascriptCommands.h */,
+				5649B5251BE280D6009947EF /* SCLinearRing.h */,
+				5649B5261BE280D6009947EF /* SCLinearRing.m */,
+				5649B5271BE280D6009947EF /* SCLinearRing+GeoJSON.h */,
+				5649B5281BE280D6009947EF /* SCLinearRing+GeoJSON.m */,
+				5649B5291BE280D6009947EF /* SCLinearRing+MapKit.h */,
+				5649B52A1BE280D6009947EF /* SCLinearRing+MapKit.m */,
+				5649B52B1BE280D6009947EF /* SCLineString.h */,
+				5649B52C1BE280D6009947EF /* SCLineString.m */,
+				5649B52D1BE280D6009947EF /* SCLineString+GeoJSON.h */,
+				5649B52E1BE280D6009947EF /* SCLineString+GeoJSON.m */,
+				5649B52F1BE280D6009947EF /* SCLineString+MapKit.h */,
+				5649B5301BE280D6009947EF /* SCLineString+MapKit.m */,
+				5649B5311BE280D6009947EF /* SCLocalWebApp.h */,
+				5649B5321BE280D6009947EF /* SCLocalWebApp.m */,
+				5649B5331BE280D6009947EF /* SCLoggingAssertionHandler.h */,
+				5649B5341BE280D6009947EF /* SCLoggingAssertionHandler.m */,
+				5649B5351BE280D6009947EF /* SCMapKitExtensions.h */,
+				5649B5361BE280D6009947EF /* SCMultiLineString.h */,
+				5649B5371BE280D6009947EF /* SCMultiLineString.m */,
+				5649B5381BE280D6009947EF /* SCMultiLineString+GeoJSON.h */,
+				5649B5391BE280D6009947EF /* SCMultiLineString+GeoJSON.m */,
+				5649B53A1BE280D6009947EF /* SCMultiLineString+MapKit.h */,
+				5649B53B1BE280D6009947EF /* SCMultiLineString+MapKit.m */,
+				5649B53C1BE280D6009947EF /* SCMultiPoint.h */,
+				5649B53D1BE280D6009947EF /* SCMultiPoint.m */,
+				5649B53E1BE280D6009947EF /* SCMultiPoint+GeoJSON.h */,
+				5649B53F1BE280D6009947EF /* SCMultiPoint+GeoJSON.m */,
+				5649B5401BE280D6009947EF /* SCMultiPoint+MapKit.h */,
+				5649B5411BE280D6009947EF /* SCMultiPoint+MapKit.m */,
+				5649B5421BE280D6009947EF /* SCMultiPolygon.h */,
+				5649B5431BE280D6009947EF /* SCMultiPolygon.m */,
+				5649B5441BE280D6009947EF /* SCMultiPolygon+GeoJSON.h */,
+				5649B5451BE280D6009947EF /* SCMultiPolygon+GeoJSON.m */,
+				5649B5461BE280D6009947EF /* SCMultiPolygon+MapKit.h */,
+				5649B5471BE280D6009947EF /* SCMultiPolygon+MapKit.m */,
+				5649B5481BE280D6009947EF /* SCNetworkService.h */,
+				5649B5491BE280D6009947EF /* SCNetworkService.m */,
+				5649B54A1BE280D6009947EF /* SCOpenStreetMapSource.h */,
+				5649B54B1BE280D6009947EF /* SCOpenStreetMapSource.m */,
+				5649B54C1BE280D6009947EF /* SCPoint.h */,
+				5649B54D1BE280D6009947EF /* SCPoint.m */,
+				5649B54E1BE280D6009947EF /* SCPoint+GeoJSON.h */,
+				5649B54F1BE280D6009947EF /* SCPoint+GeoJSON.m */,
+				5649B5501BE280D6009947EF /* SCPoint+MapKit.h */,
+				5649B5511BE280D6009947EF /* SCPoint+MapKit.m */,
+				5649B5521BE280D6009947EF /* SCPolygon.h */,
+				5649B5531BE280D6009947EF /* SCPolygon.m */,
+				5649B5541BE280D6009947EF /* SCPolygon+GeoJSON.h */,
+				5649B5551BE280D6009947EF /* SCPolygon+GeoJSON.m */,
+				5649B5561BE280D6009947EF /* SCPolygon+MapKit.h */,
+				5649B5571BE280D6009947EF /* SCPolygon+MapKit.m */,
+				5649B5581BE280D6009947EF /* SCPredicate.h */,
+				5649B5591BE280D6009947EF /* SCPredicate.m */,
+				5649B55A1BE280D6009947EF /* SCPrefixHeader.pch */,
+				5649B55B1BE280D6009947EF /* SCQueryFilter.h */,
+				5649B55C1BE280D6009947EF /* SCQueryFilter.m */,
+				5649B55D1BE280D6009947EF /* SCRasterService.h */,
+				5649B55E1BE280D6009947EF /* SCRasterService.m */,
+				5649B55F1BE280D6009947EF /* SCRasterSource.h */,
+				5649B5601BE280D6009947EF /* SCRasterSource.m */,
+				5649B5611BE280D6009947EF /* SCRasterTileStore.h */,
+				5649B5621BE280D6009947EF /* SCSensorService.h */,
+				5649B5631BE280D6009947EF /* SCSensorService.m */,
+				5649B5641BE280D6009947EF /* SCService.h */,
+				5649B5651BE280D6009947EF /* SCService.m */,
+				5649B5661BE280D6009947EF /* SCServiceDelegate.h */,
+				5649B5671BE280D6009947EF /* SCServiceLifecycle.h */,
+				5649B5681BE280D6009947EF /* SCServiceManager.h */,
+				5649B5691BE280D6009947EF /* SCServiceManager.m */,
+				5649B56A1BE280D6009947EF /* SCSpatialFeature.h */,
+				5649B56B1BE280D6009947EF /* SCSpatialFeature.m */,
+				5649B56C1BE280D6009947EF /* SCSpatialStore.h */,
+				5649B56D1BE280D6009947EF /* SCStoreConfig.h */,
+				5649B56E1BE280D6009947EF /* SCStoreConfig.m */,
+				5649B56F1BE280D6009947EF /* SCStyle.h */,
+				5649B5701BE280D6009947EF /* SCStyle.m */,
+				5649B5711BE280D6009947EF /* SCTileMapSource.h */,
+				5649B5721BE280D6009947EF /* SCTileMapSource.m */,
+				5649B5731BE280D6009947EF /* SCTileOverlay.h */,
+				5649B5741BE280D6009947EF /* SCTileOverlay.m */,
+				5649B5751BE280D6009947EF /* SCTileOverlayRenderer.h */,
+				5649B5761BE280D6009947EF /* SCTileOverlayRenderer.m */,
+				5649B5771BE280D6009947EF /* SCUserPrefs.h */,
+				5649B5781BE280D6009947EF /* SCUserPrefs.m */,
+				5649B5791BE280D6009947EF /* SCWebAppZipLoader.h */,
+				5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */,
+				5649B6211BE283EC009947EF /* SpatialConnect.h */,
+				5649B57B1BE280D6009947EF /* SpatialConnect.m */,
+				5649B4961BE27C6A009947EF /* SpatialConnect-Prefix.h */,
+				5649B4981BE27C6A009947EF /* Info.plist */,
+			);
+			path = SpatialConnect;
+			sourceTree = "<group>";
+		};
+		5649B4A11BE27C6A009947EF /* SpatialConnectTests */ = {
+			isa = PBXGroup;
+			children = (
+				5649B4AF1BE28079009947EF /* all.geojson */,
+				5649B4B01BE28079009947EF /* feature.json */,
+				5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */,
+				5649B4B21BE28079009947EF /* LocalFilterTests.m */,
+				5649B4B31BE28079009947EF /* SCCreateFeature.m */,
+				5649B4B41BE28079009947EF /* SCDeleteFeature.m */,
+				5649B4B51BE28079009947EF /* SCGeoJSONParserTest.m */,
+				5649B4B61BE28079009947EF /* SCGeoJSONWriterTest.m */,
+				5649B4B71BE28079009947EF /* SCGeometryHelper.h */,
+				5649B4B81BE28079009947EF /* SCGeometryHelper.m */,
+				5649B4B91BE28079009947EF /* SCMultiPointTest.m */,
+				5649B4BA1BE28079009947EF /* SCMultiPolygonTest.m */,
+				5649B4BB1BE28079009947EF /* SCPointTest.m */,
+				5649B4BC1BE28079009947EF /* SCPolygonTest.m */,
+				5649B4BD1BE28079009947EF /* SCQueryFilterTest.m */,
+				5649B4BE1BE28079009947EF /* SCUpdateFeature.m */,
+				5649B4BF1BE28079009947EF /* simple.json */,
+				5649B4C01BE28079009947EF /* SpatialConnectAutoConfigTest.m */,
+				5649B4C11BE28079009947EF /* SpatialConnectHelper.h */,
+				5649B4C21BE28079009947EF /* SpatialConnectHelper.m */,
+				5649B4C31BE28079009947EF /* tests.scfg */,
+				5649B4A41BE27C6A009947EF /* Info.plist */,
+			);
+			path = SpatialConnectTests;
+			sourceTree = "<group>";
+		};
+		5649B6371BE29E7A009947EF /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				5649B6591BE2A00E009947EF /* JSONKit */,
+				5649B65E1BE2A00E009947EF /* WebViewJavascriptBridge */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
+		5649B6591BE2A00E009947EF /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				5649B65A1BE2A00E009947EF /* CHANGELOG.md */,
+				5649B65B1BE2A00E009947EF /* JSONKit.h */,
+				5649B65C1BE2A00E009947EF /* JSONKit.m */,
+				5649B65D1BE2A00E009947EF /* README.md */,
+			);
+			name = JSONKit;
+			path = Vendor/JSONKit;
+			sourceTree = "<group>";
+		};
+		5649B65E1BE2A00E009947EF /* WebViewJavascriptBridge */ = {
+			isa = PBXGroup;
+			children = (
+				5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */,
+				5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */,
+				5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */,
+			);
+			name = WebViewJavascriptBridge;
+			path = Vendor/WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5649B4901BE27C6A009947EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
+				5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */,
+				5649B6631BE2A00E009947EF /* JSONKit.h in Headers */,
+				5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */,
+				5649B5CC1BE280D6009947EF /* SCLinearRing+GeoJSON.h in Headers */,
+				5649B5D21BE280D6009947EF /* SCLineString+GeoJSON.h in Headers */,
+				5649B5AB1BE280D6009947EF /* SCFilterNotIn.h in Headers */,
+				5649B5B41BE280D6009947EF /* SCGeoFilterDisjoint.h in Headers */,
+				5649B6071BE280D6009947EF /* SCSensorService.h in Headers */,
+				5649B5A71BE280D6009947EF /* SCFilterNotBetween.h in Headers */,
+				5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */,
+				5649B6021BE280D6009947EF /* SCRasterService.h in Headers */,
+				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
+				5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */,
+				5649B5951BE280D6009947EF /* SCFilter.h in Headers */,
+				5649B57E1BE280D6009947EF /* GeoJSONStorageConnector.h in Headers */,
+				5649B5FF1BE280D6009947EF /* SCPrefixHeader.pch in Headers */,
+				5649B5B81BE280D6009947EF /* SCGeoJSONExtensions.h in Headers */,
+				5649B57C1BE280D6009947EF /* GeoJSONAdapter.h in Headers */,
+				5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */,
+				5649B5BD1BE280D6009947EF /* SCGeometry+MapKit.h in Headers */,
+				5649B6141BE280D6009947EF /* SCStyle.h in Headers */,
+				5649B61A1BE280D6009947EF /* SCTileOverlayRenderer.h in Headers */,
+				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
+				5649B5DB1BE280D6009947EF /* SCMultiLineString.h in Headers */,
+				5649B5ED1BE280D6009947EF /* SCNetworkService.h in Headers */,
+				5649B61E1BE280D6009947EF /* SCWebAppZipLoader.h in Headers */,
+				5649B6061BE280D6009947EF /* SCRasterTileStore.h in Headers */,
+				5649B5A11BE280D6009947EF /* SCFilterLessThan.h in Headers */,
+				5649B5EB1BE280D6009947EF /* SCMultiPolygon+MapKit.h in Headers */,
+				5649B59F1BE280D6009947EF /* SCFilterIn.h in Headers */,
+				5649B5C51BE280D6009947EF /* SCJavascriptBridge.h in Headers */,
+				5649B5B21BE280D6009947EF /* SCGeoFilterContains.h in Headers */,
+				5649B5991BE280D6009947EF /* SCFilterEqual.h in Headers */,
+				5649B6001BE280D6009947EF /* SCQueryFilter.h in Headers */,
+				5649B5CA1BE280D6009947EF /* SCLinearRing.h in Headers */,
+				5649B5F11BE280D6009947EF /* SCPoint.h in Headers */,
+				5649B5D01BE280D6009947EF /* SCLineString.h in Headers */,
+				5649B60D1BE280D6009947EF /* SCServiceManager.h in Headers */,
+				5649B60C1BE280D6009947EF /* SCServiceLifecycle.h in Headers */,
+				5649B5B61BE280D6009947EF /* SCGeoJSON.h in Headers */,
+				5649B6111BE280D6009947EF /* SCSpatialStore.h in Headers */,
+				5649B5B91BE280D6009947EF /* SCGeometry.h in Headers */,
+				5649B5E71BE280D6009947EF /* SCMultiPolygon.h in Headers */,
+				5649B59B1BE280D6009947EF /* SCFilterGreaterThan.h in Headers */,
+				5649B5D61BE280D6009947EF /* SCLocalWebApp.h in Headers */,
+				5649B6091BE280D6009947EF /* SCService.h in Headers */,
+				5649B5E11BE280D6009947EF /* SCMultiPoint.h in Headers */,
+				5649B58C1BE280D6009947EF /* SCDataAdapter.h in Headers */,
+				5649B5BF1BE280D6009947EF /* SCGeometryCollection.h in Headers */,
+				5649B58A1BE280D6009947EF /* SCCompoundPredicate.h in Headers */,
+				5649B5E51BE280D6009947EF /* SCMultiPoint+MapKit.h in Headers */,
+				5649B5931BE280D6009947EF /* SCFileUtils.h in Headers */,
+				5649B5C91BE280D6009947EF /* SCJavascriptCommands.h in Headers */,
+				5649B5C11BE280D6009947EF /* SCGeometryCollection+GeoJSON.h in Headers */,
+				5649B5A31BE280D6009947EF /* SCFilterLessThanEqual.h in Headers */,
+				5649B5DA1BE280D6009947EF /* SCMapKitExtensions.h in Headers */,
+				5649B5801BE280D6009947EF /* GeoJSONStore.h in Headers */,
+				5649B5C71BE280D6009947EF /* SCJavascriptBridgeAPI.h in Headers */,
+				5649B5841BE280D6009947EF /* SCBoundingBox.h in Headers */,
+				5649B5B01BE280D6009947EF /* SCGeoFilter.h in Headers */,
+				5649B5901BE280D6009947EF /* SCDataStore.h in Headers */,
+				5649B5FB1BE280D6009947EF /* SCPolygon+MapKit.h in Headers */,
+				5649B4971BE27C6A009947EF /* SpatialConnect-Prefix.h in Headers */,
+				5649B5EF1BE280D6009947EF /* SCOpenStreetMapSource.h in Headers */,
+				5649B6121BE280D6009947EF /* SCStoreConfig.h in Headers */,
+				5649B5CE1BE280D6009947EF /* SCLinearRing+MapKit.h in Headers */,
+				5649B5C31BE280D6009947EF /* SCGeometryCollection+MapKit.h in Headers */,
+				5649B60B1BE280D6009947EF /* SCServiceDelegate.h in Headers */,
+				5649B5D81BE280D6009947EF /* SCLoggingAssertionHandler.h in Headers */,
+				5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */,
+				5649B5971BE280D6009947EF /* SCFilterBetween.h in Headers */,
+				5649B5DD1BE280D6009947EF /* SCMultiLineString+GeoJSON.h in Headers */,
+				5649B5A91BE280D6009947EF /* SCFilterNotEqual.h in Headers */,
+				5649B5BB1BE280D6009947EF /* SCGeometry+GeoJSON.h in Headers */,
+				5649B5E91BE280D6009947EF /* SCMultiPolygon+GeoJSON.h in Headers */,
+				5649B5AF1BE280D6009947EF /* SCFilterProtocol.h in Headers */,
+				5649B6221BE283EC009947EF /* SpatialConnect.h in Headers */,
+				5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */,
+				5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */,
+				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
+				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
+				5649B61C1BE280D6009947EF /* SCUserPrefs.h in Headers */,
+				5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */,
+				5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */,
+				5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */,
+				5649B5F71BE280D6009947EF /* SCPolygon.h in Headers */,
+				5649B5FD1BE280D6009947EF /* SCPredicate.h in Headers */,
+				5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */,
+				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5649B4921BE27C6A009947EF /* SpatialConnect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5649B4A71BE27C6A009947EF /* Build configuration list for PBXNativeTarget "SpatialConnect" */;
+			buildPhases = (
+				F6C571D963CC9C144EF05455 /* Check Pods Manifest.lock */,
+				5649B48E1BE27C6A009947EF /* Sources */,
+				5649B48F1BE27C6A009947EF /* Frameworks */,
+				5649B4901BE27C6A009947EF /* Headers */,
+				5649B4911BE27C6A009947EF /* Resources */,
+				42D57ACB9F1AD1D3FE0D0DD2 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpatialConnect;
+			productName = SpatialConnect;
+			productReference = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		5649B49C1BE27C6A009947EF /* SpatialConnectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5649B4AA1BE27C6A009947EF /* Build configuration list for PBXNativeTarget "SpatialConnectTests" */;
+			buildPhases = (
+				D137C22DF6690D1FFFB083C5 /* Check Pods Manifest.lock */,
+				5649B4991BE27C6A009947EF /* Sources */,
+				5649B49A1BE27C6A009947EF /* Frameworks */,
+				5649B49B1BE27C6A009947EF /* Resources */,
+				395D6CDD467BA196C2BD8AE4 /* Embed Pods Frameworks */,
+				15B2357F1DCF91726E7DAB3C /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5649B4A01BE27C6A009947EF /* PBXTargetDependency */,
+			);
+			name = SpatialConnectTests;
+			productName = SpatialConnectTests;
+			productReference = 5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5649B48A1BE27C6A009947EF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "Boundless Spatial";
+				TargetAttributes = {
+					5649B4921BE27C6A009947EF = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					5649B49C1BE27C6A009947EF = {
+						CreatedOnToolsVersion = 7.1;
+					};
+				};
+			};
+			buildConfigurationList = 5649B48D1BE27C6A009947EF /* Build configuration list for PBXProject "SpatialConnect" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5649B4891BE27C6A009947EF;
+			productRefGroup = 5649B4941BE27C6A009947EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5649B4921BE27C6A009947EF /* SpatialConnect */,
+				5649B49C1BE27C6A009947EF /* SpatialConnectTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5649B4911BE27C6A009947EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */,
+				5649B4AE1BE28011009947EF /* Vendor in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5649B49B1BE27C6A009947EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5649B4C51BE28079009947EF /* feature.json in Resources */,
+				5649B4D31BE28079009947EF /* simple.json in Resources */,
+				5649B4C61BE28079009947EF /* gz_2010_us_050_00_500k.json in Resources */,
+				5649B4D61BE28079009947EF /* tests.scfg in Resources */,
+				5649B4C41BE28079009947EF /* all.geojson in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		15B2357F1DCF91726E7DAB3C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpatialConnectTests/Pods-SpatialConnectTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		395D6CDD467BA196C2BD8AE4 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		42D57ACB9F1AD1D3FE0D0DD2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D137C22DF6690D1FFFB083C5 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F6C571D963CC9C144EF05455 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5649B48E1BE27C6A009947EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5649B5FE1BE280D6009947EF /* SCPredicate.m in Sources */,
+				5649B60E1BE280D6009947EF /* SCServiceManager.m in Sources */,
+				5649B6191BE280D6009947EF /* SCTileOverlay.m in Sources */,
+				5649B5EC1BE280D6009947EF /* SCMultiPolygon+MapKit.m in Sources */,
+				5649B61F1BE280D6009947EF /* SCWebAppZipLoader.m in Sources */,
+				5649B5D91BE280D6009947EF /* SCLoggingAssertionHandler.m in Sources */,
+				5649B5A61BE280D6009947EF /* SCFilterLike.m in Sources */,
+				5649B6171BE280D6009947EF /* SCTileMapSource.m in Sources */,
+				5649B5BE1BE280D6009947EF /* SCGeometry+MapKit.m in Sources */,
+				5649B6131BE280D6009947EF /* SCStoreConfig.m in Sources */,
+				5649B61D1BE280D6009947EF /* SCUserPrefs.m in Sources */,
+				5649B61B1BE280D6009947EF /* SCTileOverlayRenderer.m in Sources */,
+				5649B6031BE280D6009947EF /* SCRasterService.m in Sources */,
+				5649B5D11BE280D6009947EF /* SCLineString.m in Sources */,
+				5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */,
+				5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */,
+				5649B5911BE280D6009947EF /* SCDataStore.m in Sources */,
+				5649B5E61BE280D6009947EF /* SCMultiPoint+MapKit.m in Sources */,
+				5649B5F21BE280D6009947EF /* SCPoint.m in Sources */,
+				5649B5CD1BE280D6009947EF /* SCLinearRing+GeoJSON.m in Sources */,
+				5649B5941BE280D6009947EF /* SCFileUtils.m in Sources */,
+				5649B5B31BE280D6009947EF /* SCGeoFilterContains.m in Sources */,
+				5649B5AC1BE280D6009947EF /* SCFilterNotIn.m in Sources */,
+				5649B6081BE280D6009947EF /* SCSensorService.m in Sources */,
+				5649B5851BE280D6009947EF /* SCBoundingBox.m in Sources */,
+				5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */,
+				5649B5E21BE280D6009947EF /* SCMultiPoint.m in Sources */,
+				5649B5FC1BE280D6009947EF /* SCPolygon+MapKit.m in Sources */,
+				5649B5C21BE280D6009947EF /* SCGeometryCollection+GeoJSON.m in Sources */,
+				5649B5CB1BE280D6009947EF /* SCLinearRing.m in Sources */,
+				5649B59E1BE280D6009947EF /* SCFilterGreaterThanEqual.m in Sources */,
+				5649B5C61BE280D6009947EF /* SCJavascriptBridge.m in Sources */,
+				5649B58D1BE280D6009947EF /* SCDataAdapter.m in Sources */,
+				5649B5C41BE280D6009947EF /* SCGeometryCollection+MapKit.m in Sources */,
+				5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */,
+				5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */,
+				5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */,
+				5649B5F01BE280D6009947EF /* SCOpenStreetMapSource.m in Sources */,
+				5649B5FA1BE280D6009947EF /* SCPolygon+GeoJSON.m in Sources */,
+				5649B5961BE280D6009947EF /* SCFilter.m in Sources */,
+				5649B5C81BE280D6009947EF /* SCJavascriptBridgeAPI.m in Sources */,
+				5649B5B11BE280D6009947EF /* SCGeoFilter.m in Sources */,
+				5649B5B51BE280D6009947EF /* SCGeoFilterDisjoint.m in Sources */,
+				5649B59A1BE280D6009947EF /* SCFilterEqual.m in Sources */,
+				5649B58B1BE280D6009947EF /* SCCompoundPredicate.m in Sources */,
+				5649B5D71BE280D6009947EF /* SCLocalWebApp.m in Sources */,
+				5649B5C01BE280D6009947EF /* SCGeometryCollection.m in Sources */,
+				5649B5871BE280D6009947EF /* SCBoundingBox+MapKit.m in Sources */,
+				5649B5F61BE280D6009947EF /* SCPoint+MapKit.m in Sources */,
+				5649B5F81BE280D6009947EF /* SCPolygon.m in Sources */,
+				5649B5E81BE280D6009947EF /* SCMultiPolygon.m in Sources */,
+				5649B5981BE280D6009947EF /* SCFilterBetween.m in Sources */,
+				5649B5A21BE280D6009947EF /* SCFilterLessThan.m in Sources */,
+				5649B6641BE2A00E009947EF /* JSONKit.m in Sources */,
+				5649B6201BE280D6009947EF /* SpatialConnect.m in Sources */,
+				5649B5A81BE280D6009947EF /* SCFilterNotBetween.m in Sources */,
+				5649B5EA1BE280D6009947EF /* SCMultiPolygon+GeoJSON.m in Sources */,
+				5649B5BC1BE280D6009947EF /* SCGeometry+GeoJSON.m in Sources */,
+				5649B60A1BE280D6009947EF /* SCService.m in Sources */,
+				5649B5B71BE280D6009947EF /* SCGeoJSON.m in Sources */,
+				5649B5A01BE280D6009947EF /* SCFilterIn.m in Sources */,
+				5649B6101BE280D6009947EF /* SCSpatialFeature.m in Sources */,
+				5649B5A41BE280D6009947EF /* SCFilterLessThanEqual.m in Sources */,
+				5649B5CF1BE280D6009947EF /* SCLinearRing+MapKit.m in Sources */,
+				5649B5E01BE280D6009947EF /* SCMultiLineString+MapKit.m in Sources */,
+				5649B5F41BE280D6009947EF /* SCPoint+GeoJSON.m in Sources */,
+				5649B5E41BE280D6009947EF /* SCMultiPoint+GeoJSON.m in Sources */,
+				5649B5D31BE280D6009947EF /* SCLineString+GeoJSON.m in Sources */,
+				5649B57D1BE280D6009947EF /* GeoJSONAdapter.m in Sources */,
+				5649B5DC1BE280D6009947EF /* SCMultiLineString.m in Sources */,
+				5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */,
+				5649B5BA1BE280D6009947EF /* SCGeometry.m in Sources */,
+				5649B5D51BE280D6009947EF /* SCLineString+MapKit.m in Sources */,
+				5649B5DE1BE280D6009947EF /* SCMultiLineString+GeoJSON.m in Sources */,
+				5649B6151BE280D6009947EF /* SCStyle.m in Sources */,
+				5649B6011BE280D6009947EF /* SCQueryFilter.m in Sources */,
+				5649B57F1BE280D6009947EF /* GeoJSONStorageConnector.m in Sources */,
+				5649B58F1BE280D6009947EF /* SCDataService.m in Sources */,
+				5649B5EE1BE280D6009947EF /* SCNetworkService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5649B4991BE27C6A009947EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5649B4CE1BE28079009947EF /* SCMultiPolygonTest.m in Sources */,
+				5649B4D21BE28079009947EF /* SCUpdateFeature.m in Sources */,
+				5649B4CA1BE28079009947EF /* SCGeoJSONParserTest.m in Sources */,
+				5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */,
+				5649B4D41BE28079009947EF /* SpatialConnectAutoConfigTest.m in Sources */,
+				5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */,
+				5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */,
+				5649B4C81BE28079009947EF /* SCCreateFeature.m in Sources */,
+				5649B4D11BE28079009947EF /* SCQueryFilterTest.m in Sources */,
+				5649B4CD1BE28079009947EF /* SCMultiPointTest.m in Sources */,
+				5649B4C71BE28079009947EF /* LocalFilterTests.m in Sources */,
+				5649B4C91BE28079009947EF /* SCDeleteFeature.m in Sources */,
+				5649B4D01BE28079009947EF /* SCPolygonTest.m in Sources */,
+				5649B4CB1BE28079009947EF /* SCGeoJSONWriterTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5649B4A01BE27C6A009947EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5649B4921BE27C6A009947EF /* SpatialConnect */;
+			targetProxy = 5649B49F1BE27C6A009947EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5649B4A51BE27C6A009947EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "SpatialConnect/SpatialConnect-Prefix.h";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		5649B4A61BE27C6A009947EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "SpatialConnect/SpatialConnect-Prefix.h";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		5649B4A81BE27C6A009947EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55DA13B20A74E1C7FBC7E0D6 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SpatialConnect/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnect;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		5649B4A91BE27C6A009947EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F2710B15F6E9F16E1932224 /* Pods.release.xcconfig */;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SpatialConnect/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnect;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		5649B4AB1BE27C6A009947EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38EFC21C69482B839F799B4C /* Pods-SpatialConnectTests.debug.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = SpatialConnectTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5649B4AC1BE27C6A009947EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 51459E170E45B8FA2EA8CD4E /* Pods-SpatialConnectTests.release.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = SpatialConnectTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5649B48D1BE27C6A009947EF /* Build configuration list for PBXProject "SpatialConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5649B4A51BE27C6A009947EF /* Debug */,
+				5649B4A61BE27C6A009947EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5649B4A71BE27C6A009947EF /* Build configuration list for PBXNativeTarget "SpatialConnect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5649B4A81BE27C6A009947EF /* Debug */,
+				5649B4A91BE27C6A009947EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5649B4AA1BE27C6A009947EF /* Build configuration list for PBXNativeTarget "SpatialConnectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5649B4AB1BE27C6A009947EF /* Debug */,
+				5649B4AC1BE27C6A009947EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5649B48A1BE27C6A009947EF /* Project object */;
+}
