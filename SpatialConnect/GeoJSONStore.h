@@ -17,12 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-
 #import <Foundation/Foundation.h>
 #import "SCSpatialStore.h"
 #import "SCDataStore.h"
 #import "GeoJSONAdapter.h"
 
-@interface GeoJSONStore : SCDataStore <SCSpatialStore,SCDataStoreLifeCycle>
+@interface GeoJSONStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
+  GeoJSONAdapter *adapter;
+}
 
 @end

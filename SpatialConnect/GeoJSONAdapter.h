@@ -18,22 +18,21 @@
 ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "SCDataAdapter.h"
 #import "GeoJSONStorageConnector.h"
 #import "SCQueryFilter.h"
 #import "SCStyle.h"
 #import "SCSpatialFeature.h"
 #import "SCGeometry.h"
 
-@interface GeoJSONAdapter : SCDataAdapter {
+@interface GeoJSONAdapter : NSObject {
   NSBundle *geojsonBundle;
   NSString *geojsonFilePath;
 }
 
 @property GeoJSONStorageConnector *connector;
-@property SCDataAdapterStatus status;
 @property(nonatomic, weak) SCStyle *defaultStyle;
 
+- (void)connect;
 - (id)initWithFilePath:(NSString *)filepath;
 - (RACSignal *)query:(SCQueryFilter *)filter;
 - (RACSignal *)create:(SCSpatialFeature *)feature;

@@ -18,7 +18,6 @@
 ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "SCDataAdapter.h"
 #import "SCStyle.h"
 #import "SCStoreConfig.h"
 #import "SCQueryFilter.h"
@@ -33,7 +32,6 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
 };
 
 @interface SCDataStore : NSObject {
-  __strong SCDataAdapter *adapter;
   NSString *_storeId;
   NSString *_name;
   NSInteger _version;

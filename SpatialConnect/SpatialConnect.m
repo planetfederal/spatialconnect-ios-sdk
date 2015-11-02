@@ -18,7 +18,6 @@
 ******************************************************************************/
 
 #import "SpatialConnect.h"
-#import "SCDataAdapter.h"
 #import "SCNetworkService.h"
 #import "SCDataService.h"
 #import "SCLoggingAssertionHandler.h"
