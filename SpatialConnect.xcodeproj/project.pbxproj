@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		2D7D9D727DECA781AFD4CE68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 		560A71191BE703E500CE473F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 560A71181BE703E500CE473F /* libsqlite3.tbd */; };
-		560A711C1BE81C9800CE473F /* SCStoreEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A711A1BE81C9800CE473F /* SCStoreEvent.h */; };
-		560A711D1BE81C9800CE473F /* SCStoreEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A711B1BE81C9800CE473F /* SCStoreEvent.m */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
 		560A71251BE84DB200CE473F /* SCGeopackageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71241BE84DB200CE473F /* SCGeopackageTest.m */; };
@@ -228,8 +226,6 @@
 		51459E170E45B8FA2EA8CD4E /* Pods-SpatialConnectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpatialConnectTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpatialConnectTests/Pods-SpatialConnectTests.release.xcconfig"; sourceTree = "<group>"; };
 		55DA13B20A74E1C7FBC7E0D6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		560A71181BE703E500CE473F /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		560A711A1BE81C9800CE473F /* SCStoreEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreEvent.h; sourceTree = "<group>"; };
-		560A711B1BE81C9800CE473F /* SCStoreEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreEvent.m; sourceTree = "<group>"; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
 		560A71241BE84DB200CE473F /* SCGeopackageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageTest.m; sourceTree = "<group>"; };
@@ -738,8 +734,6 @@
 				5649B4EC1BE280D5009947EF /* SCDataStore.m */,
 				563BEC541BE500D500778EDA /* GeoJSON */,
 				563BEC671BE5290A00778EDA /* Geopackage */,
-				560A711A1BE81C9800CE473F /* SCStoreEvent.h */,
-				560A711B1BE81C9800CE473F /* SCStoreEvent.m */,
 				560A712A1BE912BF00CE473F /* SCAdapterKeyValue.h */,
 			);
 			name = Stores;
@@ -1006,7 +1000,6 @@
 				5649B6221BE283EC009947EF /* SpatialConnect.h in Headers */,
 				5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */,
 				5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */,
-				560A711C1BE81C9800CE473F /* SCStoreEvent.h in Headers */,
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				5649B61C1BE280D6009947EF /* SCUserPrefs.h in Headers */,
@@ -1254,7 +1247,6 @@
 				5649B58B1BE280D6009947EF /* SCCompoundPredicate.m in Sources */,
 				5649B5D71BE280D6009947EF /* SCLocalWebApp.m in Sources */,
 				5649B5C01BE280D6009947EF /* SCGeometryCollection.m in Sources */,
-				560A711D1BE81C9800CE473F /* SCStoreEvent.m in Sources */,
 				5649B5871BE280D6009947EF /* SCBoundingBox+MapKit.m in Sources */,
 				563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */,
 				5649B5F61BE280D6009947EF /* SCPoint+MapKit.m in Sources */,
