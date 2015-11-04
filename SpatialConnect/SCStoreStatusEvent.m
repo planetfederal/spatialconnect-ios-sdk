@@ -17,14 +17,25 @@
  * under the License.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCSpatialStore.h"
-#import "SCDataStore.h"
-#import "GeopackageFileAdapter.h"
+#import "SCStoreStatusEvent.h"
 
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-  GeopackageFileAdapter *adapter;
+@implementation SCStoreStatusEvent
+
+@synthesize status = _status;
+@synthesize storeId = _storeId;
+
++ (instancetype)fromEvent:(SCDataStoreStatus *)s andStoreId:(NSString *)sId {
+  SCStoreStatusEvent *evt =
+      [[SCStoreStatusEvent alloc] initWithEvent:s andStoreId:sId];
+  return evt;
+}
+
+- (id)initWithEvent:(SCDataStoreStatus *)s andStoreId:(NSString *)sId {
+  if (self = [super init]) {
+    _status = s;
+    _storeId = sId;
+  }
+  return self;
 }
 
 @end

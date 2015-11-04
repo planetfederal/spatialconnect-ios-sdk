@@ -23,5 +23,6 @@
 @interface SpatialConnectHelper : NSObject
 
 + (SpatialConnect *)loadConfigAndStartServices;
++ (SpatialConnect *)loadConfig;
 
 @end

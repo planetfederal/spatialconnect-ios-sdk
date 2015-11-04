@@ -56,23 +56,6 @@
   return self;
 }
 
-- (id)initWithResource:(id)resource {
-  self = [self init];
-  if (!self) {
-    return self;
-  }
-  return self;
-}
-
-- (id)initWithResource:(id)resource withStyle:(SCStyle *)style {
-  self = [self initWithResource:resource];
-  if (!self) {
-    return nil;
-  }
-  _style = style;
-  return self;
-}
-
 - (NSString *)key {
   NSAssert(_type, @"Store Type for Store has not been set");
   NSAssert(_version > 0, @"Adapter Version for Adapter is not valid. Value:%ld",

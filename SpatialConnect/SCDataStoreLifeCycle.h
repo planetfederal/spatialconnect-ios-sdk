@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
 @protocol SCDataStoreLifeCycle <NSObject>
 
 @required
@@ -26,16 +25,5 @@
 - (void)stop;
 - (void)resume;
 - (void)pause;
-
-@optional
-
-- (void)dataStoreWillStart;
-- (void)dataStoreDidStart;
-- (void)dataStoreWillStop;
-- (void)dataStoreDidStop;
-- (void)dataStoreWillResume;
-- (void)dataStoreDidResume;
-- (void)dataStoreWillPause;
-- (void)dataStoreDidPause;
 
 @end

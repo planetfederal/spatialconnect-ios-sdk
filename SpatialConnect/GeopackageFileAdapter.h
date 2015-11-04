@@ -18,13 +18,16 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "SCSpatialStore.h"
-#import "SCDataStore.h"
-#import "GeopackageFileAdapter.h"
+#import "SCStoreConfig.h"
+#import "SCAdapterKeyValue.h"
 
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-  GeopackageFileAdapter *adapter;
+@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue> {
+  NSString *uri;
+  NSString *filepath;
+  NSString *storeId;
 }
+
+- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
+- (RACSignal *)connect;
 
 @end

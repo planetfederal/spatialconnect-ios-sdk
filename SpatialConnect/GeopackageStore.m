@@ -19,6 +19,10 @@
 
 #import "GeopackageStore.h"
 
+@interface GeopackageStore (PrivateMethods)
+
+@end
+
 @implementation GeopackageStore
 
 #define STORE_NAME @"Geopackage"
@@ -33,6 +37,7 @@
   if (!self) {
     return nil;
   }
+  adapter = [[GeopackageFileAdapter alloc] initWithStoreConfig:config];
   _name = config.name;
   _type = TYPE;
   _version = VERSION;
@@ -48,32 +53,18 @@
   return self;
 }
 
-- (id)initWithResource:(id)resource {
-  self = [super initWithResource:resource];
-  if (!self) {
-    return nil;
-  }
-  _name = STORE_NAME;
-  _type = TYPE;
-  _version = VERSION;
-  return self;
-}
-
-- (id)initWithResource:(id)resource withStyle:(SCStyle *)style {
-  self = [self initWithResource:resource];
-  if (!self) {
-    return nil;
-  }
-  self.style = style;
-  return self;
-}
 #pragma mark -
 #pragma mark SCDataStoreLifeCycle
 
 - (void)start {
+  self.status = SC_DATASTORE_STARTED;
+  [adapter.connect subscribeCompleted:^{
+    self.status = SC_DATASTORE_RUNNING;
+  }];
 }
 
 - (void)stop {
+  self.status = SC_DATASTORE_STOPPED;
 }
 
 - (void)resume {
@@ -103,6 +94,12 @@
 
 - (RACSignal *)deleteFeature:(NSString *)identifier {
   return nil;
+}
+
+#pragma mark -
+#pragma mark Override Parent
++ (NSString *)versionKey {
+  return [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
 }
 
 @end

@@ -18,13 +18,11 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "SCSpatialStore.h"
-#import "SCDataStore.h"
-#import "GeopackageFileAdapter.h"
 
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-  GeopackageFileAdapter *adapter;
-}
+@protocol SCAdapterKeyValue <NSObject>
+
+@required
+
+- (NSString *)filepathKey;
 
 @end

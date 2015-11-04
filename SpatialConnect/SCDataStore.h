@@ -50,8 +50,6 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config;
 - (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style;
-- (id)initWithResource:(id)resource;
-- (id)initWithResource:(id)resource withStyle:(SCStyle *)style;
 
 - (NSDictionary *)dictionary;
 

@@ -18,13 +18,14 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "SCSpatialStore.h"
 #import "SCDataStore.h"
-#import "GeopackageFileAdapter.h"
 
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-  GeopackageFileAdapter *adapter;
-}
+@interface SCStoreStatusEvent : NSObject
+
+@property(nonatomic, readonly) SCDataStoreStatus status;
+@property(nonatomic, readonly) NSString *storeId;
+
++ (instancetype)fromEvent:(SCDataStoreStatus)s andStoreId:(NSString *)sId;
+- (id)initWithEvent:(SCDataStoreStatus)s andStoreId:(NSString *)sId;
 
 @end

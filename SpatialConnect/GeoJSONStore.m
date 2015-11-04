@@ -51,27 +51,6 @@
   return self;
 }
 
-- (id)initWithResource:(id)resource {
-  self = [super initWithResource:resource];
-  if (!self) {
-    return nil;
-  }
-  _name = STORE_NAME;
-  _type = TYPE;
-  _version = VERSION;
-  adapter = [[GeoJSONAdapter alloc] initWithFilePath:(NSString *)resource];
-  return self;
-}
-
-- (id)initWithResource:(id)resource withStyle:(SCStyle *)style {
-  self = [self initWithResource:resource];
-  if (!self) {
-    return nil;
-  }
-  self.style = style;
-  return self;
-}
-
 - (void)initializeAdapter:(SCStoreConfig *)config {
   NSString *filePath;
   if (config.isMainBundle) {

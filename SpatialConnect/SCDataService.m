@@ -19,8 +19,10 @@
 
 #import "SCDataService.h"
 #import "GeoJSONStore.h"
+#import "GeopackageStore.h"
 #import "SCGeometry.h"
 #import "SCSpatialStore.h"
+#import "SCStoreStatusEvent.h"
 
 @interface SCDataService (PrivateMethods)
 - (void)startAllStores;
@@ -32,6 +34,7 @@
 @implementation SCDataService
 
 @synthesize storesStarted;
+@synthesize storeEvents = _storeEvents;
 
 #define DATA_SERVICE @"DataService"
 
@@ -41,6 +44,8 @@
     [self addDefaultStoreImpls];
     stores = [[NSMutableDictionary alloc] init];
     self.storesStarted = NO;
+    storeEventSubject = [RACSubject new];
+    _storeEvents = [storeEventSubject publish];
   }
   return self;
 }
@@ -48,6 +53,8 @@
 - (void)addDefaultStoreImpls {
   [supportedStoreImpls setObject:[GeoJSONStore class]
                           forKey:[GeoJSONStore versionKey]];
+  [supportedStoreImpls setObject:[GeopackageStore class]
+                          forKey:[GeopackageStore versionKey]];
 }
 
 - (void)startAllStores {
@@ -67,6 +74,9 @@
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [((id<SCDataStoreLifeCycle>)store)start];
+    [storeEventSubject
+        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_RUNNING
+                                    andStoreId:store.storeId]];
   } else {
     NSLog(@"%@",
           [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
@@ -80,6 +90,9 @@
 - (void)stopStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [((id<SCDataStoreLifeCycle>)store)stop];
+    [storeEventSubject
+        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STOPPED
+                                    andStoreId:store.storeId]];
   } else {
     NSLog(@"%@",
           [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
