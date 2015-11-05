@@ -88,10 +88,11 @@
 #pragma mark -
 #pragma mark SCDataStoreLifeCycle
 
-- (void)start {
+- (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
   [adapter connect];
   self.status = SC_DATASTORE_RUNNING;
+  return [RACSignal empty];
 }
 
 - (void)stop {

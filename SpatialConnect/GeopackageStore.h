@@ -22,9 +22,15 @@
 #import "SCDataStore.h"
 #import "GeopackageFileAdapter.h"
 
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-  GeopackageFileAdapter *adapter;
-}
+extern NSString *const SCGeopackageErrorDomain;
+
+typedef NS_ENUM(NSInteger, SCGeopackageError) {
+  SC_GEOPACKAGE_FILENOTFOUND = 1,
+  SC_GEOPACKAGE_ERRORDOWNLOADING = 2
+};
+
+@interface GeopackageStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle>
+
+@property(readonly, nonatomic) GeopackageFileAdapter *adapter;
 
 @end

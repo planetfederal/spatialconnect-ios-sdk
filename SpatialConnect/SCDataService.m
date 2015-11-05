@@ -73,10 +73,16 @@
 
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-    [((id<SCDataStoreLifeCycle>)store)start];
-    [storeEventSubject
-        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_RUNNING
-                                    andStoreId:store.storeId]];
+    [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
+      [storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTFAILED
+                                      andStoreId:store.storeId]];
+    } completed:^{
+      [storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_RUNNING
+                                      andStoreId:store.storeId]];
+    }];
+
   } else {
     NSLog(@"%@",
           [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "

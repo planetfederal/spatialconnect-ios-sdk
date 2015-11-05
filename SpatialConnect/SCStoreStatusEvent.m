@@ -24,13 +24,13 @@
 @synthesize status = _status;
 @synthesize storeId = _storeId;
 
-+ (instancetype)fromEvent:(SCDataStoreStatus *)s andStoreId:(NSString *)sId {
++ (instancetype)fromEvent:(SCDataStoreStatus)s andStoreId:(NSString *)sId {
   SCStoreStatusEvent *evt =
       [[SCStoreStatusEvent alloc] initWithEvent:s andStoreId:sId];
   return evt;
 }
 
-- (id)initWithEvent:(SCDataStoreStatus *)s andStoreId:(NSString *)sId {
+- (id)initWithEvent:(SCDataStoreStatus)s andStoreId:(NSString *)sId {
   if (self = [super init]) {
     _status = s;
     _storeId = sId;

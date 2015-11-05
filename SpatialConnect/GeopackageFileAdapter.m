@@ -19,31 +19,44 @@
 
 #import "GeopackageFileAdapter.h"
 #import "SCFileUtils.h"
+#import "GeopackageStore.h"
 
-@interface GeopackageFileAdapter (PrivateMethods)
+@interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
 - (RACSignal *)attemptFileDownload;
+- (GPKGConnection *)openConnection;
+
+@property(readwrite, nonatomic, strong) NSString *uri;
+@property(readwrite, nonatomic, strong) NSString *filepath;
+@property(readwrite, nonatomic, strong) NSString *storeId;
+@property(readwrite, nonatomic, strong) GPKGConnection *connection;
+
 @end
 
 @implementation GeopackageFileAdapter
 
+@synthesize uri = _uri;
+@synthesize filepath = _filepath;
+@synthesize storeId = _storeId;
+@synthesize connection = _connection;
+
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg {
   if (self = [super init]) {
-    uri = cfg.uri;
-    storeId = cfg.uniqueid;
-    filepath = nil;
+    _uri = cfg.uri;
+    _storeId = cfg.uniqueid;
+    _filepath = nil;
   }
   return self;
 }
 
 - (RACSignal *)connect {
-  NSString *dbName = storeId;
-  NSString *fp =
-      [[NSUserDefaults standardUserDefaults] stringForKey:self.filepathKey];
+  NSString *dbName = self.storeId;
+  NSString *fp = self.dbFilepath;
+
   if ([[NSFileManager defaultManager] fileExistsAtPath:fp]) {
     return [RACSignal empty];
-  } else if ([uri.lowercaseString containsString:@"http"]) {
-    NSURL *url = [[NSURL alloc] initWithString:uri];
+  } else if ([self.uri.lowercaseString containsString:@"http"]) {
+    NSURL *url = [[NSURL alloc] initWithString:self.uri];
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
@@ -52,15 +65,26 @@
             [data writeToFile:dbPath atomically:YES];
             [self setFilepathPreference:dbPath];
             [subscriber sendCompleted];
+          } error:^(NSError *error) {
+            NSLog(@"%@", error.description);
+            [subscriber sendError:error];
           }];
           return nil;
         }];
   }
-  NSError *err =
-      [NSError errorWithDomain:@"gpkgConnect"
-                          code:-1
-                      userInfo:nil]; // TODO add connect codes to parent
+  NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
+                                     code:SC_GEOPACKAGE_FILENOTFOUND
+                                 userInfo:nil];
   return [RACSignal error:err];
+}
+
+- (GPKGGeoPackage *)openConnection {
+  self.connection =
+      [[GPKGConnection alloc] initWithDatabaseFilename:self.dbFilepath];
+  GPKGGeoPackage *gpkg =
+      [[GPKGGeoPackage alloc] initWithConnection:self.connection
+                                     andWritable:YES];
+  return gpkg;
 }
 
 - (RACSignal *)attemptFileDownload:(NSURL *)fileUrl {
@@ -74,12 +98,16 @@
 #pragma mark -
 #pragma mark SCAdapterKeyValue
 - (NSString *)filepathKey {
-  return [NSString stringWithFormat:@"%@.%@", storeId, @"filepath"];
+  return [NSString stringWithFormat:@"%@.%@", self.storeId, @"filepath"];
 }
 
 - (void)setFilepathPreference:(NSString *)dbPath {
   [[NSUserDefaults standardUserDefaults] setObject:dbPath
                                             forKey:self.filepathKey];
+}
+
+- (NSString *)dbFilepath {
+  return [[NSUserDefaults standardUserDefaults] stringForKey:self.filepathKey];
 }
 
 @end

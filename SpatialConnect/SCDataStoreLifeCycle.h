@@ -21,7 +21,7 @@
 
 @required
 
-- (void)start;
+- (RACSignal *)start;
 - (void)stop;
 - (void)resume;
 - (void)pause;

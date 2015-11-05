@@ -19,8 +19,10 @@
 
 #import "GeopackageStore.h"
 
-@interface GeopackageStore (PrivateMethods)
+NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
+@interface GeopackageStore (private)
+@property(readwrite, nonatomic, strong) GeopackageFileAdapter *adapter;
 @end
 
 @implementation GeopackageStore
@@ -28,6 +30,8 @@
 #define STORE_NAME @"Geopackage"
 #define TYPE @"gpkg"
 #define VERSION 1
+
+@synthesize adapter = _adapter;
 
 #pragma mark -
 #pragma mark Init Methods
@@ -37,7 +41,7 @@
   if (!self) {
     return nil;
   }
-  adapter = [[GeopackageFileAdapter alloc] initWithStoreConfig:config];
+  _adapter = [[GeopackageFileAdapter alloc] initWithStoreConfig:config];
   _name = config.name;
   _type = TYPE;
   _version = VERSION;
@@ -56,11 +60,16 @@
 #pragma mark -
 #pragma mark SCDataStoreLifeCycle
 
-- (void)start {
+- (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
-  [adapter.connect subscribeCompleted:^{
-    self.status = SC_DATASTORE_RUNNING;
-  }];
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.adapter.connect subscribeCompleted:^{
+          self.status = SC_DATASTORE_RUNNING;
+          [subscriber sendCompleted];
+        }];
+        return nil;
+      }];
 }
 
 - (void)stop {

@@ -20,12 +20,14 @@
 #import <Foundation/Foundation.h>
 #import "SCStoreConfig.h"
 #import "SCAdapterKeyValue.h"
+#import <geopackage-ios/geopackage_ios.h>
 
-@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue> {
-  NSString *uri;
-  NSString *filepath;
-  NSString *storeId;
-}
+@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue>
+
+@property(readonly, nonatomic, strong) NSString *uri;
+@property(readonly, nonatomic, strong) NSString *filepath;
+@property(readonly, nonatomic, strong) NSString *storeId;
+@property(readonly, nonatomic, strong) GPKGConnection *connection;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg;
 - (RACSignal *)connect;
