@@ -17,29 +17,24 @@
  * under the License.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCStoreConfig.h"
-#import "SCAdapterKeyValue.h"
-#import "SCQueryFilter.h"
-#import <geopackage-ios/geopackage_ios.h>
+#import "SCLineString+GPKG.h"
+#import "WKBLineString.h"
+#import "SCPoint+GPKG.h"
 
-@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue>
+@implementation SCLineString (GPKG)
 
-@property(readonly, nonatomic, strong) NSString *uri;
-@property(readonly, nonatomic, strong) NSString *filepath;
-@property(readonly, nonatomic, strong) NSString *storeId;
-@property(readonly, nonatomic, strong) GPKGGeoPackage *gpkg;
+- (WKBLineString*)wkGeometry {
+  WKBLineString *ls = [[WKBLineString alloc] initWithType:WKB_LINESTRING andHasZ:NO andHasM:NO];
+  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL * _Nonnull stop) {
+    [ls addPoint:p.wkGeometry];
+  }];
+  return ls;
+}
 
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
-- (RACSignal *)connect;
-
-- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter;
-- (RACSignal *)queryByLayerId:(NSString *)layerId
-                   withFilter:(SCQueryFilter *)filter;
-
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature;
-- (RACSignal *)deleteFeature:(NSString *)identifier;
-- (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
-- (NSArray *)layerList;
+- (GPKGGeometryData*)wkb {
+  GPKGGeometryData * geomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+  [geomData setGeometry:self.wkGeometry];
+  return geomData;
+}
 
 @end

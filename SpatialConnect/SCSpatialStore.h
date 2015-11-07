@@ -75,6 +75,8 @@
 
 @optional
 
+- (RACSignal *)layerList;
+
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature
                      inLayer:(NSString *)layerId;
 

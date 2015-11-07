@@ -30,12 +30,15 @@
 #define TYPE @"geojson"
 #define VERSION 1
 
+@synthesize type = _type;
+@synthesize version = _version;
+
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (!self) {
     return nil;
   }
-  _name = config.name;
+  self.name = config.name;
   _type = TYPE;
   _version = VERSION;
   [self initializeAdapter:config];

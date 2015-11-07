@@ -42,9 +42,9 @@
 - (void)testGpkgDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
   NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
-  [sc.manager startAllServices];
   RACMulticastConnection *c = sc.manager.dataService.storeEvents;
-  RACSignal *evts = [c.autoconnect filter:^BOOL(SCStoreStatusEvent *evt) {
+  [c connect];
+  RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
     if ([evt.storeId isEqualToString:storeId] &&
         evt.status == SC_DATASTORE_RUNNING) {
       return YES;
@@ -52,8 +52,38 @@
       return NO;
     }
   }];
-  SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
-  [sc.manager.dataService queryStoreById:storeId withFilter:nil];
+
+  [evts subscribeNext:^(SCStoreStatusEvent *evt) {
+    SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
+    if (ds) {
+      [expect fulfill];
+    }
+  }];
+  [sc.manager startAllServices];
+  [self waitForExpectationsWithTimeout:120.0 handler:nil];
+}
+
+- (void)testGpkgFeatureCreate {
+  XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
+  NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
+  RACMulticastConnection *c = sc.manager.dataService.storeEvents;
+  [c connect];
+  RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
+    if ([evt.storeId isEqualToString:storeId] &&
+        evt.status == SC_DATASTORE_RUNNING) {
+      return YES;
+    } else {
+      return NO;
+    }
+  }];
+  
+  [evts subscribeNext:^(SCStoreStatusEvent *evt) {
+    SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
+    if (ds) {
+      [expect fulfill];
+    }
+  }];
+  [sc.manager startAllServices];
   [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 

@@ -17,29 +17,21 @@
  * under the License.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCStoreConfig.h"
-#import "SCAdapterKeyValue.h"
-#import "SCQueryFilter.h"
-#import <geopackage-ios/geopackage_ios.h>
+#import "SCMultiLineString+GPKG.h"
+#import "WKBMultiLineString.h"
+#import <geopackage-ios/GPKGGeometryData.h>
+#import "SCLineString+GPKG.h"
 
-@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue>
+@implementation SCMultiLineString (GPKG)
 
-@property(readonly, nonatomic, strong) NSString *uri;
-@property(readonly, nonatomic, strong) NSString *filepath;
-@property(readonly, nonatomic, strong) NSString *storeId;
-@property(readonly, nonatomic, strong) GPKGGeoPackage *gpkg;
-
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
-- (RACSignal *)connect;
-
-- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter;
-- (RACSignal *)queryByLayerId:(NSString *)layerId
-                   withFilter:(SCQueryFilter *)filter;
-
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature;
-- (RACSignal *)deleteFeature:(NSString *)identifier;
-- (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
-- (NSArray *)layerList;
+- (GPKGGeometryData*)wkb {
+  WKBMultiLineString *mls = [[WKBMultiLineString alloc] initWithType:WKB_MULTILINESTRING andHasZ:NO andHasM:NO];
+  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString  *ls, NSUInteger idx, BOOL * _Nonnull stop) {
+    [mls addLineString:ls.wkGeometry];
+  }];
+  GPKGGeometryData * pointGeomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+  [pointGeomData setGeometry:mls];
+  return pointGeomData;
+}
 
 @end

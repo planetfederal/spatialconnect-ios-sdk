@@ -19,14 +19,18 @@
 
 #import "SCDataStore.h"
 
+@interface SCDataStore ()
+@property (readwrite,nonatomic,strong) NSString *storeId;
+@property (readwrite,nonatomic) NSInteger version;
+@property (readwrite,nonatomic,strong) NSString *type;
+@property (readwrite,nonatomic,strong) NSString *key;
+@property (readwrite,nonatomic,strong) NSDictionary *layers;
+@end
+
 @implementation SCDataStore
 
-@synthesize storeId = _storeId;
-@synthesize name = _name;
-@synthesize style = _style;
-@synthesize type = _type;
-@synthesize version = _version;
-@synthesize key = _key;
+@synthesize name;
+@synthesize defaultLayerName;
 
 - (id)init {
   self = [super init];
@@ -42,8 +46,8 @@
   if (!self) {
     return nil;
   }
-  _storeId = config.uniqueid;
-  _name = config.name;
+  self.storeId = config.uniqueid;
+  self.name = config.name;
   return self;
 }
 

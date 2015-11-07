@@ -20,16 +20,17 @@
 #import "GeopackageFileAdapter.h"
 #import "SCFileUtils.h"
 #import "GeopackageStore.h"
+#import "SCGeometry+GPKG.h"
 
 @interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
 - (RACSignal *)attemptFileDownload;
-- (GPKGConnection *)openConnection;
+- (GPKGGeoPackage *)openConnection;
 
 @property(readwrite, nonatomic, strong) NSString *uri;
 @property(readwrite, nonatomic, strong) NSString *filepath;
 @property(readwrite, nonatomic, strong) NSString *storeId;
-@property(readwrite, nonatomic, strong) GPKGConnection *connection;
+@property(readwrite, nonatomic, strong) GPKGGeoPackage *gpkg;
 
 @end
 
@@ -38,7 +39,6 @@
 @synthesize uri = _uri;
 @synthesize filepath = _filepath;
 @synthesize storeId = _storeId;
-@synthesize connection = _connection;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg {
   if (self = [super init]) {
@@ -54,6 +54,7 @@
   NSString *fp = self.dbFilepath;
 
   if ([[NSFileManager defaultManager] fileExistsAtPath:fp]) {
+    self.gpkg = self.openConnection;
     return [RACSignal empty];
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
@@ -64,6 +65,7 @@
                 [SCFileUtils filePathFromDocumentsDirectory:dbName];
             [data writeToFile:dbPath atomically:YES];
             [self setFilepathPreference:dbPath];
+            self.gpkg = self.openConnection;
             [subscriber sendCompleted];
           } error:^(NSError *error) {
             NSLog(@"%@", error.description);
@@ -79,10 +81,10 @@
 }
 
 - (GPKGGeoPackage *)openConnection {
-  self.connection =
+  GPKGConnection *connection =
       [[GPKGConnection alloc] initWithDatabaseFilename:self.dbFilepath];
   GPKGGeoPackage *gpkg =
-      [[GPKGGeoPackage alloc] initWithConnection:self.connection
+      [[GPKGGeoPackage alloc] initWithConnection:connection
                                      andWritable:YES];
   return gpkg;
 }
@@ -108,6 +110,56 @@
 
 - (NSString *)dbFilepath {
   return [[NSUserDefaults standardUserDefaults] stringForKey:self.filepathKey];
+}
+
+- (NSArray *)layerList {
+  return self.gpkg.tables;
+}
+
+- (GPKGFeatureRow*)toFeatureRow:(SCSpatialFeature*)feature {
+  
+  return nil;
+}
+
+- (RACSignal*)createFeature:(SCSpatialFeature *)feature {
+  GPKGFeatureRow *newRow = [self toFeatureRow:feature];
+  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    GPKGFeatureDao *featureDao = [self.gpkg getFeatureDaoWithTableName:feature.layerId];
+    [feature.properties enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSObject  *obj, BOOL *stop) {
+      [featureDao.table.columnNames enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL *stop) {
+        if ([name isEqualToString:key]) {
+          [newRow setValue:obj forKey:key];
+        }
+      }];
+    }];
+    
+    if ([feature isKindOfClass:SCGeometry.class]) {
+      SCGeometry *g = (SCGeometry*)feature;
+      if (g) {
+        [newRow setGeometry:g.wkb];
+      }
+    }
+    
+    [featureDao create:newRow];
+    [subscriber sendCompleted];
+    return nil;
+  }];
+}
+
+- (RACSignal*)deleteFeature:(NSString *)identifier {
+  return nil;
+}
+
+- (RACSignal*)updateFeature:(SCSpatialFeature *)feature {
+  return nil;
+}
+
+- (RACSignal*)queryAllLayers:(SCQueryFilter *)filter {
+  return nil;
+}
+
+- (RACSignal*)queryByLayerId:(NSString *)layerId withFilter:(SCQueryFilter *)filter {
+  return nil;
 }
 
 @end

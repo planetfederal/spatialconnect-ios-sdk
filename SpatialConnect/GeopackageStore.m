@@ -21,7 +21,7 @@
 
 NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
-@interface GeopackageStore (private)
+@interface GeopackageStore ()
 @property(readwrite, nonatomic, strong) GeopackageFileAdapter *adapter;
 @end
 
@@ -36,13 +36,16 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark -
 #pragma mark Init Methods
 
+@synthesize type = _type;
+@synthesize version = _version;
+
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (!self) {
     return nil;
   }
   _adapter = [[GeopackageFileAdapter alloc] initWithStoreConfig:config];
-  _name = config.name;
+  self.name = config.name;
   _type = TYPE;
   _version = VERSION;
   return self;
@@ -85,24 +88,28 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)queryAllLayers:(SCQueryFilter *)filter {
-  return nil;
+  return [self.adapter queryAllLayers:filter];
 }
 
 - (RACSignal *)queryByLayerId:(NSString *)layerId
                    withFilter:(SCQueryFilter *)filter {
-  return nil;
+  return [self.adapter queryByLayerId:layerId withFilter:filter];
 }
 
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature {
-  return nil;
+  return [self.adapter createFeature:feature];
 }
 
 - (RACSignal *)updateFeature:(SCSpatialFeature *)feature {
-  return nil;
+  return [self.adapter updateFeature:feature];
 }
 
 - (RACSignal *)deleteFeature:(NSString *)identifier {
-  return nil;
+  return [self.adapter deleteFeature:identifier];
+}
+
+- (NSArray *)layerList {
+  return self.adapter.layerList;
 }
 
 #pragma mark -

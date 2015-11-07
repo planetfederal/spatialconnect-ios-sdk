@@ -32,21 +32,16 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
   SC_DATASTORE_STARTFAILED
 };
 
-@interface SCDataStore : NSObject {
-  NSString *_storeId;
-  NSString *_name;
-  NSInteger _version;
-  NSString *_type;
-  NSString *_key;
-  NSDictionary *layers;
-}
+@interface SCDataStore : NSObject
 
+@property(readonly,nonatomic) NSDictionary *layers;
 @property(readonly) NSString *storeId;
 @property(nonatomic) NSString *name;
 @property(nonatomic, strong) SCStyle *style;
 @property(readonly) NSInteger version;
 @property(readonly) NSString *type;
 @property(readonly) NSString *key;
+@property(nonatomic) NSString *defaultLayerName;
 @property SCDataStoreStatus status;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config;

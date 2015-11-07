@@ -61,6 +61,10 @@
   return self.name;
 }
 
+- (NSArray*)layerList {
+  return nil;
+}
+
 - (RACSignal *)query:(SCQueryFilter *)filter {
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {

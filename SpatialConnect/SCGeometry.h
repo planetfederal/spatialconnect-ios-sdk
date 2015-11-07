@@ -44,4 +44,5 @@ typedef NS_ENUM(NSInteger,GeometryType) {
 - (id)initWithCoordinateArray:(NSArray*)coords;
 - (GeometryType)type;
 - (BOOL)checkWithin:(SCBoundingBox*)bbox;
+
 @end
