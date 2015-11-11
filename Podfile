@@ -5,7 +5,7 @@ link_with 'SpatialConnect','SpatialConnectTests'
 
 pod 'ReactiveCocoa', '2.5'
 pod 'zipzap','8.0.6'
-pod 'geopackage-ios', :path => '../geopackage-ios'
+pod 'geopackage-ios', :git => 'https://github.com/boundlessgeo/geopackage-ios.git', :branch => 'develop'
 pod 'wkb-ios', '~>1.0'
 
 target :'SpatialConnectTests', :exclusive => true do
