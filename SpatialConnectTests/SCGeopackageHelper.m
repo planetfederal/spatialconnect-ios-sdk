@@ -17,13 +17,35 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCGeometry+GPKG.h"
+#import "SCGeopackageHelper.h"
+#import "SCStoreStatusEvent.h"
 
-@implementation SCGeometry (GPKG)
+@implementation SCGeopackageHelper
 
-- (GPKGGeometryData*) wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
+NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
+
++ (RACSignal*)loadGPKGDataStore:(SpatialConnect*)sc {
+  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+
+    RACMulticastConnection *c = sc.manager.dataService.storeEvents;
+    [c connect];
+    RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
+      if ([evt.storeId isEqualToString:storeId] &&
+          evt.status == SC_DATASTORE_RUNNING) {
+        return YES;
+      } else {
+        return NO;
+      }
+    }];
+
+    [evts subscribeNext:^(SCStoreStatusEvent *evt) {
+      SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
+      [subscriber sendNext:ds];
+      [subscriber sendCompleted];
+    }];
+
+    return nil;
+  }];
 }
 
 @end

@@ -17,13 +17,15 @@
  * under the License.
  ******************************************************************************/
 
+#ifndef SCGeopackageGeometryExtensions_h
+#define SCGeopackageGeometryExtensions_h
+
+#import "SCPoint+GPKG.h"
+#import "SCMultiPoint+GPKG.h"
+#import "SCPolygon+GPKG.h"
+#import "SCMultiPolygon+GPKG.h"
+#import "SCLineString+GPKG.h"
+#import "SCMultiLineString+GPKG.h"
 #import "SCGeometry+GPKG.h"
 
-@implementation SCGeometry (GPKG)
-
-- (GPKGGeometryData*) wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
-}
-
-@end
+#endif /* SCGeopackageGeometryExtensions_h */

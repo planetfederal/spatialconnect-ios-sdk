@@ -21,6 +21,6 @@
 #import "SCGeometry.h"
 
 @interface SCGeometry (GPKG)
-- (GPKGFeatureRow*) wkb;
+- (GPKGGeometryData*) wkb;
 
 @end

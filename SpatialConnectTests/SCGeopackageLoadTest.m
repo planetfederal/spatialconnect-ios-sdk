@@ -22,17 +22,19 @@
 #import "SpatialConnectHelper.h"
 #import "SCStoreStatusEvent.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "SCGeopackageGeometryExtensions.h"
+#import "SCGeopackageHelper.h"
 
-@interface SCGeopackageTest : XCTestCase {
-  SpatialConnect *sc;
-}
+@interface SCGeopackageTest : XCTestCase
+@property(nonatomic) SpatialConnect *sc;
 @end
 
 @implementation SCGeopackageTest
+@synthesize sc;
 
 - (void)setUp {
   [super setUp];
-  sc = [SpatialConnectHelper loadConfig];
+  self.sc = [SpatialConnectHelper loadConfig];
 }
 
 - (void)tearDown {
@@ -41,48 +43,21 @@
 
 - (void)testGpkgDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
-  NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
-  RACMulticastConnection *c = sc.manager.dataService.storeEvents;
-  [c connect];
-  RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if ([evt.storeId isEqualToString:storeId] &&
-        evt.status == SC_DATASTORE_RUNNING) {
-      return YES;
+
+  [[SCGeopackageHelper loadGPKGDataStore:self.sc] subscribeNext:^(SCDataStore *ds) {
+    if (ds) {
+      XCTAssertNotNil(ds.defaultLayerName,@"Layer Name shall be set");
+      XCTAssertNotNil(ds.layers,@"Layer list as array");
+      XCTAssertNoThrow([sc.manager stopAllServices]);
     } else {
-      return NO;
+      XCTAssert(NO,@"Store is nil");
     }
+    [expect fulfill];
+  } error:^(NSError *error) {
+    XCTAssert(NO,@"Error retrieving store");
+    [expect fulfill];
   }];
 
-  [evts subscribeNext:^(SCStoreStatusEvent *evt) {
-    SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
-    if (ds) {
-      [expect fulfill];
-    }
-  }];
-  [sc.manager startAllServices];
-  [self waitForExpectationsWithTimeout:120.0 handler:nil];
-}
-
-- (void)testGpkgFeatureCreate {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
-  NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
-  RACMulticastConnection *c = sc.manager.dataService.storeEvents;
-  [c connect];
-  RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if ([evt.storeId isEqualToString:storeId] &&
-        evt.status == SC_DATASTORE_RUNNING) {
-      return YES;
-    } else {
-      return NO;
-    }
-  }];
-  
-  [evts subscribeNext:^(SCStoreStatusEvent *evt) {
-    SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
-    if (ds) {
-      [expect fulfill];
-    }
-  }];
   [sc.manager startAllServices];
   [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }

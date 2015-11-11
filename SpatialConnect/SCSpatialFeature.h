@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "SCStyle.h"
+#import "SCKeyTuple.h"
 
 @interface SCSpatialFeature : NSObject
 
@@ -30,6 +31,6 @@
 
 @property(strong, nonatomic) SCStyle *style;
 
-- (NSString *)key;
+- (SCKeyTuple *)key;
 
 @end

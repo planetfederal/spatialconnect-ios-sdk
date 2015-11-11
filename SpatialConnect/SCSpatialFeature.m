@@ -49,9 +49,11 @@
   self.storeId = sId;
 }
 
-- (NSString *)key {
-  return [NSString stringWithFormat:@"%@.%@.%@", self.storeId, self.layerId,
-                                    self.identifier];
+- (SCKeyTuple *)key {
+  return [[SCKeyTuple alloc] initWithStoreId:storeId
+                                     layerId:layerId
+                                   featureId:self.identifier];
+  ;
 }
 
 @end

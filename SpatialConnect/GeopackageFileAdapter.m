@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-
-#import "GeopackageFileAdapter.h"
-#import "SCFileUtils.h"
 #import "GeopackageStore.h"
+#import "GeopackageFileAdapter.h"
+#import "SCKeyTuple.h"
+#import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 
 @interface GeopackageFileAdapter (private)
@@ -84,8 +84,7 @@
   GPKGConnection *connection =
       [[GPKGConnection alloc] initWithDatabaseFilename:self.dbFilepath];
   GPKGGeoPackage *gpkg =
-      [[GPKGGeoPackage alloc] initWithConnection:connection
-                                     andWritable:YES];
+      [[GPKGGeoPackage alloc] initWithConnection:connection andWritable:YES];
   return gpkg;
 }
 
@@ -116,50 +115,154 @@
   return self.gpkg.tables;
 }
 
-- (GPKGFeatureRow*)toFeatureRow:(SCSpatialFeature*)feature {
-  
-  return nil;
-}
+- (GPKGFeatureRow *)toFeatureRow:(SCSpatialFeature *)feature {
+  GPKGFeatureDao *fDao = [self.gpkg getFeatureDaoWithTableName:feature.layerId];
+  GPKGFeatureRow *row =
+      (GPKGFeatureRow *)[fDao queryForIdObject:feature.identifier];
+  if (!row) {
+    row = [fDao newRow];
+  }
 
-- (RACSignal*)createFeature:(SCSpatialFeature *)feature {
-  GPKGFeatureRow *newRow = [self toFeatureRow:feature];
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    GPKGFeatureDao *featureDao = [self.gpkg getFeatureDaoWithTableName:feature.layerId];
-    [feature.properties enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSObject  *obj, BOOL *stop) {
-      [featureDao.table.columnNames enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL *stop) {
-        if ([name isEqualToString:key]) {
-          [newRow setValue:obj forKey:key];
+  [feature.properties
+      enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
+                                          BOOL *stop) {
+        if ([fDao.getFeatureTable.columnNames containsObject:key]) {
+          [row setValue:obj forKey:key];
         }
       }];
-    }];
-    
-    if ([feature isKindOfClass:SCGeometry.class]) {
-      SCGeometry *g = (SCGeometry*)feature;
-      if (g) {
-        [newRow setGeometry:g.wkb];
-      }
-    }
-    
-    [featureDao create:newRow];
-    [subscriber sendCompleted];
-    return nil;
-  }];
+
+  if ([feature isKindOfClass:SCGeometry.class]) {
+    SCGeometry *g = (SCGeometry *)feature;
+    [row setGeometry:g.wkb];
+  }
+
+  return row;
 }
 
-- (RACSignal*)deleteFeature:(NSString *)identifier {
-  return nil;
+- (RACSignal *)createFeature:(SCSpatialFeature *)feature {
+  GPKGFeatureRow *newRow = [self toFeatureRow:feature];
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        GPKGFeatureDao *featureDao =
+            [self.gpkg getFeatureDaoWithTableName:feature.layerId];
+        [feature.properties
+            enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
+                                                BOOL *stop) {
+              [featureDao.table.columnNames
+                  enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
+                                               BOOL *stop) {
+                    if ([name isEqualToString:key]) {
+                      [newRow setValue:obj forKey:key];
+                    }
+                  }];
+            }];
+
+        if ([feature isKindOfClass:SCGeometry.class]) {
+          SCGeometry *g = (SCGeometry *)feature;
+          if (g) {
+            [newRow setGeometry:g.wkb];
+          }
+        }
+
+        [featureDao create:newRow];
+        [subscriber sendCompleted];
+        return nil;
+      }];
 }
 
-- (RACSignal*)updateFeature:(SCSpatialFeature *)feature {
-  return nil;
+/**
+ *  Deletes feature using the compound Id key
+ *
+ *  @param compoundId <store>.<layer>.<feature>
+ *
+ *  @return RACSignal for completion of deletion
+ */
+- (RACSignal *)deleteFeature:(SCKeyTuple *)tuple {
+  GPKGFeatureDao *fDao = [self.gpkg getFeatureDaoWithTableName:tuple.layerId];
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if ([fDao deleteById:tuple.featureId] == 1) {
+          [subscriber sendCompleted];
+        } else {
+          [subscriber sendError:[NSError errorWithDomain:SCGeopackageErrorDomain
+                                                    code:100
+                                                userInfo:nil]];
+        }
+        return nil;
+      }];
 }
 
-- (RACSignal*)queryAllLayers:(SCQueryFilter *)filter {
-  return nil;
+- (RACSignal *)updateFeature:(SCSpatialFeature *)feature {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        GPKGFeatureDao *fDao =
+            [self.gpkg getFeatureDaoWithTableName:feature.layerId];
+        GPKGFeatureRow *row = [self toFeatureRow:feature];
+        [fDao update:row];
+        [subscriber sendCompleted];
+        return nil;
+      }];
 }
 
-- (RACSignal*)queryByLayerId:(NSString *)layerId withFilter:(SCQueryFilter *)filter {
-  return nil;
+- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.gpkg.featureTables
+            enumerateObjectsUsingBlock:^(GPKGFeatureDao *dao, NSUInteger idx,
+                                         BOOL *stop) {
+              GPKGResultSet *rs = [dao queryForAll];
+              int limit = 0;
+              while (limit < 100 && rs != nil && [rs moveToNext]) {
+                limit++;
+                SCSpatialFeature *feature =
+                    [self createSCSpatialFeature:[rs getRow]];
+                [subscriber sendNext:feature];
+              }
+              [rs close];
+
+            }];
+        return nil;
+      }];
+}
+
+- (RACSignal *)queryByLayerId:(NSString *)layerId
+                   withFilter:(SCQueryFilter *)filter {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        GPKGFeatureDao *fDao = [self.gpkg getFeatureDaoWithTableName:layerId];
+        GPKGResultSet *rs = [fDao queryForAll];
+        int limit = 0;
+        while (limit < 100 && rs != nil && [rs moveToNext]) {
+          limit++;
+          SCSpatialFeature *feature = [self createSCSpatialFeature:[rs getRow]];
+          [subscriber sendNext:feature];
+        }
+        [rs close];
+        [subscriber sendCompleted];
+        return nil;
+      }];
+}
+
+- (SCSpatialFeature *)createSCSpatialFeature:(GPKGFeatureRow *)row {
+  SCSpatialFeature *scSpatialFeature;
+  // set the geometry's geometry
+  GPKGGeometryData *geometryData = [row getGeometry];
+  if (geometryData != nil) {
+
+  } else {
+    scSpatialFeature = [[SCSpatialFeature alloc] init];
+  }
+  [scSpatialFeature
+      setIdentifier:[NSString stringWithFormat:@"%@.%@.%@", self.storeId,
+                                               row.table.tableName, row.getId]];
+  [row.getColumnNames
+      enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
+                                   BOOL *_Nonnull stop) {
+        [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]
+                                        forKey:name];
+      }];
+
+  return scSpatialFeature;
 }
 
 @end

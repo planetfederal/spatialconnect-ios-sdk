@@ -40,6 +40,7 @@
 @implementation SCDataService
 
 @synthesize storeEvents = _storeEvents;
+@synthesize status;
 
 #define DATA_SERVICE @"DataService"
 

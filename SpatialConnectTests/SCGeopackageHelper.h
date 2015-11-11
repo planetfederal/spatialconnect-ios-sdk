@@ -17,13 +17,10 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCGeometry+GPKG.h"
+#import "SpatialConnect.h"
 
-@implementation SCGeometry (GPKG)
+@interface SCGeopackageHelper : NSObject
 
-- (GPKGGeometryData*) wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
-}
++ (RACSignal*)loadGPKGDataStore:(SpatialConnect*)sc;
 
 @end

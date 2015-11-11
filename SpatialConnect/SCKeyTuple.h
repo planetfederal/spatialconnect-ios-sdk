@@ -17,13 +17,26 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCGeometry+GPKG.h"
+#import <Foundation/Foundation.h>
 
-@implementation SCGeometry (GPKG)
+@interface SCKeyTuple : NSObject
 
-- (GPKGGeometryData*) wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
-}
+@property(readonly, nonatomic) NSString *storeId;
+@property(readonly, nonatomic) NSString *layerId;
+@property(readonly, nonatomic) NSString *featureId;
+@property(readonly, nonatomic) NSString *encodedCompoundKey;
+
+/**
+ *  Creates an SCKeyTuple from a base64 encoded key
+ *
+ *  @param cKey format is <base64>.<base64>.<base64>
+ *
+ *  @return <#return value description#>
+ */
++ (instancetype)tupleFromEncodedCompositeKey:(NSString *)cKey;
+
+- (id)initWithStoreId:(NSString *)s
+              layerId:(NSString *)l
+            featureId:(NSString *)f;
 
 @end

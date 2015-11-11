@@ -17,13 +17,10 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCGeometry+GPKG.h"
+#import <Foundation/Foundation.h>
 
-@implementation SCGeometry (GPKG)
+@interface SCTestString : NSObject
 
-- (GPKGGeometryData*) wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
-}
++ (NSString *)randomStringWithLength:(int)len;
 
 @end

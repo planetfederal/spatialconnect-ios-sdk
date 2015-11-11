@@ -11,10 +11,18 @@
 		560A71191BE703E500CE473F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 560A71181BE703E500CE473F /* libsqlite3.tbd */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
-		560A71251BE84DB200CE473F /* SCGeopackageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71241BE84DB200CE473F /* SCGeopackageTest.m */; };
+		560A71251BE84DB200CE473F /* SCGeopackageLoadTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71241BE84DB200CE473F /* SCGeopackageLoadTest.m */; };
 		560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71261BE8577000CE473F /* GeopackageFileAdapter.h */; };
 		560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71271BE8577000CE473F /* GeopackageFileAdapter.m */; };
 		560A712B1BE912BF00CE473F /* SCAdapterKeyValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A712A1BE912BF00CE473F /* SCAdapterKeyValue.h */; };
+		560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 560E31B91BF1067A009DA680 /* SCGeopackageGeometryExtensions.h */; };
+		560E31BD1BF10F42009DA680 /* SCGeopackageCreateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31BC1BF10F42009DA680 /* SCGeopackageCreateTest.m */; };
+		560E31BF1BF10F4F009DA680 /* SCGeopackageUpdateTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31BE1BF10F4F009DA680 /* SCGeopackageUpdateTest.m */; };
+		560E31C11BF10F5F009DA680 /* SCGeopackageDeleteTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C01BF10F5F009DA680 /* SCGeopackageDeleteTest.m */; };
+		560E31C41BF1212B009DA680 /* SCGeopackageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */; };
+		560E31C81BF15CBD009DA680 /* SCTestString.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C71BF15CBD009DA680 /* SCTestString.m */; };
+		560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 560E31CD1BF23F83009DA680 /* SCKeyTuple.h */; };
+		560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31CE1BF23F83009DA680 /* SCKeyTuple.m */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		5645C4E01BED31F1006E4128 /* SCGeometry+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4DE1BED31F1006E4128 /* SCGeometry+GPKG.h */; };
@@ -221,6 +229,7 @@
 		5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */; };
 		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
 		564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
+		564BAD111BF2A10000D6F5F0 /* SCGeopackageQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 564BAD101BF2A10000D6F5F0 /* SCGeopackageQueryTest.m */; };
 		DF02A838B0370B96D3EAC5A3 /* libPods-SpatialConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */; };
 		E69A3564EB7B3CEE3B67F262 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -242,10 +251,20 @@
 		560A71181BE703E500CE473F /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
-		560A71241BE84DB200CE473F /* SCGeopackageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageTest.m; sourceTree = "<group>"; };
+		560A71241BE84DB200CE473F /* SCGeopackageLoadTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageLoadTest.m; sourceTree = "<group>"; };
 		560A71261BE8577000CE473F /* GeopackageFileAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageFileAdapter.h; sourceTree = "<group>"; };
 		560A71271BE8577000CE473F /* GeopackageFileAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageFileAdapter.m; sourceTree = "<group>"; };
 		560A712A1BE912BF00CE473F /* SCAdapterKeyValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAdapterKeyValue.h; sourceTree = "<group>"; };
+		560E31B91BF1067A009DA680 /* SCGeopackageGeometryExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCGeopackageGeometryExtensions.h; sourceTree = "<group>"; };
+		560E31BC1BF10F42009DA680 /* SCGeopackageCreateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageCreateTest.m; sourceTree = "<group>"; };
+		560E31BE1BF10F4F009DA680 /* SCGeopackageUpdateTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageUpdateTest.m; sourceTree = "<group>"; };
+		560E31C01BF10F5F009DA680 /* SCGeopackageDeleteTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageDeleteTest.m; sourceTree = "<group>"; };
+		560E31C21BF1212B009DA680 /* SCGeopackageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeopackageHelper.h; sourceTree = "<group>"; };
+		560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageHelper.m; sourceTree = "<group>"; };
+		560E31C61BF15CBD009DA680 /* SCTestString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTestString.h; sourceTree = "<group>"; };
+		560E31C71BF15CBD009DA680 /* SCTestString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTestString.m; sourceTree = "<group>"; };
+		560E31CD1BF23F83009DA680 /* SCKeyTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKeyTuple.h; sourceTree = "<group>"; };
+		560E31CE1BF23F83009DA680 /* SCKeyTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKeyTuple.m; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
 		5645C4DE1BED31F1006E4128 /* SCGeometry+GPKG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGeometry+GPKG.h"; sourceTree = "<group>"; };
@@ -460,6 +479,7 @@
 		5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
 		5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_500_11_20m.json; sourceTree = "<group>"; };
+		564BAD101BF2A10000D6F5F0 /* SCGeopackageQueryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageQueryTest.m; sourceTree = "<group>"; };
 		8F2710B15F6E9F16E1932224 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SpatialConnectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4FE33BD43CC3F9192E57448 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -510,6 +530,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		560E31BB1BF10F20009DA680 /* GeoPackage */ = {
+			isa = PBXGroup;
+			children = (
+				560A71241BE84DB200CE473F /* SCGeopackageLoadTest.m */,
+				560E31BC1BF10F42009DA680 /* SCGeopackageCreateTest.m */,
+				560E31BE1BF10F4F009DA680 /* SCGeopackageUpdateTest.m */,
+				560E31C01BF10F5F009DA680 /* SCGeopackageDeleteTest.m */,
+				564BAD101BF2A10000D6F5F0 /* SCGeopackageQueryTest.m */,
+			);
+			name = GeoPackage;
+			sourceTree = "<group>";
+		};
+		560E31C51BF15C90009DA680 /* TestingUtils */ = {
+			isa = PBXGroup;
+			children = (
+				5649B4B71BE28079009947EF /* SCGeometryHelper.h */,
+				5649B4B81BE28079009947EF /* SCGeometryHelper.m */,
+				560E31C21BF1212B009DA680 /* SCGeopackageHelper.h */,
+				560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */,
+				560E31C61BF15CBD009DA680 /* SCTestString.h */,
+				560E31C71BF15CBD009DA680 /* SCTestString.m */,
+			);
+			name = TestingUtils;
+			sourceTree = "<group>";
+		};
 		563BEC531BE500C500778EDA /* DataService */ = {
 			isa = PBXGroup;
 			children = (
@@ -523,6 +568,8 @@
 				563BEC571BE5012E00778EDA /* SpatialDataType */,
 				560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */,
 				560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */,
+				560E31CD1BF23F83009DA680 /* SCKeyTuple.h */,
+				560E31CE1BF23F83009DA680 /* SCKeyTuple.m */,
 			);
 			name = DataService;
 			sourceTree = "<group>";
@@ -845,6 +892,7 @@
 				5645C4F51BED9570006E4128 /* SCMultiPolygon+GPKG.m */,
 				5645C4F81BED9708006E4128 /* SCMultiPoint+GPKG.h */,
 				5645C4F91BED9708006E4128 /* SCMultiPoint+GPKG.m */,
+				560E31B91BF1067A009DA680 /* SCGeopackageGeometryExtensions.h */,
 			);
 			name = Geopackage;
 			sourceTree = "<group>";
@@ -902,6 +950,8 @@
 		5649B4A11BE27C6A009947EF /* SpatialConnectTests */ = {
 			isa = PBXGroup;
 			children = (
+				560E31C51BF15C90009DA680 /* TestingUtils */,
+				560E31BB1BF10F20009DA680 /* GeoPackage */,
 				564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */,
 				5649B4AF1BE28079009947EF /* all.geojson */,
 				5649B4B01BE28079009947EF /* feature.json */,
@@ -911,8 +961,6 @@
 				5649B4B41BE28079009947EF /* SCDeleteFeature.m */,
 				5649B4B51BE28079009947EF /* SCGeoJSONParserTest.m */,
 				5649B4B61BE28079009947EF /* SCGeoJSONWriterTest.m */,
-				5649B4B71BE28079009947EF /* SCGeometryHelper.h */,
-				5649B4B81BE28079009947EF /* SCGeometryHelper.m */,
 				5649B4B91BE28079009947EF /* SCMultiPointTest.m */,
 				5649B4BA1BE28079009947EF /* SCMultiPolygonTest.m */,
 				5649B4BB1BE28079009947EF /* SCPointTest.m */,
@@ -925,7 +973,6 @@
 				5649B4C21BE28079009947EF /* SpatialConnectHelper.m */,
 				5649B4C31BE28079009947EF /* tests.scfg */,
 				5649B4A41BE27C6A009947EF /* Info.plist */,
-				560A71241BE84DB200CE473F /* SCGeopackageTest.m */,
 			);
 			path = SpatialConnectTests;
 			sourceTree = "<group>";
@@ -970,6 +1017,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
+				560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */,
 				5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */,
 				5649B6631BE2A00E009947EF /* JSONKit.h in Headers */,
 				5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */,
@@ -979,6 +1027,7 @@
 				5649B5B41BE280D6009947EF /* SCGeoFilterDisjoint.h in Headers */,
 				5649B6071BE280D6009947EF /* SCSensorService.h in Headers */,
 				5649B5A71BE280D6009947EF /* SCFilterNotBetween.h in Headers */,
+				560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */,
 				560A712B1BE912BF00CE473F /* SCAdapterKeyValue.h in Headers */,
 				5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */,
 				5649B6021BE280D6009947EF /* SCRasterService.h in Headers */,
@@ -1336,6 +1385,7 @@
 				5649B5E41BE280D6009947EF /* SCMultiPoint+GeoJSON.m in Sources */,
 				5649B5D31BE280D6009947EF /* SCLineString+GeoJSON.m in Sources */,
 				5649B57D1BE280D6009947EF /* GeoJSONAdapter.m in Sources */,
+				560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */,
 				5645C4EB1BED796D006E4128 /* SCPolygon+GPKG.m in Sources */,
 				5649B5DC1BE280D6009947EF /* SCMultiLineString.m in Sources */,
 				5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */,
@@ -1355,19 +1405,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				5649B4CE1BE28079009947EF /* SCMultiPolygonTest.m in Sources */,
+				560E31C11BF10F5F009DA680 /* SCGeopackageDeleteTest.m in Sources */,
+				560E31C81BF15CBD009DA680 /* SCTestString.m in Sources */,
 				5649B4D21BE28079009947EF /* SCUpdateFeature.m in Sources */,
 				5649B4CA1BE28079009947EF /* SCGeoJSONParserTest.m in Sources */,
 				5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */,
+				560E31BD1BF10F42009DA680 /* SCGeopackageCreateTest.m in Sources */,
 				5649B4D41BE28079009947EF /* SpatialConnectAutoConfigTest.m in Sources */,
 				5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */,
 				5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */,
 				5649B4C81BE28079009947EF /* SCCreateFeature.m in Sources */,
 				5649B4D11BE28079009947EF /* SCQueryFilterTest.m in Sources */,
+				560E31BF1BF10F4F009DA680 /* SCGeopackageUpdateTest.m in Sources */,
 				5649B4CD1BE28079009947EF /* SCMultiPointTest.m in Sources */,
-				560A71251BE84DB200CE473F /* SCGeopackageTest.m in Sources */,
+				560E31C41BF1212B009DA680 /* SCGeopackageHelper.m in Sources */,
+				560A71251BE84DB200CE473F /* SCGeopackageLoadTest.m in Sources */,
 				5649B4C71BE28079009947EF /* LocalFilterTests.m in Sources */,
 				5649B4C91BE28079009947EF /* SCDeleteFeature.m in Sources */,
 				5649B4D01BE28079009947EF /* SCPolygonTest.m in Sources */,
+				564BAD111BF2A10000D6F5F0 /* SCGeopackageQueryTest.m in Sources */,
 				5649B4CB1BE28079009947EF /* SCGeoJSONWriterTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

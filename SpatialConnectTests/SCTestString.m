@@ -17,13 +17,22 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCGeometry+GPKG.h"
+#import "SCTestString.h"
 
-@implementation SCGeometry (GPKG)
+@implementation SCTestString
 
-- (GPKGGeometryData*) wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
+NSString *letters =
+    @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
++ (NSString *)randomStringWithLength:(int)len {
+  NSMutableString *randomString = [NSMutableString stringWithCapacity:len];
+  for (int i = 0; i < len; i++) {
+    [randomString
+        appendFormat:@"%C",
+                     [letters
+                         characterAtIndex:arc4random_uniform(
+                                              (u_int32_t)[letters length])]];
+  }
+  return randomString;
 }
 
 @end
