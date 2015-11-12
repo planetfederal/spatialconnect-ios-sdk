@@ -23,7 +23,7 @@
 @property(readwrite, nonatomic, strong) NSString *storeId;
 @property(readwrite, nonatomic) NSInteger version;
 @property(readwrite, nonatomic, strong) NSString *type;
-@property(readwrite, nonatomic, strong) NSDictionary *layers;
+@property(readwrite, nonatomic, strong) NSArray *layerList;
 @end
 
 @implementation SCDataStore
@@ -37,6 +37,7 @@
   if (!self) {
     return nil;
   }
+  _layerList = [NSArray new];
   _storeId = [[NSUUID UUID] UUIDString];
   return self;
 }
@@ -61,9 +62,6 @@
 }
 
 - (NSString *)key {
-  NSAssert(_type, @"Store Type for Store has not been set");
-  NSAssert(_version > 0, @"Adapter Version for Adapter is not valid. Value:%ld",
-           (long)_version);
   if (!_key) {
     _key = [NSString stringWithFormat:@"%@.%ld", _type, (long)_version];
   }
@@ -85,7 +83,9 @@
 #pragma mark Class Methods
 
 + (NSString *)versionKey {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
+  NSAssert(NO, @"This is an abstract method and should be overridden. Format "
+           @"for versionKey shoulde be <storename>.<versionnumber> ie "
+           @"geojson.1");
   return nil;
 }
 

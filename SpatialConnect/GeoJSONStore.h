@@ -22,6 +22,10 @@
 #import "SCDataStore.h"
 #import "GeoJSONAdapter.h"
 
+extern const NSString *kTYPE;
+extern const int *kVERSON;
+extern const NSString *kSTORE_NAME;
+
 @interface GeoJSONStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
   GeoJSONAdapter *adapter;
 }

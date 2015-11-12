@@ -85,6 +85,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 - (void)pause {
 }
 
+- (NSString *)defaultLayerName {
+  return self.adapter.defaultLayerName;
+}
+
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)queryAllLayers:(SCQueryFilter *)filter {
@@ -109,11 +113,17 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (NSArray *)layerList {
-  return self.adapter.layerList;
+  NSArray *arr = self.adapter.layerList;
+  return arr;
 }
 
 #pragma mark -
 #pragma mark Override Parent
+- (NSString *)key {
+  NSString *str = [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
+  return str;
+}
+
 + (NSString *)versionKey {
   return [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
 }

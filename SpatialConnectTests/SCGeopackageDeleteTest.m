@@ -57,7 +57,7 @@
         }];
       }];
 
-  [sc.manager startAllServices];
+  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 

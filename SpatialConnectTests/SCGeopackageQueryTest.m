@@ -34,15 +34,14 @@
 
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(GeopackageStore *ds) {
-        [[ds queryAllLayers:nil] subscribeNext:^(id x) {
-          [expect fulfill];
-        } error:^(NSError *error) {
+        [[ds queryAllLayers:nil] subscribeError:^(NSError *error) {
           NSLog(@"Error");
         } completed:^{
           [expect fulfill];
         }];
       }];
 
+  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 

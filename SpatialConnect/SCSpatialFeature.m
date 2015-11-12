@@ -32,6 +32,13 @@
 @synthesize storeId;
 @synthesize layerId;
 
+- (id)init {
+  if (self = [super init]) {
+    properties = [NSMutableDictionary new];
+  }
+  return self;
+}
+
 - (NSString *)identifier {
   if (!_identifier) {
     _identifier = [[NSUUID UUID] UUIDString];

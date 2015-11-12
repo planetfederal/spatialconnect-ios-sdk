@@ -61,7 +61,7 @@
   return self.name;
 }
 
-- (NSArray*)layerList {
+- (NSArray *)layerList {
   return nil;
 }
 

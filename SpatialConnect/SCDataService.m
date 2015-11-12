@@ -80,9 +80,6 @@
 
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-    [self.storeEvents.autoconnect subscribeNext:^(SCStoreStatusEvent *x) {
-      NSLog(@"%@", x.storeId);
-    }];
     [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
       [self.storeEventSubject
           sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTFAILED
@@ -245,7 +242,6 @@
         flattenMap:^RACStream *(id<SCSpatialStore> store) {
           return [store queryAllLayers:filter];
         }] subscribeNext:^(SCSpatialFeature *x) {
-      NSLog(@"%@", x.identifier);
       [subscriber sendNext:x];
     } error:^(NSError *error) {
       [subscriber sendError:error];

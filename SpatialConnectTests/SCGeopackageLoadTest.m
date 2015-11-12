@@ -24,6 +24,7 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "SCGeopackageGeometryExtensions.h"
 #import "SCGeopackageHelper.h"
+#import "SCDataStore.h"
 
 @interface SCGeopackageTest : XCTestCase
 @property(nonatomic) SpatialConnect *sc;
@@ -44,17 +45,18 @@
 - (void)testGpkgDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
 
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc] subscribeNext:^(SCDataStore *ds) {
+  [[SCGeopackageHelper
+      loadGPKGDataStore:self.sc] subscribeNext:^(SCDataStore *ds) {
     if (ds) {
-      XCTAssertNotNil(ds.defaultLayerName,@"Layer Name shall be set");
-      XCTAssertNotNil(ds.layers,@"Layer list as array");
+      XCTAssertNotNil(ds.defaultLayerName, @"Layer Name shall be set");
+      XCTAssertNotNil(ds.layerList, @"Layer list as array");
       XCTAssertNoThrow([sc.manager stopAllServices]);
     } else {
-      XCTAssert(NO,@"Store is nil");
+      XCTAssert(NO, @"Store is nil");
     }
     [expect fulfill];
   } error:^(NSError *error) {
-    XCTAssert(NO,@"Error retrieving store");
+    XCTAssert(NO, @"Error retrieving store");
     [expect fulfill];
   }];
 

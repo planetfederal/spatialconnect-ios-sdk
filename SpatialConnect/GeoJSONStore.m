@@ -26,12 +26,9 @@
 
 @implementation GeoJSONStore
 
-#define STORE_NAME @"GeoJSONStore"
-#define TYPE @"geojson"
-#define VERSION 1
-
-@synthesize type = _type;
-@synthesize version = _version;
+const int kVERSION = 1;
+const NSString *kTYPE = @"geojson";
+const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -39,8 +36,6 @@
     return nil;
   }
   self.name = config.name;
-  _type = TYPE;
-  _version = VERSION;
   [self initializeAdapter:config];
   return self;
 }
@@ -111,7 +106,7 @@
 }
 
 + (NSString *)versionKey {
-  return [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
+  return [NSString stringWithFormat:@"%@.%d", kTYPE, kVERSION];
 }
 
 @end

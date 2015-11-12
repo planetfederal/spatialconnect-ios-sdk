@@ -41,5 +41,5 @@
 - (RACSignal *)deleteFeature:(NSString *)identifier;
 - (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
 - (NSArray *)layerList;
-
+- (NSString *)defaultLayerName;
 @end

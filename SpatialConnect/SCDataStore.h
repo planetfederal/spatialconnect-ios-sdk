@@ -34,8 +34,8 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
 
 @interface SCDataStore : NSObject
 
-@property(readonly,nonatomic) NSDictionary *layers;
 @property(readonly) NSString *storeId;
+@property(readonly, nonatomic) NSArray *layerList;
 @property(nonatomic) NSString *name;
 @property(nonatomic, strong) SCStyle *style;
 @property(readonly) NSInteger version;
@@ -48,7 +48,6 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
 - (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style;
 
 - (NSDictionary *)dictionary;
-
 + (NSString *)versionKey;
 
 @end

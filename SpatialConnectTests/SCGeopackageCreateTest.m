@@ -54,7 +54,7 @@
     XCTAssert(YES, @"Point created");
     [expect fulfill];
   }];
-
+  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 

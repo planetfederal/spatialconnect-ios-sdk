@@ -26,12 +26,13 @@
 - (BOOL)checkFile;
 - (RACSignal *)attemptFileDownload;
 - (GPKGGeoPackage *)openConnection;
+@end
 
+@interface GeopackageFileAdapter ()
 @property(readwrite, nonatomic, strong) NSString *uri;
 @property(readwrite, nonatomic, strong) NSString *filepath;
 @property(readwrite, nonatomic, strong) NSString *storeId;
 @property(readwrite, nonatomic, strong) GPKGGeoPackage *gpkg;
-
 @end
 
 @implementation GeopackageFileAdapter
@@ -39,6 +40,7 @@
 @synthesize uri = _uri;
 @synthesize filepath = _filepath;
 @synthesize storeId = _storeId;
+@synthesize gpkg;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg {
   if (self = [super init]) {
@@ -83,9 +85,9 @@
 - (GPKGGeoPackage *)openConnection {
   GPKGConnection *connection =
       [[GPKGConnection alloc] initWithDatabaseFilename:self.dbFilepath];
-  GPKGGeoPackage *gpkg =
+  GPKGGeoPackage *g =
       [[GPKGGeoPackage alloc] initWithConnection:connection andWritable:YES];
-  return gpkg;
+  return g;
 }
 
 - (RACSignal *)attemptFileDownload:(NSURL *)fileUrl {
@@ -94,6 +96,10 @@
       reduceEach:^id(NSURLResponse *response, NSData *data) {
         return data;
       }];
+}
+
+- (NSString *)defaultLayerName {
+  return (NSString *)self.gpkg.featureTables[0];
 }
 
 #pragma mark -
@@ -112,7 +118,7 @@
 }
 
 - (NSArray *)layerList {
-  return self.gpkg.tables;
+  return self.gpkg.featureTables;
 }
 
 - (GPKGFeatureRow *)toFeatureRow:(SCSpatialFeature *)feature {
@@ -208,18 +214,20 @@
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self.gpkg.featureTables
-            enumerateObjectsUsingBlock:^(GPKGFeatureDao *dao, NSUInteger idx,
+            enumerateObjectsUsingBlock:^(NSString *tableName, NSUInteger idx,
                                          BOOL *stop) {
+              GPKGFeatureDao *dao =
+                  [self.gpkg getFeatureDaoWithTableName:tableName];
               GPKGResultSet *rs = [dao queryForAll];
               int limit = 0;
               while (limit < 100 && rs != nil && [rs moveToNext]) {
                 limit++;
                 SCSpatialFeature *feature =
-                    [self createSCSpatialFeature:[rs getRow]];
+                    [self createSCSpatialFeature:[dao getFeatureRow:rs]];
                 [subscriber sendNext:feature];
               }
               [rs close];
-
+              [subscriber sendCompleted];
             }];
         return nil;
       }];
@@ -234,7 +242,9 @@
         int limit = 0;
         while (limit < 100 && rs != nil && [rs moveToNext]) {
           limit++;
-          SCSpatialFeature *feature = [self createSCSpatialFeature:[rs getRow]];
+
+          SCSpatialFeature *feature =
+              [self createSCSpatialFeature:[fDao getFeatureRow:rs]];
           [subscriber sendNext:feature];
         }
         [rs close];
@@ -248,19 +258,22 @@
   // set the geometry's geometry
   GPKGGeometryData *geometryData = [row getGeometry];
   if (geometryData != nil) {
-
+    scSpatialFeature = [[SCSpatialFeature alloc] init];
   } else {
     scSpatialFeature = [[SCSpatialFeature alloc] init];
   }
   [scSpatialFeature
       setIdentifier:[NSString stringWithFormat:@"%@.%@.%@", self.storeId,
                                                row.table.tableName, row.getId]];
-  [row.getColumnNames
-      enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
-                                   BOOL *_Nonnull stop) {
-        [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]
-                                        forKey:name];
-      }];
+  [row.getColumnNames enumerateObjectsUsingBlock:^(NSString *name,
+                                                   NSUInteger idx,
+                                                   BOOL *_Nonnull stop) {
+    NSObject *obj = [row getValueWithColumnName:name];
+    if (obj) {
+      [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]
+                                      forKey:name];
+    }
+  }];
 
   return scSpatialFeature;
 }
