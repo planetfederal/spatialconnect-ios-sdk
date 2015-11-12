@@ -19,54 +19,77 @@
 
 #import "SCDataService.h"
 #import "GeoJSONStore.h"
+#import "GeopackageStore.h"
 #import "SCGeometry.h"
 #import "SCSpatialStore.h"
+#import "SCStoreStatusEvent.h"
 
-@interface SCDataService (PrivateMethods)
+@interface SCDataService ()
 - (void)startAllStores;
 - (void)stopAllStores;
 - (void)startStore:(SCDataStore *)store;
 - (void)stopStore:(SCDataStore *)store;
+@property(readwrite, nonatomic) BOOL storesStarted;
+@property(readwrite, nonatomic) SCServiceStatus status;
+@property(readwrite, nonatomic, strong)
+    NSMutableDictionary *supportedStoreImpls;
+@property(readwrite, nonatomic, strong) NSMutableDictionary *stores;
+@property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
 @end
 
 @implementation SCDataService
 
-@synthesize storesStarted;
+@synthesize storeEvents = _storeEvents;
+@synthesize status;
 
 #define DATA_SERVICE @"DataService"
 
 - (id)init {
   if (self = [super init]) {
-    supportedStoreImpls = [[NSMutableDictionary alloc] init];
+    self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
-    stores = [[NSMutableDictionary alloc] init];
+    self.stores = [[NSMutableDictionary alloc] init];
     self.storesStarted = NO;
+    self.storeEventSubject = [RACSubject new];
+    self.storeEvents = [self.storeEventSubject publish];
   }
   return self;
 }
 
 - (void)addDefaultStoreImpls {
-  [supportedStoreImpls setObject:[GeoJSONStore class]
-                          forKey:[GeoJSONStore versionKey]];
+  [self.supportedStoreImpls setObject:[GeoJSONStore class]
+                               forKey:[GeoJSONStore versionKey]];
+  [self.supportedStoreImpls setObject:[GeopackageStore class]
+                               forKey:[GeopackageStore versionKey]];
 }
 
 - (void)startAllStores {
-  [stores enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
-                                              BOOL *stop) {
-    [self startStore:store];
-  }];
+  [self.stores
+      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
+                                          BOOL *stop) {
+        [self startStore:store];
+      }];
 }
 
 - (void)stopAllStores {
-  for (NSString *key in [stores allKeys]) {
-    SCDataStore *store = [stores objectForKey:key];
+  for (NSString *key in [self.stores allKeys]) {
+    SCDataStore *store = [self.stores objectForKey:key];
     [self stopStore:store];
   }
 }
 
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-    [((id<SCDataStoreLifeCycle>)store)start];
+    [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
+      [self.storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTFAILED
+                                      andStoreId:store.storeId]];
+    } completed:^{
+      [self.storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_RUNNING
+                                      andStoreId:store.storeId]];
+    }];
+
   } else {
     NSLog(@"%@",
           [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
@@ -80,6 +103,9 @@
 - (void)stopStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [((id<SCDataStoreLifeCycle>)store)stop];
+    [self.storeEventSubject
+        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STOPPED
+                                    andStoreId:store.storeId]];
   } else {
     NSLog(@"%@",
           [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
@@ -111,7 +137,7 @@
   if (!store.storeId) {
     NSCAssert(store.storeId, @"Store Id not set");
   } else {
-    [stores setObject:store forKey:store.storeId];
+    [self.stores setObject:store forKey:store.storeId];
     if (self.status == SC_SERVICE_RUNNING) {
       [self startStore:store];
     }
@@ -122,18 +148,18 @@
   if (store.status == SC_DATASTORE_RUNNING) {
     [self stopStore:store];
   }
-  [stores removeObjectForKey:store.storeId];
+  [self.stores removeObjectForKey:store.storeId];
 }
 
 - (Class)supportedStoreByKey:(NSString *)key {
-  return (Class)[supportedStoreImpls objectForKey:key];
+  return (Class)[self.supportedStoreImpls objectForKey:key];
 }
 
 #pragma mark -
 #pragma Store Accessor Methods
 
 - (NSArray *)activeStoreList {
-  return [[stores.allValues.rac_sequence filter:^BOOL(SCDataStore *value) {
+  return [[self.stores.allValues.rac_sequence filter:^BOOL(SCDataStore *value) {
     if (value.status == SC_DATASTORE_RUNNING) {
       return YES;
     }
@@ -166,15 +192,16 @@
 
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running {
   NSMutableArray *arr = [NSMutableArray new];
-  [stores enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *ds,
-                                              BOOL *stop) {
-    BOOL conforms = [ds conformsToProtocol:protocol];
-    SCDataStoreStatus d = ds.status;
-    BOOL running = d == SC_DATASTORE_RUNNING;
-    if (conforms && running) {
-      [arr addObject:ds];
-    }
-  }];
+  [self.stores
+      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *ds,
+                                          BOOL *stop) {
+        BOOL conforms = [ds conformsToProtocol:protocol];
+        SCDataStoreStatus d = ds.status;
+        BOOL running = d == SC_DATASTORE_RUNNING;
+        if (conforms && running) {
+          [arr addObject:ds];
+        }
+      }];
 
   return [NSArray arrayWithArray:arr];
 }
@@ -184,7 +211,7 @@
 }
 
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier {
-  return [stores objectForKey:identifier];
+  return [self.stores objectForKey:identifier];
 }
 
 #pragma mark -
@@ -215,7 +242,6 @@
         flattenMap:^RACStream *(id<SCSpatialStore> store) {
           return [store queryAllLayers:filter];
         }] subscribeNext:^(SCSpatialFeature *x) {
-      NSLog(@"%@", x.identifier);
       [subscriber sendNext:x];
     } error:^(NSError *error) {
       [subscriber sendError:error];
@@ -228,7 +254,8 @@
 
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter {
-  id<SCSpatialStore> store = (id<SCSpatialStore>)[stores objectForKey:storeId];
+  id<SCSpatialStore> store =
+      (id<SCSpatialStore>)[self.stores objectForKey:storeId];
   return [store queryAllLayers:filter];
 }
 

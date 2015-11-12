@@ -26,45 +26,22 @@
 
 @implementation GeoJSONStore
 
-#define STORE_NAME @"GeoJSONStore"
-#define TYPE @"geojson"
-#define VERSION 1
+const int kVERSION = 1;
+const NSString *kTYPE = @"geojson";
+const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (!self) {
     return nil;
   }
-  _name = config.name;
-  _type = TYPE;
-  _version = VERSION;
+  self.name = config.name;
   [self initializeAdapter:config];
   return self;
 }
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style {
   self = [self initWithStoreConfig:config];
-  if (!self) {
-    return nil;
-  }
-  self.style = style;
-  return self;
-}
-
-- (id)initWithResource:(id)resource {
-  self = [super initWithResource:resource];
-  if (!self) {
-    return nil;
-  }
-  _name = STORE_NAME;
-  _type = TYPE;
-  _version = VERSION;
-  adapter = [[GeoJSONAdapter alloc] initWithFilePath:(NSString *)resource];
-  return self;
-}
-
-- (id)initWithResource:(id)resource withStyle:(SCStyle *)style {
-  self = [self initWithResource:resource];
   if (!self) {
     return nil;
   }
@@ -109,10 +86,11 @@
 #pragma mark -
 #pragma mark SCDataStoreLifeCycle
 
-- (void)start {
+- (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
   [adapter connect];
   self.status = SC_DATASTORE_RUNNING;
+  return [RACSignal empty];
 }
 
 - (void)stop {
@@ -128,7 +106,7 @@
 }
 
 + (NSString *)versionKey {
-  return [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
+  return [NSString stringWithFormat:@"%@.%d", kTYPE, kVERSION];
 }
 
 @end

@@ -57,7 +57,7 @@
     [create subscribeError:^(NSError *error) {
       XCTAssertTrue(NO, @"Error deleting feature");
     } completed:^{
-      [[store deleteFeature:pt.identifier] subscribeError:^(NSError *error) {
+      [[store deleteFeature:pt.key] subscribeError:^(NSError *error) {
         NSLog(@"%@", error.description);
         [expectation fulfill];
       } completed:^{

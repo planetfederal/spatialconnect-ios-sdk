@@ -18,7 +18,6 @@
 ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "SCDataAdapter.h"
 #import "SCStyle.h"
 #import "SCStoreConfig.h"
 #import "SCQueryFilter.h"
@@ -29,34 +28,26 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
   SC_DATASTORE_STARTED,
   SC_DATASTORE_RUNNING,
   SC_DATASTORE_PAUSED,
-  SC_DATASTORE_STOPPED
+  SC_DATASTORE_STOPPED,
+  SC_DATASTORE_STARTFAILED
 };
 
-@interface SCDataStore : NSObject {
-  __strong SCDataAdapter *adapter;
-  NSString *_storeId;
-  NSString *_name;
-  NSInteger _version;
-  NSString *_type;
-  NSString *_key;
-  NSDictionary *layers;
-}
+@interface SCDataStore : NSObject
 
 @property(readonly) NSString *storeId;
+@property(readonly, nonatomic) NSArray *layerList;
 @property(nonatomic) NSString *name;
 @property(nonatomic, strong) SCStyle *style;
 @property(readonly) NSInteger version;
 @property(readonly) NSString *type;
 @property(readonly) NSString *key;
+@property(nonatomic) NSString *defaultLayerName;
 @property SCDataStoreStatus status;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config;
 - (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style;
-- (id)initWithResource:(id)resource;
-- (id)initWithResource:(id)resource withStyle:(SCStyle *)style;
 
 - (NSDictionary *)dictionary;
-
 + (NSString *)versionKey;
 
 @end

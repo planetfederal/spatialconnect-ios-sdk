@@ -19,7 +19,6 @@
 
 #import <Foundation/Foundation.h>
 #import "WebViewJavascriptBridge.h"
-#import "SCDataAdapter.h"
 #import "SCService.h"
 #import "SCServiceManager.h"
 #import "SCSensorService.h"

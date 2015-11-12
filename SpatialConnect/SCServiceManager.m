@@ -155,7 +155,7 @@
 
 - (void)stopAllServices {
   for (SCService *service in [self.services allValues]) {
-    [service start];
+    [service stop];
   }
 }
 

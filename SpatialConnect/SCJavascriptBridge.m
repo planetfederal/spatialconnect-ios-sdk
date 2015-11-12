@@ -248,7 +248,9 @@ NSString *const SCJavascriptBridgeErrorDomain =
       storeByIdentifier:[value[@"storeId"] stringValue]];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
-    [s deleteFeature:[value[@"id"] stringValue]];
+    SCKeyTuple *key =
+        [SCKeyTuple tupleFromEncodedCompositeKey:[value[@"id"] stringValue]];
+    [s deleteFeature:key];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_DELETEFEATURE

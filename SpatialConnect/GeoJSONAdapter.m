@@ -32,7 +32,6 @@
 
 @implementation GeoJSONAdapter
 
-@synthesize status;
 @synthesize connector;
 
 - (id)initWithFilePath:(NSString *)filepath {
@@ -43,15 +42,8 @@
 }
 
 - (void)connect {
-  self.status = DATA_ADAPTER_CONNECTING;
-  [super connect];
   self.connector =
       [[GeoJSONStorageConnector alloc] initWithFileName:geojsonFilePath];
-  self.status = DATA_ADAPTER_CONNECTED;
-}
-
-- (void)disconnect {
-  [super disconnect];
 }
 
 - (void)supportedQueries {
@@ -67,6 +59,10 @@
 
 - (NSString *)name {
   return self.name;
+}
+
+- (NSArray *)layerList {
+  return nil;
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
