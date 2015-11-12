@@ -42,6 +42,7 @@
     if (!self.isMainBundle) {
       self.isMainBundle = NO;
     }
+    self.defaultLayer = dict[@"default"];
     self.name = dict[@"name"];
   }
   return self;

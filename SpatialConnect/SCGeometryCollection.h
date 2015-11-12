@@ -17,10 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import <Foundation/Foundation.h>
 #import "SCGeometry.h"
 

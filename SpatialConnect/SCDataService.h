@@ -22,14 +22,12 @@
 #import "SCService.h"
 #import "SCServiceDelegate.h"
 #import "SCQueryFilter.h"
+#import "SCDataStore.h"
 
-@interface SCDataService : SCService {
-  SCServiceStatus status;
+@interface SCDataService : SCService
 
-  NSMutableDictionary *supportedStoreImpls;
-  NSMutableDictionary *stores;
-}
-@property(nonatomic) BOOL storesStarted;
+@property(readonly, nonatomic) SCServiceStatus status;
+@property(nonatomic) RACMulticastConnection *storeEvents;
 
 - (void)registerStore:(SCDataStore *)store;
 - (void)unregisterStore:(SCDataStore *)store;

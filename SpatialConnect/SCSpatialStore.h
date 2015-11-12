@@ -19,6 +19,7 @@
 
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
+#import "SCKeyTuple.h"
 
 @protocol SCSpatialStore <NSObject>
 
@@ -71,9 +72,11 @@
  *
  *  @return RACSignal - Completion
  */
-- (RACSignal *)deleteFeature:(NSString *)identifier;
+- (RACSignal *)deleteFeature:(SCKeyTuple *)key;
 
 @optional
+
+- (RACSignal *)layerList;
 
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature
                      inLayer:(NSString *)layerId;

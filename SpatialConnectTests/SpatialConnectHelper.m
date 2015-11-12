@@ -21,12 +21,17 @@
 
 @implementation SpatialConnectHelper
 
-+ (SpatialConnect *)loadConfigAndStartServices {
++ (SpatialConnect *)loadConfig {
   [SpatialConnectHelper moveTestBundleToDocsDir];
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   SpatialConnect *sc = [[SpatialConnect alloc] initWithFilepath:filePath];
+  return sc;
+}
+
++ (SpatialConnect *)loadConfigAndStartServices {
+  SpatialConnect *sc = [SpatialConnectHelper loadConfig];
   [sc startAllServices];
   return sc;
 }

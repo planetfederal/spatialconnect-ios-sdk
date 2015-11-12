@@ -31,6 +31,7 @@
 @property (nonatomic,weak) NSString *uniqueid;
 @property BOOL isMainBundle;
 @property (nonatomic,weak) NSString *name;
+@property (nonatomic) NSString *defaultLayer;
 
 - (id)initWithDictionary:(NSDictionary*)dict;
 @end
