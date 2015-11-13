@@ -63,7 +63,7 @@
     XCTAssertTrue(arr.count > 0);
     [expectation fulfill];
   }];
-  [self waitForExpectationsWithTimeout:50.0 handler:nil];
+  [self waitForExpectationsWithTimeout:150.0 handler:nil];
 }
 
 @end

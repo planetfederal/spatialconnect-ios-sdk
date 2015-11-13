@@ -26,11 +26,10 @@
 @property(nonatomic) NSDate *date;
 @property(nonatomic) NSDate *createdAt;
 @property(nonatomic) NSMutableDictionary *properties;
-@property(readonly, nonatomic) NSString *storeId;
-@property(readonly, nonatomic) NSString *layerId;
+@property(nonatomic) NSString *storeId;
+@property(nonatomic) NSString *layerId;
 
 @property(strong, nonatomic) SCStyle *style;
 
 - (SCKeyTuple *)key;
-
 @end

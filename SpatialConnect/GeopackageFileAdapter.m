@@ -132,8 +132,11 @@
   [feature.properties
       enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
                                           BOOL *stop) {
-        if ([fDao.getFeatureTable.columnNames containsObject:key]) {
-          [row setValue:obj forKey:key];
+        NSArray *cols = fDao.getFeatureTable.columnNames;
+        if ([cols containsObject:key]) {
+          if (![key isEqualToString:@"id"]) {
+            [row setValueWithColumnName:key andValue:obj];
+          }
         }
       }];
 
@@ -187,7 +190,8 @@
   GPKGFeatureDao *fDao = [self.gpkg getFeatureDaoWithTableName:tuple.layerId];
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        if ([fDao deleteById:tuple.featureId] == 1) {
+        NSNumber *n = [NSNumber numberWithLong:[tuple.featureId integerValue]];
+        if ([fDao deleteById:n] == 1) {
           [subscriber sendCompleted];
         } else {
           [subscriber sendError:[NSError errorWithDomain:SCGeopackageErrorDomain
@@ -262,9 +266,10 @@
   } else {
     scSpatialFeature = [[SCSpatialFeature alloc] init];
   }
-  [scSpatialFeature
-      setIdentifier:[NSString stringWithFormat:@"%@.%@.%@", self.storeId,
-                                               row.table.tableName, row.getId]];
+  scSpatialFeature.storeId = self.storeId;
+  scSpatialFeature.layerId = row.table.tableName;
+  scSpatialFeature.identifier = [NSString stringWithFormat:@"%@", row.getId];
+
   [row.getColumnNames enumerateObjectsUsingBlock:^(NSString *name,
                                                    NSUInteger idx,
                                                    BOOL *_Nonnull stop) {
