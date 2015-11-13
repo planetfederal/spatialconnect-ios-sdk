@@ -97,10 +97,13 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (RACSignal *)queryByLayerId:(NSString *)layerId
                    withFilter:(SCQueryFilter *)filter {
+  NSParameterAssert(layerId != nil);
   return [self.adapter queryByLayerId:layerId withFilter:filter];
 }
 
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature {
+  NSParameterAssert(feature.layerId != nil);
+  NSParameterAssert(feature.identifier != nil);
   return [self.adapter createFeature:feature];
 }
 
@@ -108,8 +111,9 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [self.adapter updateFeature:feature];
 }
 
-- (RACSignal *)deleteFeature:(NSString *)identifier {
-  return [self.adapter deleteFeature:identifier];
+- (RACSignal *)deleteFeature:(SCKeyTuple *)tuple {
+  NSParameterAssert(tuple);
+  return [self.adapter deleteFeature:tuple];
 }
 
 - (NSArray *)layerList {

@@ -26,14 +26,16 @@
 @implementation SCQueryFilter
 
 @synthesize limit;
+@synthesize predicates = _predicates;
+@synthesize layerIds = _layerIds;
 
 - (id)init {
   self = [super init];
   if (!self) {
     return nil;
   }
-  predicates = [NSMutableArray new];
-  layerIds = [NSMutableArray new];
+  _predicates = [NSMutableArray new];
+  _layerIds = [NSMutableArray new];
   return nil;
 }
 
@@ -57,25 +59,25 @@
 }
 
 - (void)addPredicate:(SCPredicate *)pred {
-  [predicates addObject:pred];
+  [self.predicates addObject:pred];
 }
 
 - (void)addPredicates:(NSArray *)preds {
-  [predicates addObjectsFromArray:preds];
+  [self.predicates addObjectsFromArray:preds];
 }
 
 - (void)addLayerId:(NSString *)layerId {
-  [layerIds addObject:layerId];
+  [self.layerIds addObject:layerId];
 }
 
 - (void)addLayerIds:(NSArray *)lIds {
-  [layerIds addObjectsFromArray:lIds];
+  [self.layerIds addObjectsFromArray:lIds];
 }
 
 - (BOOL)testValue:(id)value {
   __block BOOL allTrue = YES;
-  [predicates enumerateObjectsUsingBlock:^(SCPredicate *pred, NSUInteger idx,
-                                           BOOL *stop) {
+  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *pred,
+                                                NSUInteger idx, BOOL *stop) {
     if (![pred compare:value]) {
       allTrue = NO;
       *stop = YES;

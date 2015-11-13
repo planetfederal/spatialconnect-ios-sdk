@@ -19,6 +19,7 @@
 
 #import <XCTest/XCTest.h>
 #import "SpatialConnect.h"
+#import "SpatialConnectHelper.h"
 #import "GeopackageStore.h"
 #import "SCGeopackageHelper.h"
 #import "SCTestString.h"
@@ -33,6 +34,7 @@
 
 - (void)setUp {
   [super setUp];
+  self.sc = [SpatialConnectHelper loadConfig];
 }
 
 - (void)tearDown {

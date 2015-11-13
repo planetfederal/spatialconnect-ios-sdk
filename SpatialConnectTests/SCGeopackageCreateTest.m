@@ -45,6 +45,7 @@
       flattenMap:^RACStream *(GeopackageStore *ds) {
         SCPoint *p =
             [[SCPoint alloc] initWithCoordinateArray:@[ @(32.3), @(43.1) ]];
+        p.layerId = ds.defaultLayerName;
         return [ds createFeature:p];
       }] subscribeError:^(NSError *error) {
     NSLog(@"%@", error.description);
@@ -55,7 +56,7 @@
     [expect fulfill];
   }];
   [self.sc startAllServices];
-  [self waitForExpectationsWithTimeout:120.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 @end

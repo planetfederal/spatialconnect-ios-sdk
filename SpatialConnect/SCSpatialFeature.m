@@ -20,7 +20,6 @@
 #import "SCSpatialFeature.h"
 
 @interface SCSpatialFeature (PrivateMethods)
-- (BOOL)isClean:(NSString *)str;
 @end
 
 @implementation SCSpatialFeature
@@ -44,16 +43,6 @@
     _identifier = [[NSUUID UUID] UUIDString];
   }
   return _identifier;
-}
-
-- (void)setLayerId:(NSString *)lId {
-  NSAssert([self isClean:lId], @"Id Cannot contain illegal chars");
-  self.layerId = lId;
-}
-
-- (void)setStoreId:(NSString *)sId {
-  NSAssert([self isClean:sId], @"Id cannot contain illegal characters");
-  self.storeId = sId;
 }
 
 - (SCKeyTuple *)key {

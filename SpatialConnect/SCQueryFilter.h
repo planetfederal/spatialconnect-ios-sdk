@@ -20,10 +20,10 @@
 #import <Foundation/Foundation.h>
 #import "SCPredicate.h"
 
-@interface SCQueryFilter : NSObject {
-  NSMutableArray *predicates;
-  NSMutableArray *layerIds;
-}
+@interface SCQueryFilter : NSObject
+
+@property(nonatomic) NSMutableArray *predicates;
+@property(nonatomic) NSMutableArray *layerIds;
 
 @property(nonatomic) NSInteger limit;
 
