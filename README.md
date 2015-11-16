@@ -59,3 +59,12 @@ In the SCDataService there is an NSDictionary named 'supportedStores'. The this 
 ## Web Bundles
 
 Web Bundles zip files containing a webapp with the entry point being 'index.html'. A zip file placed in the Application's Documents directory will be scanned on load, check for zips containing an 'index.html', and will load that 'index.html' in a 'UIWebView'.
+
+The data store needs an adapter to connect to the underlying data source (a GeoJson file, a GeoPackage database, a CSV file, etc), therefore you must also create a class that extends SCDataAdapter.  The adapter will manage connecting and disconecting to the data source as well as the actual I/O to the data source.  The adapter will use the uri defined in the config to connect to the data source.  If the uri is remote, then it will download from the location and store it locally (at least for a geopackage).  
+
+### Testing
+
+To run the tests open XCode and run the test scheme.
+
+### Version Support
+iOS 8+
