@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01C8428AA6B791FA8FB49E90 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 		18363BA048400EC2B8180427 /* libPods-SpatialConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */; };
 		2D7D9D727DECA781AFD4CE68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 		560A71191BE703E500CE473F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 560A71181BE703E500CE473F /* libsqlite3.tbd */; };
@@ -501,6 +502,7 @@
 			files = (
 				56345CE81BFAB2E1008416AF /* SpatialConnect.framework in Frameworks */,
 				18363BA048400EC2B8180427 /* libPods-SpatialConnectTests.a in Frameworks */,
+				01C8428AA6B791FA8FB49E90 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1253,7 +1255,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpatialConnectTests/Pods-SpatialConnectTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		42D57ACB9F1AD1D3FE0D0DD2 /* Copy Pods Resources */ = {
