@@ -214,25 +214,34 @@
       }];
 }
 
-- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter {
+- (RACSignal *)query:(SCQueryFilter *)filter {
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self.gpkg.featureTables
-            enumerateObjectsUsingBlock:^(NSString *tableName, NSUInteger idx,
-                                         BOOL *stop) {
-              GPKGFeatureDao *dao =
-                  [self.gpkg getFeatureDaoWithTableName:tableName];
-              GPKGResultSet *rs = [dao queryForAll];
-              int limit = 0;
-              while (limit < 100 && rs != nil && [rs moveToNext]) {
-                limit++;
-                SCSpatialFeature *feature =
-                    [self createSCSpatialFeature:[dao getFeatureRow:rs]];
-                [subscriber sendNext:feature];
-              }
-              [rs close];
-              [subscriber sendCompleted];
-            }];
+        NSArray *arr = self.gpkg.featureTables;
+        NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
+        NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
+        // Use set intersection to make sure layers are valid feature table
+        // names.
+        [featureTableSet intersectSet:layerQuerySet];
+        NSArray *queryLayers = featureTableSet.allObjects.count > 0
+                                   ? featureTableSet.allObjects
+                                   : arr;
+
+        [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
+                                                  NSUInteger idx, BOOL *stop) {
+          GPKGFeatureDao *dao =
+              [self.gpkg getFeatureDaoWithTableName:tableName];
+          GPKGResultSet *rs = [dao queryForAll];
+          int limit = 0;
+          while (limit < 100 && rs != nil && [rs moveToNext]) {
+            limit++;
+            SCSpatialFeature *feature =
+                [self createSCSpatialFeature:[dao getFeatureRow:rs]];
+            [subscriber sendNext:feature];
+          }
+          [rs close];
+        }];
+        [subscriber sendCompleted];
         return nil;
       }];
 }
@@ -262,7 +271,7 @@
   // set the geometry's geometry
   GPKGGeometryData *geometryData = [row getGeometry];
   if (geometryData != nil) {
-    scSpatialFeature = [[SCSpatialFeature alloc] init];
+    scSpatialFeature = [SCGeometry fromGeometryData:geometryData];
   } else {
     scSpatialFeature = [[SCSpatialFeature alloc] init];
   }

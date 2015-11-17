@@ -25,6 +25,6 @@
 
 @interface SCMultiLineString : SCGeometry
 
-@property (nonatomic) NSArray* linestrings;
+@property (readonly,nonatomic) NSArray* linestrings;
 
 @end

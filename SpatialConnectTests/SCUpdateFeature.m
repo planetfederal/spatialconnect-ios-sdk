@@ -50,11 +50,11 @@
 
     id<SCSpatialStore> store = [spatialStores
         objectAtIndex:arc4random_uniform((int)spatialStores.count)];
-    [[store createFeature:pt] subscribeCompleted:^{
+    [[store create:pt] subscribeCompleted:^{
       [pt.properties
           setValue:[NSNumber numberWithInteger:(int)arc4random_uniform(1000)]
             forKey:@"randomNumber"];
-      [[store updateFeature:pt] subscribeCompleted:^{
+      [[store update:pt] subscribeCompleted:^{
         XCTAssertTrue(YES, "Feature Updated Successfully");
         [expectation fulfill];
       }];

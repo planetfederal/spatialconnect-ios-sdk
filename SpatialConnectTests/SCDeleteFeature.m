@@ -53,11 +53,11 @@
   if (spatialStores.count) {
     id<SCSpatialStore> store = (id<SCSpatialStore>)[spatialStores firstObject];
 
-    RACSignal *create = [store createFeature:pt];
+    RACSignal *create = [store create:pt];
     [create subscribeError:^(NSError *error) {
       XCTAssertTrue(NO, @"Error deleting feature");
     } completed:^{
-      [[store deleteFeature:pt.key] subscribeError:^(NSError *error) {
+      [[store delete:pt.key] subscribeError:^(NSError *error) {
         NSLog(@"%@", error.description);
         [expectation fulfill];
       } completed:^{

@@ -23,12 +23,23 @@
 
 @implementation SCMultiPoint (GPKG)
 
-- (GPKGGeometryData*)wkb {
-  WKBMultiPoint *mp = [[WKBMultiPoint alloc] initWithType:WKB_MULTIPOINT andHasZ:NO andHasM:NO];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL * _Nonnull stop) {
+- (id)initWithWKB:(WKBMultiPoint *)w {
+  NSArray *coordArray = [[w.getPoints.rac_sequence map:^NSArray *(WKBPoint *p) {
+    return @[ p.x, p.y ];
+  }] array];
+  self = [super initWithCoordinateArray:coordArray];
+  return self;
+}
+
+- (GPKGGeometryData *)wkb {
+  WKBMultiPoint *mp =
+      [[WKBMultiPoint alloc] initWithType:WKB_MULTIPOINT andHasZ:NO andHasM:NO];
+  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx,
+                                            BOOL *_Nonnull stop) {
     [mp addPoint:p.wkGeometry];
   }];
-  GPKGGeometryData *geomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+  GPKGGeometryData *geomData =
+      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
   [geomData setGeometry:mp];
   return geomData;
 }

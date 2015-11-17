@@ -46,7 +46,7 @@
         SCPoint *p =
             [[SCPoint alloc] initWithCoordinateArray:@[ @(32.3), @(43.1) ]];
         p.layerId = ds.defaultLayerName;
-        return [ds createFeature:p];
+        return [ds create:p];
       }] subscribeError:^(NSError *error) {
     NSLog(@"%@", error.description);
     XCTAssert(NO, @"Error creating point");

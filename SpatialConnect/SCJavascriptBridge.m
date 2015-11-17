@@ -217,7 +217,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     SCSpatialFeature *feat = [SCGeoJSON parseDict:value];
-    [s createFeature:feat];
+    [s create:feat];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:-57
@@ -233,7 +233,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     SCSpatialFeature *feat = [SCGeoJSON parseDict:value];
-    [s updateFeature:feat];
+    [s update:feat];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_UPDATEFEATURE
@@ -250,7 +250,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     SCKeyTuple *key =
         [SCKeyTuple tupleFromEncodedCompositeKey:[value[@"id"] stringValue]];
-    [s deleteFeature:key];
+    [s delete:key];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_DELETEFEATURE

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18363BA048400EC2B8180427 /* libPods-SpatialConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */; };
 		2D7D9D727DECA781AFD4CE68 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 		560A71191BE703E500CE473F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 560A71181BE703E500CE473F /* libsqlite3.tbd */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; };
@@ -23,6 +24,7 @@
 		560E31C81BF15CBD009DA680 /* SCTestString.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C71BF15CBD009DA680 /* SCTestString.m */; };
 		560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 560E31CD1BF23F83009DA680 /* SCKeyTuple.h */; };
 		560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31CE1BF23F83009DA680 /* SCKeyTuple.m */; };
+		56345CE81BFAB2E1008416AF /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		5645C4E01BED31F1006E4128 /* SCGeometry+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4DE1BED31F1006E4128 /* SCGeometry+GPKG.h */; };
@@ -40,7 +42,6 @@
 		5645C4FA1BED9708006E4128 /* SCMultiPoint+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4F81BED9708006E4128 /* SCMultiPoint+GPKG.h */; };
 		5645C4FB1BED9708006E4128 /* SCMultiPoint+GPKG.m in Sources */ = {isa = PBXBuildFile; fileRef = 5645C4F91BED9708006E4128 /* SCMultiPoint+GPKG.m */; };
 		5649B4971BE27C6A009947EF /* SpatialConnect-Prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4961BE27C6A009947EF /* SpatialConnect-Prefix.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B49E1BE27C6A009947EF /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		5649B4AE1BE28011009947EF /* Vendor in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4AD1BE28011009947EF /* Vendor */; };
 		5649B4C41BE28079009947EF /* all.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4AF1BE28079009947EF /* all.geojson */; };
 		5649B4C51BE28079009947EF /* feature.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4B01BE28079009947EF /* feature.json */; };
@@ -230,8 +231,6 @@
 		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
 		564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
 		564BAD111BF2A10000D6F5F0 /* SCGeopackageQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 564BAD101BF2A10000D6F5F0 /* SCGeopackageQueryTest.m */; };
-		DF02A838B0370B96D3EAC5A3 /* libPods-SpatialConnectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 979478E48B67C7F9E534553A /* libPods-SpatialConnectTests.a */; };
-		E69A3564EB7B3CEE3B67F262 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FE33BD43CC3F9192E57448 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -265,6 +264,7 @@
 		560E31C71BF15CBD009DA680 /* SCTestString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTestString.m; sourceTree = "<group>"; };
 		560E31CD1BF23F83009DA680 /* SCKeyTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKeyTuple.h; sourceTree = "<group>"; };
 		560E31CE1BF23F83009DA680 /* SCKeyTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKeyTuple.m; sourceTree = "<group>"; };
+		56345CE61BFAB274008416AF /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
 		5645C4DE1BED31F1006E4128 /* SCGeometry+GPKG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGeometry+GPKG.h"; sourceTree = "<group>"; };
@@ -499,9 +499,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5649B49E1BE27C6A009947EF /* SpatialConnect.framework in Frameworks */,
-				DF02A838B0370B96D3EAC5A3 /* libPods-SpatialConnectTests.a in Frameworks */,
-				E69A3564EB7B3CEE3B67F262 /* libPods.a in Frameworks */,
+				56345CE81BFAB2E1008416AF /* SpatialConnect.framework in Frameworks */,
+				18363BA048400EC2B8180427 /* libPods-SpatialConnectTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +521,7 @@
 		0B5FE958508C82B8D8FF4D5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				56345CE61BFAB274008416AF /* libPods.a */,
 				5645C4E61BED7102006E4128 /* boost.framework */,
 				560A71181BE703E500CE473F /* libsqlite3.tbd */,
 				C4FE33BD43CC3F9192E57448 /* libPods.a */,
@@ -1253,7 +1253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SpatialConnectTests/Pods-SpatialConnectTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		42D57ACB9F1AD1D3FE0D0DD2 /* Copy Pods Resources */ = {
@@ -1572,6 +1572,10 @@
 			buildSettings = {
 				INFOPLIST_FILE = SpatialConnectTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnectTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1583,6 +1587,10 @@
 			buildSettings = {
 				INFOPLIST_FILE = SpatialConnectTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnectTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

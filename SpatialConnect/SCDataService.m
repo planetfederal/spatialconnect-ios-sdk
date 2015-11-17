@@ -72,10 +72,11 @@
 }
 
 - (void)stopAllStores {
-  for (NSString *key in [self.stores allKeys]) {
-    SCDataStore *store = [self.stores objectForKey:key];
-    [self stopStore:store];
-  }
+  [self.stores
+      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
+                                          BOOL *stop) {
+        [self stopStore:store];
+      }];
 }
 
 - (void)startStore:(SCDataStore *)store {
@@ -236,27 +237,45 @@
 }
 
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter {
-  return [RACSignal createSignal:^RACDisposable *(
-                                     id<RACSubscriber> subscriber) {
-    [[[[[self storesByProtocol:@protocol(SCSpatialStore)] rac_sequence] signal]
-        flattenMap:^RACStream *(id<SCSpatialStore> store) {
-          return [store queryAllLayers:filter];
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSArray *arr = [self storesByProtocol:@protocol(SCSpatialStore)];
+        __block NSUInteger queryCompleted = 0;
+        __block NSUInteger count = arr.count;
+        [[[[arr rac_sequence] signal] flattenMap:^RACStream *(
+                                                     id<SCSpatialStore> store) {
+          return
+              [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> qSub) {
+                NSLog(@"Store %ld", queryCompleted);
+                [[store query:filter] subscribeNext:^(id x) {
+                  [qSub sendNext:x];
+                } error:^(NSError *error) {
+                  [qSub sendError:error];
+                } completed:^{
+                  queryCompleted++;
+                  NSLog(@"Completed Store %ld", queryCompleted);
+                  if (queryCompleted == count) {
+                    [subscriber sendCompleted];
+                  }
+                }];
+                return nil;
+              }];
         }] subscribeNext:^(SCSpatialFeature *x) {
-      [subscriber sendNext:x];
-    } error:^(NSError *error) {
-      [subscriber sendError:error];
-    } completed:^{
-      [subscriber sendCompleted];
-    }];
-    return nil;
-  }];
+          [subscriber sendNext:x];
+        } error:^(NSError *error) {
+          [subscriber sendError:error];
+        } completed:^{
+          [subscriber sendCompleted];
+        }];
+        return nil;
+      }];
 }
 
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter {
   id<SCSpatialStore> store =
       (id<SCSpatialStore>)[self.stores objectForKey:storeId];
-  return [store queryAllLayers:filter];
+  return [store query:filter];
 }
 
 @end

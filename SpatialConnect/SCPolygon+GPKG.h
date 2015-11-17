@@ -22,6 +22,7 @@
 
 @interface SCPolygon (GPKG)
 
-- (WKBPolygon*)wkGeometry;
+- (id)initWithWKB:(WKBPolygon *)w;
+- (WKBPolygon *)wkGeometry;
 
 @end

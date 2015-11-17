@@ -89,7 +89,7 @@
                                encoding:NSUTF8StringEncoding];
 }
 
-- (NSString *)encodedCompoundKey {
+- (NSString *)encodedCompositeKey {
   return
       [NSString stringWithFormat:@"%@.%@.%@", [SCKeyTuple encodeString:storeId],
                                  [SCKeyTuple encodeString:layerId],

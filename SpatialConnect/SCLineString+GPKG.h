@@ -22,6 +22,7 @@
 
 @interface SCLineString (GPKG)
 
-- (WKBLineString*)wkGeometry;
+- (id)initWithWKB:(WKBLineString *)w;
+- (WKBLineString *)wkGeometry;
 
 @end

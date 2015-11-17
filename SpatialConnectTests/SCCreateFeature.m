@@ -50,7 +50,7 @@
   XCTAssert(spatialStores.count, "Successfully fetched Spatial Stores");
   if (spatialStores.count) {
     id<SCSpatialStore> store = (id<SCSpatialStore>)[spatialStores firstObject];
-    [[store createFeature:pt] subscribeError:^(NSError *error) {
+    [[store create:pt] subscribeError:^(NSError *error) {
       XCTAssertTrue(NO, @"Error:%@", [error description]);
       [expectation fulfill];
     } completed:^{

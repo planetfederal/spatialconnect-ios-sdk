@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
@@ -38,6 +35,7 @@
 
 - (void)setUp {
   [super setUp];
+  numPoints = 500;
   points = [SCGeometryHelper generateNRandomPoints:numPoints];
 }
 
@@ -47,13 +45,13 @@
 
 - (void)testMultiPoint {
   SCMultiPoint *mPoint = [[SCMultiPoint alloc] initWithCoordinateArray:points];
-  XCTAssertEqual(mPoint.points.count,numPoints, @"Size");
-  for (int i=0; i < numPoints; i++) {
+  XCTAssertEqual(mPoint.points.count, numPoints, @"Size");
+  for (int i = 0; i < numPoints; i++) {
     SCPoint *p = mPoint.points[i];
     NSArray *pT = points[i];
-    XCTAssertEqual(p.longitude, [pT[0] doubleValue],@"Longitude");
-    XCTAssertEqual(p.latitude, [pT[1] doubleValue],@"Latitude");
-    XCTAssertEqual(p.altitude, [pT[2] doubleValue],@"Altitude");
+    XCTAssertEqual(p.longitude, [pT[0] doubleValue], @"Longitude");
+    XCTAssertEqual(p.latitude, [pT[1] doubleValue], @"Latitude");
+    XCTAssertEqual(p.altitude, [pT[2] doubleValue], @"Altitude");
   }
 }
 

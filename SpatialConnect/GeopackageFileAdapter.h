@@ -33,12 +33,9 @@
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg;
 - (RACSignal *)connect;
 
-- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter;
-- (RACSignal *)queryByLayerId:(NSString *)layerId
-                   withFilter:(SCQueryFilter *)filter;
-
+- (RACSignal *)query:(SCQueryFilter *)filter;
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature;
-- (RACSignal *)deleteFeature:(NSString *)identifier;
+- (RACSignal *)deleteFeature:(SCKeyTuple *)tuple;
 - (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
 - (NSArray *)layerList;
 - (NSString *)defaultLayerName;

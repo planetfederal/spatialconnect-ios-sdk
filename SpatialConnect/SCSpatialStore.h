@@ -32,18 +32,7 @@
  *
  *  @return SCSpatialFeature
  */
-- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter;
-
-/**
- *  Returns SCSpatialFeature on the returned signal
- *
- *  @param layerId the id of the layer registered in the store
- *  @param filter used to bring back only valid data
- *
- *  @return RACSignal
- */
-- (RACSignal *)queryByLayerId:(NSString *)layerId
-                   withFilter:(SCQueryFilter *)filter;
+- (RACSignal *)query:(SCQueryFilter *)filter;
 
 /**
  *  Returns RACSignal completion on successful creation
@@ -54,7 +43,7 @@
  *
  *  @return RACSignal - Completion
  */
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature;
+- (RACSignal *)create:(SCSpatialFeature *)feature;
 
 /**
  *  Returns RACSignal completion on successful update
@@ -63,7 +52,7 @@
  *
  *  @return RACSignal - Completion
  */
-- (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
+- (RACSignal *)update:(SCSpatialFeature *)feature;
 
 /**
  *  Returns RACSignal completion on successful delete
@@ -72,14 +61,24 @@
  *
  *  @return RACSignal - Completion
  */
-- (RACSignal *)deleteFeature:(SCKeyTuple *)key;
+- (RACSignal *) delete:(SCKeyTuple *)key;
 
-@optional
+/**
+ *  Default layer to be used when no layer is present in
+ *  SCSpatialFeature's layerId ivar
+ *
+ *  @return string representing layer name
+ */
+- (NSString *)defaultLayerName;
 
+/**
+ *  List of layers in the store
+ *
+ *  @return RACSignla - NSArray of strings
+ */
 - (RACSignal *)layerList;
 
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature
-                     inLayer:(NSString *)layerId;
+@optional
 
 - (RACSignal *)moveFeature:(SCSpatialFeature *)feature
                    toLayer:(NSString *)layerId;

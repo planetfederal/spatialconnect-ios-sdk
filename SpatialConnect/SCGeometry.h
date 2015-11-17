@@ -17,16 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCSpatialFeature.h"
 
 @class SCBoundingBox;
 @class SCPoint;
 
-typedef NS_ENUM(NSInteger,GeometryType) {
+typedef NS_ENUM(NSInteger, GeometryType) {
   POINT,
   MULTIPOINT,
   LINESTRING,
@@ -37,12 +33,13 @@ typedef NS_ENUM(NSInteger,GeometryType) {
   LINEARRING
 };
 
-@interface SCGeometry : SCSpatialFeature 
+@interface SCGeometry : SCSpatialFeature
 
-@property (nonatomic) SCBoundingBox *bbox;
+@property(nonatomic) SCBoundingBox *bbox;
+@property(nonatomic) NSNumber *srsId;
 
-- (id)initWithCoordinateArray:(NSArray*)coords;
+- (id)initWithCoordinateArray:(NSArray *)coords;
 - (GeometryType)type;
-- (BOOL)checkWithin:(SCBoundingBox*)bbox;
+- (BOOL)checkWithin:(SCBoundingBox *)bbox;
 
 @end

@@ -44,21 +44,20 @@
 - (void)testGpkgFeatureUpdate {
   XCTestExpectation *expect = [self expectationWithDescription:@"Update"];
 
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
-      subscribeNext:^(GeopackageStore *ds) {
-        [[[[ds queryAllLayers:nil] takeLast:1]
-            flattenMap:^RACStream *(SCSpatialFeature *f) {
-              [f.properties setObject:[SCTestString randomStringWithLength:200]
-                               forKey:@"foo"];
-              return [ds updateFeature:f];
-            }] subscribeError:^(NSError *error) {
-          XCTAssert(NO, @"Error loading GPGK");
-          [expect fulfill];
-        } completed:^{
-          XCTAssert(YES, @"Delete successfully");
-          [expect fulfill];
-        }];
-      }];
+  [[SCGeopackageHelper
+      loadGPKGDataStore:self.sc] subscribeNext:^(GeopackageStore *ds) {
+    [[[[ds query:nil] takeLast:1] flattenMap:^RACStream *(SCSpatialFeature *f) {
+      [f.properties setObject:[SCTestString randomStringWithLength:200]
+                       forKey:@"foo"];
+      return [ds update:f];
+    }] subscribeError:^(NSError *error) {
+      XCTAssert(NO, @"Error loading GPGK");
+      [expect fulfill];
+    } completed:^{
+      XCTAssert(YES, @"Delete successfully");
+      [expect fulfill];
+    }];
+  }];
 
   [sc.manager startAllServices];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
