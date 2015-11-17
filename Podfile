@@ -7,7 +7,7 @@ pod 'ReactiveCocoa', '2.5'
 pod 'zipzap','8.0.6'
 pod 'geopackage-ios', :git => 'https://github.com/boundlessgeo/geopackage-ios.git', :branch => 'develop'
 pod 'wkb-ios', '~>1.0'
-pod 'AFNetworking'
+pod 'AFNetworking', '~> 2.1'
 
 target :'SpatialConnectTests', :exclusive => true do
   pod 'spatialconnect', :path => '.'
