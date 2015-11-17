@@ -17,14 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
 
 @interface SCMultiPolygon : SCGeometry
 
-@property (nonatomic) NSArray *polygons;
+@property(nonatomic) NSArray *polygons;
 
 @end

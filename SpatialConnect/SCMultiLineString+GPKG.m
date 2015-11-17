@@ -24,12 +24,30 @@
 
 @implementation SCMultiLineString (GPKG)
 
-- (GPKGGeometryData*)wkb {
-  WKBMultiLineString *mls = [[WKBMultiLineString alloc] initWithType:WKB_MULTILINESTRING andHasZ:NO andHasM:NO];
-  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString  *ls, NSUInteger idx, BOOL * _Nonnull stop) {
-    [mls addLineString:ls.wkGeometry];
-  }];
-  GPKGGeometryData * pointGeomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+- (id)initWithWKB:(WKBMultiLineString *)w {
+  NSArray *coordArray =
+      [[w.getLineStrings.rac_sequence map:^NSArray *(WKBLineString *l) {
+        return [[l.points.rac_sequence map:^NSArray *(WKBPoint *p) {
+          return @[ p.x, p.y ];
+        }] array];
+      }] array];
+
+  self = [self initWithCoordinateArray:coordArray];
+  return self;
+}
+
+- (GPKGGeometryData *)wkb {
+  WKBMultiLineString *mls =
+      [[WKBMultiLineString alloc] initWithType:WKB_MULTILINESTRING
+                                       andHasZ:NO
+                                       andHasM:NO];
+  [self.linestrings
+      enumerateObjectsUsingBlock:^(SCLineString *ls, NSUInteger idx,
+                                   BOOL *_Nonnull stop) {
+        [mls addLineString:ls.wkGeometry];
+      }];
+  GPKGGeometryData *pointGeomData =
+      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
   [pointGeomData setGeometry:mls];
   return pointGeomData;
 }

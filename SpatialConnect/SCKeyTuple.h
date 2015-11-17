@@ -24,7 +24,7 @@
 @property(readonly, nonatomic) NSString *storeId;
 @property(readonly, nonatomic) NSString *layerId;
 @property(readonly, nonatomic) NSString *featureId;
-@property(readonly, nonatomic) NSString *encodedCompoundKey;
+@property(readonly, nonatomic) NSString *encodedCompositeKey;
 
 /**
  *  Creates an SCKeyTuple from a base64 encoded key

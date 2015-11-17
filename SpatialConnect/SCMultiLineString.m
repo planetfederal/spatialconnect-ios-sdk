@@ -17,34 +17,39 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCMultiLinestring.h"
 #import "SCLineString.h"
 
+@interface SCMultiLineString ()
+@property(readwrite, nonatomic, strong) NSArray *linestrings;
+@end
+
 @implementation SCMultiLineString
 
-@synthesize linestrings;
+@synthesize linestrings = _linestrings;
 
-- (id)initWithCoordinateArray:(NSArray*)coords {
+- (id)initWithCoordinateArray:(NSArray *)coords {
   if (self = [super init]) {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSArray *linestring in coords) {
-      [arr addObject:[[SCLineString alloc] initWithCoordinateArray:linestring]];
+      SCLineString *l =
+          [[SCLineString alloc] initWithCoordinateArray:linestring];
+      [arr addObject:l];
     }
-    linestrings = [[NSArray alloc] initWithArray:arr];
+    _linestrings = [[NSArray alloc] initWithArray:arr];
   }
   return self;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return MULTILINESTRING;
 }
 
-- (NSString*)description {
-  NSMutableString *str = [[NSMutableString alloc] initWithString:@"MultiLineString["];
-  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *lineString, NSUInteger idx, BOOL *stop) {
+- (NSString *)description {
+  NSMutableString *str =
+      [[NSMutableString alloc] initWithString:@"MultiLineString["];
+  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *lineString,
+                                                 NSUInteger idx, BOOL *stop) {
     [str appendString:[lineString description]];
   }];
   [str appendString:@"]"];
@@ -53,7 +58,8 @@
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   __block BOOL response = YES;
-  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *line, NSUInteger idx, BOOL *stop) {
+  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *line,
+                                                 NSUInteger idx, BOOL *stop) {
     if (![line checkWithin:bbox]) {
       response = NO;
       *stop = YES;

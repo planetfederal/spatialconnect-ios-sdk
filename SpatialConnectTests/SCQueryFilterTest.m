@@ -44,11 +44,6 @@
   }
 }
 
-- (void)testQueryFilter {
-  SCQueryFilter *qf = [[SCQueryFilter alloc] init];
-  [sc.manager.dataService queryAllStores:qf];
-}
-
 - (void)testQueryAllStores {
   XCTestExpectation *expectation =
       [self expectationWithDescription:@"testing query all stores"];
@@ -63,7 +58,7 @@
     XCTAssertTrue(arr.count > 0);
     [expectation fulfill];
   }];
-  [self waitForExpectationsWithTimeout:150.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 @end

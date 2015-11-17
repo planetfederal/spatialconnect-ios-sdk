@@ -18,7 +18,10 @@
  ******************************************************************************/
 
 #import "SCMultiPoint.h"
+#import "WKBMultiPoint.h"
 
 @interface SCMultiPoint (GPKG)
+
+- (id)initWithWKB:(WKBMultiPoint *)w;
 
 @end

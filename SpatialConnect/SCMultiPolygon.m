@@ -17,35 +17,37 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCMultiPolygon.h"
 #import "SCPolygon.h"
 
+@interface SCMultiPolygon ()
+@end
+
 @implementation SCMultiPolygon
 
-@synthesize polygons;
+@synthesize polygons = _polygons;
 
 - (id)initWithCoordinateArray:(NSArray *)coords {
   if (self = [super init]) {
-    NSMutableArray *arr = [[NSMutableArray alloc]initWithCapacity:coords.count];
+    NSMutableArray *arr =
+        [[NSMutableArray alloc] initWithCapacity:coords.count];
     for (NSArray *coord in coords) {
       [arr addObject:[[SCPolygon alloc] initWithCoordinateArray:coord]];
     }
-    self.polygons = [[NSArray alloc] initWithArray:arr];
+    _polygons = [[NSArray alloc] initWithArray:arr];
   }
   return self;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return MULTIPOLYGON;
 }
 
-- (NSString*) description
-{
-  NSMutableString *str = [[NSMutableString alloc] initWithString:@"MultiPolygon["];
-  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *polygon, NSUInteger idx, BOOL *stop) {
+- (NSString *)description {
+  NSMutableString *str =
+      [[NSMutableString alloc] initWithString:@"MultiPolygon["];
+  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *polygon,
+                                              NSUInteger idx, BOOL *stop) {
     [str appendString:[polygon description]];
   }];
   [str appendString:@"]"];
@@ -54,7 +56,8 @@
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   __block BOOL response = YES;
-  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *poly, NSUInteger idx, BOOL *stop) {
+  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *poly, NSUInteger idx,
+                                              BOOL *stop) {
     if (![poly checkWithin:bbox]) {
       response = NO;
       *stop = YES;

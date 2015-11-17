@@ -43,19 +43,18 @@
 - (void)testGpkgFeatureDelete {
   XCTestExpectation *expect = [self expectationWithDescription:@"Delete"];
 
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
-      subscribeNext:^(GeopackageStore *ds) {
-        [[[[ds queryAllLayers:nil] takeLast:1]
-            flattenMap:^RACStream *(SCSpatialFeature *f) {
-              return [ds deleteFeature:f.key];
-            }] subscribeError:^(NSError *error) {
-          XCTAssert(NO, @"Error loading GPGK");
-          [expect fulfill];
-        } completed:^{
-          XCTAssert(YES, @"Delete successfully");
-          [expect fulfill];
-        }];
-      }];
+  [[SCGeopackageHelper
+      loadGPKGDataStore:self.sc] subscribeNext:^(GeopackageStore *ds) {
+    [[[[ds query:nil] takeLast:1] flattenMap:^RACStream *(SCSpatialFeature *f) {
+      return [ds delete:f.key];
+    }] subscribeError:^(NSError *error) {
+      XCTAssert(NO, @"Error loading GPGK");
+      [expect fulfill];
+    } completed:^{
+      XCTAssert(YES, @"Delete successfully");
+      [expect fulfill];
+    }];
+  }];
 
   [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];

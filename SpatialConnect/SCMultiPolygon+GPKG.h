@@ -18,7 +18,10 @@
  ******************************************************************************/
 
 #import "SCMultiPolygon.h"
+#import "WKBMultiPolygon.h"
 
 @interface SCMultiPolygon (GPKG)
+
+- (id)initWithWKB:(WKBMultiPolygon *)w;
 
 @end

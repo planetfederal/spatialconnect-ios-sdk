@@ -21,15 +21,34 @@
 #import "SCPolygon+GPKG.h"
 #import <geopackage-ios/GPKGGeometryData.h>
 #import "WKBMultiPolygon.h"
+#import "WKBLineString.h"
 
 @implementation SCMultiPolygon (GPKG)
 
-- (GPKGGeometryData*)wkb {
-  WKBMultiPolygon *mls = [[WKBMultiPolygon alloc] initWithType:WKB_MULTIPOLYGON andHasZ:NO andHasM:NO];
-  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon  *poly, NSUInteger idx, BOOL * _Nonnull stop) {
+- (id)initWithWKB:(WKBMultiPolygon *)w {
+  NSArray *coordArray =
+      [[w.getPolygons.rac_sequence map:^NSArray *(WKBPolygon *p) {
+        return [[p.rings.rac_sequence map:^NSArray *(WKBLineString *l) {
+          return [[l.points.rac_sequence map:^NSArray *(WKBPoint *p) {
+            return @[ p.x, p.y ];
+          }] array];
+        }] array];
+      }] array];
+
+  self = [super initWithCoordinateArray:coordArray];
+  return self;
+}
+
+- (GPKGGeometryData *)wkb {
+  WKBMultiPolygon *mls = [[WKBMultiPolygon alloc] initWithType:WKB_MULTIPOLYGON
+                                                       andHasZ:NO
+                                                       andHasM:NO];
+  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *poly, NSUInteger idx,
+                                              BOOL *_Nonnull stop) {
     [mls addPolygon:poly.wkGeometry];
   }];
-  GPKGGeometryData *geomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+  GPKGGeometryData *geomData =
+      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
   [geomData setGeometry:mls];
   return geomData;
 }

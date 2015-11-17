@@ -24,18 +24,36 @@
 
 @implementation SCPolygon (GPKG)
 
-- (WKBPolygon*)wkGeometry {
-  WKBPolygon *p = [[WKBPolygon alloc] initWithType:WKB_POLYGON andHasZ:NO andHasM:NO];
-  WKBLineString *ls = [[WKBLineString alloc] initWithType:WKB_LINESTRING andHasZ:NO andHasM:NO];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL * _Nonnull stop) {
+- (id)initWithWKB:(WKBPolygon *)w {
+  NSArray *rings = w.rings;
+  NSMutableArray *coordArray = [NSMutableArray new];
+  [rings enumerateObjectsUsingBlock:^(WKBLineString *ring, NSUInteger idx,
+                                      BOOL *stop) {
+    [coordArray
+        addObject:[[ring.points.rac_sequence map:^NSArray *(WKBPoint *p) {
+          return @[ p.x, p.y ];
+        }] array]];
+  }];
+  self = [super initWithCoordinateArray:coordArray];
+  return self;
+}
+
+- (WKBPolygon *)wkGeometry {
+  WKBPolygon *p =
+      [[WKBPolygon alloc] initWithType:WKB_POLYGON andHasZ:NO andHasM:NO];
+  WKBLineString *ls =
+      [[WKBLineString alloc] initWithType:WKB_LINESTRING andHasZ:NO andHasM:NO];
+  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx,
+                                            BOOL *_Nonnull stop) {
     [ls addPoint:p.wkGeometry];
   }];
   [p addRing:ls];
   return p;
 }
 
-- (GPKGGeometryData*)wkb {  
-  GPKGGeometryData * geomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+- (GPKGGeometryData *)wkb {
+  GPKGGeometryData *geomData =
+      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
   [geomData setGeometry:self.wkGeometry];
   return geomData;
 }

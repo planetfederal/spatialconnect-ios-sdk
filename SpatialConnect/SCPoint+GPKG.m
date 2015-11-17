@@ -18,17 +18,27 @@
  ******************************************************************************/
 
 #import "SCPoint+GPKG.h"
+#import "WKBGeometry.h"
 
 @implementation SCPoint (GPKG)
 
-- (WKBPoint*)wkGeometry {
-  WKBPoint *p = [[WKBPoint alloc] initWithHasZ:NO andHasM:NO andX:[[NSDecimalNumber alloc] initWithDouble:self.x] andY:[[NSDecimalNumber alloc] initWithDouble:self.y]];
+- (id)initWithWKB:(WKBPoint *)w {
+  self = [super initWithCoordinateArray:@[ w.x, w.y ]];
+  return self;
+}
+
+- (WKBPoint *)wkGeometry {
+  WKBPoint *p = [[WKBPoint alloc]
+      initWithHasZ:NO
+           andHasM:NO
+              andX:[[NSDecimalNumber alloc] initWithDouble:self.x]
+              andY:[[NSDecimalNumber alloc] initWithDouble:self.y]];
   return p;
 }
 
-- (GPKGGeometryData*)wkb {
-  
-  GPKGGeometryData * pointGeomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+- (GPKGGeometryData *)wkb {
+  GPKGGeometryData *pointGeomData =
+      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
   [pointGeomData setGeometry:self.wkGeometry];
   return pointGeomData;
 }

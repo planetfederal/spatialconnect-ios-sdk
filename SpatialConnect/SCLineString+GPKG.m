@@ -23,16 +23,27 @@
 
 @implementation SCLineString (GPKG)
 
-- (WKBLineString*)wkGeometry {
-  WKBLineString *ls = [[WKBLineString alloc] initWithType:WKB_LINESTRING andHasZ:NO andHasM:NO];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL * _Nonnull stop) {
+- (id)initWithWKB:(WKBLineString *)w {
+  NSArray *arr = [[w.points.rac_sequence map:^NSArray *(WKBPoint *p) {
+    return @[ p.x, p.y ];
+  }] array];
+  self = [super initWithCoordinateArray:arr];
+  return self;
+}
+
+- (WKBLineString *)wkGeometry {
+  WKBLineString *ls =
+      [[WKBLineString alloc] initWithType:WKB_LINESTRING andHasZ:NO andHasM:NO];
+  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx,
+                                            BOOL *_Nonnull stop) {
     [ls addPoint:p.wkGeometry];
   }];
   return ls;
 }
 
-- (GPKGGeometryData*)wkb {
-  GPKGGeometryData * geomData = [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
+- (GPKGGeometryData *)wkb {
+  GPKGGeometryData *geomData =
+      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
   [geomData setGeometry:self.wkGeometry];
   return geomData;
 }

@@ -18,12 +18,51 @@
  ******************************************************************************/
 
 #import "SCGeometry+GPKG.h"
+#import "WKBGeometryTypes.h"
+#import "SCPoint+GPKG.h"
+#import "SCMultiPoint+GPKG.h"
+#import "SCLineString+GPKG.h"
+#import "SCMultiLineString+GPKG.h"
+#import "SCPolygon+GPKG.h"
+#import "SCMultiPolygon+GPKG.h"
 
 @implementation SCGeometry (GPKG)
 
-- (GPKGGeometryData*) wkb {
+- (GPKGGeometryData *)wkb {
   NSAssert(NO, @"This is an abstract method and should be overridden");
   return nil;
+}
+
++ (SCGeometry *)fromGeometryData:(GPKGGeometryData *)gData {
+  SCGeometry *g;
+  WKBGeometry *wkb = gData.geometry;
+  switch (wkb.geometryType) {
+  case WKB_POINT:
+    g = [[SCPoint alloc] initWithWKB:(WKBPoint *)wkb];
+    break;
+  case WKB_MULTIPOINT:
+    g = [[SCMultiPoint alloc] initWithWKB:(WKBMultiPoint *)wkb];
+    break;
+  case WKB_LINESTRING:
+    g = [[SCLineString alloc] initWithWKB:(WKBLineString *)wkb];
+    break;
+  case WKB_MULTILINESTRING:
+    g = [[SCMultiLineString alloc] initWithWKB:(WKBMultiLineString *)wkb];
+    break;
+  case WKB_POLYGON:
+    g = [[SCPolygon alloc] initWithWKB:(WKBPolygon *)wkb];
+    break;
+  case WKB_MULTIPOLYGON:
+    g = [[SCMultiPolygon alloc] initWithWKB:(WKBMultiPolygon *)wkb];
+    break;
+  default:
+    break;
+  }
+  if (g) {
+    NSNumber *n = gData.srsId;
+    g.srsId = n;
+  }
+  return g;
 }
 
 @end

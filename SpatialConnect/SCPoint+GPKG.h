@@ -22,5 +22,6 @@
 #import "SCGeometry+GPKG.h"
 
 @interface SCPoint (GPKG)
-- (WKBPoint*)wkGeometry;
+- (id)initWithWKB:(WKBPoint *)w;
+- (WKBPoint *)wkGeometry;
 @end

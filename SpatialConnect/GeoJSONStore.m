@@ -61,25 +61,19 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 #pragma mark -
 #pragma mark SCSpatialStore
-
-- (RACSignal *)queryAllLayers:(SCQueryFilter *)filter {
+- (RACSignal *)query:(SCQueryFilter *)filter {
   return [(GeoJSONAdapter *)adapter query:filter];
 }
 
-- (RACSignal *)queryByLayerId:(NSString *)layerId
-                   withFilter:(SCQueryFilter *)filter {
-  return [(GeoJSONAdapter *)adapter query:filter];
-}
-
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature {
+- (RACSignal *)create:(SCSpatialFeature *)feature {
   return [(GeoJSONAdapter *)adapter create:feature];
 }
 
-- (RACSignal *)updateFeature:(SCSpatialFeature *)feature {
+- (RACSignal *)update:(SCSpatialFeature *)feature {
   return [(GeoJSONAdapter *)adapter update:feature];
 }
 
-- (RACSignal *)deleteFeature:(SCSpatialFeature *)feature {
+- (RACSignal *) delete:(SCSpatialFeature *)feature {
   return [(GeoJSONAdapter *)adapter delete:feature];
 }
 

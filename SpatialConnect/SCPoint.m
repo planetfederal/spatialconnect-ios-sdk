@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCPoint.h"
 #import "SCBoundingBox.h"
 
@@ -39,22 +36,20 @@
 }
 
 - (id)initWithCoordinateArray:(NSArray *)coordinate {
-  
   if (self = [super init]) {
     NSUInteger len = [coordinate count];
     if (len == 2) {
-      self.x = [[coordinate objectAtIndex:0] doubleValue];
-      self.y = [[coordinate objectAtIndex:1] doubleValue];
+      _x = [[coordinate objectAtIndex:0] doubleValue];
+      _y = [[coordinate objectAtIndex:1] doubleValue];
     } else if (len == 3) {
-      self.x = [[coordinate objectAtIndex:0] doubleValue];
-      self.y = [[coordinate objectAtIndex:1] doubleValue];
-      self.z = [[coordinate objectAtIndex:2] doubleValue];
-    }
-    else {
+      _x = [[coordinate objectAtIndex:0] doubleValue];
+      _y = [[coordinate objectAtIndex:1] doubleValue];
+      _z = [[coordinate objectAtIndex:2] doubleValue];
+    } else {
       self = nil;
     }
   }
-  
+
   return self;
 }
 
@@ -70,7 +65,7 @@
   return self.z;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return POINT;
 }
 
@@ -87,9 +82,9 @@
   return YES;
 }
 
-- (NSString*) description
-{
-  return [NSString stringWithFormat:@"Point[%f,%f,%f]", self.x, self.y, self.z, nil];
+- (NSString *)description {
+  return [NSString
+      stringWithFormat:@"Point[%f,%f,%f]", self.x, self.y, self.z, nil];
 }
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {

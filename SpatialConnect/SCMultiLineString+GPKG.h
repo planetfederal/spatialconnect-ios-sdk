@@ -18,7 +18,8 @@
  ******************************************************************************/
 
 #import "SCMultiLineString.h"
+#import "WKBMultiLineString.h"
 
 @interface SCMultiLineString (GPKG)
-
+- (id)initWithWKB:(WKBMultiLineString *)w;
 @end

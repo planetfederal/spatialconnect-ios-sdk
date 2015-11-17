@@ -17,19 +17,16 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCGeometry.h"
 #import "SCBoundingBox.h"
 
 @implementation SCGeometry
 
-@synthesize bbox = _bbox;
+@synthesize bbox;
+@synthesize srsId;
 
 - (id)initWithCoordinateArray:(NSArray *)coords {
-  if (self = [super init]) {
-    _bbox = [[SCBoundingBox alloc] init];
+  if (self = [self init]) {
     return self;
   }
   return nil;
@@ -37,14 +34,18 @@
 
 - (id)init {
   self = [super init];
+  if (self) {
+    bbox = [[SCBoundingBox alloc] init];
+    srsId = [NSNumber numberWithLong:4326];
+  }
   return self;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return -1;
 }
 
-- (NSString*)description {
+- (NSString *)description {
   return [self description];
 }
 
