@@ -8,7 +8,7 @@ script:
 
   xctool
   -workspace SpatialConnect.xcworkspace
-  -scheme SpatialConnectTests
+  -scheme SpatialConnect
   -sdk iphonesimulator
   -destination 'platform=iOS Simulator,name=iPhone 6 Plus'
   build
