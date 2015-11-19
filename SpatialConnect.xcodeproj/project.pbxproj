@@ -288,7 +288,7 @@
 		5649B4981BE27C6A009947EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5649B4A41BE27C6A009947EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5649B4AD1BE28011009947EF /* Vendor */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vendor; path = "/Users/wesr/Development/boundless/SC/spatialconnect-ios/SpatialConnect/Vendor"; sourceTree = "<absolute>"; };
+		5649B4AD1BE28011009947EF /* Vendor */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vendor; path = "./SpatialConnect/Vendor"; sourceTree = "<absolute>"; };
 		5649B4AF1BE28079009947EF /* all.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = all.geojson; sourceTree = "<group>"; };
 		5649B4B01BE28079009947EF /* feature.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feature.json; sourceTree = "<group>"; };
 		5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_050_00_500k.json; sourceTree = "<group>"; };
