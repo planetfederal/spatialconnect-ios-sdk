@@ -17,29 +17,28 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCStoreStatusEvent.h"
+#import "SCServiceStatusEvent.h"
 
-@implementation SCStoreStatusEvent
+@implementation SCServiceStatusEvent
 
 @synthesize status = _status;
-@synthesize storeId = _storeId;
+@synthesize serviceName = _serviceName;
 
-+ (instancetype)fromEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId {
-  SCStoreStatusEvent *evt =
-      [[SCStoreStatusEvent alloc] initWithEvent:s andStoreId:sId];
++ (instancetype)fromEvent:(SCServiceStatus)s andServiceName:(NSString *)sName {
+  SCServiceStatusEvent *evt =
+      [[SCServiceStatusEvent alloc] initWithEvent:s andStoreName:sName];
   return evt;
 }
 
-- (id)initWithEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId {
+- (id)initWithEvent:(SCServiceStatus)s andStoreName:(NSString *)sName {
   if (self = [super init]) {
     _status = s;
-    _storeId = sId;
+    _serviceName = sName;
   }
   return self;
 }
 
 - (NSString *)description {
-  return [NSString stringWithFormat:@"%ld,%@", self.status, self.storeId];
+  return [NSString stringWithFormat:@"%ld,%@", self.status, self.serviceName];
 }
-
 @end

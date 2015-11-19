@@ -54,6 +54,21 @@
   return self;
 }
 
+- (void)setStoreId:(NSString *)s {
+  NSParameterAssert(![s containsString:@"."]);
+  storeId = s;
+}
+
+- (void)setLayerId:(NSString *)l {
+  NSParameterAssert(![l containsString:@"."]);
+  layerId = l;
+}
+
+- (void)setFeatureId:(NSString *)f {
+  NSParameterAssert(![f containsString:@"."]);
+  featureId = f;
+}
+
 /**
  *  This is used to encode strings as base64. This allows
  *  for keys to have '.' within them.

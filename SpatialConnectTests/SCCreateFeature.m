@@ -22,6 +22,7 @@
 #import "SpatialConnectHelper.h"
 #import "SCPoint.h"
 #import "SCSpatialStore.h"
+#import "SCStoreStatusEvent.h"
 
 @interface SCCreateFeature : XCTestCase
 @property SpatialConnect *sc;
@@ -29,9 +30,11 @@
 
 @implementation SCCreateFeature
 
+//@synthesize sc = _sc;
+
 - (void)setUp {
   [super setUp];
-  _sc = [SpatialConnectHelper loadConfigAndStartServices];
+  _sc = [SpatialConnectHelper loadConfig];
 }
 
 - (void)tearDown {
@@ -45,20 +48,28 @@
   XCTestExpectation *expectation =
       [self expectationWithDescription:@"create feature"];
   SCPoint *pt = [[SCPoint alloc] initWithCoordinateArray:@[ @-90, @38, @111 ]];
-  NSArray *spatialStores =
-      [self.sc.manager.dataService storesByProtocol:@protocol(SCSpatialStore)];
-  XCTAssert(spatialStores.count, "Successfully fetched Spatial Stores");
-  if (spatialStores.count) {
-    id<SCSpatialStore> store = (id<SCSpatialStore>)[spatialStores firstObject];
-    [[store create:pt] subscribeError:^(NSError *error) {
-      XCTAssertTrue(NO, @"Error:%@", [error description]);
+  [self.sc.manager.dataService.allStoresStartedSignal subscribeNext:^(id x) {
+    NSArray *spatialStores = [self.sc.manager.dataService
+        storesByProtocol:@protocol(SCSpatialStore)];
+    XCTAssert(spatialStores.count, "Successfully fetched Spatial Stores");
+    if (spatialStores.count) {
+      id<SCSpatialStore> store =
+          (id<SCSpatialStore>)[spatialStores firstObject];
+      [[store create:pt] subscribeError:^(NSError *error) {
+        XCTAssertTrue(NO, @"Error:%@", [error description]);
+        [expectation fulfill];
+      } completed:^{
+        XCTAssertTrue(YES);
+        [expectation fulfill];
+      }];
+    } else {
+      XCTAssertTrue(NO, @"No Stores were started yet");
       [expectation fulfill];
-    } completed:^{
-      XCTAssertTrue(YES);
-      [expectation fulfill];
-    }];
-  }
-  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    }
+  }];
+
+  [self.sc.manager startAllServices];
+  [self waitForExpectationsWithTimeout:150.0 handler:nil];
 }
 
 @end

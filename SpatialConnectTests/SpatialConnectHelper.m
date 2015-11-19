@@ -45,6 +45,22 @@
 
   NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(
       NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+  //  [directoryAndFileNames enumerateObjectsUsingBlock:^(NSString *fileName,
+  //                                                      NSUInteger idx,
+  //                                                      BOOL *stop) {
+  //    if ([fileName containsString:@"scfg"] ||
+  //        [fileName containsString:@"json"] ||
+  //        [fileName containsString:@"geojson"]) {
+  //      NSError *error;
+  //      [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@",
+  //      documentsPath,
+  //                                                      fileName]
+  //                     error:&error];
+  //      if (error) {
+  //        NSLog(@"Error: %@", error.description);
+  //      }
+  //    }
+  //  }];
   [directoryAndFileNames enumerateObjectsUsingBlock:^(NSString *fileName,
                                                       NSUInteger idx,
                                                       BOOL *stop) {
@@ -52,10 +68,13 @@
         [fileName containsString:@"json"] ||
         [fileName containsString:@"geojson"]) {
       NSError *error;
-      [fm copyItemAtPath:[NSString stringWithFormat:@"%@/%@", path, fileName]
+      [fm moveItemAtPath:[NSString stringWithFormat:@"%@/%@", path, fileName]
                   toPath:[NSString
                              stringWithFormat:@"%@/%@", documentsPath, fileName]
                    error:&error];
+      if (error) {
+        NSLog(@"Error: %@", error.description);
+      }
     }
   }];
 }

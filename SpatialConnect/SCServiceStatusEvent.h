@@ -17,29 +17,15 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCStoreStatusEvent.h"
+#import <Foundation/Foundation.h>
+#import "SCService.h"
 
-@implementation SCStoreStatusEvent
+@interface SCServiceStatusEvent : NSObject
 
-@synthesize status = _status;
-@synthesize storeId = _storeId;
+@property(nonatomic, readonly) NSInteger status;
+@property(nonatomic, readonly) NSString *serviceName;
 
-+ (instancetype)fromEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId {
-  SCStoreStatusEvent *evt =
-      [[SCStoreStatusEvent alloc] initWithEvent:s andStoreId:sId];
-  return evt;
-}
-
-- (id)initWithEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId {
-  if (self = [super init]) {
-    _status = s;
-    _storeId = sId;
-  }
-  return self;
-}
-
-- (NSString *)description {
-  return [NSString stringWithFormat:@"%ld,%@", self.status, self.storeId];
-}
++ (instancetype)fromEvent:(SCServiceStatus)s andServiceName:(NSString *)sName;
+- (id)initWithEvent:(SCServiceStatus)s andStoreName:(NSString *)sName;
 
 @end

@@ -31,7 +31,7 @@
 
 - (void)setUp {
   [super setUp];
-  _sc = [SpatialConnectHelper loadConfigAndStartServices];
+  _sc = [SpatialConnectHelper loadConfig];
 }
 
 - (void)tearDown {
@@ -45,31 +45,35 @@
   XCTestExpectation *expectation =
       [self expectationWithDescription:@"create feature"];
   SCPoint *pt = [[SCPoint alloc] initWithCoordinateArray:@[ @-90, @38, @111 ]];
-  NSArray *spatialStores =
-      [self.sc.manager.dataService storesByProtocol:@protocol(SCSpatialStore)];
-  if (spatialStores.count == 0) {
-    XCTAssert(spatialStores.count, "Successfully fetched Spatial Stores");
-  }
-  if (spatialStores.count) {
-    id<SCSpatialStore> store = (id<SCSpatialStore>)[spatialStores firstObject];
+  [self.sc.manager.dataService.allStoresStartedSignal subscribeNext:^(id x) {
+    NSArray *spatialStores = [self.sc.manager.dataService
+        storesByProtocol:@protocol(SCSpatialStore)];
+    if (spatialStores.count) {
+      id<SCSpatialStore> store =
+          (id<SCSpatialStore>)[spatialStores firstObject];
 
-    RACSignal *create = [store create:pt];
-    [create subscribeError:^(NSError *error) {
-      XCTAssertTrue(NO, @"Error deleting feature");
-    } completed:^{
-      [[store delete:pt.key] subscribeError:^(NSError *error) {
+      RACSignal *create = [store create:pt];
+      [create subscribeError:^(NSError *error) {
+        XCTAssertTrue(NO, @"Error deleting feature");
         NSLog(@"%@", error.description);
         [expectation fulfill];
       } completed:^{
-        XCTAssertTrue(YES, "Feature Deleted Successfully");
-        [expectation fulfill];
+        [[store delete:pt.key] subscribeError:^(NSError *error) {
+          NSLog(@"%@", error.description);
+          [expectation fulfill];
+        } completed:^{
+          XCTAssertTrue(YES, "Feature Deleted Successfully");
+          [expectation fulfill];
+        }];
       }];
-    }];
+    } else {
+      XCTAssert(NO, "There are no stores registered");
+      [expectation fulfill];
+    }
+  }];
 
-  } else {
-    XCTAssert(NO, "There are no stores registered");
-  }
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self.sc startAllServices];
+  [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 @end

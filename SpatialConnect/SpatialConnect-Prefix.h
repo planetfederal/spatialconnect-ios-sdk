@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import <UIKit/UIKit.h>
-
+#import <libextobjc/EXTScope.h>
 //! Project version number for SpatialConnect.
 FOUNDATION_EXPORT double SpatialConnectVersionNumber;
 

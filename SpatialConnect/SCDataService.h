@@ -20,9 +20,10 @@
 #import <Foundation/Foundation.h>
 #import "SCDataStore.h"
 #import "SCService.h"
-#import "SCServiceDelegate.h"
 #import "SCQueryFilter.h"
 #import "SCDataStore.h"
+
+extern NSString *const kSERVICENAME;
 
 @interface SCDataService : SCService
 
@@ -34,9 +35,8 @@
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;
 - (NSArray *)activeStoreList;
-- (NSArray *)activeStoreListDictionary; // TODO make instance method
-- (NSDictionary *)storeByIdAsDictionary:
-    (NSString *)storeId; // TODO make instance method
+- (NSArray *)activeStoreListDictionary;
+- (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;
 - (NSArray *)storesByProtocol:(Protocol *)protocol;
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
 
@@ -48,5 +48,5 @@
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter;
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter;
-
+- (RACSignal *)allStoresStartedSignal;
 @end

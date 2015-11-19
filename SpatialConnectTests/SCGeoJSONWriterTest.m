@@ -38,7 +38,8 @@
 }
 
 - (void)testWriter {
-  NSString *filePath = [SCFileUtils filePathFromBundle:@"all.geojson"];
+  NSString *filePath =
+      [SCFileUtils filePathFromDocumentsDirectory:@"all.geojson"];
   NSError *error;
   NSDictionary *featureContent =
       [SCFileUtils jsonFileToDict:filePath error:&error];
@@ -47,15 +48,19 @@
         (SCGeometryCollection *)[SCGeoJSON parseDict:featureContent];
     NSDictionary *geoJSONDict = [features geoJSONDict];
     XCTAssert(geoJSONDict, @"FeatureCollection");
+  } else {
+    XCTAssertTrue(NO, @"File could not be read");
   }
 
   NSDictionary *geometryContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromBundle:@"simple.json"]
+      jsonFileToDict:[SCFileUtils filePathFromDocumentsDirectory:@"simple.json"]
                error:&error];
   if (geometryContent) {
     SCGeometryCollection *geometries =
         (SCGeometryCollection *)[SCGeoJSON parseDict:geometryContent];
     XCTAssert([[geometries geometries] count] > 0, @"GeometryCollection");
+  } else {
+    XCTAssertTrue(NO, @"File could not be read");
   }
 }
 

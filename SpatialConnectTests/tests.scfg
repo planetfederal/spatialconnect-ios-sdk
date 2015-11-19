@@ -4,7 +4,6 @@
 "type": "geojson",
 "version": "1",
 "uri": "all.geojson",
-"isMainBundle": true,
 "id":"63602599-3ad3-439f-9c49-3c8a7579933b",
 "name":"Simple"
 },
