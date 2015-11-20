@@ -24,6 +24,7 @@
 #import "SCFileUtils.h"
 
 @interface SCGeoJSONParserTest : XCTestCase
+- (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 @end
 
 @implementation SCGeoJSONParserTest
@@ -36,9 +37,26 @@
   [super tearDown];
 }
 
-- (void)testFeatureReads {
+- (NSString *)filePathFromSelfBundle:(NSString *)fileName {
+  NSArray *strs = [fileName componentsSeparatedByString:@"."];
+  NSString *filePrefix;
+  if (strs.count == 2) {
+    filePrefix = strs.firstObject;
+  } else {
+    filePrefix =
+        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
+                                                NSMakeRange(0, strs.count - 2)]]
+            componentsJoinedByString:@"."];
+  }
+  NSString *extension = [strs lastObject];
   NSString *filePath =
-      [SCFileUtils filePathFromDocumentsDirectory:@"feature.json"];
+      [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
+                                                       ofType:extension];
+  return filePath;
+}
+
+- (void)testFeatureReads {
+  NSString *filePath = [self filePathFromSelfBundle:@"feature.json"];
   NSError *error;
   NSDictionary *featureContent =
       [SCFileUtils jsonFileToDict:filePath error:&error];
@@ -56,9 +74,9 @@
 
 - (void)testSimpleGeoJSONReads {
   NSError *error;
-  NSDictionary *geometryContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromDocumentsDirectory:@"simple.json"]
-               error:&error];
+  NSDictionary *geometryContent =
+      [SCFileUtils jsonFileToDict:[self filePathFromSelfBundle:@"simple.json"]
+                            error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json");
   }
@@ -73,9 +91,9 @@
 
 - (void)testMixedGeoJSONRead {
   NSError *error;
-  NSDictionary *complexContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromDocumentsDirectory:@"all.geojson"]
-               error:&error];
+  NSDictionary *complexContent =
+      [SCFileUtils jsonFileToDict:[self filePathFromSelfBundle:@"all.geojson"]
+                            error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json");
   }
@@ -92,8 +110,7 @@
 - (void)testMediumGeoJSONRead {
   NSError *error;
   NSDictionary *mediumContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromDocumentsDirectory:
-                                      @"gz_2010_us_500_11_20m.json"]
+      jsonFileToDict:[self filePathFromSelfBundle:@"gz_2010_us_500_11_20m.json"]
                error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json");
@@ -111,8 +128,8 @@
 - (void)testBigGeoJSONRead {
   NSError *error;
   NSDictionary *bigContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromDocumentsDirectory:
-                                      @"gz_2010_us_050_00_500k.json"]
+      jsonFileToDict:[self
+                         filePathFromSelfBundle:@"gz_2010_us_050_00_500k.json"]
                error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json: %@", error.description);

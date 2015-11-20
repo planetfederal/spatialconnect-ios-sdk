@@ -66,7 +66,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (void)startAllStores {
-  NSLog(@"startAllStores");
   __block NSUInteger count = self.stores.count;
   __block NSUInteger startCount = 0;
   RACMulticastConnection *c = self.storeEvents;
@@ -84,10 +83,11 @@ NSString *const kSERVICENAME = @"DATASERVICE";
                                       andStoreId:nil]];
     }
   }];
-  for (NSString *key in self.stores.allKeys) {
-    SCDataStore *ds = self.stores[key];
-    [self startStore:ds];
-  }
+  [self.stores
+      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
+                                          BOOL *stop) {
+        [self startStore:store];
+      }];
 }
 
 - (void)stopAllStores {
@@ -168,7 +168,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   if (!store.storeId) {
     NSCAssert(store.storeId, @"Store Id not set");
   } else {
-    NSLog(@"register");
     [self.stores setObject:store forKey:store.storeId];
   }
 }
@@ -274,14 +273,12 @@ NSString *const kSERVICENAME = @"DATASERVICE";
                                                      id<SCSpatialStore> store) {
           return
               [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> qSub) {
-                NSLog(@"Store %ld", queryCompleted);
                 [[store query:filter] subscribeNext:^(id x) {
                   [qSub sendNext:x];
                 } error:^(NSError *error) {
                   [qSub sendError:error];
                 } completed:^{
                   queryCompleted++;
-                  NSLog(@"Completed Store %ld", queryCompleted);
                   if (queryCompleted == count) {
                     [subscriber sendCompleted];
                   }

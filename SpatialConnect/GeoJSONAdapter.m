@@ -36,9 +36,6 @@
 
 - (id)initWithFilePath:(NSString *)filepath {
   if (self = [super init]) {
-    if (!filepath) {
-      NSLog(@"Whoa");
-    }
     geojsonFilePath = filepath;
   }
   return self;

@@ -22,6 +22,12 @@
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 
+#ifndef TEST
+BOOL const saveToDocsDir = NO;
+#else
+BOOL const saveToDocsDir = YES;
+#endif
+
 @interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
 - (RACSignal *)attemptFileDownload;
@@ -52,6 +58,9 @@
 }
 
 - (RACSignal *)connect {
+  // The Database's name on disk is its store ID. This is to guaruntee
+  // uniqueness
+  // when being stored on disk.
   NSString *dbName = self.storeId;
   NSString *fp = self.dbFilepath;
 
@@ -63,8 +72,12 @@
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
-            NSString *dbPath =
-                [SCFileUtils filePathFromDocumentsDirectory:dbName];
+            NSString *dbPath;
+            if (saveToDocsDir) {
+              dbPath = [SCFileUtils filePathFromDocumentsDirectory:dbName];
+            } else {
+              dbPath = [SCFileUtils filePathFromNSHomeDirectory:dbName];
+            }
             [data writeToFile:dbPath atomically:YES];
             [self setFilepathPreference:dbPath];
             self.gpkg = self.openConnection;

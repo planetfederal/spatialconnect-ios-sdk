@@ -24,7 +24,7 @@
 #import "SCGeometryCollection+GeoJSON.h"
 
 @interface SCGeoJSONWriterTest : XCTestCase
-
+- (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 @end
 
 @implementation SCGeoJSONWriterTest
@@ -37,9 +37,26 @@
   [super tearDown];
 }
 
-- (void)testWriter {
+- (NSString *)filePathFromSelfBundle:(NSString *)fileName {
+  NSArray *strs = [fileName componentsSeparatedByString:@"."];
+  NSString *filePrefix;
+  if (strs.count == 2) {
+    filePrefix = strs.firstObject;
+  } else {
+    filePrefix =
+        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
+                                                NSMakeRange(0, strs.count - 2)]]
+            componentsJoinedByString:@"."];
+  }
+  NSString *extension = [strs lastObject];
   NSString *filePath =
-      [SCFileUtils filePathFromDocumentsDirectory:@"all.geojson"];
+      [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
+                                                       ofType:extension];
+  return filePath;
+}
+
+- (void)testWriter {
+  NSString *filePath = [self filePathFromSelfBundle:@"all.geojson"];
   NSError *error;
   NSDictionary *featureContent =
       [SCFileUtils jsonFileToDict:filePath error:&error];
@@ -52,9 +69,9 @@
     XCTAssertTrue(NO, @"File could not be read");
   }
 
-  NSDictionary *geometryContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromDocumentsDirectory:@"simple.json"]
-               error:&error];
+  NSDictionary *geometryContent =
+      [SCFileUtils jsonFileToDict:[self filePathFromSelfBundle:@"simple.json"]
+                            error:&error];
   if (geometryContent) {
     SCGeometryCollection *geometries =
         (SCGeometryCollection *)[SCGeoJSON parseDict:geometryContent];

@@ -64,7 +64,7 @@
   return [documentsDirectory stringByAppendingPathComponent:fileName];
 }
 
-+ (NSString *)filePathFromBundle:(NSString *)fileName {
++ (NSString *)filePathFromSelfBundle:(NSString *)fileName {
   NSArray *strs = [fileName componentsSeparatedByString:@"."];
   NSString *filePrefix;
   if (strs.count == 2) {
@@ -80,6 +80,28 @@
       [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
                                                        ofType:extension];
   return filePath;
+}
+
++ (NSString *)filePathFromMainBundle:(NSString *)fileName {
+  NSArray *strs = [fileName componentsSeparatedByString:@"."];
+  NSString *filePrefix;
+  if (strs.count == 2) {
+    filePrefix = strs.firstObject;
+  } else {
+    filePrefix =
+        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
+                                                NSMakeRange(0, strs.count - 2)]]
+            componentsJoinedByString:@"."];
+  }
+  NSString *extension = [strs lastObject];
+  NSString *filePath =
+      [[NSBundle mainBundle] pathForResource:filePrefix ofType:extension];
+  return filePath;
+}
+
++ (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName {
+  NSString *path = NSHomeDirectory();
+  return [NSString stringWithFormat:@"%@/%@", path, fileName];
 }
 
 @end

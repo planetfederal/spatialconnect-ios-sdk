@@ -31,7 +31,7 @@
 
 - (void)setUp {
   [super setUp];
-  _sc = [SpatialConnectHelper loadConfigAndStartServices];
+  _sc = [SpatialConnectHelper loadConfig];
 }
 
 - (void)tearDown {
@@ -43,25 +43,28 @@
   XCTestExpectation *expectation =
       [self expectationWithDescription:@"update feature"];
   SCPoint *pt = [[SCPoint alloc] initWithCoordinateArray:@[ @-90, @38, @111 ]];
-  NSArray *spatialStores =
-      [self.sc.manager.dataService storesByProtocol:@protocol(SCSpatialStore)];
-  XCTAssert(spatialStores.count, "Successfully fetched Spatial Stores");
-  if (spatialStores.count) {
+  [self.sc.manager.dataService.allStoresStartedSignal subscribeNext:^(id x) {
+    NSArray *spatialStores = [self.sc.manager.dataService
+        storesByProtocol:@protocol(SCSpatialStore)];
+    XCTAssert(spatialStores.count, "Successfully fetched Spatial Stores");
+    if (spatialStores.count) {
 
-    id<SCSpatialStore> store = [spatialStores
-        objectAtIndex:arc4random_uniform((int)spatialStores.count)];
-    [[store create:pt] subscribeCompleted:^{
-      [pt.properties
-          setValue:[NSNumber numberWithInteger:(int)arc4random_uniform(1000)]
-            forKey:@"randomNumber"];
-      [[store update:pt] subscribeCompleted:^{
-        XCTAssertTrue(YES, "Feature Updated Successfully");
-        [expectation fulfill];
+      id<SCSpatialStore> store = [spatialStores
+          objectAtIndex:arc4random_uniform((int)spatialStores.count)];
+      [[store create:pt] subscribeCompleted:^{
+        [pt.properties
+            setValue:[NSNumber numberWithInteger:(int)arc4random_uniform(1000)]
+              forKey:@"randomNumber"];
+        [[store update:pt] subscribeCompleted:^{
+          XCTAssertTrue(YES, "Feature Updated Successfully");
+          [expectation fulfill];
+        }];
       }];
-    }];
-  } else {
-    XCTAssert(NO, "There are no stores registered");
-  }
+    } else {
+      XCTAssert(NO, "There are no stores registered");
+    }
+  }];
+  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 

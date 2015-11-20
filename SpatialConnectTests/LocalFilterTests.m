@@ -66,7 +66,9 @@
   float mid = (upper.floatValue + lower.floatValue) / 2.0f;
   NSNumber *v = [NSNumber numberWithFloat:mid];
   XCTAssertTrue([filter2 compareLHS:v],
-                @"Check that midpoint float returns the proper value");
+                @"Check that midpoint float returns the proper value Upper:%@ "
+                @"Lower:%@ Check:%@",
+                upper, lower, v);
 }
 
 - (void)testFilterNotBetween {
@@ -77,14 +79,22 @@
   XCTAssertTrue([filter compareLHS:@(2)]);
   NSNumber *n = [NSNumber numberWithInt:arc4random()];
   NSNumber *n2 = [NSNumber numberWithInt:arc4random()];
-  SCFilterNotBetween *filter2 =
-      [[SCFilterNotBetween alloc] initWithUpper:n lower:n2 andKeyPath:nil];
+  SCFilterNotBetween *filter2;
+  if ([n compare:n2] == NSOrderedDescending) {
+    filter2 =
+        [[SCFilterNotBetween alloc] initWithUpper:n lower:n2 andKeyPath:nil];
+  } else {
+    filter2 =
+        [[SCFilterNotBetween alloc] initWithUpper:n2 lower:n andKeyPath:nil];
+  }
   NSNumber *upper = (NSNumber *)filter2.upper;
   NSNumber *lower = (NSNumber *)filter2.lower;
   float mid = (upper.floatValue + lower.floatValue) / 2.0f;
   NSNumber *v = [NSNumber numberWithFloat:mid];
   XCTAssertFalse([filter2 compareLHS:v],
-                 @"Check that midpoint float returns the proper value");
+                 @"Check that midpoint float returns the proper value Upper:%@ "
+                 @"Lower:%@ Check:%@",
+                 upper, lower, v);
 }
 
 - (void)testFilterGreaterThan {

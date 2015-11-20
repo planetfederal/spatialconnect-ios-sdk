@@ -20,6 +20,12 @@
 #import "GeoJSONStore.h"
 #import "SCFileUtils.h"
 
+#ifndef TEST
+BOOL const isUnitTesting = YES;
+#else
+BOOL const isUnitTesting = NO;
+#endif
+
 @interface GeoJSONStore ()
 - (void)initializeAdapter:(SCStoreConfig *)config;
 @end
@@ -52,9 +58,13 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 - (void)initializeAdapter:(SCStoreConfig *)config {
   NSString *filePath;
   if (config.isMainBundle) {
-    filePath = [SCFileUtils filePathFromBundle:config.uri];
+    filePath = [SCFileUtils filePathFromMainBundle:config.uri];
   } else {
-    filePath = [SCFileUtils filePathFromDocumentsDirectory:config.uri];
+    if (isUnitTesting) {
+      filePath = [SCFileUtils filePathFromNSHomeDirectory:config.uri];
+    } else {
+      filePath = [SCFileUtils filePathFromDocumentsDirectory:config.uri];
+    }
   }
   adapter = [[GeoJSONAdapter alloc] initWithFilePath:filePath];
 }

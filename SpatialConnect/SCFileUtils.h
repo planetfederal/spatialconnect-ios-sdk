@@ -23,6 +23,8 @@
 
 + (NSDictionary *)jsonFileToDict:(NSString *)filepath error:(NSError **)err;
 + (NSString *)filePathFromDocumentsDirectory:(NSString *)fileName;
-+ (NSString *)filePathFromBundle:(NSString *)fileName;
++ (NSString *)filePathFromSelfBundle:(NSString *)fileName;
++ (NSString *)filePathFromMainBundle:(NSString *)fileName;
++ (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName;
 
 @end
