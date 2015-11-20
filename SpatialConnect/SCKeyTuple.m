@@ -82,6 +82,13 @@
       base64EncodedStringWithOptions:0];
 }
 
+/**
+ *  Convert from base64 encoding string
+ *
+ *  @param s string as base64 string
+ *
+ *  @return <#return value description#>
+ */
 + (NSString *)decodeString:(NSString *)s {
   NSData *nsdataFromBase64String =
       [[NSData alloc] initWithBase64EncodedString:s options:0];

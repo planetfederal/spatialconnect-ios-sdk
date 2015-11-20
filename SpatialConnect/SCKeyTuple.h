@@ -31,7 +31,7 @@
  *
  *  @param cKey format is <base64>.<base64>.<base64>
  *
- *  @return <#return value description#>
+ *  @return SCKeyTuple
  */
 + (instancetype)tupleFromEncodedCompositeKey:(NSString *)cKey;
 

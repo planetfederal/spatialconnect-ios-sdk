@@ -23,6 +23,9 @@
 #import "SCGeometry.h"
 #import "SCSpatialStore.h"
 #import "SCStoreStatusEvent.h"
+#import "SCServiceStatusEvent.h"
+
+NSString *const kSERVICENAME = @"DATASERVICE";
 
 @interface SCDataService ()
 - (void)startAllStores;
@@ -33,7 +36,7 @@
 @property(readwrite, nonatomic) SCServiceStatus status;
 @property(readwrite, nonatomic, strong)
     NSMutableDictionary *supportedStoreImpls;
-@property(readwrite, nonatomic, strong) NSMutableDictionary *stores;
+@property(readwrite, atomic, strong) NSMutableDictionary *stores;
 @property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
 @end
 
@@ -42,13 +45,12 @@
 @synthesize storeEvents = _storeEvents;
 @synthesize status;
 
-#define DATA_SERVICE @"DataService"
-
 - (id)init {
   if (self = [super init]) {
     self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
-    self.stores = [[NSMutableDictionary alloc] init];
+    _stores = [[NSMutableDictionary alloc] init];
+    self.name = kSERVICENAME;
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
@@ -64,6 +66,23 @@
 }
 
 - (void)startAllStores {
+  __block NSUInteger count = self.stores.count;
+  __block NSUInteger startCount = 0;
+  RACMulticastConnection *c = self.storeEvents;
+  [c connect];
+  [[c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
+    if (evt.status == SC_DATASTORE_RUNNING) {
+      return YES;
+    }
+    return NO;
+  }] subscribeNext:^(id x) {
+    startCount++;
+    if (startCount == count) {
+      [self.storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_ALLSTARTED
+                                      andStoreId:nil]];
+    }
+  }];
   [self.stores
       enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
                                           BOOL *stop) {
@@ -77,6 +96,17 @@
                                           BOOL *stop) {
         [self stopStore:store];
       }];
+}
+
+- (RACSignal *)allStoresStartedSignal {
+  RACMulticastConnection *rmcc = self.storeEvents;
+  [rmcc connect];
+  return [[rmcc.signal filter:^BOOL(SCStoreStatusEvent *evt) {
+    if (evt.status == SC_DATASTORE_ALLSTARTED) {
+      return YES;
+    }
+    return NO;
+  }] take:1];
 }
 
 - (void)startStore:(SCDataStore *)store {
@@ -139,9 +169,6 @@
     NSCAssert(store.storeId, @"Store Id not set");
   } else {
     [self.stores setObject:store forKey:store.storeId];
-    if (self.status == SC_SERVICE_RUNNING) {
-      [self startStore:store];
-    }
   }
 }
 
@@ -176,7 +203,7 @@
         NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
         [store setObject:ds.storeId forKey:@"storeid"];
         [store setObject:ds.name forKey:@"name"];
-        [store setObject:DATA_SERVICE forKey:@"service"];
+        [store setObject:kSERVICENAME forKey:@"service"];
         [arr addObject:store];
       }];
   return [NSArray arrayWithArray:arr];
@@ -187,7 +214,7 @@
   NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
   [store setObject:ds.storeId forKey:@"storeid"];
   [store setObject:ds.name forKey:@"name"];
-  [store setObject:DATA_SERVICE forKey:@"service"];
+  [store setObject:kSERVICENAME forKey:@"service"];
   return store;
 }
 
@@ -246,14 +273,12 @@
                                                      id<SCSpatialStore> store) {
           return
               [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> qSub) {
-                NSLog(@"Store %ld", queryCompleted);
                 [[store query:filter] subscribeNext:^(id x) {
                   [qSub sendNext:x];
                 } error:^(NSError *error) {
                   [qSub sendError:error];
                 } completed:^{
                   queryCompleted++;
-                  NSLog(@"Completed Store %ld", queryCompleted);
                   if (queryCompleted == count) {
                     [subscriber sendCompleted];
                   }

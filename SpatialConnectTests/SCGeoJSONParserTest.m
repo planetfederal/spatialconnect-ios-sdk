@@ -24,6 +24,7 @@
 #import "SCFileUtils.h"
 
 @interface SCGeoJSONParserTest : XCTestCase
+- (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 @end
 
 @implementation SCGeoJSONParserTest
@@ -36,8 +37,26 @@
   [super tearDown];
 }
 
+- (NSString *)filePathFromSelfBundle:(NSString *)fileName {
+  NSArray *strs = [fileName componentsSeparatedByString:@"."];
+  NSString *filePrefix;
+  if (strs.count == 2) {
+    filePrefix = strs.firstObject;
+  } else {
+    filePrefix =
+        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
+                                                NSMakeRange(0, strs.count - 2)]]
+            componentsJoinedByString:@"."];
+  }
+  NSString *extension = [strs lastObject];
+  NSString *filePath =
+      [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
+                                                       ofType:extension];
+  return filePath;
+}
+
 - (void)testFeatureReads {
-  NSString *filePath = [SCFileUtils filePathFromBundle:@"feature.json"];
+  NSString *filePath = [self filePathFromSelfBundle:@"feature.json"];
   NSError *error;
   NSDictionary *featureContent =
       [SCFileUtils jsonFileToDict:filePath error:&error];
@@ -48,14 +67,16 @@
     SCGeometryCollection *features =
         (SCGeometryCollection *)[SCGeoJSON parseDict:featureContent];
     XCTAssert([[features geometries] count] > 0, @"FeatureCollection");
+  } else {
+    XCTAssert(NO, @"");
   }
 }
 
 - (void)testSimpleGeoJSONReads {
   NSError *error;
-  NSDictionary *geometryContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromBundle:@"simple.json"]
-               error:&error];
+  NSDictionary *geometryContent =
+      [SCFileUtils jsonFileToDict:[self filePathFromSelfBundle:@"simple.json"]
+                            error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json");
   }
@@ -63,14 +84,16 @@
     SCGeometryCollection *geometries =
         (SCGeometryCollection *)[SCGeoJSON parseDict:geometryContent];
     XCTAssert([[geometries geometries] count] > 0, @"GeometryCollection");
+  } else {
+    XCTAssert(NO, @"Unable to read file");
   }
 }
 
 - (void)testMixedGeoJSONRead {
   NSError *error;
-  NSDictionary *complexContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils filePathFromBundle:@"all.geojson"]
-               error:&error];
+  NSDictionary *complexContent =
+      [SCFileUtils jsonFileToDict:[self filePathFromSelfBundle:@"all.geojson"]
+                            error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json");
   }
@@ -79,14 +102,15 @@
         (SCGeometryCollection *)[SCGeoJSON parseDict:complexContent];
     XCTAssert([[geometries geometries] count] > 0,
               @"FeatureCollection with all types");
+  } else {
+    XCTAssert(NO, @"Unable to read file");
   }
 }
 
 - (void)testMediumGeoJSONRead {
   NSError *error;
   NSDictionary *mediumContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils
-                         filePathFromBundle:@"gz_2010_us_500_11_20m.json"]
+      jsonFileToDict:[self filePathFromSelfBundle:@"gz_2010_us_500_11_20m.json"]
                error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json");
@@ -104,8 +128,8 @@
 - (void)testBigGeoJSONRead {
   NSError *error;
   NSDictionary *bigContent = [SCFileUtils
-      jsonFileToDict:[SCFileUtils
-                         filePathFromBundle:@"gz_2010_us_050_00_500k.json"]
+      jsonFileToDict:[self
+                         filePathFromSelfBundle:@"gz_2010_us_050_00_500k.json"]
                error:&error];
   if (error) {
     XCTAssertTrue(NO, @"Error parsing Json: %@", error.description);

@@ -17,19 +17,16 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import <Foundation/Foundation.h>
 
 #import "SCService.h"
 
 @interface SCService (PrivateMethods)
 
--(void)generateId;
+- (void)generateId;
 
-@property (nonatomic,strong) NSString* identifier;
-@property (nonatomic) SCServiceStatus status;
+@property(nonatomic, strong) NSString *identifier;
+@property(nonatomic) SCServiceStatus status;
 
 @end
 
@@ -37,7 +34,6 @@
 
 @synthesize identifier = _identifier;
 @synthesize status = _status;
-@synthesize delegate;
 
 - (id)init {
   self = [super init];
@@ -49,14 +45,13 @@
   return self;
 }
 
-#pragma mark  - Service Lifecycle
+#pragma mark - Service Lifecycle
 
 - (void)start {
   _status = SC_SERVICE_RUNNING;
 }
 
 - (void)stop {
-  [delegate serviceWillStop];
   _status = SC_SERVICE_STOPPED;
 }
 

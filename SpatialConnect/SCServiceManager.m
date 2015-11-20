@@ -102,8 +102,7 @@
     return;
   }
 
-  [cfg[@"stores"] enumerateObjectsUsingBlock:^(NSDictionary *dict,
-                                               NSUInteger idx, BOOL *stop) {
+  for (NSDictionary *dict in cfg[@"stores"]) {
     SCStoreConfig *cfg = [[SCStoreConfig alloc] initWithDictionary:dict];
     Class store = [self.dataService
         supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
@@ -112,7 +111,7 @@
     if (gmStore.key) {
       [self.dataService registerStore:gmStore];
     }
-  }];
+  }
 }
 
 - (void)addDefaultServices {

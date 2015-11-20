@@ -23,6 +23,10 @@
 #import "SCQueryFilter.h"
 #import <geopackage-ios/geopackage_ios.h>
 
+#ifndef TEST
+#define UNITTESTING YES;
+#endif
+
 @interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue>
 
 @property(readonly, nonatomic, strong) NSString *uri;

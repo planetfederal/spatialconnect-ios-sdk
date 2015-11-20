@@ -20,12 +20,18 @@
 #import <Foundation/Foundation.h>
 #import "SCDataStore.h"
 
+typedef NS_ENUM(NSInteger, SCDataStoreStatusEvent) {
+  SC_DATASTORE_STARTFAILED,
+  SC_DATASTORE_ALLSTARTED
+};
+
 @interface SCStoreStatusEvent : NSObject
 
-@property(nonatomic, readonly) SCDataStoreStatus status;
+@property(nonatomic, readonly) SCDataStoreStatusEvent status;
 @property(nonatomic, readonly) NSString *storeId;
 
-+ (instancetype)fromEvent:(SCDataStoreStatus)s andStoreId:(NSString *)sId;
-- (id)initWithEvent:(SCDataStoreStatus)s andStoreId:(NSString *)sId;
++ (instancetype)fromEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId;
+- (id)initWithEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId;
+- (NSString *)description;
 
 @end

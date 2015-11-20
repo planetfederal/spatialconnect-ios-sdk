@@ -17,18 +17,19 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
-#import "SCServiceDelegate.h"
 #import "SCServiceLifecycle.h"
+
+typedef NS_ENUM(NSInteger, SCServiceStatus) {
+  SC_SERVICE_STARTED,
+  SC_SERVICE_PAUSED,
+  SC_SERVICE_RUNNING,
+  SC_SERVICE_STOPPED
+};
 
 @interface SCService : NSObject <SCServiceLifecycle>
 
-@property (readonly,nonatomic) NSString* identifier;
-@property (nonatomic) NSString* name;
-@property (readonly,nonatomic) SCServiceStatus status;
-@property (nonatomic) id<SCServiceDelegate> delegate;
+@property(readonly, nonatomic) NSString *identifier;
+@property(nonatomic) NSString *name;
+@property(readonly, nonatomic) SCServiceStatus status;
 
 @end

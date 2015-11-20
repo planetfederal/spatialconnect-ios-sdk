@@ -22,11 +22,21 @@
 @implementation SpatialConnectHelper
 
 + (SpatialConnect *)loadConfig {
-  [SpatialConnectHelper moveTestBundleToDocsDir];
+  [self moveTestBundleToDocsDir];
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   SpatialConnect *sc = [[SpatialConnect alloc] initWithFilepath:filePath];
+  NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
+
+  [NSURLRequest
+          .class performSelector:NSSelectorFromString(
+                                     @"setAllowsAnyHTTPSCertificate:forHost:")
+                      withObject:NSNull.null // Just need to pass non-nil here
+                                             // to appear as a BOOL YES, using
+                                             // the NSNull.null singleton is
+                                             // pretty safe
+                      withObject:[URL host]];
   return sc;
 }
 
@@ -43,21 +53,41 @@
   NSArray *directoryAndFileNames =
       [fm contentsOfDirectoryAtPath:path error:&error];
 
-  NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(
-      NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  [directoryAndFileNames enumerateObjectsUsingBlock:^(NSString *fileName,
-                                                      NSUInteger idx,
-                                                      BOOL *stop) {
-    if ([fileName containsString:@"scfg"] ||
-        [fileName containsString:@"json"] ||
-        [fileName containsString:@"geojson"]) {
-      NSError *error;
-      [fm copyItemAtPath:[NSString stringWithFormat:@"%@/%@", path, fileName]
-                  toPath:[NSString
-                             stringWithFormat:@"%@/%@", documentsPath, fileName]
-                   error:&error];
-    }
-  }];
+  NSString *documentsPath = NSHomeDirectory();
+  //  [directoryAndFileNames enumerateObjectsUsingBlock:^(NSString *fileName,
+  //                                                      NSUInteger idx,
+  //                                                      BOOL *stop) {
+  //    if ([fileName containsString:@"scfg"] ||
+  //        [fileName containsString:@"json"] ||
+  //        [fileName containsString:@"geojson"]) {
+  //      NSError *error;
+  //      [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@",
+  //      documentsPath,
+  //                                                      fileName]
+  //                     error:&error];
+  //      if (error) {
+  //        NSLog(@"Error: %@", error.description);
+  //      }
+  //    }
+  //  }];
+  [directoryAndFileNames
+      enumerateObjectsUsingBlock:^(NSString *fileName, NSUInteger idx,
+                                   BOOL *stop) {
+        if ([fileName containsString:@"scfg"] ||
+            [fileName containsString:@"json"] ||
+            [fileName containsString:@"geojson"]) {
+          NSString *item = [NSString stringWithFormat:@"%@/%@", path, fileName];
+          NSString *to =
+              [NSString stringWithFormat:@"%@/%@", documentsPath, fileName];
+          NSError *error;
+          [fm copyItemAtPath:item toPath:to error:&error];
+          if (error) {
+            if (error.code != 516) {
+              NSLog(@"Error: %@", error.description);
+            }
+          }
+        }
+      }];
 }
 
 @end

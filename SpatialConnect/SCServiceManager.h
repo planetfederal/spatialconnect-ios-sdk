@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
 #import <Foundation/Foundation.h>
 #import "SCService.h"
 #import "SCDataService.h"
@@ -27,21 +26,21 @@
 
 @interface SCServiceManager : NSObject
 
-@property (nonatomic,readonly,strong) NSMutableDictionary *services;
-@property (nonatomic,readonly,strong) SCDataService *dataService;
-@property (nonatomic,readonly,strong) SCNetworkService *networkService;
-@property (nonatomic,readonly,strong) SCSensorService *sensorService;
-@property (nonatomic,readonly,strong) SCRasterService *rasterService;
+@property(nonatomic, readonly, strong) NSMutableDictionary *services;
+@property(nonatomic, readonly, strong) SCDataService *dataService;
+@property(nonatomic, readonly, strong) SCNetworkService *networkService;
+@property(nonatomic, readonly, strong) SCSensorService *sensorService;
+@property(nonatomic, readonly, strong) SCRasterService *rasterService;
 
-- (instancetype)initWithFilepath:(NSString*)filepath;
+- (instancetype)initWithFilepath:(NSString *)filepath;
 - (instancetype)initWithFilepaths:(NSArray *)filepaths;
 
-- (void)addService:(SCService*)service;
-- (void)removeService:(NSString*)serviceId;
+- (void)addService:(SCService *)service;
+- (void)removeService:(NSString *)serviceId;
 
-- (void)startService:(NSString*)serviceId;
-- (void)stopService:(NSString*)serviceId;
-- (void)restartService:(NSString*)serviceId;
+- (void)startService:(NSString *)serviceId;
+- (void)stopService:(NSString *)serviceId;
+- (void)restartService:(NSString *)serviceId;
 - (void)startAllServices;
 - (void)stopAllServices;
 - (void)restartAllServices;

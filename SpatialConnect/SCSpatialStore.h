@@ -78,15 +78,4 @@
  */
 - (RACSignal *)layerList;
 
-@optional
-
-- (RACSignal *)moveFeature:(SCSpatialFeature *)feature
-                   toLayer:(NSString *)layerId;
-
-- (RACSignal *)moveFeatureToDefaultLayer:(SCSpatialFeature *)feature;
-
-- (RACSignal *)moveFeatures:(NSArray *)features toLayer:(NSString *)layerId;
-
-- (RACSignal *)moveFeaturesToDefaultLayer:(NSArray *)features;
-
 @end
