@@ -117,7 +117,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
                                       andStoreId:store.storeId]];
     } completed:^{
       [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_RUNNING
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTED
                                       andStoreId:store.storeId]];
     }];
 
@@ -185,6 +185,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 #pragma mark -
 #pragma Store Accessor Methods
+
+- (NSArray *)storeList {
+  return self.stores.allValues;
+}
 
 - (NSArray *)activeStoreList {
   return [[self.stores.allValues.rac_sequence filter:^BOOL(SCDataStore *value) {

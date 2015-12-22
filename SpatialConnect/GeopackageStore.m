@@ -64,10 +64,14 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark SCDataStoreLifeCycle
 
 - (RACSignal *)start {
+  self.adapter.parentStore = self;
   self.status = SC_DATASTORE_STARTED;
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self.adapter.connect subscribeCompleted:^{
+        [self.adapter.connect subscribeError:^(NSError *error) {
+          self.status = SC_DATASTORE_STOPPED;
+          [subscriber sendError:error];
+        } completed:^{
           self.status = SC_DATASTORE_RUNNING;
           [subscriber sendCompleted];
         }];

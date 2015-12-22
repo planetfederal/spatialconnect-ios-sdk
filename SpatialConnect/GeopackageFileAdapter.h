@@ -23,6 +23,8 @@
 #import "SCQueryFilter.h"
 #import <geopackage-ios/geopackage_ios.h>
 
+@class GeopackageStore;
+
 #ifndef TEST
 #define UNITTESTING YES;
 #endif
@@ -33,6 +35,7 @@
 @property(readonly, nonatomic, strong) NSString *filepath;
 @property(readonly, nonatomic, strong) NSString *storeId;
 @property(readonly, nonatomic, strong) GPKGGeoPackage *gpkg;
+@property (nonatomic, weak) GeopackageStore *parentStore;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg;
 - (RACSignal *)connect;
