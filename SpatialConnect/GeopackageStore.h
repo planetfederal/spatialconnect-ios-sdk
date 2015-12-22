@@ -31,6 +31,6 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
 
 @interface GeopackageStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle>
 
-@property(readonly, nonatomic) GeopackageFileAdapter *adapter;
+@property(strong, readonly, nonatomic) GeopackageFileAdapter *adapter;
 
 @end

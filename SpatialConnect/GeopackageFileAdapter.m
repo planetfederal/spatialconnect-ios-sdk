@@ -47,6 +47,7 @@ BOOL const saveToDocsDir = YES;
 @synthesize filepath = _filepath;
 @synthesize storeId = _storeId;
 @synthesize gpkg;
+@synthesize parentStore;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg {
   if (self = [super init]) {
@@ -68,6 +69,7 @@ BOOL const saveToDocsDir = YES;
     self.gpkg = self.openConnection;
     return [RACSignal empty];
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
+    self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {

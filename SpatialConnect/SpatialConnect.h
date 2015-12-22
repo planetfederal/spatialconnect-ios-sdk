@@ -18,12 +18,15 @@
 ******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 #import "WebViewJavascriptBridge.h"
 #import "SCService.h"
 #import "SCServiceManager.h"
 #import "SCSensorService.h"
 #import "SCNetworkService.h"
 #import "SCDataService.h"
+#import "SCFileUtils.h"
+#import "SCStoreStatusEvent.h"
 
 @interface SpatialConnect : NSObject
 

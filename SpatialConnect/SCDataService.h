@@ -34,6 +34,7 @@ extern NSString *const kSERVICENAME;
 - (void)unregisterStore:(SCDataStore *)store;
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;
+- (NSArray *)storeList;
 - (NSArray *)activeStoreList;
 - (NSArray *)activeStoreListDictionary;
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;

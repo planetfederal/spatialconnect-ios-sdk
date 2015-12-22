@@ -69,6 +69,14 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   adapter = [[GeoJSONAdapter alloc] initWithFilePath:filePath];
 }
 
+- (NSString*)type {
+  return [NSString stringWithFormat:@"%@",kTYPE];
+}
+
+- (NSInteger)version {
+  return kVERSION;
+}
+
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
