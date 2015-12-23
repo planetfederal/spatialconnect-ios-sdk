@@ -32,17 +32,9 @@
 + (NSDictionary *)jsonFileToDict:(NSString *)filepath error:(NSError **)err {
   BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:filepath];
   if (fileExist) {
-    //    NSString *content = [NSString stringWithContentsOfFile:filepath
-    //                                                  encoding:NSUTF8StringEncoding
-    //                                                     error:err];
-    //    if (!content) {
-    //      NSLog(@"Error reading file at path:%@", filepath);
-    //      return nil;
-    //    }
     NSData *data = [NSData dataWithContentsOfFile:filepath
                                           options:NSDataReadingMappedIfSafe
                                             error:err];
-    //    NSData *data = [content dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *dictContent =
         [[JSONDecoder decoder] objectWithData:data error:err];
     if (!dictContent) {

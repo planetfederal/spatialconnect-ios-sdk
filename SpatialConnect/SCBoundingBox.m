@@ -81,7 +81,6 @@
 
 - (void)setBBOX:(NSArray *)points {
   SCPoint *firstPoint = (SCPoint*)[points firstObject];
-  
   self.lowerLeft = [[SCPoint alloc] initWithCoordinateArray:
                   @[[NSNumber numberWithDouble:firstPoint.x],
                     [NSNumber numberWithDouble:firstPoint.y]]];

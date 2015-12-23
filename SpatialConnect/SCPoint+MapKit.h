@@ -29,5 +29,6 @@
 @interface SCPoint (Mapkit) <MKAnnotation>
 
 - (MKPointAnnotation*)shape;
++ (instancetype)pointFromCLLocationCoordinate2D:(CLLocationCoordinate2D)coord;
 
 @end

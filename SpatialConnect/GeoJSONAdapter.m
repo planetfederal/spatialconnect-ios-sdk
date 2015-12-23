@@ -67,7 +67,7 @@
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
   return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *readError = nil;
         NSDictionary *dict = [self.connector read:&readError];
         if (readError) {
@@ -80,6 +80,26 @@
         [subscriber sendNext:geom];
         [subscriber sendCompleted];
         return nil;
+      }] flattenMap:^RACStream *(SCGeometry *g) {
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          if([g isKindOfClass:SCGeometryCollection.class]) {
+            SCGeometryCollection *scgc = (SCGeometryCollection*)g;
+            [scgc.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom, NSUInteger idx, BOOL *stop) {
+              [subscriber sendNext:geom];
+            }];
+          } else {
+            [subscriber sendNext:g];
+          }
+          [subscriber sendCompleted];
+          return nil;
+        }];
+      }] filter:^BOOL(SCGeometry *value) {
+        for (SCPredicate *p in filter.predicates) {
+          if (![p compare:value]) {
+            return NO;
+          }
+        }
+        return YES;
       }];
 }
 

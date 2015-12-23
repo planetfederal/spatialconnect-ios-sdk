@@ -20,6 +20,8 @@
 #import "SCGeoFilterContains.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
+#import "SCPolygon.h"
+#import "SCMultiPolygon.h"
 
 @implementation SCGeoFilterContains
 
@@ -27,7 +29,14 @@
   return nil;
 }
 
-- (BOOL)compareLHS:(id)value {
+- (BOOL)compareLHS:(SCGeometry*)value {
+  if (bbox) {
+    if ([value isKindOfClass:SCPolygon.class]) {
+
+    } else if ([value isKindOfClass:SCMultiPolygon.class]) {
+      
+    }
+  }
   return YES;
 }
 @end
