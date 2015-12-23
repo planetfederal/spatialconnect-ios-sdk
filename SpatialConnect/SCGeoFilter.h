@@ -25,9 +25,11 @@
 @interface SCGeoFilter : NSObject {
   SCGeometry *geometry;
   NSString *keyPath;
+  SCBoundingBox *bbox;
 }
 
 - (id)initWithGeometry:(SCGeometry *)g andKeyPath:(NSString *)keypath;
 - (id)initWithGeometry:(SCGeometry *)g;
+- (id)initWithBBOX:(SCBoundingBox*)b;
 
 @end

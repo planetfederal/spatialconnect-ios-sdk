@@ -248,7 +248,7 @@ BOOL const saveToDocsDir = YES;
               [self.gpkg getFeatureDaoWithTableName:tableName];
           GPKGResultSet *rs = [dao queryForAll];
           int limit = 0;
-          while (limit < 100 && rs != nil && [rs moveToNext]) {
+          while (limit < filter.limit && rs != nil && [rs moveToNext]) {
             limit++;
             SCSpatialFeature *feature =
                 [self createSCSpatialFeature:[dao getFeatureRow:rs]];

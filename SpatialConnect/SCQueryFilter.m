@@ -34,9 +34,10 @@
   if (!self) {
     return nil;
   }
+  limit = 100;
   _predicates = [NSMutableArray new];
   _layerIds = [NSMutableArray new];
-  return nil;
+  return self;
 }
 
 + (instancetype)filterFromDictionary:(NSDictionary *)dictionary {

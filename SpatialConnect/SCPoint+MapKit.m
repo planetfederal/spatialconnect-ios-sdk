@@ -39,4 +39,10 @@
   return CLLocationCoordinate2DMake(self.latitude, self.longitude);
 }
 
++ (instancetype)pointFromCLLocationCoordinate2D:(CLLocationCoordinate2D)coord {
+  NSArray *arr = @[@(coord.longitude),@(coord.latitude)];
+  SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:arr];
+  return p;
+}
+
 @end

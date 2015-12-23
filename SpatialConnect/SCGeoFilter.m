@@ -42,4 +42,15 @@
   return self;
 }
 
+- (id)initWithBBOX:(SCBoundingBox*)b {
+  self = [super init];
+  if (!self) {
+    return nil;
+  }
+  geometry = nil;
+  bbox = b;
+  keyPath = nil;
+  return self;
+}
+
 @end

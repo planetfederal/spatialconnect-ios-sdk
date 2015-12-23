@@ -22,6 +22,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import "SCGeometry.h"
 
 @import MapKit;
 

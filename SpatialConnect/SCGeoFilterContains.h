@@ -24,4 +24,6 @@
 
 @interface SCGeoFilterContains : SCGeoFilter <SCFilterProtocol>
 
+
+
 @end

@@ -147,7 +147,7 @@
   if (self) {
     _filter = filter;
   }
-  return nil;
+  return self;
 }
 
 - (BOOL)compare:(id)val {
