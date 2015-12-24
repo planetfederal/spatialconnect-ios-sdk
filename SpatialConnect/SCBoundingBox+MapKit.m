@@ -28,11 +28,11 @@
 -(MKMapRect)asMKMapRect {
   MKMapPoint upperRight = MKMapPointForCoordinate(CLLocationCoordinate2DMake(self.upperRight.latitude, self.upperRight.longitude));
   MKMapPoint lowerLeft = MKMapPointForCoordinate(CLLocationCoordinate2DMake(self.lowerLeft.latitude, self.lowerLeft.longitude));
-  
+
   return MKMapRectMake(lowerLeft.x,
                        upperRight.y,
-                       fabs(upperRight.x - lowerLeft.x),
-                       fabs(upperRight.y - lowerLeft.y));
+                       ABS(upperRight.x - lowerLeft.x),
+                       ABS(upperRight.y - lowerLeft.y));
 }
 
 @end

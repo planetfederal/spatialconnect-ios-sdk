@@ -47,19 +47,19 @@
   return self;
 }
 
-- (SCPoint*)lowerLeft {
-  if (!lowerLeft) {
-    lowerLeft = [[SCPoint alloc] init];
-  }
-  return lowerLeft;
-}
-
-- (SCPoint*)upperRight {
-  if (!upperRight) {
-    upperRight = [[SCPoint alloc] init];
-  }
-  return upperRight;
-}
+//- (SCPoint*)lowerLeft {
+//  if (!lowerLeft) {
+//    lowerLeft = [[SCPoint alloc] init];
+//  }
+//  return lowerLeft;
+//}
+//
+//- (SCPoint*)upperRight {
+//  if (!upperRight) {
+//    upperRight = [[SCPoint alloc] init];
+//  }
+//  return upperRight;
+//}
 
 - (void)setLowerLeft:(SCPoint*)ll {
   if (!lowerLeft) {

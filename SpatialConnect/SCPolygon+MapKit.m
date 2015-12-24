@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCPolygon+MapKit.h"
 #import "SCPoint+MapKit.h"
 #import "SCLinearRing+MapKit.h"
@@ -60,7 +57,7 @@
   return self.points.count;
 }
 
--(MKMapRect)boundinSCapRect {
+-(MKMapRect)boundingMapRect {
   return self.bbox.asMKMapRect;
 }
 

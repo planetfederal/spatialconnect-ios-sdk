@@ -84,9 +84,9 @@
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           if([g isKindOfClass:SCGeometryCollection.class]) {
             SCGeometryCollection *scgc = (SCGeometryCollection*)g;
-            [scgc.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom, NSUInteger idx, BOOL *stop) {
+            for (SCGeometry *geom in scgc.geometries) {
               [subscriber sendNext:geom];
-            }];
+            }
           } else {
             [subscriber sendNext:g];
           }

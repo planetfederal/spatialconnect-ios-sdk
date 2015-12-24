@@ -27,6 +27,7 @@
 
 - (id)initWithCoordinateArray:(NSArray *)coords {
   if (self = [self init]) {
+    bbox = [[SCBoundingBox alloc] init];
     return self;
   }
   return nil;
@@ -35,7 +36,6 @@
 - (id)init {
   self = [super init];
   if (self) {
-    bbox = [[SCBoundingBox alloc] init];
     srsId = [NSNumber numberWithLong:4326];
   }
   return self;

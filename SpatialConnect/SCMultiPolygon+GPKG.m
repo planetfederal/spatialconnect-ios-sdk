@@ -35,7 +35,7 @@
         }] array];
       }] array];
 
-  self = [super initWithCoordinateArray:coordArray];
+  self = [self initWithCoordinateArray:coordArray];
   return self;
 }
 

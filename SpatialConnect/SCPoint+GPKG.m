@@ -23,7 +23,8 @@
 @implementation SCPoint (GPKG)
 
 - (id)initWithWKB:(WKBPoint *)w {
-  self = [super initWithCoordinateArray:@[ w.x, w.y ]];
+  self = [self initWithCoordinateArray:@[ w.x, w.y ]];
+
   return self;
 }
 

@@ -27,7 +27,7 @@
   NSArray *arr = [[w.points.rac_sequence map:^NSArray *(WKBPoint *p) {
     return @[ p.x, p.y ];
   }] array];
-  self = [super initWithCoordinateArray:arr];
+  self = [self initWithCoordinateArray:arr];
   return self;
 }
 

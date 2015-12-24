@@ -34,7 +34,7 @@
           return @[ p.x, p.y ];
         }] array]];
   }];
-  self = [super initWithCoordinateArray:coordArray];
+  self = [self initWithCoordinateArray:coordArray];
   return self;
 }
 

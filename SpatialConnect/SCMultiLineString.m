@@ -19,6 +19,7 @@
 
 #import "SCMultiLinestring.h"
 #import "SCLineString.h"
+#import "SCBoundingBox.h"
 
 @interface SCMultiLineString ()
 @property(readwrite, nonatomic, strong) NSArray *linestrings;
@@ -38,6 +39,10 @@
     }
     _linestrings = [[NSArray alloc] initWithArray:arr];
   }
+  self.bbox = [[SCBoundingBox alloc] init];
+  [_linestrings enumerateObjectsUsingBlock:^(SCLineString  *l, NSUInteger idx, BOOL *stop) {
+    [self.bbox addPoints:l.points];
+  }];
   return self;
 }
 
