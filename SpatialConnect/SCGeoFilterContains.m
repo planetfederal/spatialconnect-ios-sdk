@@ -31,11 +31,7 @@
 
 - (BOOL)compareLHS:(SCGeometry*)value {
   if (bbox) {
-    if ([value isKindOfClass:SCPolygon.class]) {
-
-    } else if ([value isKindOfClass:SCMultiPolygon.class]) {
-      
-    }
+    return [value checkWithin:bbox];
   }
   return YES;
 }

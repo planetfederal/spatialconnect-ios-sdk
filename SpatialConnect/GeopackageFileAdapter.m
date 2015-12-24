@@ -23,9 +23,9 @@
 #import "SCGeometry+GPKG.h"
 
 #ifndef TEST
-BOOL const saveToDocsDir = NO;
-#else
 BOOL const saveToDocsDir = YES;
+#else
+BOOL const saveToDocsDir = NO;
 #endif
 
 @interface GeopackageFileAdapter (private)

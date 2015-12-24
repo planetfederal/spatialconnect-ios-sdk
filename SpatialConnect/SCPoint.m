@@ -36,18 +36,20 @@
 }
 
 - (id)initWithCoordinateArray:(NSArray *)coordinate {
-  if (self = [super init]) {
-    NSUInteger len = [coordinate count];
-    if (len == 2) {
-      _x = [[coordinate objectAtIndex:0] doubleValue];
-      _y = [[coordinate objectAtIndex:1] doubleValue];
-    } else if (len == 3) {
-      _x = [[coordinate objectAtIndex:0] doubleValue];
-      _y = [[coordinate objectAtIndex:1] doubleValue];
-      _z = [[coordinate objectAtIndex:2] doubleValue];
-    } else {
-      self = nil;
-    }
+  self = [super init];
+  if (!self) {
+    return nil;
+  }
+  NSUInteger len = [coordinate count];
+  if (len == 2) {
+    _x = [[coordinate objectAtIndex:0] doubleValue];
+    _y = [[coordinate objectAtIndex:1] doubleValue];
+  } else if (len == 3) {
+    _x = [[coordinate objectAtIndex:0] doubleValue];
+    _y = [[coordinate objectAtIndex:1] doubleValue];
+    _z = [[coordinate objectAtIndex:2] doubleValue];
+  } else {
+    self = nil;
   }
 
   return self;

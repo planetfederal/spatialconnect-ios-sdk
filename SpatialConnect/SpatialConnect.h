@@ -27,6 +27,7 @@
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCStoreStatusEvent.h"
+#import "SCSpatialStore.h"
 
 @interface SpatialConnect : NSObject
 

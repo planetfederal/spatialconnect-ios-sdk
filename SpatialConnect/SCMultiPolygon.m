@@ -19,6 +19,7 @@
 
 #import "SCMultiPolygon.h"
 #import "SCPolygon.h"
+#import "SCBoundingBox.h"
 
 @interface SCMultiPolygon ()
 @end
@@ -36,6 +37,10 @@
     }
     _polygons = [[NSArray alloc] initWithArray:arr];
   }
+  self.bbox = [[SCBoundingBox alloc] init];
+  [_polygons enumerateObjectsUsingBlock:^(SCPolygon *p, NSUInteger idx, BOOL *stop) {
+    [self.bbox addPoints:p.points];
+  }];
   return self;
 }
 
