@@ -17,18 +17,16 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
-#import <Foundation/Foundation.h>
 #import "SCPoint.h"
+#import <Foundation/Foundation.h>
 
 @import MapKit;
 
 @interface SCPoint (Mapkit) <MKAnnotation>
 
-- (MKPointAnnotation*)shape;
+- (MKPointAnnotation *)shape;
 + (instancetype)pointFromCLLocationCoordinate2D:(CLLocationCoordinate2D)coord;
-
+- (MKAnnotationView *)createViewAnnotationForMapView:(MKMapView *)mapView
+                                          annotation:
+                                              (id<MKAnnotation>)annotation;
 @end

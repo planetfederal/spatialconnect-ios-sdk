@@ -36,6 +36,7 @@
 
 - (void)addToMap:(MKMapView *)mapview {
   [self.linestrings enumerateObjectsUsingBlock:^(SCLineString* geom,NSUInteger idx, BOOL *stop) {
+    geom.style = self.style;
     [mapview addOverlay:geom];
   }];
 }

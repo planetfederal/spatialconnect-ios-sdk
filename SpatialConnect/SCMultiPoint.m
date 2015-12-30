@@ -17,12 +17,9 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
+#import "SCBoundingBox.h"
 #import "SCMultiPoint.h"
 #import "SCPoint.h"
-#import "SCBoundingBox.h"
 
 @implementation SCMultiPoint
 
@@ -40,29 +37,43 @@
   return self;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return MULTIPOINT;
 }
 
-- (NSString*) description
-{
-  NSMutableString *str = [[NSMutableString alloc] initWithString:@"MultiPoint["];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint* point, NSUInteger idx, BOOL *stop) {
-    [str appendString:[point description]];
-  }];
+- (NSString *)description {
+  NSMutableString *str =
+      [[NSMutableString alloc] initWithString:@"MultiPoint["];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *point, NSUInteger idx, BOOL *stop) {
+        [str appendString:[point description]];
+      }];
   [str appendString:@"]"];
   return str;
 }
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   __block BOOL response = YES;
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
-    if (![bbox pointWithin:p]) {
-      *stop = YES;
-      response = NO;
-    }
-  }];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        if (![bbox pointWithin:p]) {
+          *stop = YES;
+          response = NO;
+        }
+      }];
   return response;
+}
+
+- (SCSimplePoint *)centroid {
+  __block double x = 0;
+  __block double y = 0;
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        x += p.x;
+        y += p.y;
+      }];
+  return [[SCSimplePoint alloc] initWithX:(x / self.points.count)
+                                        Y:(y / self.points.count)];
 }
 
 @end

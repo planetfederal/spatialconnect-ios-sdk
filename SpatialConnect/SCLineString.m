@@ -17,12 +17,9 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
+#import "SCBoundingBox.h"
 #import "SCLineString.h"
 #import "SCPoint.h"
-#import "SCBoundingBox.h"
 
 @implementation SCLineString
 
@@ -40,38 +37,53 @@
   return self;
 }
 
-- (SCPoint*)first {
+- (SCPoint *)first {
   return self.points.firstObject;
 }
 
-- (SCPoint*)last {
+- (SCPoint *)last {
   return self.points.lastObject;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return LINESTRING;
 }
 
 #pragma mark - NSObject
 
-- (NSString*)description {
-  NSMutableString *str = [[NSMutableString alloc] initWithString:@"LineString["];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *point, NSUInteger idx, BOOL *stop){
-    [str appendString:[point description]];
-  }];
+- (NSString *)description {
+  NSMutableString *str =
+      [[NSMutableString alloc] initWithString:@"LineString["];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *point, NSUInteger idx, BOOL *stop) {
+        [str appendString:[point description]];
+      }];
   [str appendString:@"]"];
   return str;
 }
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   __block BOOL response = YES;
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
-    if (![bbox pointWithin:p]) {
-      response = NO;
-      *stop = YES;
-    }
-  }];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        if (![bbox pointWithin:p]) {
+          response = NO;
+          *stop = YES;
+        }
+      }];
   return response;
+}
+
+- (SCSimplePoint *)centroid {
+  __block double x = 0;
+  __block double y = 0;
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        x += p.x;
+        y += p.y;
+      }];
+  return [[SCSimplePoint alloc] initWithX:(x / self.points.count)
+                                        Y:(y / self.points.count)];
 }
 
 @end

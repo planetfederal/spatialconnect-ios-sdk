@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCFileUtils.h"
 #import "JSONKit.h"
+#import "SCFileUtils.h"
 @implementation SCFileUtils
 
 /**
@@ -62,10 +62,11 @@
   if (strs.count == 2) {
     filePrefix = strs.firstObject;
   } else {
-    filePrefix =
-        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
-                                                NSMakeRange(0, strs.count - 2)]]
-            componentsJoinedByString:@"."];
+    filePrefix = [[strs
+        objectsAtIndexes:[NSIndexSet
+                             indexSetWithIndexesInRange:NSMakeRange(
+                                                            0, strs.count - 2)]]
+        componentsJoinedByString:@"."];
   }
   NSString *extension = [strs lastObject];
   NSString *filePath =
@@ -80,10 +81,11 @@
   if (strs.count == 2) {
     filePrefix = strs.firstObject;
   } else {
-    filePrefix =
-        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
-                                                NSMakeRange(0, strs.count - 2)]]
-            componentsJoinedByString:@"."];
+    filePrefix = [[strs
+        objectsAtIndexes:[NSIndexSet
+                             indexSetWithIndexesInRange:NSMakeRange(
+                                                            0, strs.count - 2)]]
+        componentsJoinedByString:@"."];
   }
   NSString *extension = [strs lastObject];
   NSString *filePath =
@@ -94,6 +96,12 @@
 + (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName {
   NSString *path = NSHomeDirectory();
   return [NSString stringWithFormat:@"%@/%@", path, fileName];
+}
+
++ (NSURL *)applicationDocumentsDirectory {
+  return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                 inDomains:NSUserDomainMask]
+      lastObject];
 }
 
 @end

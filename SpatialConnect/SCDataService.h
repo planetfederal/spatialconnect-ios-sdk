@@ -16,12 +16,11 @@
 * specific language governing permissions and limitations
 * under the License.
 ******************************************************************************/
-
-#import <Foundation/Foundation.h>
 #import "SCDataStore.h"
-#import "SCService.h"
+#import "SCDataStore.h"
 #import "SCQueryFilter.h"
-#import "SCDataStore.h"
+#import "SCService.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 extern NSString *const kSERVICENAME;
 

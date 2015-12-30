@@ -47,5 +47,6 @@ typedef struct {
 - (void)addPoint:(SCPoint*)pt;
 - (void)addPoints:(NSArray*)pts;
 - (BOOL)pointWithin:(SCPoint*)pt;
+- (BOOL)geometryWithin:(SCGeometry*)g;
 
 @end

@@ -26,5 +26,6 @@
 + (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 + (NSString *)filePathFromMainBundle:(NSString *)fileName;
 + (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName;
++ (NSURL *)applicationDocumentsDirectory;
 
 @end

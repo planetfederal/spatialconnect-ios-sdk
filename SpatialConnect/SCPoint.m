@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCPoint.h"
 #import "SCBoundingBox.h"
+#import "SCPoint.h"
 
 @implementation SCPoint
 
@@ -91,6 +91,10 @@
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   return [bbox pointWithin:self];
+}
+
+- (SCSimplePoint *)centroid {
+  return [[SCSimplePoint alloc] initWithX:self.x Y:self.y];
 }
 
 @end

@@ -17,12 +17,9 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-#import "SCPolygon.h"
-#import "SCPoint.h"
 #import "SCBoundingBox.h"
+#import "SCPoint.h"
+#import "SCPolygon.h"
 
 @implementation SCPolygon
 
@@ -30,30 +27,37 @@
 
 - (id)initWithCoordinateArray:(NSArray *)coords {
   if (self = [super init]) {
-    self.points = [[[SCLinearRing alloc] initWithCoordinateArray:coords[0]] points];
+    self.points =
+        [[[SCLinearRing alloc] initWithCoordinateArray:coords[0]] points];
     if (coords.count > 1) {
-      self.holes = [[[[coords objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, coords.count-1)]] rac_sequence] map:^SCLinearRing*(NSArray* coordArray) {
+      self.holes = [[[[coords
+          objectsAtIndexes:[NSIndexSet
+                               indexSetWithIndexesInRange:NSMakeRange(
+                                                              1, coords.count -
+                                                                     1)]]
+          rac_sequence] map:^SCLinearRing *(NSArray *coordArray) {
         return [[SCLinearRing alloc] initWithCoordinateArray:coordArray];
-      }] array ];
+      }] array];
     }
     self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points];
   }
   return self;
 }
 
-- (GeometryType) type {
+- (GeometryType)type {
   return POLYGON;
 }
 
-- (NSString*) description
-{
+- (NSString *)description {
   NSMutableString *str = [[NSMutableString alloc] initWithString:@"Polygon["];
   [str appendString:@"["];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p,NSUInteger idx, BOOL *stop) {
-    [str appendString:[p description]];
-  }];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        [str appendString:[p description]];
+      }];
   [str appendString:@"]"];
-  [self.holes enumerateObjectsUsingBlock:^(SCLinearRing *hole,NSUInteger idx, BOOL *stop) {
+  [self.holes enumerateObjectsUsingBlock:^(SCLinearRing *hole, NSUInteger idx,
+                                           BOOL *stop) {
     [str appendString:[hole description]];
   }];
   [str appendString:@"]"];
@@ -62,13 +66,26 @@
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   __block BOOL response = YES;
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
-    if (![bbox pointWithin:p]) {
-      *stop = YES;
-      response = NO;
-    }
-  }];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        if (![bbox pointWithin:p]) {
+          *stop = YES;
+          response = NO;
+        }
+      }];
   return response;
+}
+
+- (SCSimplePoint *)centroid {
+  __block double x = 0;
+  __block double y = 0;
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        x += p.x;
+        y += p.y;
+      }];
+  return [[SCSimplePoint alloc] initWithX:(x / self.points.count)
+                                        Y:(y / self.points.count)];
 }
 
 @end

@@ -17,6 +17,7 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCSimplePoint.h"
 #import "SCSpatialFeature.h"
 
 @class SCBoundingBox;
@@ -41,5 +42,6 @@ typedef NS_ENUM(NSInteger, GeometryType) {
 - (id)initWithCoordinateArray:(NSArray *)coords;
 - (GeometryType)type;
 - (BOOL)checkWithin:(SCBoundingBox *)bbox;
+- (SCSimplePoint *)centroid;
 
 @end
