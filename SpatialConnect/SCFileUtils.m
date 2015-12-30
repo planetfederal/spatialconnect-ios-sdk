@@ -104,4 +104,9 @@
       lastObject];
 }
 
++ (BOOL)isTesting {
+  NSDictionary *environment = [[NSProcessInfo processInfo] environment];
+  return [environment objectForKey:@"TEST"] != nil;
+}
+
 @end

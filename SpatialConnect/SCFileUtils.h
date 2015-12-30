@@ -27,5 +27,5 @@
 + (NSString *)filePathFromMainBundle:(NSString *)fileName;
 + (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName;
 + (NSURL *)applicationDocumentsDirectory;
-
++ (BOOL)isTesting;
 @end

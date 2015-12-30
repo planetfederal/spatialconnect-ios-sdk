@@ -22,12 +22,6 @@
 #import "SCGeometry+GPKG.h"
 #import "SCKeyTuple.h"
 
-#ifndef TEST
-BOOL const saveToDocsDir = YES;
-#else
-BOOL const saveToDocsDir = NO;
-#endif
-
 @interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
 - (RACSignal *)attemptFileDownload;
@@ -59,14 +53,20 @@ BOOL const saveToDocsDir = NO;
 }
 
 - (RACSignal *)connect {
+  BOOL saveToDocsDir = ![SCFileUtils isTesting];
   // The Database's name on disk is its store ID. This is to guaruntee
   // uniqueness
   // when being stored on disk.
   NSString *dbName = [NSString stringWithFormat:@"%@.db", self.storeId];
-  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                       NSUserDomainMask, YES);
-  NSString *documentsDirectory = [paths objectAtIndex:0];
-  NSString *path = [documentsDirectory stringByAppendingPathComponent:dbName];
+  NSString *path;
+  if (saveToDocsDir) {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    path = [documentsDirectory stringByAppendingPathComponent:dbName];
+  } else {
+    path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
+  }
   BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
 
   if (b) {
@@ -78,15 +78,9 @@ BOOL const saveToDocsDir = NO;
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
-            NSString *dbPath;
-            if (saveToDocsDir) {
-              dbPath = path;
-            } else {
-              dbPath = [SCFileUtils filePathFromNSHomeDirectory:dbName];
-            }
-            [data writeToFile:dbPath atomically:YES];
-            [self setFilepathPreference:dbPath];
-            self.gpkg = [self openConnection:dbPath];
+            NSLog(@"Saving GPKG to %@", path);
+            [data writeToFile:path atomically:YES];
+            self.gpkg = [self openConnection:path];
             [subscriber sendCompleted];
           }
               error:^(NSError *error) {
