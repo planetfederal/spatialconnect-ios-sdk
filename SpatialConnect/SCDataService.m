@@ -17,13 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCDataService.h"
 #import "GeoJSONStore.h"
 #import "GeopackageStore.h"
+#import "SCDataService.h"
 #import "SCGeometry.h"
+#import "SCServiceStatusEvent.h"
 #import "SCSpatialStore.h"
 #import "SCStoreStatusEvent.h"
-#import "SCServiceStatusEvent.h"
 
 NSString *const kSERVICENAME = @"DATASERVICE";
 
@@ -71,7 +71,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   RACMulticastConnection *c = self.storeEvents;
   [c connect];
   [[c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_RUNNING) {
+    if (evt.status == SC_DATASTORE_STORESTARTED) {
       return YES;
     }
     return NO;
@@ -82,20 +82,21 @@ NSString *const kSERVICENAME = @"DATASERVICE";
           sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_ALLSTARTED
                                       andStoreId:nil]];
     }
-  }];
-  [self.stores
-      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
-                                          BOOL *stop) {
-        [self startStore:store];
+  }
+      error:^(NSError *error) {
+        NSLog(@"%@", error.description);
       }];
+  [self.stores enumerateKeysAndObjectsUsingBlock:^(
+                   NSString *key, SCDataStore *store, BOOL *stop) {
+    [self startStore:store];
+  }];
 }
 
 - (void)stopAllStores {
-  [self.stores
-      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *store,
-                                          BOOL *stop) {
-        [self stopStore:store];
-      }];
+  [self.stores enumerateKeysAndObjectsUsingBlock:^(
+                   NSString *key, SCDataStore *store, BOOL *stop) {
+    [self stopStore:store];
+  }];
 }
 
 - (RACSignal *)allStoresStartedSignal {
@@ -115,11 +116,12 @@ NSString *const kSERVICENAME = @"DATASERVICE";
       [self.storeEventSubject
           sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTFAILED
                                       andStoreId:store.storeId]];
-    } completed:^{
-      [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTED
-                                      andStoreId:store.storeId]];
-    }];
+    }
+        completed:^{
+          [self.storeEventSubject
+              sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STORESTARTED
+                                          andStoreId:store.storeId]];
+        }];
 
   } else {
     NSLog(@"%@",
@@ -201,15 +203,14 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (NSArray *)activeStoreListDictionary {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
-  [[self activeStoreList]
-      enumerateObjectsUsingBlock:^(SCDataStore *ds, NSUInteger idx,
-                                   BOOL *stop) {
-        NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
-        [store setObject:ds.storeId forKey:@"storeid"];
-        [store setObject:ds.name forKey:@"name"];
-        [store setObject:kSERVICENAME forKey:@"service"];
-        [arr addObject:store];
-      }];
+  [[self activeStoreList] enumerateObjectsUsingBlock:^(
+                              SCDataStore *ds, NSUInteger idx, BOOL *stop) {
+    NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
+    [store setObject:ds.storeId forKey:@"storeid"];
+    [store setObject:ds.name forKey:@"name"];
+    [store setObject:kSERVICENAME forKey:@"service"];
+    [arr addObject:store];
+  }];
   return [NSArray arrayWithArray:arr];
 }
 
@@ -224,16 +225,15 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running {
   NSMutableArray *arr = [NSMutableArray new];
-  [self.stores
-      enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *ds,
-                                          BOOL *stop) {
-        BOOL conforms = [ds conformsToProtocol:protocol];
-        SCDataStoreStatus d = ds.status;
-        BOOL running = d == SC_DATASTORE_RUNNING;
-        if (conforms && running) {
-          [arr addObject:ds];
-        }
-      }];
+  [self.stores enumerateKeysAndObjectsUsingBlock:^(
+                   NSString *key, SCDataStore *ds, BOOL *stop) {
+    BOOL conforms = [ds conformsToProtocol:protocol];
+    SCDataStoreStatus d = ds.status;
+    BOOL running = d == SC_DATASTORE_RUNNING;
+    if (conforms && running) {
+      [arr addObject:ds];
+    }
+  }];
 
   return [NSArray arrayWithArray:arr];
 }
@@ -273,29 +273,33 @@ NSString *const kSERVICENAME = @"DATASERVICE";
         NSArray *arr = [self storesByProtocol:@protocol(SCSpatialStore)];
         __block NSUInteger queryCompleted = 0;
         __block NSUInteger count = arr.count;
-        [[[[arr rac_sequence] signal] flattenMap:^RACStream *(
-                                                     id<SCSpatialStore> store) {
-          return
-              [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> qSub) {
-                [[store query:filter] subscribeNext:^(id x) {
-                  [qSub sendNext:x];
-                } error:^(NSError *error) {
-                  [qSub sendError:error];
-                } completed:^{
-                  queryCompleted++;
-                  if (queryCompleted == count) {
-                    [subscriber sendCompleted];
-                  }
-                }];
-                return nil;
-              }];
-        }] subscribeNext:^(SCSpatialFeature *x) {
+        [[[[arr rac_sequence] signal]
+            flattenMap:^RACStream *(id<SCSpatialStore> store) {
+              return [RACSignal
+                  createSignal:^RACDisposable *(id<RACSubscriber> qSub) {
+                    [[store query:filter] subscribeNext:^(SCSpatialFeature *x) {
+                      [qSub sendNext:x];
+                    }
+                        error:^(NSError *error) {
+                          [qSub sendError:error];
+                        }
+                        completed:^{
+                          queryCompleted++;
+                          if (queryCompleted == count) {
+                            [subscriber sendCompleted];
+                          }
+                        }];
+                    return nil;
+                  }];
+            }] subscribeNext:^(SCSpatialFeature *x) {
           [subscriber sendNext:x];
-        } error:^(NSError *error) {
-          [subscriber sendError:error];
-        } completed:^{
-          [subscriber sendCompleted];
-        }];
+        }
+            error:^(NSError *error) {
+              [subscriber sendError:error];
+            }
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
       }];
 }

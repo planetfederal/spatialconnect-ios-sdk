@@ -17,11 +17,11 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCPredicate.h"
+#import "SCQueryFilter.h"
+#import "SpatialConnectHelper.h"
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "SpatialConnectHelper.h"
-#import "SCQueryFilter.h"
-#import "SCPredicate.h"
 
 @interface SCQueryFilterTest : XCTestCase {
   SpatialConnect *sc;
@@ -49,16 +49,18 @@
       [self expectationWithDescription:@"testing query all stores"];
   SCQueryFilter *qf = [[SCQueryFilter alloc] init];
   NSMutableArray *arr = [NSMutableArray new];
-  [[sc.manager.dataService
-      queryAllStores:qf] subscribeNext:^(SCSpatialFeature *x) {
-    [arr addObject:x];
-  } error:^(NSError *error) {
-    NSLog(@"Error");
-  } completed:^{
-    XCTAssertTrue(arr.count > 0);
-    [expectation fulfill];
-  }];
-  [self waitForExpectationsWithTimeout:10 handler:nil];
+  [[sc.manager.dataService queryAllStores:qf]
+      subscribeNext:^(SCSpatialFeature *x) {
+        [arr addObject:x];
+      }
+      error:^(NSError *error) {
+        NSLog(@"Error");
+      }
+      completed:^{
+        XCTAssertTrue(arr.count > 0);
+        [expectation fulfill];
+      }];
+  [self waitForExpectationsWithTimeout:50 handler:nil];
 }
 
 @end
