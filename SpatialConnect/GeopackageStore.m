@@ -71,10 +71,11 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
         [self.adapter.connect subscribeError:^(NSError *error) {
           self.status = SC_DATASTORE_STOPPED;
           [subscriber sendError:error];
-        } completed:^{
-          self.status = SC_DATASTORE_RUNNING;
-          [subscriber sendCompleted];
-        }];
+        }
+            completed:^{
+              self.status = SC_DATASTORE_RUNNING;
+              [subscriber sendCompleted];
+            }];
         return nil;
       }];
 }
@@ -99,6 +100,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [self.adapter query:filter];
 }
 
+- (RACSignal *)queryById:(SCKeyTuple *)key {
+  return [self.adapter queryById:key];
+}
+
 - (RACSignal *)create:(SCSpatialFeature *)feature {
   NSParameterAssert(feature.layerId != nil);
   NSParameterAssert(feature.identifier != nil);
@@ -109,7 +114,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [self.adapter updateFeature:feature];
 }
 
-- (RACSignal *)delete:(SCKeyTuple *)tuple {
+- (RACSignal *) delete:(SCKeyTuple *)tuple {
   NSParameterAssert(tuple);
   return [self.adapter deleteFeature:tuple];
 }

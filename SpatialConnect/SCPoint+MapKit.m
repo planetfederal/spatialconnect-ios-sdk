@@ -17,15 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-#import "SCPoint+MapKit.h"
 #import "SCGeometry+MapKit.h"
+#import "SCPoint+MapKit.h"
 
-@implementation SCPoint(MapKit)
+@implementation SCPoint (MapKit)
 
-- (MKPointAnnotation*)shape {
+- (MKPointAnnotation *)shape {
   MKPointAnnotation *p = [MKPointAnnotation new];
   p.coordinate = CLLocationCoordinate2DMake(self.latitude, self.longitude);
   return p;
@@ -40,9 +37,38 @@
 }
 
 + (instancetype)pointFromCLLocationCoordinate2D:(CLLocationCoordinate2D)coord {
-  NSArray *arr = @[@(coord.longitude),@(coord.latitude)];
+  NSArray *arr = @[ @(coord.longitude), @(coord.latitude) ];
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:arr];
   return p;
+}
+
+- (NSString *)title {
+  return [NSString stringWithFormat:@"%@.%@.%@", self.key.storeId,
+                                    self.key.layerId, self.key.featureId];
+}
+
+- (NSString *)subtitle {
+  return self.layerId;
+}
+
+- (MKAnnotationView *)createViewAnnotationForMapView:(MKMapView *)mapView
+                                          annotation:
+                                              (id<MKAnnotation>)annotation {
+  MKAnnotationView *returnedAnnotationView = [mapView
+      dequeueReusableAnnotationViewWithIdentifier:NSStringFromClass(
+                                                      [SCPoint class])];
+  if (returnedAnnotationView == nil) {
+    returnedAnnotationView = [[MKPinAnnotationView alloc]
+        initWithAnnotation:annotation
+           reuseIdentifier:NSStringFromClass([SCPoint class])];
+
+    ((MKPinAnnotationView *)returnedAnnotationView).pinTintColor =
+        [MKPinAnnotationView greenPinColor];
+    ((MKPinAnnotationView *)returnedAnnotationView).animatesDrop = NO;
+    ((MKPinAnnotationView *)returnedAnnotationView).canShowCallout = YES;
+  }
+
+  return returnedAnnotationView;
 }
 
 @end

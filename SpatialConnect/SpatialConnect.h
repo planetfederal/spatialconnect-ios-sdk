@@ -17,17 +17,18 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import <ReactiveCocoa/ReactiveCocoa.h>
-#import "WebViewJavascriptBridge.h"
-#import "SCService.h"
-#import "SCServiceManager.h"
-#import "SCSensorService.h"
-#import "SCNetworkService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
-#import "SCStoreStatusEvent.h"
+#import "SCNetworkService.h"
+#import "SCSensorService.h"
+#import "SCService.h"
+#import "SCServiceManager.h"
+#import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
+#import "SCStoreStatusEvent.h"
+#import "WebViewJavascriptBridge.h"
+#import <Foundation/Foundation.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface SpatialConnect : NSObject
 

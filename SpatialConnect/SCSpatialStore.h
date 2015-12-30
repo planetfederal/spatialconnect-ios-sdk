@@ -17,9 +17,9 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCKeyTuple.h"
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
-#import "SCKeyTuple.h"
 
 @protocol SCSpatialStore <NSObject>
 
@@ -33,6 +33,8 @@
  *  @return SCSpatialFeature
  */
 - (RACSignal *)query:(SCQueryFilter *)filter;
+
+- (RACSignal *)queryById:(SCKeyTuple *)key;
 
 /**
  *  Returns RACSignal completion on successful creation

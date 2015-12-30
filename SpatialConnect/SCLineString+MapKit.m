@@ -49,7 +49,6 @@
 }
 
 - (MKMapRect)boundingMapRect {
-    NSLog(@"%@",[self.bbox description]);
     return self.bbox.asMKMapRect;
 }
 

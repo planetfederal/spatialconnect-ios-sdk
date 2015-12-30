@@ -17,34 +17,11 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCAdapterKeyValue.h"
-#import "SCQueryFilter.h"
-#import "SCStoreConfig.h"
-#import <Foundation/Foundation.h>
-#import <geopackage-ios/geopackage_ios.h>
+@interface SCSimplePoint : NSObject
 
-@class GeopackageStore;
+@property(nonatomic) double x;
+@property(nonatomic) double y;
 
-#ifndef TEST
-#define UNITTESTING YES;
-#endif
+- (id)initWithX:(double)x Y:(double)y;
 
-@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue>
-
-@property(readonly, nonatomic, strong) NSString *uri;
-@property(readonly, nonatomic, strong) NSString *filepath;
-@property(readonly, nonatomic, strong) NSString *storeId;
-@property(readonly, nonatomic, strong) GPKGGeoPackage *gpkg;
-@property(nonatomic, weak) GeopackageStore *parentStore;
-
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
-- (RACSignal *)connect;
-
-- (RACSignal *)query:(SCQueryFilter *)filter;
-- (RACSignal *)queryById:(SCKeyTuple *)key;
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature;
-- (RACSignal *)deleteFeature:(SCKeyTuple *)tuple;
-- (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
-- (NSArray *)layerList;
-- (NSString *)defaultLayerName;
 @end

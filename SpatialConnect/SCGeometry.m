@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCGeometry.h"
 #import "SCBoundingBox.h"
+#import "SCGeometry.h"
 
 @implementation SCGeometry
 
@@ -51,5 +51,9 @@
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   return NO;
+}
+
+- (SCSimplePoint *)centroid {
+  return nil;
 }
 @end

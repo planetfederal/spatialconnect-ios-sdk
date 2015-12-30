@@ -35,7 +35,8 @@
 
 - (void)addToMap:(MKMapView *)mapview {
     [self.polygons enumerateObjectsUsingBlock:^(SCPolygon* geom,NSUInteger idx, BOOL *stop) {
-        [mapview addOverlay:geom];
+      geom.style = self.style;
+      [mapview addOverlay:geom];
     }];
 }
 

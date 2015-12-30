@@ -75,7 +75,7 @@
 		5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E41BE280D5009947EF /* SCComparisonPredicate.m */; };
 		5649B58A1BE280D6009947EF /* SCCompoundPredicate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E51BE280D5009947EF /* SCCompoundPredicate.h */; };
 		5649B58B1BE280D6009947EF /* SCCompoundPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4E61BE280D5009947EF /* SCCompoundPredicate.m */; };
-		5649B58E1BE280D6009947EF /* SCDataService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E91BE280D5009947EF /* SCDataService.h */; };
+		5649B58E1BE280D6009947EF /* SCDataService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4E91BE280D5009947EF /* SCDataService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5649B58F1BE280D6009947EF /* SCDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4EA1BE280D5009947EF /* SCDataService.m */; };
 		5649B5901BE280D6009947EF /* SCDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4EB1BE280D5009947EF /* SCDataStore.h */; };
 		5649B5911BE280D6009947EF /* SCDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4EC1BE280D5009947EF /* SCDataStore.m */; };
@@ -229,6 +229,8 @@
 		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
 		564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
 		564BAD111BF2A10000D6F5F0 /* SCGeopackageQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 564BAD101BF2A10000D6F5F0 /* SCGeopackageQueryTest.m */; };
+		56789C401C32C0AC001B5ABE /* SCSimplePoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */; };
+		56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */; };
 		56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		56DC516D1BFD22AB002C71B3 /* SCServiceStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DC516B1BFD22AB002C71B3 /* SCServiceStatusEvent.h */; };
 		56DC516E1BFD22AB002C71B3 /* SCServiceStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DC516C1BFD22AB002C71B3 /* SCServiceStatusEvent.m */; };
@@ -480,6 +482,8 @@
 		5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_500_11_20m.json; sourceTree = "<group>"; };
 		564BAD101BF2A10000D6F5F0 /* SCGeopackageQueryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageQueryTest.m; sourceTree = "<group>"; };
+		56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSimplePoint.h; sourceTree = "<group>"; };
+		56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSimplePoint.m; sourceTree = "<group>"; };
 		56DC51381BFBEF71002C71B3 /* libgeopackage-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgeopackage-ios.a"; path = "Pods/../build/Debug-iphoneos/libgeopackage-ios.a"; sourceTree = "<group>"; };
 		56DC513D1BFC0CD0002C71B3 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		56DC51681BFC230B002C71B3 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
@@ -798,6 +802,8 @@
 				5649B53D1BE280D6009947EF /* SCMultiPoint.m */,
 				5649B5421BE280D6009947EF /* SCMultiPolygon.h */,
 				5649B5431BE280D6009947EF /* SCMultiPolygon.m */,
+				56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */,
+				56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -1066,6 +1072,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
+				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 				560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */,
 				5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */,
 				5649B6631BE2A00E009947EF /* JSONKit.h in Headers */,
@@ -1095,7 +1102,6 @@
 				5645C4EA1BED796D006E4128 /* SCPolygon+GPKG.h in Headers */,
 				5649B6141BE280D6009947EF /* SCStyle.h in Headers */,
 				5649B61A1BE280D6009947EF /* SCTileOverlayRenderer.h in Headers */,
-				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 				5649B5DB1BE280D6009947EF /* SCMultiLineString.h in Headers */,
 				5649B5ED1BE280D6009947EF /* SCNetworkService.h in Headers */,
 				5645C4EE1BED8E56006E4128 /* SCLineString+GPKG.h in Headers */,
@@ -1105,6 +1111,7 @@
 				5649B5A11BE280D6009947EF /* SCFilterLessThan.h in Headers */,
 				5649B5EB1BE280D6009947EF /* SCMultiPolygon+MapKit.h in Headers */,
 				5649B59F1BE280D6009947EF /* SCFilterIn.h in Headers */,
+				56789C401C32C0AC001B5ABE /* SCSimplePoint.h in Headers */,
 				5649B5C51BE280D6009947EF /* SCJavascriptBridge.h in Headers */,
 				5649B5B21BE280D6009947EF /* SCGeoFilterContains.h in Headers */,
 				5649B5991BE280D6009947EF /* SCFilterEqual.h in Headers */,
@@ -1360,6 +1367,7 @@
 				5649B5FE1BE280D6009947EF /* SCPredicate.m in Sources */,
 				5649B60E1BE280D6009947EF /* SCServiceManager.m in Sources */,
 				5649B6191BE280D6009947EF /* SCTileOverlay.m in Sources */,
+				56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */,
 				5649B5EC1BE280D6009947EF /* SCMultiPolygon+MapKit.m in Sources */,
 				5649B61F1BE280D6009947EF /* SCWebAppZipLoader.m in Sources */,
 				5649B5D91BE280D6009947EF /* SCLoggingAssertionHandler.m in Sources */,

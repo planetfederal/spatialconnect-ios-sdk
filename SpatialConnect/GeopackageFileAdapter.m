@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-#import "GeopackageStore.h"
 #import "GeopackageFileAdapter.h"
-#import "SCKeyTuple.h"
+#import "GeopackageStore.h"
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
+#import "SCKeyTuple.h"
 
 #ifndef TEST
 BOOL const saveToDocsDir = YES;
@@ -62,11 +62,15 @@ BOOL const saveToDocsDir = NO;
   // The Database's name on disk is its store ID. This is to guaruntee
   // uniqueness
   // when being stored on disk.
-  NSString *dbName = self.storeId;
-  NSString *fp = self.dbFilepath;
+  NSString *dbName = [NSString stringWithFormat:@"%@.db", self.storeId];
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                       NSUserDomainMask, YES);
+  NSString *documentsDirectory = [paths objectAtIndex:0];
+  NSString *path = [documentsDirectory stringByAppendingPathComponent:dbName];
+  BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
 
-  if ([[NSFileManager defaultManager] fileExistsAtPath:fp]) {
-    self.gpkg = self.openConnection;
+  if (b) {
+    self.gpkg = [self openConnection:path];
     return [RACSignal empty];
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
     self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
@@ -76,18 +80,19 @@ BOOL const saveToDocsDir = NO;
           [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
             NSString *dbPath;
             if (saveToDocsDir) {
-              dbPath = [SCFileUtils filePathFromDocumentsDirectory:dbName];
+              dbPath = path;
             } else {
               dbPath = [SCFileUtils filePathFromNSHomeDirectory:dbName];
             }
             [data writeToFile:dbPath atomically:YES];
             [self setFilepathPreference:dbPath];
-            self.gpkg = self.openConnection;
+            self.gpkg = [self openConnection:dbPath];
             [subscriber sendCompleted];
-          } error:^(NSError *error) {
-            NSLog(@"%@", error.description);
-            [subscriber sendError:error];
-          }];
+          }
+              error:^(NSError *error) {
+                NSLog(@"%@", error.description);
+                [subscriber sendError:error];
+              }];
           return nil;
         }];
   }
@@ -97,9 +102,9 @@ BOOL const saveToDocsDir = NO;
   return [RACSignal error:err];
 }
 
-- (GPKGGeoPackage *)openConnection {
+- (GPKGGeoPackage *)openConnection:(NSString *)path {
   GPKGConnection *connection =
-      [[GPKGConnection alloc] initWithDatabaseFilename:self.dbFilepath];
+      [[GPKGConnection alloc] initWithDatabaseFilename:path];
   GPKGGeoPackage *g =
       [[GPKGGeoPackage alloc] initWithConnection:connection andWritable:YES];
   return g;
@@ -124,8 +129,8 @@ BOOL const saveToDocsDir = NO;
 }
 
 - (void)setFilepathPreference:(NSString *)dbPath {
-  [[NSUserDefaults standardUserDefaults] setObject:dbPath
-                                            forKey:self.filepathKey];
+  NSString *key = self.filepathKey;
+  [[NSUserDefaults standardUserDefaults] setObject:dbPath forKey:key];
 }
 
 - (NSString *)dbFilepath {
@@ -144,16 +149,15 @@ BOOL const saveToDocsDir = NO;
     row = [fDao newRow];
   }
 
-  [feature.properties
-      enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
-                                          BOOL *stop) {
-        NSArray *cols = fDao.getFeatureTable.columnNames;
-        if ([cols containsObject:key]) {
-          if (![key isEqualToString:@"id"]) {
-            [row setValueWithColumnName:key andValue:obj];
-          }
-        }
-      }];
+  [feature.properties enumerateKeysAndObjectsUsingBlock:^(
+                          NSString *key, NSObject *obj, BOOL *stop) {
+    NSArray *cols = fDao.getFeatureTable.columnNames;
+    if ([cols containsObject:key]) {
+      if (![key isEqualToString:@"id"]) {
+        [row setValueWithColumnName:key andValue:obj];
+      }
+    }
+  }];
 
   if ([feature isKindOfClass:SCGeometry.class]) {
     SCGeometry *g = (SCGeometry *)feature;
@@ -169,17 +173,16 @@ BOOL const saveToDocsDir = NO;
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         GPKGFeatureDao *featureDao =
             [self.gpkg getFeatureDaoWithTableName:feature.layerId];
-        [feature.properties
-            enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
-                                                BOOL *stop) {
-              [featureDao.table.columnNames
-                  enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
-                                               BOOL *stop) {
-                    if ([name isEqualToString:key]) {
-                      [newRow setValue:obj forKey:key];
-                    }
-                  }];
-            }];
+        [feature.properties enumerateKeysAndObjectsUsingBlock:^(
+                                NSString *key, NSObject *obj, BOOL *stop) {
+          [featureDao.table.columnNames
+              enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
+                                           BOOL *stop) {
+                if ([name isEqualToString:key]) {
+                  [newRow setValue:obj forKey:key];
+                }
+              }];
+        }];
 
         if ([feature isKindOfClass:SCGeometry.class]) {
           SCGeometry *g = (SCGeometry *)feature;
@@ -230,32 +233,48 @@ BOOL const saveToDocsDir = NO;
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
+  return [RACSignal createSignal:^RACDisposable *(
+                        id<RACSubscriber> subscriber) {
+    NSArray *arr = self.gpkg.featureTables;
+    NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
+    NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
+    // Use set intersection to make sure layers are valid feature table
+    // names.
+    [featureTableSet intersectSet:layerQuerySet];
+    NSArray *queryLayers =
+        featureTableSet.allObjects.count > 0 ? featureTableSet.allObjects : arr;
+
+    [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
+                                              NSUInteger idx, BOOL *stop) {
+      GPKGFeatureDao *dao = [self.gpkg getFeatureDaoWithTableName:tableName];
+      GPKGResultSet *rs = [dao queryForAll];
+      int limit = 0;
+      while (limit < filter.limit && rs != nil && [rs moveToNext]) {
+        limit++;
+        SCSpatialFeature *feature =
+            [self createSCSpatialFeature:[dao getFeatureRow:rs]];
+        [subscriber sendNext:feature];
+      }
+      [rs close];
+    }];
+    [subscriber sendCompleted];
+    return nil;
+  }];
+}
+
+- (RACSignal *)queryById:(SCKeyTuple *)key {
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        NSArray *arr = self.gpkg.featureTables;
-        NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
-        NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
-        // Use set intersection to make sure layers are valid feature table
-        // names.
-        [featureTableSet intersectSet:layerQuerySet];
-        NSArray *queryLayers = featureTableSet.allObjects.count > 0
-                                   ? featureTableSet.allObjects
-                                   : arr;
-
-        [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
-                                                  NSUInteger idx, BOOL *stop) {
-          GPKGFeatureDao *dao =
-              [self.gpkg getFeatureDaoWithTableName:tableName];
-          GPKGResultSet *rs = [dao queryForAll];
-          int limit = 0;
-          while (limit < filter.limit && rs != nil && [rs moveToNext]) {
-            limit++;
-            SCSpatialFeature *feature =
-                [self createSCSpatialFeature:[dao getFeatureRow:rs]];
-            [subscriber sendNext:feature];
-          }
-          [rs close];
-        }];
+        NSString *layerId = key.layerId;
+        GPKGFeatureDao *fDao = [self.gpkg getFeatureDaoWithTableName:layerId];
+        NSString *featureId = key.featureId;
+        GPKGResultSet *rs = [fDao queryForId:featureId];
+        if (rs.moveToFirst) {
+          SCSpatialFeature *feature =
+              [self createSCSpatialFeature:[fDao getFeatureRow:rs]];
+          [subscriber sendNext:feature];
+        }
+        [rs close];
         [subscriber sendCompleted];
         return nil;
       }];
@@ -294,9 +313,8 @@ BOOL const saveToDocsDir = NO;
   scSpatialFeature.layerId = row.table.tableName;
   scSpatialFeature.identifier = [NSString stringWithFormat:@"%@", row.getId];
 
-  [row.getColumnNames enumerateObjectsUsingBlock:^(NSString *name,
-                                                   NSUInteger idx,
-                                                   BOOL *_Nonnull stop) {
+  [row.getColumnNames enumerateObjectsUsingBlock:^(
+                          NSString *name, NSUInteger idx, BOOL *_Nonnull stop) {
     NSObject *obj = [row getValueWithColumnName:name];
     if (obj) {
       [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]

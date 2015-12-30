@@ -17,14 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
 
 @interface SCMultiLineString : SCGeometry
 
-@property (readonly,nonatomic) NSArray* linestrings;
+@property(readonly, nonatomic) NSArray *linestrings;
 
 @end
