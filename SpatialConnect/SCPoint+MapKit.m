@@ -43,12 +43,12 @@
 }
 
 - (NSString *)title {
-  return [NSString stringWithFormat:@"%@.%@.%@", self.key.storeId,
-                                    self.key.layerId, self.key.featureId];
+  return [NSString
+      stringWithFormat:@"%@.%@", self.key.layerId, self.key.featureId];
 }
 
 - (NSString *)subtitle {
-  return self.layerId;
+  return self.storeId;
 }
 
 - (MKAnnotationView *)createViewAnnotationForMapView:(MKMapView *)mapView

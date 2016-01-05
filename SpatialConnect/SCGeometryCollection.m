@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCGeometryCollection.h"
 
 @implementation SCGeometryCollection
@@ -37,9 +34,11 @@
   return GEOMETRY_COLLECTION;
 }
 
-- (NSString*)description {
-  NSMutableString *str = [[NSMutableString alloc] initWithString:@"GeometryCollection"];
-  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry* geom,NSUInteger idx,BOOL *stop) {
+- (NSString *)description {
+  NSMutableString *str =
+      [[NSMutableString alloc] initWithString:@"GeometryCollection"];
+  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom,
+                                                NSUInteger idx, BOOL *stop) {
     if (idx > 0) {
       [str appendString:@","];
     }
@@ -49,7 +48,8 @@
 }
 
 - (void)applyStyle:(SCStyle *)style {
-  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom,NSUInteger idx, BOOL *stop) {
+  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom,
+                                                NSUInteger idx, BOOL *stop) {
     if (!geom.style) {
       geom.style = [[SCStyle alloc] init];
     }
@@ -57,13 +57,13 @@
   }];
 }
 
-- (void)addGeometry:(SCGeometry*)geom {
+- (void)addGeometry:(SCGeometry *)geom {
   [self.geometries addObject:geom];
 }
 
-- (void)removeGeometryById:(NSString*)identifier {
+- (void)removeGeometryById:(NSObject *)identifier {
   [[[self.geometries.rac_sequence filter:^BOOL(SCGeometry *g) {
-    if ([g.identifier isEqualToString:identifier]) {
+    if ([g.identifier isEqual:identifier]) {
       return YES;
     }
     return NO;
@@ -72,18 +72,19 @@
   }];
 }
 
-- (void)removeGeometry:(SCGeometry*)geom {
+- (void)removeGeometry:(SCGeometry *)geom {
   [self.geometries removeObject:geom];
 }
 
 - (BOOL)checkWithin:(SCBoundingBox *)bbox {
   __block BOOL response = YES;
-  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry *g, NSUInteger idx, BOOL *stop) {
-    if (![g checkWithin:bbox]) {
-      response = NO;
-      *stop = YES;
-    }
-  }];
+  [self.geometries
+      enumerateObjectsUsingBlock:^(SCGeometry *g, NSUInteger idx, BOOL *stop) {
+        if (![g checkWithin:bbox]) {
+          response = NO;
+          *stop = YES;
+        }
+      }];
   return response;
 }
 

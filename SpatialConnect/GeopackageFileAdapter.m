@@ -150,6 +150,8 @@
       if (![key isEqualToString:@"id"]) {
         [row setValueWithColumnName:key andValue:obj];
       }
+    } else {
+      [fDao createIfNotExists:nil];
     }
   }];
 
@@ -178,14 +180,12 @@
               }];
         }];
 
-        if ([feature isKindOfClass:SCGeometry.class]) {
-          SCGeometry *g = (SCGeometry *)feature;
-          if (g) {
-            [newRow setGeometry:g.wkb];
-          }
+        if ([newRow.getColumnNames containsObject:@"featureid"]) {
+          [newRow setValueWithColumnName:@"featureid"
+                                andValue:feature.identifier];
         }
 
-        [featureDao create:newRow];
+        long long newId = [featureDao create:newRow];
         [subscriber sendCompleted];
         return nil;
       }];
@@ -220,40 +220,59 @@
         GPKGFeatureDao *fDao =
             [self.gpkg getFeatureDaoWithTableName:feature.layerId];
         GPKGFeatureRow *row = [self toFeatureRow:feature];
-        [fDao update:row];
-        [subscriber sendCompleted];
+        int count = [fDao update:row];
+        if (count == SQLITE_OK) {
+          [subscriber sendCompleted];
+        } else {
+          [subscriber
+              sendError:[NSError errorWithDomain:@"GeopackageFileAdapter"
+                                            code:count
+                                        userInfo:nil]];
+        }
         return nil;
       }];
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [RACSignal createSignal:^RACDisposable *(
-                        id<RACSubscriber> subscriber) {
-    NSArray *arr = self.gpkg.featureTables;
-    NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
-    NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
-    // Use set intersection to make sure layers are valid feature table
-    // names.
-    [featureTableSet intersectSet:layerQuerySet];
-    NSArray *queryLayers =
-        featureTableSet.allObjects.count > 0 ? featureTableSet.allObjects : arr;
-
-    [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
-                                              NSUInteger idx, BOOL *stop) {
-      GPKGFeatureDao *dao = [self.gpkg getFeatureDaoWithTableName:tableName];
-      GPKGResultSet *rs = [dao queryForAll];
-      int limit = 0;
-      while (limit < filter.limit && rs != nil && [rs moveToNext]) {
+  __block int limit = 0;
+  return
+      [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSArray *arr = self.gpkg.featureTables;
+        NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
+        NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
+        // Use set intersection to make sure layers are valid feature table
+        // names.
+        [featureTableSet intersectSet:layerQuerySet];
+        NSArray *queryLayers = featureTableSet.allObjects.count > 0
+                                   ? featureTableSet.allObjects
+                                   : arr;
+        __block GPKGResultSet *rs;
+        [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
+                                                  NSUInteger idx, BOOL *stop) {
+          GPKGFeatureDao *dao =
+              [self.gpkg getFeatureDaoWithTableName:tableName];
+          rs = [dao queryForAll];
+          int filterLimit = filter == nil ? 100 : (int)filter.limit;
+          while (limit < filterLimit && rs != nil && [rs moveToNext]) {
+            SCSpatialFeature *feature =
+                [self createSCSpatialFeature:[dao getFeatureRow:rs]];
+            [subscriber sendNext:feature];
+          }
+          [rs close]; // Must Close connection before disposing of Observable
+        }];
+        [subscriber sendCompleted];
+        return nil;
+      }] filter:^BOOL(SCSpatialFeature *f) {
+        if ([f isKindOfClass:[SCGeometry class]] && filter != nil) {
+          BOOL check = [filter testValue:f];
+          if (check) {
+            limit++;
+          }
+          return check;
+        }
         limit++;
-        SCSpatialFeature *feature =
-            [self createSCSpatialFeature:[dao getFeatureRow:rs]];
-        [subscriber sendNext:feature];
-      }
-      [rs close];
-    }];
-    [subscriber sendCompleted];
-    return nil;
-  }];
+        return YES;
+      }];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
@@ -268,7 +287,7 @@
               [self createSCSpatialFeature:[fDao getFeatureRow:rs]];
           [subscriber sendNext:feature];
         }
-        [rs close];
+        [rs close]; // Must Close connection before disposing of Observable
         [subscriber sendCompleted];
         return nil;
       }];
@@ -288,7 +307,7 @@
               [self createSCSpatialFeature:[fDao getFeatureRow:rs]];
           [subscriber sendNext:feature];
         }
-        [rs close];
+        [rs close]; // Must Close connection before disposing of Observable
         [subscriber sendCompleted];
         return nil;
       }];

@@ -17,11 +17,12 @@
  * under the License.
  ******************************************************************************/
 
-#import <XCTest/XCTest.h>
-#import "SpatialConnect.h"
-#import "SCGeopackageHelper.h"
 #import "GeopackageStore.h"
+#import "SCGeoFilterContains.h"
+#import "SCGeopackageHelper.h"
+#import "SpatialConnect.h"
 #import "SpatialConnectHelper.h"
+#import <XCTest/XCTest.h>
 
 @interface SCGeopackageQueryTest : XCTestCase
 @property(nonatomic) SpatialConnect *sc;
@@ -42,14 +43,19 @@
 
 - (void)testGpkgFeatureQuery {
   XCTestExpectation *expect = [self expectationWithDescription:@"Query"];
-
+  SCQueryFilter *filter = [[SCQueryFilter alloc] init];
+  SCBoundingBox *bbox = [SCBoundingBox worldBounds];
+  SCGeoFilterContains *gfc = [[SCGeoFilterContains alloc] initWithBBOX:bbox];
+  SCPredicate *predicate = [[SCPredicate alloc] initWithFilter:gfc];
+  [filter addPredicate:predicate];
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(GeopackageStore *ds) {
-        [[ds query:nil] subscribeError:^(NSError *error) {
+        [[ds query:filter] subscribeError:^(NSError *error) {
           NSLog(@"Error");
-        } completed:^{
-          [expect fulfill];
-        }];
+        }
+            completed:^{
+              [expect fulfill];
+            }];
       }];
 
   [self.sc startAllServices];
