@@ -17,11 +17,11 @@
  * under the License.
  ******************************************************************************/
 
-#import <XCTest/XCTest.h>
-#import "SpatialConnect.h"
-#import "SCGeopackageHelper.h"
 #import "GeopackageStore.h"
+#import "SCGeopackageHelper.h"
+#import "SpatialConnect.h"
 #import "SpatialConnectHelper.h"
+#import <XCTest/XCTest.h>
 
 @interface SCGeopackageDeleteTest : XCTestCase
 @property(nonatomic) SpatialConnect *sc;
@@ -50,10 +50,11 @@
     }] subscribeError:^(NSError *error) {
       XCTAssert(NO, @"Error loading GPGK");
       [expect fulfill];
-    } completed:^{
-      XCTAssert(YES, @"Delete successfully");
-      [expect fulfill];
-    }];
+    }
+        completed:^{
+          XCTAssert(YES, @"Delete successfully");
+          [expect fulfill];
+        }];
   }];
 
   [self.sc startAllServices];

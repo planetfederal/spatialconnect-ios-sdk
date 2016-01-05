@@ -17,12 +17,12 @@
  * under the License.
  ******************************************************************************/
 
-#import <XCTest/XCTest.h>
-#import "SpatialConnect.h"
-#import "SpatialConnectHelper.h"
 #import "GeopackageStore.h"
 #import "SCGeopackageHelper.h"
 #import "SCTestString.h"
+#import "SpatialConnect.h"
+#import "SpatialConnectHelper.h"
+#import <XCTest/XCTest.h>
 
 @interface SCGeopackageUpdateTest : XCTestCase
 @property(nonatomic) SpatialConnect *sc;
@@ -44,20 +44,22 @@
 - (void)testGpkgFeatureUpdate {
   XCTestExpectation *expect = [self expectationWithDescription:@"Update"];
 
-  [[SCGeopackageHelper
-      loadGPKGDataStore:self.sc] subscribeNext:^(GeopackageStore *ds) {
-    [[[[ds query:nil] takeLast:1] flattenMap:^RACStream *(SCSpatialFeature *f) {
-      [f.properties setObject:[SCTestString randomStringWithLength:200]
-                       forKey:@"foo"];
-      return [ds update:f];
-    }] subscribeError:^(NSError *error) {
-      XCTAssert(NO, @"Error loading GPGK");
-      [expect fulfill];
-    } completed:^{
-      XCTAssert(YES, @"Delete successfully");
-      [expect fulfill];
-    }];
-  }];
+  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+      subscribeNext:^(GeopackageStore *ds) {
+        [[[[ds query:nil] take:1] flattenMap:^RACStream *(SCSpatialFeature *f) {
+          NSString *key = [[f.properties allKeys] objectAtIndex:0];
+          [f.properties setObject:[SCTestString randomStringWithLength:200]
+                           forKey:key];
+          return [ds update:f];
+        }] subscribeError:^(NSError *error) {
+          XCTAssert(NO, @"Error loading GPGK");
+          [expect fulfill];
+        }
+            completed:^{
+              XCTAssert(YES, @"Update successfully");
+              [expect fulfill];
+            }];
+      }];
 
   [sc.manager startAllServices];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];

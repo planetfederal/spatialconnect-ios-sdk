@@ -17,12 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCStyle.h"
 #import "SCKeyTuple.h"
+#import "SCStyle.h"
 
 @interface SCSpatialFeature : NSObject
 
-@property(nonatomic) NSString *identifier;
+@property(nonatomic) NSObject *identifier;
 @property(nonatomic) NSDate *date;
 @property(nonatomic) NSDate *createdAt;
 @property(nonatomic) NSMutableDictionary *properties;

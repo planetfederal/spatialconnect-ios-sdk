@@ -38,7 +38,7 @@
   return self;
 }
 
-- (NSString *)identifier {
+- (NSObject *)identifier {
   if (!_identifier) {
     _identifier = [[NSUUID UUID] UUIDString];
   }

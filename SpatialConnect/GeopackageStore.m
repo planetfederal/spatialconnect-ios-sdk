@@ -105,8 +105,12 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
-  NSParameterAssert(feature.layerId != nil);
-  NSParameterAssert(feature.identifier != nil);
+  if (feature.storeId == nil) {
+    feature.storeId = self.storeId;
+  }
+  if (feature.layerId == nil) {
+    feature.layerId = self.defaultLayerName;
+  }
   return [self.adapter createFeature:feature];
 }
 

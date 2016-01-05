@@ -17,12 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
-#import <Foundation/Foundation.h>
 #import "SCGeometry.h"
+#import <Foundation/Foundation.h>
 
 @import MapKit;
 
@@ -33,20 +29,17 @@ typedef struct {
   double y;
 } GMBoundingBoxCorner;
 
-@interface SCBoundingBox : NSObject {
-  double
-  ll_x,ll_y,ur_x,ur_y;
-}
+@interface SCBoundingBox : NSObject
 
-@property (strong,nonatomic) SCPoint *lowerLeft;
-@property (strong,nonatomic) SCPoint *upperRight;
+@property(strong, nonatomic) SCPoint *lowerLeft;
+@property(strong, nonatomic) SCPoint *upperRight;
 
 + (instancetype)worldBounds;
 
-- (id)initWithPoints:(NSArray*)points;
-- (void)addPoint:(SCPoint*)pt;
-- (void)addPoints:(NSArray*)pts;
-- (BOOL)pointWithin:(SCPoint*)pt;
-- (BOOL)geometryWithin:(SCGeometry*)g;
+- (id)initWithPoints:(NSArray *)points;
+- (void)addPoint:(SCPoint *)pt;
+- (void)addPoints:(NSArray *)pts;
+- (BOOL)pointWithin:(SCPoint *)pt;
+- (BOOL)geometryWithin:(SCGeometry *)g;
 
 @end

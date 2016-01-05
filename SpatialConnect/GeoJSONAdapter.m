@@ -18,10 +18,10 @@
 ******************************************************************************/
 
 #import "GeoJSONAdapter.h"
-#import "SCQueryFilter.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCGeometryCollection+GeoJSON.h"
+#import "SCQueryFilter.h"
 
 #define ADAPTER_TYPE @"geojson"
 #define ADAPTER_VERSION 1
@@ -81,18 +81,19 @@
         [subscriber sendCompleted];
         return nil;
       }] flattenMap:^RACStream *(SCGeometry *g) {
-        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          if([g isKindOfClass:SCGeometryCollection.class]) {
-            SCGeometryCollection *scgc = (SCGeometryCollection*)g;
-            for (SCGeometry *geom in scgc.geometries) {
-              [subscriber sendNext:geom];
-            }
-          } else {
-            [subscriber sendNext:g];
-          }
-          [subscriber sendCompleted];
-          return nil;
-        }];
+        return [RACSignal
+            createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+              if ([g isKindOfClass:SCGeometryCollection.class]) {
+                SCGeometryCollection *scgc = (SCGeometryCollection *)g;
+                for (SCGeometry *geom in scgc.geometries) {
+                  [subscriber sendNext:geom];
+                }
+              } else {
+                [subscriber sendNext:g];
+              }
+              [subscriber sendCompleted];
+              return nil;
+            }];
       }] filter:^BOOL(SCGeometry *value) {
         for (SCPredicate *p in filter.predicates) {
           if (![p compare:value]) {
@@ -124,9 +125,10 @@
 
         [write subscribeError:^(NSError *error) {
           [subscriber sendError:error];
-        } completed:^{
-          [subscriber sendCompleted];
-        }];
+        }
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
       }];
 }
@@ -137,23 +139,23 @@
         [[[[self query:nil] map:^SCGeometry *(SCGeometry *geom) {
           if ([geom isKindOfClass:SCGeometryCollection.class]) {
             SCGeometryCollection *geomc = (SCGeometryCollection *)geom;
-            [geomc.geometries
-                enumerateObjectsUsingBlock:^(SCGeometry *g, NSUInteger idx,
-                                             BOOL *stop) {
-                  if ([feature.identifier isEqualToString:g.identifier]) {
-                    g = (SCGeometry *)feature;
-                    *stop = YES;
-                  }
-                }];
+            [geomc.geometries enumerateObjectsUsingBlock:^(
+                                  SCGeometry *g, NSUInteger idx, BOOL *stop) {
+              if ([feature.identifier isEqual:g.identifier]) {
+                g = (SCGeometry *)feature;
+                *stop = YES;
+              }
+            }];
           }
           return geom;
         }] flattenMap:^RACStream *(SCGeometry *g) {
           return [self writeGeometryToFile:g];
         }] subscribeError:^(NSError *error) {
           [subscriber sendError:error];
-        } completed:^{
-          [subscriber sendCompleted];
-        }];
+        }
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
       }];
 }
@@ -178,9 +180,10 @@
 
         [write subscribeError:^(NSError *error) {
           [subscriber sendError:error];
-        } completed:^{
-          [subscriber sendCompleted];
-        }];
+        }
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
       }];
 }
