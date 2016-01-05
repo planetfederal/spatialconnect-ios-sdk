@@ -220,15 +220,8 @@
         GPKGFeatureDao *fDao =
             [self.gpkg getFeatureDaoWithTableName:feature.layerId];
         GPKGFeatureRow *row = [self toFeatureRow:feature];
-        int count = [fDao update:row];
-        if (count == SQLITE_OK) {
-          [subscriber sendCompleted];
-        } else {
-          [subscriber
-              sendError:[NSError errorWithDomain:@"GeopackageFileAdapter"
-                                            code:count
-                                        userInfo:nil]];
-        }
+        [fDao update:row];
+        [subscriber sendCompleted];
         return nil;
       }];
 }
