@@ -1,5 +1,8 @@
 # SpatialConnect iOS Library
 
+## Testing Status
+[![Build Status](https://travis-ci.org/tetriscode/spatialconnect-ios-sdk.svg?branch=develop)](https://travis-ci.org/tetriscode/spatialconnect-ios-sdk)
+
 ## License
 
 Apache 2.0
