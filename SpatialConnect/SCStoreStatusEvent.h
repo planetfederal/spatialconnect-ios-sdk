@@ -17,13 +17,14 @@
  * under the License.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCDataStore.h"
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, SCDataStoreStatusEvent) {
-  SC_DATASTORE_STARTFAILED,
-  SC_DATASTORE_STORESTARTED,
-  SC_DATASTORE_ALLSTARTED
+  SC_DATASTORE_EVT_STARTFAILED,
+  SC_DATASTORE_EVT_STARTED,
+  SC_DATASTORE_EVT_ALLSTARTED,
+  SC_DATASTORE_EVT_STOPPED,
 };
 
 @interface SCStoreStatusEvent : NSObject

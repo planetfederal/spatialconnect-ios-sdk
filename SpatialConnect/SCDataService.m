@@ -71,7 +71,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   RACMulticastConnection *c = self.storeEvents;
   [c connect];
   [[c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_STORESTARTED) {
+    if (evt.status == SC_DATASTORE_EVT_STARTED) {
       return YES;
     }
     return NO;
@@ -79,7 +79,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     startCount++;
     if (startCount == count) {
       [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_ALLSTARTED
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_ALLSTARTED
                                       andStoreId:nil]];
     }
   }
@@ -103,7 +103,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   RACMulticastConnection *rmcc = self.storeEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_ALLSTARTED) {
+    if (evt.status == SC_DATASTORE_EVT_ALLSTARTED) {
       return YES;
     }
     return NO;
@@ -114,12 +114,12 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
       [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STARTFAILED
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTFAILED
                                       andStoreId:store.storeId]];
     }
         completed:^{
           [self.storeEventSubject
-              sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STORESTARTED
+              sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTED
                                           andStoreId:store.storeId]];
         }];
 
@@ -137,7 +137,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [((id<SCDataStoreLifeCycle>)store)stop];
     [self.storeEventSubject
-        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_STOPPED
+        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STOPPED
                                     andStoreId:store.storeId]];
   } else {
     NSLog(@"%@",

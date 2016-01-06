@@ -17,12 +17,12 @@
  * under the License.
  ******************************************************************************/
 
-#import <XCTest/XCTest.h>
+#import "GeopackageStore.h"
+#import "SCGeopackageHelper.h"
+#import "SCPoint.h"
 #import "SpatialConnect.h"
 #import "SpatialConnectHelper.h"
-#import "SCGeopackageHelper.h"
-#import "GeopackageStore.h"
-#import "SCPoint.h"
+#import <XCTest/XCTest.h>
 
 @interface SCGeopackageCreateTest : XCTestCase
 @property(nonatomic) SpatialConnect *sc;
@@ -51,12 +51,13 @@
     NSLog(@"%@", error.description);
     XCTAssert(NO, @"Error creating point");
     [expect fulfill];
-  } completed:^{
-    XCTAssert(YES, @"Point created");
-    [expect fulfill];
-  }];
+  }
+      completed:^{
+        XCTAssert(YES, @"Point created");
+        [expect fulfill];
+      }];
   [self.sc startAllServices];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [self waitForExpectationsWithTimeout:150.0 handler:nil];
 }
 
 @end
