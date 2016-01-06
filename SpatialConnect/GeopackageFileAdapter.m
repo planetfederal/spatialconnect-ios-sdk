@@ -21,6 +21,7 @@
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 #import "SCKeyTuple.h"
+#import "SCPoint.h"
 
 @interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
@@ -185,7 +186,7 @@
                                 andValue:feature.identifier];
         }
 
-        long long newId = [featureDao create:newRow];
+        [featureDao create:newRow];
         [subscriber sendCompleted];
         return nil;
       }];
@@ -229,7 +230,7 @@
 - (RACSignal *)query:(SCQueryFilter *)filter {
   __block int limit = 0;
   return
-      [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSArray *arr = self.gpkg.featureTables;
         NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
         NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
@@ -265,7 +266,8 @@
         }
         limit++;
         return YES;
-      }];
+      }] subscribeOn:[RACScheduler
+                         schedulerWithPriority:RACSchedulerPriorityBackground]];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
