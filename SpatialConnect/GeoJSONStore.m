@@ -67,10 +67,12 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     }
   }
   adapter = [[GeoJSONAdapter alloc] initWithFilePath:filePath];
+  adapter.defaultStyle = self.style;
+  adapter.storeId = self.storeId;
 }
 
-- (NSString*)type {
-  return [NSString stringWithFormat:@"%@",kTYPE];
+- (NSString *)type {
+  return [NSString stringWithFormat:@"%@", kTYPE];
 }
 
 - (NSInteger)version {
@@ -101,6 +103,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 - (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
   [adapter connect];
+  adapter.defaultStyle = self.style;
   self.status = SC_DATASTORE_RUNNING;
   return [RACSignal empty];
 }

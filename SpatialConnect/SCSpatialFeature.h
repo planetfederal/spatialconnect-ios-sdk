@@ -26,8 +26,8 @@
 @property(nonatomic) NSDate *date;
 @property(nonatomic) NSDate *createdAt;
 @property(nonatomic) NSMutableDictionary *properties;
-@property(nonatomic) NSString *storeId;
-@property(nonatomic) NSString *layerId;
+@property(strong, nonatomic) NSString *storeId;
+@property(strong, nonatomic) NSString *layerId;
 
 @property(strong, nonatomic) SCStyle *style;
 

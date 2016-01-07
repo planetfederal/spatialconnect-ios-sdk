@@ -49,7 +49,7 @@
         [[[ds query:filter] flattenMap:^RACStream *(SCSpatialFeature *f) {
           return [ds delete:f.key];
         }] subscribeError:^(NSError *error) {
-          XCTAssert(NO, @"Error loading GPGK");
+          XCTFail(@"Error loading GPGK");
           [expect fulfill];
         }
             completed:^{

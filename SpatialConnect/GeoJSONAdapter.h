@@ -17,12 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "GeoJSONStorageConnector.h"
-#import "SCQueryFilter.h"
-#import "SCStyle.h"
-#import "SCSpatialFeature.h"
 #import "SCGeometry.h"
+#import "SCQueryFilter.h"
+#import "SCSpatialFeature.h"
+#import "SCStyle.h"
+#import <Foundation/Foundation.h>
 
 @interface GeoJSONAdapter : NSObject {
   NSBundle *geojsonBundle;
@@ -30,7 +30,8 @@
 }
 
 @property GeoJSONStorageConnector *connector;
-@property(nonatomic, weak) SCStyle *defaultStyle;
+@property(nonatomic, strong) SCStyle *defaultStyle;
+@property(nonatomic, strong) NSString *storeId;
 
 - (void)connect;
 - (id)initWithFilePath:(NSString *)filepath;

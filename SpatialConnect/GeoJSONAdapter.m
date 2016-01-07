@@ -32,7 +32,7 @@
 
 @implementation GeoJSONAdapter
 
-@synthesize connector;
+@synthesize connector, storeId;
 
 - (id)initWithFilePath:(NSString *)filepath {
   if (self = [super init]) {
@@ -74,9 +74,6 @@
           [subscriber sendError:readError];
         }
         SCGeometry *geom = [SCGeoJSON parseDict:dict];
-        if (!geom.style) {
-          [geom.style addMissing:self.defaultStyle];
-        }
         [subscriber sendNext:geom];
         [subscriber sendCompleted];
         return nil;
@@ -86,6 +83,11 @@
               if ([g isKindOfClass:SCGeometryCollection.class]) {
                 SCGeometryCollection *scgc = (SCGeometryCollection *)g;
                 for (SCGeometry *geom in scgc.geometries) {
+                  geom.layerId = @"default";
+                  geom.storeId = [NSString stringWithString:self.storeId];
+                  if (!geom.style) {
+                    [geom.style addMissing:self.defaultStyle];
+                  }
                   [subscriber sendNext:geom];
                 }
               } else {

@@ -241,16 +241,20 @@
                                    ? featureTableSet.allObjects
                                    : arr;
         __block GPKGResultSet *rs;
+        int filterLimit = filter == nil ? 100 : (int)filter.limit;
+        int perLayer = filterLimit / queryLayers.count;
         [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
                                                   NSUInteger idx, BOOL *stop) {
           GPKGFeatureDao *dao =
               [self.gpkg getFeatureDaoWithTableName:tableName];
           rs = [dao queryForAll];
-          int filterLimit = filter == nil ? 100 : (int)filter.limit;
-          while (limit < filterLimit && rs != nil && [rs moveToNext]) {
+          int layerCount = 0;
+          while (limit < filterLimit && rs != nil && [rs moveToNext] &&
+                 layerCount < perLayer) {
             SCSpatialFeature *feature =
                 [self createSCSpatialFeature:[dao getFeatureRow:rs]];
             [subscriber sendNext:feature];
+            layerCount++;
           }
           [rs close]; // Must Close connection before disposing of Observable
         }];
