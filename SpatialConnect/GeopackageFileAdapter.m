@@ -21,6 +21,7 @@
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 #import "SCKeyTuple.h"
+#import "SCPoint.h"
 
 @interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
@@ -185,7 +186,7 @@
                                 andValue:feature.identifier];
         }
 
-        long long newId = [featureDao create:newRow];
+        [featureDao create:newRow];
         [subscriber sendCompleted];
         return nil;
       }];
@@ -220,15 +221,8 @@
         GPKGFeatureDao *fDao =
             [self.gpkg getFeatureDaoWithTableName:feature.layerId];
         GPKGFeatureRow *row = [self toFeatureRow:feature];
-        int count = [fDao update:row];
-        if (count == SQLITE_OK) {
-          [subscriber sendCompleted];
-        } else {
-          [subscriber
-              sendError:[NSError errorWithDomain:@"GeopackageFileAdapter"
-                                            code:count
-                                        userInfo:nil]];
-        }
+        [fDao update:row];
+        [subscriber sendCompleted];
         return nil;
       }];
 }
@@ -236,7 +230,7 @@
 - (RACSignal *)query:(SCQueryFilter *)filter {
   __block int limit = 0;
   return
-      [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSArray *arr = self.gpkg.featureTables;
         NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
         NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
@@ -247,16 +241,20 @@
                                    ? featureTableSet.allObjects
                                    : arr;
         __block GPKGResultSet *rs;
+        int filterLimit = filter == nil ? 100 : (int)filter.limit;
+        int perLayer = filterLimit / queryLayers.count;
         [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
                                                   NSUInteger idx, BOOL *stop) {
           GPKGFeatureDao *dao =
               [self.gpkg getFeatureDaoWithTableName:tableName];
           rs = [dao queryForAll];
-          int filterLimit = filter == nil ? 100 : (int)filter.limit;
-          while (limit < filterLimit && rs != nil && [rs moveToNext]) {
+          int layerCount = 0;
+          while (limit < filterLimit && rs != nil && [rs moveToNext] &&
+                 layerCount < perLayer) {
             SCSpatialFeature *feature =
                 [self createSCSpatialFeature:[dao getFeatureRow:rs]];
             [subscriber sendNext:feature];
+            layerCount++;
           }
           [rs close]; // Must Close connection before disposing of Observable
         }];
@@ -272,7 +270,8 @@
         }
         limit++;
         return YES;
-      }];
+      }] subscribeOn:[RACScheduler
+                         schedulerWithPriority:RACSchedulerPriorityBackground]];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
