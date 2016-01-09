@@ -22,6 +22,11 @@
 #import "SCGeometry+GPKG.h"
 #import "SCKeyTuple.h"
 #import "SCPoint.h"
+#import <geopackage-ios/GPKGOverlayFactory.h>
+#import <geopackage-ios/GPKGProjectionConstants.h>
+#import <geopackage-ios/GPKGProjectionTransform.h>
+#import <geopackage-ios/GPKGSpatialReferenceSystemDao.h>
+#import <geopackage-ios/GPKGTileBoundingBoxUtils.h>
 
 @interface GeopackageFileAdapter (private)
 - (BOOL)checkFile;
@@ -117,6 +122,10 @@
   return (NSString *)self.gpkg.featureTables[0];
 }
 
+- (NSString *)defaultRasterName {
+  return (NSString *)self.gpkg.tileTables[0];
+}
+
 #pragma mark -
 #pragma mark SCAdapterKeyValue
 - (NSString *)filepathKey {
@@ -134,6 +143,91 @@
 
 - (NSArray *)layerList {
   return self.gpkg.featureTables;
+}
+
+- (NSArray *)rasterList {
+  return self.gpkg.tileTables;
+}
+
+- (MKTileOverlay *)overlayFromLayer:(NSString *)layer
+                            mapview:(MKMapView *)mapView {
+  __block MKTileOverlay *overlay = nil;
+  NSArray *arr = [self.gpkg tileTables];
+
+  @weakify(self);
+  [arr enumerateObjectsUsingBlock:^(NSString *table, NSUInteger idx,
+                                    BOOL *_Nonnull stop) {
+    if ([layer isEqualToString:table]) {
+      @strongify(self);
+      GPKGTileDao *tileDao = [self.gpkg getTileDaoWithTableName:layer];
+      overlay = [GPKGOverlayFactory getTileOverlayWithTileDao:tileDao];
+      overlay.canReplaceMapContent = false;
+
+      GPKGTileMatrixSet *tileMatrixSet = tileDao.tileMatrixSet;
+      GPKGContents *contents =
+          [[self.gpkg getTileMatrixSetDao] getContents:tileMatrixSet];
+      GPKGContentsDao *contentsDao = [self.gpkg contentsDao];
+      GPKGProjection *projection = [contentsDao getProjection:contents];
+
+      GPKGProjectionTransform *transformToWebMercator =
+          [[GPKGProjectionTransform alloc]
+              initWithFromProjection:projection
+                           andToEpsg:PROJ_EPSG_WEB_MERCATOR];
+
+      GPKGBoundingBox *contentsBoundingBox = [contents getBoundingBox];
+      if ([projection.epsg intValue] == PROJ_EPSG_WORLD_GEODETIC_SYSTEM) {
+        contentsBoundingBox = [GPKGTileBoundingBoxUtils
+            boundWgs84BoundingBoxWithWebMercatorLimits:contentsBoundingBox];
+      }
+
+      GPKGBoundingBox *webMercatorBoundingBox =
+          [transformToWebMercator transformWithBoundingBox:contentsBoundingBox];
+      GPKGProjectionTransform *transform = [[GPKGProjectionTransform alloc]
+          initWithFromEpsg:PROJ_EPSG_WEB_MERCATOR
+                 andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
+      GPKGBoundingBox *boundingBox =
+          [transform transformWithBoundingBox:webMercatorBoundingBox];
+
+      //      if (specifiedBoundingBox != nil) {
+      //        boundingBox = [GPKGTileBoundingBoxUtils
+      //            overlapWithBoundingBox:boundingBox
+      //                    andBoundingBox:specifiedBoundingBox];
+      //      }
+      //
+      //      if (self.tilesBoundingBox == nil) {
+      //        self.tilesBoundingBox = boundingBox;
+      //      } else {
+      //        if ([boundingBox.minLongitude
+      //                compare:self.tilesBoundingBox.minLongitude] ==
+      //            NSOrderedAscending) {
+      //          [self.tilesBoundingBox
+      //          setMinLongitude:boundingBox.minLongitude];
+      //        }
+      //        if ([boundingBox.maxLongitude
+      //                compare:self.tilesBoundingBox.maxLongitude] ==
+      //            NSOrderedDescending) {
+      //          [self.tilesBoundingBox
+      //          setMaxLongitude:boundingBox.maxLongitude];
+      //        }
+      //        if ([boundingBox.minLatitude
+      //                compare:self.tilesBoundingBox.minLatitude] ==
+      //            NSOrderedAscending) {
+      //          [self.tilesBoundingBox
+      //          setMinLatitude:boundingBox.minLatitude];
+      //        }
+      //        if ([boundingBox.maxLatitude
+      //                compare:self.tilesBoundingBox.maxLatitude] ==
+      //            NSOrderedDescending) {
+      //          [self.tilesBoundingBox
+      //          setMaxLatitude:boundingBox.maxLatitude];
+      //        }
+      //      }
+
+      [mapView addOverlay:overlay];
+    }
+  }];
+
+  return overlay;
 }
 
 - (GPKGFeatureRow *)toFeatureRow:(SCSpatialFeature *)feature {

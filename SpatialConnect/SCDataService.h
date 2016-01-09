@@ -39,6 +39,7 @@ extern NSString *const kSERVICENAME;
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;
 - (NSArray *)storesByProtocol:(Protocol *)protocol;
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
+- (NSArray *)storesRaster;
 
 - (RACSignal *)queryAllStoresOfProtocol:(Protocol *)protocol
                                  filter:(SCQueryFilter *)filter;

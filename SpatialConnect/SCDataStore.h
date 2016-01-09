@@ -17,12 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCStyle.h"
-#import "SCStoreConfig.h"
+#import "SCDataStoreLifeCycle.h"
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
-#import "SCDataStoreLifeCycle.h"
+#import "SCStoreConfig.h"
+#import "SCStyle.h"
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
   SC_DATASTORE_STARTED,
@@ -30,6 +30,11 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
   SC_DATASTORE_PAUSED,
   SC_DATASTORE_STOPPED,
   SC_DATASTORE_DOWNLOADINGDATA
+};
+
+typedef NS_ENUM(NSInteger, SCDataStorePermission) {
+  SC_DATASTORE_READONLY,
+  SC_DATASTORE_READWRITE
 };
 
 @interface SCDataStore : NSObject
@@ -43,6 +48,7 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
 @property(readonly) NSString *key;
 @property(nonatomic) NSString *defaultLayerName;
 @property SCDataStoreStatus status;
+@property SCDataStorePermission permission;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config;
 - (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style;

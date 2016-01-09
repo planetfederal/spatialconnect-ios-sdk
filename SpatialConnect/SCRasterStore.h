@@ -16,23 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
+@import MapKit;
 
-#import "GeopackageFileAdapter.h"
-#import "SCDataStore.h"
-#import "SCRasterStore.h"
-#import "SCSpatialStore.h"
-#import <Foundation/Foundation.h>
+@protocol SCRasterStore <NSObject>
 
-extern NSString *const SCGeopackageErrorDomain;
-
-typedef NS_ENUM(NSInteger, SCGeopackageError) {
-  SC_GEOPACKAGE_FILENOTFOUND = 1,
-  SC_GEOPACKAGE_ERRORDOWNLOADING = 2
-};
-
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle, SCRasterStore>
-
-@property(strong, readonly, nonatomic) GeopackageFileAdapter *adapter;
+- (MKTileOverlay *)overlayFromLayer:(NSString *)layer
+                            mapview:(MKMapView *)mapView;
 
 @end
