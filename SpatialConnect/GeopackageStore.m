@@ -46,6 +46,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   }
   _adapter = [[GeopackageFileAdapter alloc] initWithStoreConfig:config];
   self.name = config.name;
+  self.permission = SC_DATASTORE_READWRITE;
   _type = TYPE;
   _version = VERSION;
   return self;
@@ -95,6 +96,13 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 #pragma mark -
+#pragma mark SCRasterStore
+- (MKTileOverlay *)overlayFromLayer:(NSString *)layer
+                            mapview:(MKMapView *)mapView {
+  return [self.adapter overlayFromLayer:layer mapview:mapView];
+}
+
+#pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
   return [self.adapter query:filter];
@@ -124,8 +132,11 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (NSArray *)layerList {
-  NSArray *arr = self.adapter.layerList;
-  return arr;
+  return self.adapter.layerList;
+}
+
+- (NSArray *)rasterList {
+  return self.adapter.rasterList;
 }
 
 #pragma mark -

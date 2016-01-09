@@ -31,12 +31,14 @@
 @synthesize name;
 @synthesize defaultLayerName;
 @synthesize key = _key;
+@synthesize status, permission;
 
 - (id)init {
   self = [super init];
   if (!self) {
     return nil;
   }
+  permission = SC_DATASTORE_READONLY;
   _layerList = [NSArray new];
   _storeId = [[NSUUID UUID] UUIDString];
   return self;
@@ -84,8 +86,8 @@
 
 + (NSString *)versionKey {
   NSAssert(NO, @"This is an abstract method and should be overridden. Format "
-           @"for versionKey shoulde be <storename>.<versionnumber> ie "
-           @"geojson.1");
+               @"for versionKey shoulde be <storename>.<versionnumber> ie "
+               @"geojson.1");
   return nil;
 }
 

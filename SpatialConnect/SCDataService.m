@@ -242,13 +242,16 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   return [self storesByProtocol:protocol onlyRunning:YES];
 }
 
+- (NSArray *)storesRaster {
+  return [self storesByProtocol:@protocol(SCRasterStore)];
+}
+
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier {
   return [self.stores objectForKey:identifier];
 }
 
 #pragma mark -
 #pragma mark Store Query/Messaging Methods
-
 - (RACSignal *)queryAllStoresOfProtocol:(Protocol *)protocol
                                  filter:(SCQueryFilter *)filter {
   return nil; // TODO

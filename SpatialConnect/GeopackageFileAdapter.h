@@ -46,5 +46,9 @@
 - (RACSignal *)deleteFeature:(SCKeyTuple *)tuple;
 - (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
 - (NSArray *)layerList;
+- (NSArray *)rasterList;
 - (NSString *)defaultLayerName;
+- (MKTileOverlay *)overlayFromLayer:(NSString *)layer
+                            mapview:(MKMapView *)mapView;
+
 @end
