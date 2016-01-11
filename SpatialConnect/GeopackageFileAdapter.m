@@ -336,9 +336,10 @@
                                    : arr;
         __block GPKGResultSet *rs;
         int filterLimit = filter == nil ? 100 : (int)filter.limit;
-        int perLayer = filterLimit / queryLayers.count;
+        __block int perLayer;
         [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
                                                   NSUInteger idx, BOOL *stop) {
+          perLayer = filterLimit / queryLayers.count;
           GPKGFeatureDao *dao =
               [self.gpkg getFeatureDaoWithTableName:tableName];
           rs = [dao queryForAll];
