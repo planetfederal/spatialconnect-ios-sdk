@@ -188,41 +188,6 @@
       GPKGBoundingBox *boundingBox =
           [transform transformWithBoundingBox:webMercatorBoundingBox];
 
-      //      if (specifiedBoundingBox != nil) {
-      //        boundingBox = [GPKGTileBoundingBoxUtils
-      //            overlapWithBoundingBox:boundingBox
-      //                    andBoundingBox:specifiedBoundingBox];
-      //      }
-      //
-      //      if (self.tilesBoundingBox == nil) {
-      //        self.tilesBoundingBox = boundingBox;
-      //      } else {
-      //        if ([boundingBox.minLongitude
-      //                compare:self.tilesBoundingBox.minLongitude] ==
-      //            NSOrderedAscending) {
-      //          [self.tilesBoundingBox
-      //          setMinLongitude:boundingBox.minLongitude];
-      //        }
-      //        if ([boundingBox.maxLongitude
-      //                compare:self.tilesBoundingBox.maxLongitude] ==
-      //            NSOrderedDescending) {
-      //          [self.tilesBoundingBox
-      //          setMaxLongitude:boundingBox.maxLongitude];
-      //        }
-      //        if ([boundingBox.minLatitude
-      //                compare:self.tilesBoundingBox.minLatitude] ==
-      //            NSOrderedAscending) {
-      //          [self.tilesBoundingBox
-      //          setMinLatitude:boundingBox.minLatitude];
-      //        }
-      //        if ([boundingBox.maxLatitude
-      //                compare:self.tilesBoundingBox.maxLatitude] ==
-      //            NSOrderedDescending) {
-      //          [self.tilesBoundingBox
-      //          setMaxLatitude:boundingBox.maxLatitude];
-      //        }
-      //      }
-
       [mapView addOverlay:overlay];
     }
   }];
