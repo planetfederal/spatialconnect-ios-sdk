@@ -44,20 +44,6 @@
   return self;
 }
 
-//- (SCPoint*)lowerLeft {
-//  if (!lowerLeft) {
-//    lowerLeft = [[SCPoint alloc] init];
-//  }
-//  return lowerLeft;
-//}
-//
-//- (SCPoint*)upperRight {
-//  if (!upperRight) {
-//    upperRight = [[SCPoint alloc] init];
-//  }
-//  return upperRight;
-//}
-
 - (void)setLowerLeft:(SCPoint *)ll {
   if (!lowerLeft) {
     lowerLeft = [[SCPoint alloc] initWithCoordinateArray:@[
@@ -150,7 +136,7 @@
 }
 
 - (BOOL)geometryWithin:(SCGeometry *)g {
-  return [g checkWithin:self];
+  return [g isContained:self];
 }
 
 #pragma mark - NSObject

@@ -89,7 +89,7 @@
       stringWithFormat:@"Point[%f,%f,%f]", self.x, self.y, self.z, nil];
 }
 
-- (BOOL)checkWithin:(SCBoundingBox *)bbox {
+- (BOOL)isContained:(SCBoundingBox *)bbox {
   return [bbox pointWithin:self];
 }
 

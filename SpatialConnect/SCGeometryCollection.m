@@ -76,12 +76,12 @@
   [self.geometries removeObject:geom];
 }
 
-- (BOOL)checkWithin:(SCBoundingBox *)bbox {
-  __block BOOL response = YES;
+- (BOOL)isContained:(SCBoundingBox *)bbox {
+  __block BOOL response = NO;
   [self.geometries
       enumerateObjectsUsingBlock:^(SCGeometry *g, NSUInteger idx, BOOL *stop) {
-        if (![g checkWithin:bbox]) {
-          response = NO;
+        if ([g isContained:bbox]) {
+          response = YES;
           *stop = YES;
         }
       }];

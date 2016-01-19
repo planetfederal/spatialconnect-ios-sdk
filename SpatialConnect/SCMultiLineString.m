@@ -62,12 +62,12 @@
   return str;
 }
 
-- (BOOL)checkWithin:(SCBoundingBox *)bbox {
-  __block BOOL response = YES;
+- (BOOL)isContained:(SCBoundingBox *)bbox {
+  __block BOOL response = NO;
   [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *line,
                                                  NSUInteger idx, BOOL *stop) {
-    if (![line checkWithin:bbox]) {
-      response = NO;
+    if ([line isContained:bbox]) {
+      response = YES;
       *stop = YES;
     }
   }];

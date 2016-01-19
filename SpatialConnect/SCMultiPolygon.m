@@ -60,12 +60,12 @@
   return str;
 }
 
-- (BOOL)checkWithin:(SCBoundingBox *)bbox {
-  __block BOOL response = YES;
+- (BOOL)isContained:(SCBoundingBox *)bbox {
+  __block BOOL response = NO;
   [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *poly, NSUInteger idx,
                                               BOOL *stop) {
-    if (![poly checkWithin:bbox]) {
-      response = NO;
+    if ([poly isContained:bbox]) {
+      response = YES;
       *stop = YES;
     }
   }];
