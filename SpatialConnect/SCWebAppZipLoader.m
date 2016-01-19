@@ -21,11 +21,23 @@
 
 @implementation SCWebAppZipLoader
 
-- (void)unzipFile:(NSString *)zipFilePath {
++ (NSString *)unzipFile:(NSString *)zipFilePath {
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSURL *path = [NSURL fileURLWithPath:@"/tmp/webapp"];
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                       NSUserDomainMask, YES);
+  NSURL *path = [[NSURL fileURLWithPath:[paths objectAtIndex:0]]
+      URLByAppendingPathComponent:@"webapps"];
+  [fileManager createDirectoryAtURL:path
+        withIntermediateDirectories:YES
+                         attributes:nil
+                              error:nil];
+  NSError *error;
   ZZArchive *archive =
-      [ZZArchive archiveWithURL:[NSURL fileURLWithPath:zipFilePath] error:nil];
+      [ZZArchive archiveWithURL:[NSURL fileURLWithPath:zipFilePath] error:&error];
+  if (error) {
+    NSLog(@"%@",error.debugDescription);
+  }
+  NSString *indexHTMLPath = nil;
   for (ZZArchiveEntry *entry in archive.entries) {
     NSURL *targetPath = [path URLByAppendingPathComponent:entry.fileName];
 
@@ -40,13 +52,18 @@
       // and just include the directory's name in the filename.
       // Make sure that directory exists before writing a file into it.
       [fileManager createDirectoryAtURL:[targetPath
-                                                URLByDeletingLastPathComponent]
+                                            URLByDeletingLastPathComponent]
             withIntermediateDirectories:YES
                              attributes:nil
                                   error:nil];
 
+      if ([[targetPath path] containsString:@"index.html"]) {
+        indexHTMLPath = [targetPath path];
+      }
+
       [[entry newDataWithError:nil] writeToURL:targetPath atomically:NO];
     }
   }
+  return indexHTMLPath;
 }
 @end

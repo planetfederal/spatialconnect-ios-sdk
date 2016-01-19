@@ -17,8 +17,9 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCLocalWebApp.h"
 #import "SCJavascriptBridge.h"
+#import "SCLocalWebApp.h"
+#import "SCWebAppZipLoader.h"
 
 @interface SCLocalWebApp ()
 @property SCJavascriptBridge *bridge;
@@ -32,6 +33,7 @@
           andFilepath:(NSString *)fp {
   if (self = [super init]) {
     webview = wv;
+    webviewDelegate = d;
     filepath = fp;
   }
   return self;
@@ -43,9 +45,14 @@
 
   if (self = [super init]) {
     webview = wv;
-    filepath = fp;
+    webviewDelegate = d;
+    filepath = [self zipPathToFilepath:fp];
   }
   return self;
+}
+
+- (NSString *)zipPathToFilepath:(NSString *)fp {
+  return [SCWebAppZipLoader unzipFile:fp];
 }
 
 - (void)load {
@@ -54,7 +61,7 @@
   }
   _bridge = [[SCJavascriptBridge alloc]
       initWithWebView:webview
-             delegate:self
+             delegate:webviewDelegate
                    sc:[SpatialConnect sharedInstance]];
 
   [self loadEntryPage];
@@ -68,31 +75,32 @@
 - (BOOL)webView:(UIWebView *)webView
     shouldStartLoadWithRequest:(NSURLRequest *)request
                 navigationType:(UIWebViewNavigationType)navigationType {
-  if ([delegate respondsToSelector:@selector(webView:
-                                       shouldStartLoadWithRequest:
-                                                   navigationType:)]) {
-    return [delegate webView:webView
-        shouldStartLoadWithRequest:request
-                    navigationType:navigationType];
+  if ([webviewDelegate respondsToSelector:@selector(webView:
+                                              shouldStartLoadWithRequest:
+                                                          navigationType:)]) {
+    return [webviewDelegate webView:webView
+         shouldStartLoadWithRequest:request
+                     navigationType:navigationType];
   }
   return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
-  if ([delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
-    [delegate webViewDidStartLoad:webview];
+  if ([webviewDelegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
+    [webviewDelegate webViewDidStartLoad:webview];
   }
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-  if ([delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
-    [delegate webViewDidStartLoad:webview];
+  if ([webviewDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
+    [webviewDelegate webViewDidStartLoad:webview];
   }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-  if ([delegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
-    [delegate webView:webView didFailLoadWithError:error];
+  if ([webviewDelegate
+          respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
+    [webviewDelegate webView:webView didFailLoadWithError:error];
   }
 }
 

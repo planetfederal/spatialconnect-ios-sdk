@@ -17,12 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCJavascriptBridge.h"
-#import "WebViewJavascriptBridge.h"
-#import "SpatialConnect.h"
-#import "SCJavascriptCommands.h"
 #import "SCGeoJSONExtensions.h"
+#import "SCJavascriptBridge.h"
+#import "SCJavascriptCommands.h"
 #import "SCSpatialStore.h"
+#import "SpatialConnect.h"
+#import "WebViewJavascriptBridge.h"
 
 NSString *const SCJavascriptBridgeErrorDomain =
     @"SCJavascriptBridgeErrorDomain";
@@ -93,8 +93,9 @@ NSString *const SCJavascriptBridgeErrorDomain =
  */
 - (RACSignal *)parseJSCommand:(id)data {
   return [RACSignal createSignal:^RACDisposable *(
-                                     id<RACSubscriber> subscriber) {
+                        id<RACSubscriber> subscriber) {
     NSDictionary *command = (NSDictionary *)data;
+    NSNumber *num;
     NSLog(@"%@", command);
     if (!command) {
       [subscriber sendCompleted];
@@ -130,7 +131,8 @@ NSString *const SCJavascriptBridgeErrorDomain =
       [self deleteFeature:command[@"value"] responseSubscriber:subscriber];
       break;
     case SENSORSERVICE_GPS:
-      [self spatialConnectGPS:command[@"value"]];
+      num = [NSNumber numberWithLong:(long)command[@"payload"]];
+      [self spatialConnectGPS:num];
       [subscriber sendCompleted];
       break;
     default:

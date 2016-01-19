@@ -22,7 +22,7 @@
 @interface SCLocalWebApp : NSObject <UIWebViewDelegate> {
   UIWebView *webview;
   NSString *filepath;
-  id<UIWebViewDelegate> delegate;
+  id<UIWebViewDelegate> webviewDelegate;
 }
 
 - (id)initWithWebView:(UIWebView *)wv

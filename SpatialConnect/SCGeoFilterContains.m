@@ -20,8 +20,8 @@
 #import "SCGeoFilterContains.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
-#import "SCPolygon.h"
 #import "SCMultiPolygon.h"
+#import "SCPolygon.h"
 
 @implementation SCGeoFilterContains
 
@@ -29,9 +29,9 @@
   return nil;
 }
 
-- (BOOL)compareLHS:(SCGeometry*)value {
+- (BOOL)compareLHS:(SCGeometry *)value {
   if (bbox) {
-    return [value checkWithin:bbox];
+    return [value isContained:bbox];
   }
   return YES;
 }

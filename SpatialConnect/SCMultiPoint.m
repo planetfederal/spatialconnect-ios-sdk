@@ -52,13 +52,13 @@
   return str;
 }
 
-- (BOOL)checkWithin:(SCBoundingBox *)bbox {
-  __block BOOL response = YES;
+- (BOOL)isContained:(SCBoundingBox *)bbox {
+  __block BOOL response = NO;
   [self.points
       enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
-        if (![bbox pointWithin:p]) {
+        if ([bbox pointWithin:p]) {
           *stop = YES;
-          response = NO;
+          response = YES;
         }
       }];
   return response;

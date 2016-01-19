@@ -245,7 +245,8 @@
                                 andValue:feature.identifier];
         }
 
-        [featureDao create:newRow];
+        long newId = [featureDao create:newRow];
+        [feature setIdentifier:[[NSNumber numberWithLong:newId] stringValue]];
         [subscriber sendCompleted];
         return nil;
       }];
@@ -289,7 +290,7 @@
 - (RACSignal *)query:(SCQueryFilter *)filter {
   __block int limit = 0;
   return
-      [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSArray *arr = self.gpkg.featureTables;
         NSMutableSet *featureTableSet = [NSMutableSet setWithArray:arr];
         NSSet *layerQuerySet = [NSSet setWithArray:filter.layerIds];
@@ -311,25 +312,26 @@
           int layerCount = 0;
           while (limit < filterLimit && rs != nil && [rs moveToNext] &&
                  layerCount < perLayer) {
-            SCSpatialFeature *feature =
+            SCSpatialFeature *f =
                 [self createSCSpatialFeature:[dao getFeatureRow:rs]];
-            [subscriber sendNext:feature];
-            layerCount++;
+
+            if ([f isKindOfClass:[SCGeometry class]] && filter != nil) {
+              BOOL check = [filter testValue:f];
+              if (check) {
+                limit++;
+                layerCount++;
+                [subscriber sendNext:f];
+              }
+            } else {
+              limit++;
+              layerCount++;
+              [subscriber sendNext:f];
+            }
           }
           [rs close]; // Must Close connection before disposing of Observable
         }];
         [subscriber sendCompleted];
         return nil;
-      }] filter:^BOOL(SCSpatialFeature *f) {
-        if ([f isKindOfClass:[SCGeometry class]] && filter != nil) {
-          BOOL check = [filter testValue:f];
-          if (check) {
-            limit++;
-          }
-          return check;
-        }
-        limit++;
-        return YES;
       }] subscribeOn:[RACScheduler
                          schedulerWithPriority:RACSchedulerPriorityBackground]];
 }

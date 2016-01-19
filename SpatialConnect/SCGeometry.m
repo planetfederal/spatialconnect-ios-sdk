@@ -49,7 +49,7 @@
   return [self description];
 }
 
-- (BOOL)checkWithin:(SCBoundingBox *)bbox {
+- (BOOL)isContained:(SCBoundingBox *)bbox {
   return NO;
 }
 

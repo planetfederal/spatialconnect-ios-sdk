@@ -21,4 +21,6 @@
 
 @interface SCWebAppZipLoader : NSObject
 
++ (NSString *)unzipFile:(NSString *)zipFilePath;
+
 @end
