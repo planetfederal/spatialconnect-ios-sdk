@@ -10,11 +10,11 @@ iOS 8+
 
 ## Dependencies
 
-Carthage is used to build frameworks for the library.
-
-[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)
-
-[ZipZap](https://github.com/pixelglow/ZipZap)
+[ReactiveCocoa 2.5](https://github.com/ReactiveCocoa/ReactiveCocoa)  
+[ZipZap 8.0.6](https://github.com/pixelglow/ZipZap)
+[libextobjc 0.4.1](https://github.com/jspahrsummers/libextobjc)
+[Geopackage-iOS](https://github.com/boundlessgeo/geopackage-ios)
+[Geopackage-wkb-iOS](https://github.com/boundlessgeo/geopackage-wkb-ios)
 
 ## Store Configuration
 The stores array will load the stores on start in no guaranteed order. The configuration files will have an extension of ".scfg". SpatialConnect can support multiple configs and will be loaded in no guaranteed order.
@@ -41,14 +41,21 @@ This unique identifier can be generated online [here](https://guidgenerator.com)
             "version": "1",
             "uri": "feature.geojson",
             "id":"276d2186-24f4-11e5-b345-feff819cdc9f"
-        },       
-        {
-            "type" : "tms",
-            "uri" : "http://tile.openstreetmap.org",
-            "mime_type" : "png",
-            "zoom_levels" : [0,18],
-            "id":"b769ba61-4ca6-459a-adba-24187febec81"
-        }
+        },   
+		{
+			"type":"gpkg",
+			"version":"1",
+			"name":"Haiti",
+			"uri":"http://www.geopackage.org/data/haiti-vectors-split.gpkg",
+			"id":"a5d93796-5026-46f7-a2ff-e5dec85heh6b"
+		},
+		{
+			"type":"gpkg",
+			"version":"1",
+			"name":"Whitehorse Imagery",
+			"uri":"https://portal.opengeospatial.org/files/63156",
+			"id":"ba293796-5026-46f7-a2ff-e5dec85heh6b"
+		}
       ]
     }
 
