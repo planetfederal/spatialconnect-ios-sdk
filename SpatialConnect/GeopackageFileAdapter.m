@@ -393,6 +393,8 @@
     if (obj) {
       [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]
                                       forKey:name];
+    } else {
+      [scSpatialFeature.properties setObject:[NSNull null] forKey:name];
     }
   }];
 

@@ -62,11 +62,11 @@
 }
 
 - (NSArray *)layerList {
-  return nil;
+  return @[ @"default" ];
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return
+  return [
       [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *readError = nil;
         NSDictionary *dict = [self.connector read:&readError];
@@ -103,6 +103,10 @@
           }
         }
         return YES;
+      }] map:^SCGeometry *(SCGeometry *g) {
+        g.layerId = self.layerList[0];
+        g.storeId = self.storeId;
+        return g;
       }];
 }
 

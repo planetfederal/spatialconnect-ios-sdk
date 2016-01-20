@@ -17,26 +17,28 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-#import "SCMultiPoint+MapKit.h"
-#import "SCPoint+MapKit.h"
 #import "SCBoundingBox.h"
 #import "SCGeometry+MapKit.h"
+#import "SCMultiPoint+MapKit.h"
+#import "SCPoint+MapKit.h"
 
 @implementation SCMultiPoint (MapKit)
 
-- (NSArray*) shape {
-  NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:self.points.count];
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
-    [arr addObject:[p shape]];
-  }];
+- (NSArray *)shape {
+  NSMutableArray *arr =
+      [[NSMutableArray alloc] initWithCapacity:self.points.count];
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        [arr addObject:[p shape]];
+      }];
   return [NSArray arrayWithArray:arr];
 }
 
-- (void)addToMap:(MKMapView*)mapview {
-  [mapview addAnnotations:self.shape];
+- (void)addToMap:(MKMapView *)mapview {
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        [p addToMap:mapview];
+      }];
 }
 
 @end
