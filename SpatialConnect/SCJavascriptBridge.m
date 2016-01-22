@@ -77,7 +77,6 @@ NSString *const SCJavascriptBridgeErrorDomain =
         CLLocationDistance alt = loc.altitude;
         float lat = loc.coordinate.latitude;
         float lon = loc.coordinate.longitude;
-        NSLog(@"%f", lat);
         [_bridge callHandler:@"lastKnownLocation"
                         data:@{
                           @"latitude" : [NSNumber numberWithFloat:lat],
@@ -230,7 +229,14 @@ NSString *const SCJavascriptBridgeErrorDomain =
       NSLog(@"%@", err.description);
     }
     SCSpatialFeature *feat = [SCGeoJSON parseDict:geoJsonDict];
-    [s create:feat];
+    [[s create:feat] subscribeError:^(NSError *error) {
+
+    }
+        completed:^{
+          SCGeometry *g = (SCGeometry *)feat;
+          [self.bridge callHandler:@"createFeature" data:g.geoJSONDict];
+        }];
+
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:-57
