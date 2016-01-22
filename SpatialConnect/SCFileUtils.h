@@ -21,6 +21,7 @@
 
 @interface SCFileUtils : NSObject
 
++ (NSDictionary *)jsonStringToDict:(NSString *)string error:(NSError **)err;
 + (NSDictionary *)jsonFileToDict:(NSString *)filepath error:(NSError **)err;
 + (NSString *)filePathFromDocumentsDirectory:(NSString *)fileName;
 + (NSString *)filePathFromSelfBundle:(NSString *)fileName;

@@ -36,7 +36,6 @@
 
 @property(nonatomic, strong) SCServiceManager *manager;
 
-+ (SpatialConnect *)sharedInstance;
 - (instancetype)initWithFilepath:(NSString *)filepath;
 - (instancetype)initWithFilepaths:(NSArray *)filepaths;
 - (void)startAllServices;

@@ -29,6 +29,12 @@
  *
  *  @return NSDictionary from valid JSON Object
  */
++ (NSDictionary *)jsonStringToDict:(NSString *)string error:(NSError **)err {
+  NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+  NSDictionary *dict = [[JSONDecoder decoder] objectWithData:data error:err];
+  return dict;
+}
+
 + (NSDictionary *)jsonFileToDict:(NSString *)filepath error:(NSError **)err {
   BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:filepath];
   if (fileExist) {

@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-#import "SpatialConnect.h"
-#import "SCNetworkService.h"
 #import "SCDataService.h"
 #import "SCLoggingAssertionHandler.h"
+#import "SCNetworkService.h"
+#import "SpatialConnect.h"
 
 @interface SpatialConnect ()
 
@@ -29,15 +29,6 @@
 @end
 
 @implementation SpatialConnect
-
-+ (SpatialConnect *)sharedInstance {
-  static SpatialConnect *_sharedInstance = nil;
-  static dispatch_once_t oncePredicate;
-  dispatch_once(&oncePredicate, ^{
-    _sharedInstance = [[SpatialConnect alloc] init];
-  });
-  return _sharedInstance;
-}
 
 - (id)init {
   if (self = [super init]) {
