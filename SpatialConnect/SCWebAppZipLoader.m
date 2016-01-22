@@ -33,9 +33,10 @@
                               error:nil];
   NSError *error;
   ZZArchive *archive =
-      [ZZArchive archiveWithURL:[NSURL fileURLWithPath:zipFilePath] error:&error];
+      [ZZArchive archiveWithURL:[NSURL fileURLWithPath:zipFilePath]
+                          error:&error];
   if (error) {
-    NSLog(@"%@",error.debugDescription);
+    NSLog(@"%@", error.debugDescription);
   }
   NSString *indexHTMLPath = nil;
   for (ZZArchiveEntry *entry in archive.entries) {
@@ -61,7 +62,7 @@
         indexHTMLPath = [targetPath path];
       }
 
-      [[entry newDataWithError:nil] writeToURL:targetPath atomically:NO];
+      [[entry newDataWithError:nil] writeToURL:targetPath atomically:YES];
     }
   }
   return indexHTMLPath;

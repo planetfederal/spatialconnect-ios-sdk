@@ -30,10 +30,12 @@
 
 - (id)initWithWebView:(UIWebView *)wv
              delegate:(id<UIWebViewDelegate>)d
+       spatialConnect:(SpatialConnect *)scon
           andFilepath:(NSString *)fp {
   if (self = [super init]) {
     webview = wv;
     webviewDelegate = d;
+    sc = scon;
     filepath = fp;
   }
   return self;
@@ -41,11 +43,13 @@
 
 - (id)initWithWebView:(UIWebView *)wv
              delegate:(id<UIWebViewDelegate>)d
+       spatialConnect:(SpatialConnect *)scon
            andZipFile:(NSString *)fp {
 
   if (self = [super init]) {
     webview = wv;
     webviewDelegate = d;
+    sc = scon;
     filepath = [self zipPathToFilepath:fp];
   }
   return self;
@@ -59,10 +63,9 @@
   if (_bridge) {
     return;
   }
-  _bridge = [[SCJavascriptBridge alloc]
-      initWithWebView:webview
-             delegate:webviewDelegate
-                   sc:[SpatialConnect sharedInstance]];
+  _bridge = [[SCJavascriptBridge alloc] initWithWebView:webview
+                                               delegate:webviewDelegate
+                                                     sc:sc];
 
   [self loadEntryPage];
 }

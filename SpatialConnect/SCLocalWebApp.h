@@ -23,15 +23,19 @@
   UIWebView *webview;
   NSString *filepath;
   id<UIWebViewDelegate> webviewDelegate;
+  SpatialConnect *sc;
 }
 
 - (id)initWithWebView:(UIWebView *)wv
              delegate:(id<UIWebViewDelegate>)d
+       spatialConnect:(SpatialConnect *)scon
           andFilepath:(NSString *)fp;
 
 - (id)initWithWebView:(UIWebView *)wv
              delegate:(id<UIWebViewDelegate>)d
+       spatialConnect:(SpatialConnect *)scon
            andZipFile:(NSString *)fp;
+
 - (void)load;
 
 @end

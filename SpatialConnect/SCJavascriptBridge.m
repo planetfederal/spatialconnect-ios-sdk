@@ -17,6 +17,7 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCJavascriptBridge.h"
 #import "SCJavascriptCommands.h"
@@ -107,28 +108,30 @@ NSString *const SCJavascriptBridgeErrorDomain =
       [self activeStoreList:subscriber];
       break;
     case DATASERVICE_ACTIVESTOREBYID:
-      [self activeStoreById:command[@"value"] responseSubscriber:subscriber];
+      [self activeStoreById:command[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_SPATIALQUERY:
-      [self queryStoreById:command[@"value"] responseSubcriber:subscriber];
+      [self queryStoreById:command[@"payload"] responseSubcriber:subscriber];
       break;
     case DATASERVICE_SPATIALQUERYALL:
-      [self queryAllStores:command[@"value"] responseSubscriber:subscriber];
+      [self queryAllStores:command[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERY:
-      [self queryAllGeoStores:command[@"value"] responseSubscriber:subscriber];
+      [self queryAllGeoStores:command[@"payload"]
+           responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERYALL:
-      [self queryGeoStoreById:command[@"value"] responseSubscriber:subscriber];
+      [self queryGeoStoreById:command[@"payload"]
+           responseSubscriber:subscriber];
       break;
     case DATASERVICE_CREATEFEATURE:
-      [self createFeature:command[@"value"] responseSubscriber:subscriber];
+      [self createFeature:command[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_UPDATEFEATURE:
-      [self updateFeature:command[@"value"] responseSubscriber:subscriber];
+      [self updateFeature:command[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_DELETEFEATURE:
-      [self deleteFeature:command[@"value"] responseSubscriber:subscriber];
+      [self deleteFeature:command[@"payload"] responseSubscriber:subscriber];
       break;
     case SENSORSERVICE_GPS:
       num = [NSNumber numberWithLong:(long)command[@"payload"]];
@@ -214,11 +217,19 @@ NSString *const SCJavascriptBridgeErrorDomain =
 
 - (void)createFeature:(NSDictionary *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
-  SCDataStore *store = [self.spatialConnect.manager.dataService
-      storeByIdentifier:[value[@"storeId"] stringValue]];
+  NSString *storeId = [value objectForKey:@"storeId"];
+  NSString *geoJson = [value objectForKey:@"feature"];
+  SCDataStore *store =
+      [self.spatialConnect.manager.dataService storeByIdentifier:storeId];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
-    SCSpatialFeature *feat = [SCGeoJSON parseDict:value];
+    NSError *err;
+    NSDictionary *geoJsonDict =
+        [SCFileUtils jsonStringToDict:geoJson error:&err];
+    if (err) {
+      NSLog(@"%@", err.description);
+    }
+    SCSpatialFeature *feat = [SCGeoJSON parseDict:geoJsonDict];
     [s create:feat];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
