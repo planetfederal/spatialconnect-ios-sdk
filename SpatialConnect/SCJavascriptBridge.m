@@ -200,9 +200,11 @@ NSString *const SCJavascriptBridgeErrorDomain =
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter] subscribeNext:^(SCGeometry *g) {
     NSDictionary *gj = g.geoJSONDict;
-    [subscriber sendCompleted];
     [self.bridge callHandler:@"spatialQuery" data:gj];
-  }];
+  }
+      completed:^{
+        [subscriber sendCompleted];
+      }];
 }
 
 - (void)spatialConnectGPS:(id)value {
@@ -247,12 +249,32 @@ NSString *const SCJavascriptBridgeErrorDomain =
 
 - (void)updateFeature:(NSDictionary *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
-  SCDataStore *store = [self.spatialConnect.manager.dataService
-      storeByIdentifier:[value[@"storeId"] stringValue]];
+  NSString *jsonStr = value[@"feature"];
+  NSError *err;
+  NSDictionary *gjDict = [SCFileUtils jsonStringToDict:jsonStr error:&err];
+  if (err) {
+    NSLog(@"%@", err.description);
+  }
+  SCGeometry *geom = [SCGeoJSON parseDict:gjDict];
+  SCKeyTuple *t = [SCKeyTuple tupleFromEncodedCompositeKey:geom.identifier];
+  geom.storeId = t.storeId;
+  geom.layerId = t.layerId;
+  geom.identifier = t.featureId;
+
+  SCDataStore *store =
+      [self.spatialConnect.manager.dataService storeByIdentifier:geom.storeId];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
-    SCSpatialFeature *feat = [SCGeoJSON parseDict:value];
-    [s update:feat];
+    [[s update:geom] subscribeError:^(NSError *error) {
+      NSError *err =
+          [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
+                              code:SCJSERROR_DATASERVICE_UPDATEFEATURE
+                          userInfo:nil];
+      [subscriber sendError:err];
+    }
+        completed:^{
+          [subscriber sendCompleted];
+        }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_UPDATEFEATURE
@@ -261,15 +283,23 @@ NSString *const SCJavascriptBridgeErrorDomain =
   }
 }
 
-- (void)deleteFeature:(NSDictionary *)value
+- (void)deleteFeature:(NSString *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
-  SCDataStore *store = [self.spatialConnect.manager.dataService
-      storeByIdentifier:[value[@"storeId"] stringValue]];
+  SCKeyTuple *key = [SCKeyTuple tupleFromEncodedCompositeKey:value];
+  SCDataStore *store =
+      [self.spatialConnect.manager.dataService storeByIdentifier:key.storeId];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
-    SCKeyTuple *key =
-        [SCKeyTuple tupleFromEncodedCompositeKey:[value[@"id"] stringValue]];
-    [s delete:key];
+    [[s delete:key] subscribeError:^(NSError *error) {
+      NSError *err =
+          [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
+                              code:SCJSERROR_DATASERVICE_DELETEFEATURE
+                          userInfo:nil];
+      [subscriber sendError:err];
+    }
+        completed:^{
+          [subscriber sendCompleted];
+        }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_DELETEFEATURE

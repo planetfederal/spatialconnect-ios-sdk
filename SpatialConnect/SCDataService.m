@@ -206,9 +206,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   [[self activeStoreList] enumerateObjectsUsingBlock:^(
                               SCDataStore *ds, NSUInteger idx, BOOL *stop) {
     NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
-    [store setObject:ds.storeId forKey:@"storeid"];
+    [store setObject:ds.storeId forKey:@"storeId"];
     [store setObject:ds.name forKey:@"name"];
     [store setObject:kSERVICENAME forKey:@"service"];
+    [store setObject:ds.type forKey:@"type"];
     [arr addObject:store];
   }];
   return [NSArray arrayWithArray:arr];
@@ -254,7 +255,8 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 #pragma mark Store Query/Messaging Methods
 - (RACSignal *)queryAllStoresOfProtocol:(Protocol *)protocol
                                  filter:(SCQueryFilter *)filter {
-  return nil; // TODO
+  return [self queryStores:[self storesByProtocol:protocol onlyRunning:YES]
+                    filter:filter];
 }
 
 - (RACSignal *)send:(SEL *)selector
@@ -271,12 +273,16 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter {
+  NSArray *arr = [self storesByProtocol:@protocol(SCSpatialStore)];
+  return [self queryStores:arr filter:filter];
+}
+
+- (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter {
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        NSArray *arr = [self storesByProtocol:@protocol(SCSpatialStore)];
         __block NSUInteger queryCompleted = 0;
-        __block NSUInteger count = arr.count;
-        [[[[arr rac_sequence] signal]
+        __block NSUInteger count = stores.count;
+        [[[[stores rac_sequence] signal]
             flattenMap:^RACStream *(id<SCSpatialStore> store) {
               return [RACSignal
                   createSignal:^RACDisposable *(id<RACSubscriber> qSub) {

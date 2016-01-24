@@ -22,7 +22,7 @@
 
 @interface SCSpatialFeature : NSObject
 
-@property(nonatomic) NSObject *identifier;
+@property(nonatomic) NSString *identifier;
 @property(nonatomic) NSDate *date;
 @property(nonatomic) NSDate *createdAt;
 @property(nonatomic) NSMutableDictionary *properties;

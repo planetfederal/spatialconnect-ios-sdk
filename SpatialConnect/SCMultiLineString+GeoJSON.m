@@ -17,28 +17,29 @@
 * under the License.
 ******************************************************************************/
 
-
-
-#import "SCMultiLineString+GeoJSON.h"
-#import "SCLineString+GeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
+#import "SCLineString+GeoJSON.h"
+#import "SCMultiLineString+GeoJSON.h"
 
 @implementation SCMultiLineString (GeoJSON)
 
-- (NSDictionary*)geoJSONDict {
+- (NSDictionary *)geoJSONDict {
   NSMutableDictionary *dict = [super geoJSONDict];
-  NSDictionary *geometry = [NSDictionary dictionaryWithObjects:@[@"LineString",[self coordinateArray]] forKeys:@[@"type",@"coordinates"]];
+  NSDictionary *geometry = [NSDictionary
+      dictionaryWithObjects:@[ @"MultiLineString", [self coordinateArray] ]
+                    forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 
-- (NSArray*)coordinateArray {
-  return [[self.linestrings.rac_sequence map:^NSArray*(SCLineString *lineString) {
-    return lineString.coordinateArray;
-  }] array];
+- (NSArray *)coordinateArray {
+  return
+      [[self.linestrings.rac_sequence map:^NSArray *(SCLineString *lineString) {
+        return lineString.coordinateArray;
+      }] array];
 }
 
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   return [super geoJSONString];
 }
 @end

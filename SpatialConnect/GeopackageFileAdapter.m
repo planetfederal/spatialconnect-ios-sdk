@@ -391,8 +391,10 @@
                           NSString *name, NSUInteger idx, BOOL *_Nonnull stop) {
     NSObject *obj = [row getValueWithColumnName:name];
     if (obj) {
-      [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]
-                                      forKey:name];
+      if (![obj isKindOfClass:[GPKGGeometryData class]]) {
+        [scSpatialFeature.properties setObject:[row getValueWithColumnName:name]
+                                        forKey:name];
+      }
     } else {
       [scSpatialFeature.properties setObject:[NSNull null] forKey:name];
     }

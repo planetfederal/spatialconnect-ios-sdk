@@ -35,7 +35,7 @@
 - (NSMutableDictionary*)geoJSONDict {
   NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
   if (self.identifier) {
-    dict[@"id"] = self.identifier;
+    dict[@"id"] = self.key.encodedCompositeKey;
   }
   if (self.properties) {
     dict[@"properties"] = self.properties;
