@@ -41,21 +41,13 @@
 }
 
 + (instancetype)filterFromDictionary:(NSDictionary *)dictionary {
-  SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-  NSArray *filters = dictionary[@"filters"];
-  [filter addPredicates:[[filters.rac_sequence
-                            map:^SCPredicate *(NSDictionary *dictionary) {
-                              return [SCPredicate predicateFromDict:dictionary];
-                            }] array]];
-  return filter;
-}
-
-+ (instancetype)filterFromDictionaryArray:(NSArray *)arr {
-  SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-  [filter addPredicates:[[arr.rac_sequence
-                            map:^SCPredicate *(NSDictionary *dictionary) {
-                              return [SCPredicate predicateFromDict:dictionary];
-                            }] array]];
+  __block SCQueryFilter *filter = [[SCQueryFilter alloc] init];
+  NSDictionary *filters = dictionary[@"filter"];
+  [filters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
+                                               BOOL *stop) {
+    SCPredicate *p = [SCPredicate predicateType:key clause:obj];
+    [filter addPredicate:p];
+  }];
   return filter;
 }
 

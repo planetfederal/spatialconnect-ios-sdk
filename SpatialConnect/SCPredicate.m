@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCPredicate.h"
-#import "SCJavascriptCommands.h"
+#import "SCBoundingBox.h"
+#import "SCFIlterEqual.h"
 #import "SCFilter.h"
 #import "SCFilterBetween.h"
 #import "SCFilterGreaterThan.h"
@@ -31,10 +31,11 @@
 #import "SCFilterNotEqual.h"
 #import "SCFilterNotIn.h"
 #import "SCFilterNotLike.h"
-#import "SCFIlterEqual.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeoFilterDisjoint.h"
 #import "SCGeoJSON.h"
+#import "SCJavascriptCommands.h"
+#import "SCPredicate.h"
 
 @interface SCPredicate (Private)
 - (void)setComparator:(NSInteger)c;
@@ -45,91 +46,11 @@
 
 @synthesize filter = _filter;
 
-+ (instancetype)predicateFromDict:(NSDictionary *)d {
-  NSDictionary *dict;
-  if ((dict = d[SCJS_GEO_CONTAINS])) {
-    SCGeometry *g = [SCGeoJSON parseDict:dict[@"geometry"]];
-    NSString *k = dict[@"key"];
-    SCGeoFilterContains *f =
-        [[SCGeoFilterContains alloc] initWithGeometry:g andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if ((dict = d[SCJS_GEO_DISJOINT])) {
-    SCGeometry *g = [SCGeoJSON parseDict:dict[@"geometry"]];
-    NSString *k = dict[@"key"];
-    SCGeoFilterDisjoint *f =
-        [[SCGeoFilterDisjoint alloc] initWithGeometry:g andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if ((dict = d[SCJS_GREATER_THAN])) {
-    NSObject *o = dict[@"value"];
-    NSString *k = dict[@"key"];
-    SCFilterGreaterThan *f =
-        [[SCFilterGreaterThan alloc] initWithValue:o andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if ((dict = d[SCJS_GREATER_THAN_EQUAL])) {
-    NSObject *o = dict[@"value"];
-    NSString *k = dict[@"key"];
-    SCFilterGreaterThanEqual *f =
-        [[SCFilterGreaterThanEqual alloc] initWithValue:o andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_LESS_THAN]) {
-    NSObject *o = dict[@"value"];
-    NSString *k = dict[@"key"];
-    SCFilterLessThan *f =
-        [[SCFilterLessThan alloc] initWithValue:o andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_LESS_THAN_EQUAL]) {
-    NSObject *o = dict[@"value"];
-    NSString *k = dict[@"key"];
-    SCFilterLessThanEqual *f =
-        [[SCFilterLessThanEqual alloc] initWithValue:o andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_EQUAL]) {
-    NSObject *o = dict[@"value"];
-    NSString *k = dict[@"key"];
-    SCFilterEqual *f = [[SCFilterEqual alloc] initWithValue:o andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_NOT_EQUAL]) {
-    NSObject *o = dict[@"value"];
-    NSString *k = dict[@"key"];
-    SCFilterNotEqual *f =
-        [[SCFilterNotEqual alloc] initWithValue:o andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_BETWEEN]) {
-    NSString *k = dict[@"key"];
-    NSObject *upper = dict[@"upper"];
-    NSObject *lower = dict[@"lower"];
-    SCFilterBetween *f =
-        [[SCFilterBetween alloc] initWithUpper:upper lower:lower andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_NOT_BETWEEN]) {
-    NSString *k = dict[@"key"];
-    NSObject *upper = dict[@"upper"];
-    NSObject *lower = dict[@"lower"];
-    SCFilterNotBetween *f = [[SCFilterNotBetween alloc] initWithUpper:upper
-                                                                lower:lower
-                                                           andKeyPath:k];
-
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_IN]) {
-    NSString *k = dict[@"key"];
-    NSArray *values = [dict[@"values"] array];
-    SCFilterIn *f = [[SCFilterIn alloc] initWithArray:values andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_NOT_IN]) {
-    NSString *k = dict[@"key"];
-    NSArray *values = [dict[@"values"] array];
-    SCFilterNotIn *f =
-        [[SCFilterNotIn alloc] initWithArray:values andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_LIKE]) {
-    NSString *k = dict[@"key"];
-    NSString *value = [dict[@"value"] stringValue];
-    SCFilterLike *f = [[SCFilterLike alloc] initWithValue:value andKeyPath:k];
-    return [[SCPredicate alloc] initWithFilter:f];
-  } else if (dict[SCJS_NOT_LIKE]) {
-    NSString *k = dict[@"key"];
-    NSString *value = [dict[@"value"] stringValue];
-    SCFilterLike *f = [[SCFilterLike alloc] initWithValue:value andKeyPath:k];
++ (instancetype)predicateType:(NSString *)type clause:(NSObject *)clause {
+  if ([type isEqualToString:SCJS_GEO_CONTAINS]) {
+    NSArray *coords = (NSArray *)clause;
+    SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:coords];
+    SCGeoFilterContains *f = [[SCGeoFilterContains alloc] initWithBBOX:bbox];
     return [[SCPredicate alloc] initWithFilter:f];
   }
   return nil;
