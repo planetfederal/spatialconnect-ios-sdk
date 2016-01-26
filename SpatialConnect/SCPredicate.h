@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCGeometry.h"
 #import "SCFilter.h"
 #import "SCFilterProtocol.h"
+#import "SCGeometry.h"
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, SCPredicateComparison) {
   SCPREDICATE_OPERATOR_EQUAL,
@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, SCGeometryPredicateComparison) {
 
 @property(nonatomic, readonly) id<SCFilterProtocol> filter;
 
-+ (instancetype)predicateFromDict:(NSDictionary *)dict;
++ (instancetype)predicateType:(NSString *)type clause:(NSObject *)clause;
 
 - (id)initWithFilter:(id<SCFilterProtocol>)filter;
 - (BOOL)compare:(id)value;

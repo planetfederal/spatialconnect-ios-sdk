@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCPredicate.h"
+#import <Foundation/Foundation.h>
 
 @interface SCQueryFilter : NSObject
 

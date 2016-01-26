@@ -35,6 +35,25 @@
   return [[SCBoundingBox alloc] initWithPoints:@[ ll, ur ]];
 }
 
+- (id)initWithCoords:(NSArray *)coords {
+  self = [super init];
+  if (self) {
+    self.lowerLeft = [[SCPoint alloc]
+        initWithCoordinateArray:
+            [coords
+                objectsAtIndexes:[NSIndexSet
+                                     indexSetWithIndexesInRange:NSMakeRange(
+                                                                    0, 2)]]];
+    self.upperRight = [[SCPoint alloc]
+        initWithCoordinateArray:
+            [coords
+                objectsAtIndexes:[NSIndexSet
+                                     indexSetWithIndexesInRange:NSMakeRange(
+                                                                    2, 2)]]];
+  }
+  return self;
+}
+
 - (id)initWithPoints:(NSArray *)points {
   self = [super init];
   if (!self) {

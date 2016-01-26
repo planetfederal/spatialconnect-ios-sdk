@@ -36,6 +36,7 @@ typedef struct {
 
 + (instancetype)worldBounds;
 
+- (id)initWithCoords:(NSArray *)coords;
 - (id)initWithPoints:(NSArray *)points;
 - (void)addPoint:(SCPoint *)pt;
 - (void)addPoints:(NSArray *)pts;
