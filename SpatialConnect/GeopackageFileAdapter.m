@@ -226,31 +226,46 @@
 
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature {
   GPKGFeatureRow *newRow = [self toFeatureRow:feature];
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        GPKGFeatureDao *featureDao =
-            [self.gpkg getFeatureDaoWithTableName:feature.layerId];
-        [feature.properties enumerateKeysAndObjectsUsingBlock:^(
-                                NSString *key, NSObject *obj, BOOL *stop) {
-          [featureDao.table.columnNames
-              enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
-                                           BOOL *stop) {
-                if ([name isEqualToString:key]) {
-                  [newRow setValue:obj forKey:key];
-                }
-              }];
+  return [RACSignal createSignal:^RACDisposable *(
+                        id<RACSubscriber> subscriber) {
+    GPKGFeatureDao *featureDao =
+        [self.gpkg getFeatureDaoWithTableName:feature.layerId];
+    [feature.properties enumerateKeysAndObjectsUsingBlock:^(
+                            NSString *key, NSObject *obj, BOOL *stop) {
+      [featureDao.table.columnNames
+          enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
+                                       BOOL *stop) {
+            if ([name isEqualToString:key]) {
+              [newRow setValue:obj forKey:key];
+            }
+          }];
+    }];
+
+    if ([newRow.getColumnNames containsObject:@"featureid"]) {
+      [newRow setValueWithColumnName:@"featureid" andValue:feature.identifier];
+    }
+
+    long newId = [featureDao create:newRow];
+    [feature setIdentifier:[[NSNumber numberWithLong:newId] stringValue]];
+
+    // Fill the properties
+    [newRow.getColumnNames
+        enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx,
+                                     BOOL *_Nonnull stop) {
+          NSObject *obj = [newRow getValueWithColumnName:name];
+          if (obj) {
+            if (![obj isKindOfClass:[GPKGGeometryData class]]) {
+              [feature.properties setObject:[newRow getValueWithColumnName:name]
+                                     forKey:name];
+            }
+          } else {
+            [feature.properties setObject:[NSNull null] forKey:name];
+          }
         }];
 
-        if ([newRow.getColumnNames containsObject:@"featureid"]) {
-          [newRow setValueWithColumnName:@"featureid"
-                                andValue:feature.identifier];
-        }
-
-        long newId = [featureDao create:newRow];
-        [feature setIdentifier:[[NSNumber numberWithLong:newId] stringValue]];
-        [subscriber sendCompleted];
-        return nil;
-      }];
+    [subscriber sendCompleted];
+    return nil;
+  }];
 }
 
 /**
