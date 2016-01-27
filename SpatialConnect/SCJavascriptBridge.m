@@ -219,6 +219,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
 - (void)createFeature:(NSDictionary *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
   NSString *storeId = [value objectForKey:@"storeId"];
+  NSString *layerId = [value objectForKey:@"layerId"];
   NSString *geoJson = [value objectForKey:@"feature"];
   SCDataStore *store =
       [self.spatialConnect.manager.dataService storeByIdentifier:storeId];
@@ -231,8 +232,10 @@ NSString *const SCJavascriptBridgeErrorDomain =
       NSLog(@"%@", err.description);
     }
     SCSpatialFeature *feat = [SCGeoJSON parseDict:geoJsonDict];
+    feat.storeId = storeId;
+    feat.layerId = layerId;
     [[s create:feat] subscribeError:^(NSError *error) {
-
+      NSLog(@"Error creating Feature");
     }
         completed:^{
           SCGeometry *g = (SCGeometry *)feat;
