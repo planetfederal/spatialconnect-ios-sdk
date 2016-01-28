@@ -37,7 +37,7 @@ This is the version of adapter that SpatialConnect will use "geojson.1" will be 
 This is the filepath to the resource relative to the config file location.
 #### id ####
 This unique identifier can be generated online [here](https://guidgenerator.com) or using any other unique identifier. Identifiers are not required by SpatialConnect to be a hash. If there is a collision between identifiers, the last loaded store will overwrite all previously loaded stores with the same identifier. 
-
+```
     {
       "stores":[
         {
@@ -68,11 +68,11 @@ This unique identifier can be generated online [here](https://guidgenerator.com)
 		}
       ]
     }
-
+```
 
 ### Data Stores and the DataService
 The `SCDataService` is responsible for interacting with the data stores.  All data stores must implement the `SCSpatialStore` interface which provides methods to interact with the data store.  Here's what it looks like:
-```
+```objective-c
 - (RACSignal *)query:(SCQueryFilter *)filter;
 - (RACSignal *)queryById:(SCKeyTuple *)key;
 - (RACSignal *)create:(SCSpatialFeature *)feature;
@@ -125,7 +125,7 @@ There are a few different ways to query for features but the main idea is to cre
 
 Let's see how this works with an example.  Let's say you want to query for all features that exist within a specific bounding box.  You would first need to build an `SCQueryFilter` with an`SCPredicate` that uses a `SCBoundingBox` like this:
 
-```
+```objective-c
 SCBoundingBox *bbox = [[SCBoundingBox alloc] init];
 [bbox setUpperRight:[SCPoint pointFromCLLocationCoordinate2D:neCoord]];
 [bbox setLowerLeft:[SCPoint pointFromCLLocationCoordinate2D:swCoord]];
@@ -137,7 +137,7 @@ SCPredicate *predicate = [[SCPredicate alloc] initWithFilter:gfc];
 
 Now to query across all stores for features in that bounding box, we can use the data service like this:
 
-```
+```objective-c
 AppDelegate *ad = [[UIApplication sharedApplication] delegate];
 SpatialConnect *sc = [ad spatialConnectSharedInstance];
 @weakify(self);
@@ -208,11 +208,11 @@ To run the tests open XCode and run the test scheme.
 
 ## Dependencies
 
-[ReactiveCocoa 2.5](https://github.com/ReactiveCocoa/ReactiveCocoa)  
-[ZipZap 8.0.6](https://github.com/pixelglow/ZipZap)
-[libextobjc 0.4.1](https://github.com/jspahrsummers/libextobjc)
-[Geopackage-iOS](https://github.com/boundlessgeo/geopackage-ios)
-[Geopackage-wkb-iOS](https://github.com/boundlessgeo/geopackage-wkb-ios)
+[ReactiveCocoa 2.5](https://github.com/ReactiveCocoa/ReactiveCocoa)   
+[ZipZap 8.0.6](https://github.com/pixelglow/ZipZap)   
+[libextobjc 0.4.1](https://github.com/jspahrsummers/libextobjc)   
+[Geopackage-iOS](https://github.com/boundlessgeo/geopackage-ios)   
+[Geopackage-wkb-iOS](https://github.com/boundlessgeo/geopackage-wkb-ios)   
 
 ## License
 
