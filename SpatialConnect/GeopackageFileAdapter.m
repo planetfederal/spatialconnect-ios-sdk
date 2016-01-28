@@ -207,8 +207,9 @@
                           NSString *key, NSObject *obj, BOOL *stop) {
     NSArray *cols = fDao.getFeatureTable.columnNames;
     if ([cols containsObject:key]) {
-      if (![key isEqualToString:@"fid"]) { // TODO Properly find Geopackage FID
-                                           // from table
+      if (!([key isEqualToString:@"fid"] ||
+            [key isEqualToString:@"id"])) { // TODO Properly find Geopackage FID
+                                            // from table
         [row setValueWithColumnName:key andValue:obj];
       }
     } else {
