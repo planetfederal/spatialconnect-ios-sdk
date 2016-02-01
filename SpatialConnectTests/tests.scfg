@@ -1,0 +1,32 @@
+{
+"stores":[
+{
+"type": "geojson",
+"version": "1",
+"uri": "all.geojson",
+"id":"63602599-3ad3-439f-9c49-3c8a7579933b",
+"name":"Simple"
+},
+{
+"type":"geojson",
+"version":"1",
+"name":"20m Points",
+"uri":"gz_2010_us_500_11_20m.json",
+"id":"a5d93796-5026-46f7-a2ff-e5dec85d116b"
+},
+{
+"type":"gpkg",
+"version":"1",
+"name":"Haiti",
+"uri":"http://www.geopackage.org/data/haiti-vectors-split.gpkg",
+"id":"a5d93796-5026-46f7-a2ff-e5dec85heh6b"
+},
+{
+"type":"gpkg",
+"version":"1",
+"name":"Whitehorse",
+"uri":"https://portal.opengeospatial.org/files/63156",
+"id":"ba293796-5026-46f7-a2ff-e5dec85heh6b"
+}
+]
+}
