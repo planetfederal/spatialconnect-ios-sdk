@@ -322,7 +322,9 @@
         __block int perLayer;
         [queryLayers enumerateObjectsUsingBlock:^(NSString *tableName,
                                                   NSUInteger idx, BOOL *stop) {
-          perLayer = filterLimit / queryLayers.count;
+          perLayer = filterLimit <= queryLayers.count
+                         ? filterLimit
+                         : filterLimit / queryLayers.count;
           GPKGFeatureDao *dao =
               [self.gpkg getFeatureDaoWithTableName:tableName];
           rs = [dao queryForAll];
