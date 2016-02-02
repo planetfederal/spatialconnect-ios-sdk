@@ -22,10 +22,10 @@
 
 @interface SCQueryFilter : NSObject
 
-@property(nonatomic) NSMutableArray *predicates;
-@property(nonatomic) NSMutableArray *layerIds;
+@property(nonatomic,readonly) NSMutableArray *predicates;
+@property(nonatomic,readonly) NSMutableArray *layerIds;
 
-@property(nonatomic) NSInteger limit;
+@property NSInteger limit;
 
 + (instancetype)filterFromDictionary:(NSDictionary *)dictionary;
 
@@ -33,6 +33,8 @@
 - (void)addPredicates:(NSArray *)predicates;
 - (void)addLayerId:(NSString *)layerId;
 - (void)addLayerIds:(NSArray *)layerIds;
-
+- (NSString *)buildWhereClause;
 - (BOOL)testValue:(id)value;
+- (NSArray*)geometryFilters;
+- (NSArray*)propertyFilters;
 @end

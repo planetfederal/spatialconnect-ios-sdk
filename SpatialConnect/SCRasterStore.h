@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  ******************************************************************************/
-@import MapKit;
+#import <MapKit/MapKit.h>
 
 @protocol SCRasterStore <NSObject>
 

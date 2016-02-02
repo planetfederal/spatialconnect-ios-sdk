@@ -19,7 +19,6 @@
 
 #import "SCMultiLineString+GPKG.h"
 #import "WKBMultiLineString.h"
-#import <geopackage-ios/GPKGGeometryData.h>
 #import "SCLineString+GPKG.h"
 
 @implementation SCMultiLineString (GPKG)
@@ -36,20 +35,8 @@
   return self;
 }
 
-- (GPKGGeometryData *)wkb {
-  WKBMultiLineString *mls =
-      [[WKBMultiLineString alloc] initWithType:WKB_MULTILINESTRING
-                                       andHasZ:NO
-                                       andHasM:NO];
-  [self.linestrings
-      enumerateObjectsUsingBlock:^(SCLineString *ls, NSUInteger idx,
-                                   BOOL *_Nonnull stop) {
-        [mls addLineString:ls.wkGeometry];
-      }];
-  GPKGGeometryData *pointGeomData =
-      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
-  [pointGeomData setGeometry:mls];
-  return pointGeomData;
+- (NSData *)wkb {
+  return nil;
 }
 
 @end

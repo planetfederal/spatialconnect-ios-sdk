@@ -18,12 +18,14 @@
 ******************************************************************************/
 
 #import "SCQueryFilter.h"
+#import "SCGeoFilter.h"
 
-@interface SCQueryFilter (Private)
-
+@interface SCQueryFilter ()
+@property (readwrite) NSMutableArray *predicates;
+@property (readwrite) NSMutableArray *layerIds;
 @end
 
-@implementation SCQueryFilter
+@implementation SCQueryFilter 
 
 @synthesize limit;
 @synthesize predicates = _predicates;
@@ -77,6 +79,43 @@
     }
   }];
   return allTrue;
+}
+
+- (NSString *)buildWhereClause {
+  __block NSMutableString *where = [NSMutableString new];
+  [[self propertyFilters] enumerateObjectsUsingBlock:^(SCPredicate *pred,
+                                                NSUInteger idx, BOOL *stop) {
+    if (idx != 0) {
+      [where appendString:@" AND "];
+    }
+    NSString *sql = [pred.filter asSQL];
+    [where appendString:sql];
+  }];
+  return where;
+}
+
+- (NSArray*)geometryFilters {
+  NSMutableArray *arr = [NSMutableArray new];
+
+  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *p, NSUInteger idx, BOOL * _Nonnull stop) {
+    if ([p.filter isKindOfClass:[SCGeoFilter class]]) {
+      [arr addObject:p];
+    }
+  }];
+
+  return [NSArray arrayWithArray:arr];
+}
+
+- (NSArray*)propertyFilters {
+  NSMutableArray *arr = [NSMutableArray new];
+
+  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *p, NSUInteger idx, BOOL * _Nonnull stop) {
+    if (![p.filter isKindOfClass:[SCGeoFilter class]]) {
+      [arr addObject:p];
+    }
+  }];
+
+  return [NSArray arrayWithArray:arr];
 }
 
 @end

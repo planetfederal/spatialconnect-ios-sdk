@@ -22,8 +22,7 @@
 
 
 #import "SCLinearRing.h"
-
-@import MapKit;
+#import <MapKit/MapKit.h>
 
 @interface SCLinearRing (MapKit) <MKOverlay>
 

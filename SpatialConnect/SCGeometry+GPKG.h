@@ -17,10 +17,14 @@
  * under the License.
  ******************************************************************************/
 
-#import <geopackage-ios/GPKGFeatureRow.h>
 #import "SCGeometry.h"
+#import "WKBGeometry.h"
+#import <objc-geohash/GeoHash.h>
 
 @interface SCGeometry (GPKG)
-- (GPKGGeometryData *)wkb;
-+ (SCGeometry *)fromGeometryData:(GPKGGeometryData *)gData;
+
++ (SCGeometry *)fromGeometryBinary:(NSData*)d;
+- (WKBGeometry *)wkGeometry;
+- (NSData*)bytes;
+
 @end

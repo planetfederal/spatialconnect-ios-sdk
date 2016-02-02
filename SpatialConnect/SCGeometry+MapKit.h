@@ -17,13 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
-
-@import MapKit;
+#import <MapKit/MapKit.h>
 
 @interface SCGeometry (MapKit)
 

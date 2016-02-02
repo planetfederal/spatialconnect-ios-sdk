@@ -22,8 +22,7 @@
 
 
 #import "SCGeometry.h"
-
-@import UIKit;
+#import <UIKit/UIKit.h>
 
 @interface SCLineString : SCGeometry
 

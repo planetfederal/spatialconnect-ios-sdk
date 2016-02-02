@@ -17,22 +17,25 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCMultiPolygon.h"
+#import "SCPoint.h"
 #import "SCPolygon.h"
+#import <objc-geohash/GeoHash.h>
 
 @implementation SCGeoFilterContains
 
-- (NSString *)asSQL {
-  return nil;
-}
-
 - (BOOL)compareLHS:(SCGeometry *)value {
-  if (bbox) {
-    return [value isContained:bbox];
+  if (self.bbox) {
+    return [value isContained:self.bbox];
   }
   return YES;
+}
+
+- (NSString*)asSQL {
+  return nil;
 }
 @end

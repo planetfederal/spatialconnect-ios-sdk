@@ -26,14 +26,14 @@
 
 @synthesize identifier = _identifier;
 @synthesize date;
-@synthesize properties;
+@synthesize properties = _properties;
 @synthesize style;
 @synthesize storeId;
 @synthesize layerId;
 
 - (id)init {
   if (self = [super init]) {
-    properties = [NSMutableDictionary new];
+    _properties = [NSMutableDictionary new];
   }
   return self;
 }
@@ -43,6 +43,13 @@
     _identifier = [[NSUUID UUID] UUIDString];
   }
   return _identifier;
+}
+
+- (NSMutableDictionary*)properties {
+  if (!_properties) {
+    _properties = [NSMutableDictionary new];
+  }
+  return _properties;
 }
 
 - (SCKeyTuple *)key {

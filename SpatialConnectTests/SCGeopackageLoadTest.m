@@ -17,20 +17,20 @@
  * under the License.
  ******************************************************************************/
 
-#import <XCTest/XCTest.h>
-#import "SpatialConnect.h"
-#import "SpatialConnectHelper.h"
-#import "SCStoreStatusEvent.h"
-#import <ReactiveCocoa/ReactiveCocoa.h>
+#import "SCDataStore.h"
 #import "SCGeopackageGeometryExtensions.h"
 #import "SCGeopackageHelper.h"
-#import "SCDataStore.h"
+#import "SCStoreStatusEvent.h"
+#import "SpatialConnect.h"
+#import "SpatialConnectHelper.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import <XCTest/XCTest.h>
 
-@interface SCGeopackageTest : XCTestCase
+@interface SCGeopackageLoadTest : XCTestCase
 @property(nonatomic) SpatialConnect *sc;
 @end
 
-@implementation SCGeopackageTest
+@implementation SCGeopackageLoadTest
 @synthesize sc;
 
 - (void)setUp {
@@ -45,20 +45,21 @@
 - (void)testGpkgDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
 
-  [[SCGeopackageHelper
-      loadGPKGDataStore:self.sc] subscribeNext:^(SCDataStore *ds) {
-    if (ds) {
-      XCTAssertNotNil(ds.defaultLayerName, @"Layer Name shall be set");
-      XCTAssertNotNil(ds.layerList, @"Layer list as array");
-      XCTAssertNoThrow([sc.manager stopAllServices]);
-    } else {
-      XCTAssert(NO, @"Store is nil");
-    }
-    [expect fulfill];
-  } error:^(NSError *error) {
-    XCTAssert(NO, @"Error retrieving store");
-    [expect fulfill];
-  }];
+  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+      subscribeNext:^(SCDataStore *ds) {
+        if (ds) {
+          XCTAssertNotNil(ds.defaultLayerName, @"Layer Name shall be set");
+          XCTAssertNotNil(ds.layerList, @"Layer list as array");
+          XCTAssertNoThrow([sc.manager stopAllServices]);
+        } else {
+          XCTAssert(NO, @"Store is nil");
+        }
+        [expect fulfill];
+      }
+      error:^(NSError *error) {
+        XCTAssert(NO, @"Error retrieving store");
+        [expect fulfill];
+      }];
 
   [sc.manager startAllServices];
   [self waitForExpectationsWithTimeout:120.0 handler:nil];
