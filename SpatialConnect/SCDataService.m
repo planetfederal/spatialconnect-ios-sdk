@@ -305,9 +305,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
         }
             error:^(NSError *error) {
               [subscriber sendError:error];
-            }
-            completed:^{
-              [subscriber sendCompleted];
             }];
         return nil;
       }];
