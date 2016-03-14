@@ -17,20 +17,16 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCDataService.h"
+#import "SCDataStore.h"
+#import "SCFileUtils.h"
 #import "SCServiceManager.h"
 #import "SCStoreConfig.h"
-#import "SCFileUtils.h"
-#import "SCDataStore.h"
-#import "SCDataService.h"
 
 #import <ReactiveCocoa/RACSequence.h>
 
 @interface SCServiceManager ()
-
 - (void)addDefaultServices;
-- (void)loadConfig:(NSString *)filepath;
-- (void)sweepDataDirectory;
-
 @end
 
 @implementation SCServiceManager
@@ -40,78 +36,50 @@
 @synthesize networkService = _networkService;
 @synthesize sensorService = _sensorService;
 @synthesize rasterService = _rasterService;
+@synthesize configService = _configService;
 
 - (id)init {
   if (self = [super init]) {
-    _services = [[NSMutableDictionary alloc] init];
-    _dataService = [[SCDataService alloc] init];
-    _networkService = [[SCNetworkService alloc] init];
-    _sensorService = [[SCSensorService alloc] init];
-    _rasterService = [[SCRasterService alloc] init];
-    [self addDefaultServices];
-    [self sweepDataDirectory];
+    _configService = [[SCConfigService alloc] init];
+    [self initServices];
   }
   return self;
 }
 
 - (instancetype)initWithFilepath:(NSString *)filepath {
-  self = [self init];
-  if (!self) {
-    return nil;
+  self = [super init];
+  if (self) {
+    _configService = [[SCConfigService alloc] initWithFilepath:filepath];
+    [self initServices];
   }
-  [self loadConfig:filepath];
   return self;
 }
 
 - (instancetype)initWithFilepaths:(NSArray *)filepaths {
-  self = [self init];
-  if (!self) {
-    return nil;
+  self = [super init];
+  if (self) {
+    _configService = [[SCConfigService alloc] initWithFilepaths:filepaths];
+    [self initServices];
   }
-  [filepaths enumerateObjectsUsingBlock:^(NSString *filepath, NSUInteger idx,
-                                          BOOL *stop) {
-    [self loadConfig:filepath];
-  }];
   return self;
 }
 
-#pragma mark - Private
+// Class store = [self.dataService
+//               supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld",
+//               cfg.type,
+//                                    (long)cfg.version]];
+// SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
+// if (gmStore.key) {
+//  [self.dataService registerStore:gmStore];
+//}
 
-- (void)sweepDataDirectory {
-  NSString *path = [NSSearchPathForDirectoriesInDomains(
-      NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  NSArray *dirs =
-      [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
-                                                          error:NULL];
-
-  [[[dirs.rac_sequence filter:^BOOL(NSString *filename) {
-    if ([filename.pathExtension.lowercaseString isEqualToString:@"scfg"]) {
-      return YES;
-    } else {
-      return NO;
-    }
-  }] signal] subscribeNext:^(NSString *cfgFileName) {
-    [self loadConfig:[NSString stringWithFormat:@"%@/%@", path, cfgFileName]];
-  }];
-}
-
-- (void)loadConfig:(NSString *)filepath {
-  NSError *error;
-  NSDictionary *cfg = [SCFileUtils jsonFileToDict:filepath error:&error];
-  if (error) {
-    return;
-  }
-
-  for (NSDictionary *dict in cfg[@"stores"]) {
-    SCStoreConfig *cfg = [[SCStoreConfig alloc] initWithDictionary:dict];
-    Class store = [self.dataService
-        supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
-                                                       (long)cfg.version]];
-    SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
-    if (gmStore.key) {
-      [self.dataService registerStore:gmStore];
-    }
-  }
+- (void)initServices {
+  _services = [[NSMutableDictionary alloc] init];
+  _dataService = [[SCDataService alloc] init];
+  _networkService = [[SCNetworkService alloc] init];
+  _sensorService = [[SCSensorService alloc] init];
+  _rasterService = [[SCRasterService alloc] init];
+  [self addDefaultServices];
 }
 
 - (void)addDefaultServices {
@@ -119,6 +87,7 @@
   [self addService:self.networkService];
   [self addService:self.sensorService];
   [self addService:self.rasterService];
+  [self addService:self.configService];
 }
 
 #pragma mark - Service Lifecycle
@@ -147,9 +116,27 @@
 }
 
 - (void)startAllServices {
-  for (SCService *service in [self.services allValues]) {
-    [service start];
+  [[[self.configService load] filter:^BOOL(RACTuple *t) {
+    SCConfigEvent evt = (SCConfigEvent)[t.first integerValue];
+    return evt == SC_CONFIG_DATASERVICE_STORE_ADDED;
+  }] subscribeNext:^(RACTuple *t) {
+    SCStoreConfig *cfg = (SCStoreConfig *)t.second;
+    Class store = [self.dataService
+        supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
+                                                       (long)cfg.version]];
+    SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
+    if (gmStore.key) {
+      [self.dataService registerStore:gmStore];
+    }
   }
+      error:^(NSError *error) {
+        NSLog(@"%@", error.description);
+      }
+      completed:^{
+        for (SCService *service in [self.services allValues]) {
+          [service start];
+        }
+      }];
 }
 
 - (void)stopAllServices {

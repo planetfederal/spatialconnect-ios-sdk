@@ -17,39 +17,33 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
-#import <Foundation/Foundation.h>
-#import <ReactiveCocoa/ReactiveCocoa.h>
-#import <ReactiveCocoa/RACSignal.h>
-//#import <RXCollections/RXCollection.h>
-
 #import "SCService.h"
+#import <Foundation/Foundation.h>
+#import <ReactiveCocoa/RACSignal.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @import CoreLocation;
 
 typedef enum : NSUInteger {
-    SC_LOCATION_HIGH = 0,
-    SC_LOCATION_NAVIGATION = 1,
-    SC_LOCATION_LOW = 3
+  SC_LOCATION_HIGH = 0,
+  SC_LOCATION_NAVIGATION = 1,
+  SC_LOCATION_LOW = 3
 } SCLocationAccuracy;
 
-@interface SCSensorService : SCService <CLLocationManagerDelegate>
-{
-    __strong CLLocationManager *locationManager;
-    CLLocationDistance distance;
-    CLLocationAccuracy accuracy;
+@interface SCSensorService : SCService <CLLocationManagerDelegate> {
+  __strong CLLocationManager *locationManager;
+  CLLocationDistance distance;
+  CLLocationAccuracy accuracy;
 }
 
-@property (nonatomic,readonly) BOOL isTracking;
-@property (nonatomic,retain) NSArray *location;
-@property (nonatomic,readonly) RACSignal *lastKnown;
+@property(nonatomic, readonly) BOOL isTracking;
+@property(nonatomic, retain) NSArray *location;
+@property(nonatomic, readonly) RACSignal *lastKnown;
 
--(void)locationAccuracy:(CLLocationAccuracy)accuracy withDistance:(CLLocationDistance)distance;
+- (void)locationAccuracy:(CLLocationAccuracy)accuracy
+            withDistance:(CLLocationDistance)distance;
 
--(void)enableGPS;
--(void)disableGPS;
+- (void)enableGPS;
+- (void)disableGPS;
 
 @end

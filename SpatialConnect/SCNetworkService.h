@@ -17,13 +17,18 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
-#import <Foundation/Foundation.h>
 #import "SCService.h"
+#import <Foundation/Foundation.h>
 
 @interface SCNetworkService : SCService
+
+/*!
+ *  @brief returns NSDictionary on signal
+ *
+ *  @param url http/https resource with JSON Response
+ *
+ *  @return NSDictionary over RACSignal
+ */
+- (RACSignal *)requestURLAsDict:(NSURL *)url;
 
 @end
