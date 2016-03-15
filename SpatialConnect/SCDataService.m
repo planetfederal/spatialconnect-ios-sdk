@@ -152,13 +152,11 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 - (void)start {
   [super start];
   [self startAllStores];
-  self.storesStarted = YES;
 }
 
 - (void)stop {
   [super stop];
   [self stopAllStores];
-  self.storesStarted = NO;
 }
 
 /**

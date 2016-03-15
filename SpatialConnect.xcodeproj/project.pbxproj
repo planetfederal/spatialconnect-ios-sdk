@@ -229,6 +229,8 @@
 		5677D6DB1C3F046E00C1E0F2 /* SCRasterStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */; };
 		56789C401C32C0AC001B5ABE /* SCSimplePoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */; };
 		56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */; };
+		56B2A6551C97408500464076 /* SCConfigService.h in Headers */ = {isa = PBXBuildFile; fileRef = 56B2A6531C97408500464076 /* SCConfigService.h */; };
+		56B2A6561C97408500464076 /* SCConfigService.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B2A6541C97408500464076 /* SCConfigService.m */; };
 		56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		56DC516D1BFD22AB002C71B3 /* SCServiceStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DC516B1BFD22AB002C71B3 /* SCServiceStatusEvent.h */; };
 		56DC516E1BFD22AB002C71B3 /* SCServiceStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DC516C1BFD22AB002C71B3 /* SCServiceStatusEvent.m */; };
@@ -480,6 +482,8 @@
 		5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterStore.h; sourceTree = "<group>"; };
 		56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSimplePoint.h; sourceTree = "<group>"; };
 		56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSimplePoint.m; sourceTree = "<group>"; };
+		56B2A6531C97408500464076 /* SCConfigService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCConfigService.h; sourceTree = "<group>"; };
+		56B2A6541C97408500464076 /* SCConfigService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCConfigService.m; sourceTree = "<group>"; };
 		56DC51381BFBEF71002C71B3 /* libgeopackage-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgeopackage-ios.a"; path = "Pods/../build/Debug-iphoneos/libgeopackage-ios.a"; sourceTree = "<group>"; };
 		56DC513D1BFC0CD0002C71B3 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		56DC51681BFC230B002C71B3 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
@@ -920,6 +924,7 @@
 		5649B4951BE27C6A009947EF /* SpatialConnect */ = {
 			isa = PBXGroup;
 			children = (
+				56B2A6521C97385800464076 /* ConfigService */,
 				567B1FD31BFD5CB6003254C7 /* Events */,
 				563BEC6B1BE52A6B00778EDA /* NetworkService */,
 				563BEC691BE52A2400778EDA /* RasterService */,
@@ -1047,6 +1052,15 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
+		56B2A6521C97385800464076 /* ConfigService */ = {
+			isa = PBXGroup;
+			children = (
+				56B2A6531C97408500464076 /* SCConfigService.h */,
+				56B2A6541C97408500464076 /* SCConfigService.m */,
+			);
+			name = ConfigService;
+			sourceTree = "<group>";
+		};
 		B50F784BAECD0A5117CB7E1B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1159,6 +1173,7 @@
 				5649B6221BE283EC009947EF /* SpatialConnect.h in Headers */,
 				5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */,
 				5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */,
+				56B2A6551C97408500464076 /* SCConfigService.h in Headers */,
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				5649B61C1BE280D6009947EF /* SCUserPrefs.h in Headers */,
@@ -1388,6 +1403,7 @@
 				5649B5B31BE280D6009947EF /* SCGeoFilterContains.m in Sources */,
 				5649B5AC1BE280D6009947EF /* SCFilterNotIn.m in Sources */,
 				5649B6081BE280D6009947EF /* SCSensorService.m in Sources */,
+				56B2A6561C97408500464076 /* SCConfigService.m in Sources */,
 				5649B5851BE280D6009947EF /* SCBoundingBox.m in Sources */,
 				5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */,
 				560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */,

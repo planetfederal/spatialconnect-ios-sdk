@@ -17,12 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCService.h"
+#import "SCConfigService.h"
 #import "SCDataService.h"
-#import "SCSensorService.h"
 #import "SCNetworkService.h"
 #import "SCRasterService.h"
+#import "SCSensorService.h"
+#import "SCService.h"
+#import <Foundation/Foundation.h>
 
 @interface SCServiceManager : NSObject
 
@@ -31,6 +32,7 @@
 @property(nonatomic, readonly, strong) SCNetworkService *networkService;
 @property(nonatomic, readonly, strong) SCSensorService *sensorService;
 @property(nonatomic, readonly, strong) SCRasterService *rasterService;
+@property(nonatomic, readonly, strong) SCConfigService *configService;
 
 - (instancetype)initWithFilepath:(NSString *)filepath;
 - (instancetype)initWithFilepaths:(NSArray *)filepaths;
