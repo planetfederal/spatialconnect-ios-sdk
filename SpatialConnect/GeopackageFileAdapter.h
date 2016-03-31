@@ -20,8 +20,8 @@
 #import "SCAdapterKeyValue.h"
 #import "SCQueryFilter.h"
 #import "SCStoreConfig.h"
+#import "SCGeopackage.h"
 #import <Foundation/Foundation.h>
-#import <geopackage-ios/geopackage_ios.h>
 
 @class GeopackageStore;
 
@@ -34,7 +34,7 @@
 @property(readonly, nonatomic, strong) NSString *uri;
 @property(readonly, nonatomic, strong) NSString *filepath;
 @property(readonly, nonatomic, strong) NSString *storeId;
-@property(readonly, nonatomic, strong) GPKGGeoPackage *gpkg;
+@property(readonly, nonatomic, strong) SCGeopackage *gpkg;
 @property(nonatomic, weak) GeopackageStore *parentStore;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg;

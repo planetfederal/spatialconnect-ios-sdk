@@ -64,15 +64,6 @@
   return self;
 }
 
-// Class store = [self.dataService
-//               supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld",
-//               cfg.type,
-//                                    (long)cfg.version]];
-// SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
-// if (gmStore.key) {
-//  [self.dataService registerStore:gmStore];
-//}
-
 - (void)initServices {
   _services = [[NSMutableDictionary alloc] init];
   _dataService = [[SCDataService alloc] init];

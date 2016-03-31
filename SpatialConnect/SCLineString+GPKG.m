@@ -41,11 +41,4 @@
   return ls;
 }
 
-- (GPKGGeometryData *)wkb {
-  GPKGGeometryData *geomData =
-      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
-  [geomData setGeometry:self.wkGeometry];
-  return geomData;
-}
-
 @end

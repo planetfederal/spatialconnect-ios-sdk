@@ -25,8 +25,7 @@ FOUNDATION_EXPORT double SpatialConnectVersionNumber;
 //! Project version string for SpatialConnect.
 FOUNDATION_EXPORT const unsigned char SpatialConnectVersionString[];
 
-// In this header, you should import all the public headers of your framework
-// using statements like #import <SpatialConnect/PublicHeader.h>
-
-#import <ZipZap/ZipZap.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import <ZipZap/ZipZap.h>
+#import "FMDB.h"
+

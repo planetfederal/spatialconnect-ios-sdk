@@ -20,9 +20,7 @@
 #import "SCService.h"
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/RACSignal.h>
-#import <ReactiveCocoa/ReactiveCocoa.h>
-
-@import CoreLocation;
+#import <CoreLocation/CoreLocation.h>
 
 typedef enum : NSUInteger {
   SC_LOCATION_HIGH = 0,

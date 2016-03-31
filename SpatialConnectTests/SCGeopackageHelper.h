@@ -21,6 +21,7 @@
 
 @interface SCGeopackageHelper : NSObject
 
-+ (RACSignal*)loadGPKGDataStore:(SpatialConnect*)sc;
++ (RACSignal *)loadGPKGDataStore:(SpatialConnect *)sc;
++ (RACSignal *)downloadGpkgFile;
 
 @end
