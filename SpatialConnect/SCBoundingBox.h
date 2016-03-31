@@ -19,8 +19,7 @@
 
 #import "SCGeometry.h"
 #import <Foundation/Foundation.h>
-
-@import MapKit;
+#import <MapKit/MapKit.h>
 
 @class SCPoint;
 

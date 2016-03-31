@@ -39,7 +39,7 @@
 }
 
 - (NSString *)description {
-  return [NSString stringWithFormat:@"%ld,%@", self.status, self.storeId];
+  return [NSString stringWithFormat:@"%ld,%@", (long)self.status, self.storeId];
 }
 
 @end

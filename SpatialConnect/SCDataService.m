@@ -152,13 +152,11 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 - (void)start {
   [super start];
   [self startAllStores];
-  self.storesStarted = YES;
 }
 
 - (void)stop {
   [super stop];
   [self stopAllStores];
-  self.storesStarted = NO;
 }
 
 /**
@@ -305,9 +303,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
         }
             error:^(NSError *error) {
               [subscriber sendError:error];
-            }
-            completed:^{
-              [subscriber sendCompleted];
             }];
         return nil;
       }];

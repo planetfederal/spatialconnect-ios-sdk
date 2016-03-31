@@ -17,13 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCPolygon.h"
-
-@import MapKit;
+#import <MapKit/MapKit.h>
 
 @interface SCPolygon (MapKit) <MKOverlay>
 - (MKPolygon*)shape;

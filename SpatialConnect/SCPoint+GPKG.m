@@ -37,11 +37,4 @@
   return p;
 }
 
-- (GPKGGeometryData *)wkb {
-  GPKGGeometryData *pointGeomData =
-      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
-  [pointGeomData setGeometry:self.wkGeometry];
-  return pointGeomData;
-}
-
 @end

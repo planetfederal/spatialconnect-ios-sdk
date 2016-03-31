@@ -31,17 +31,14 @@
   return self;
 }
 
-- (GPKGGeometryData *)wkb {
+- (WKBGeometry*)wkGeometry {
   WKBMultiPoint *mp =
-      [[WKBMultiPoint alloc] initWithType:WKB_MULTIPOINT andHasZ:NO andHasM:NO];
+  [[WKBMultiPoint alloc] initWithType:WKB_MULTIPOINT andHasZ:NO andHasM:NO];
   [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx,
                                             BOOL *_Nonnull stop) {
     [mp addPoint:p.wkGeometry];
   }];
-  GPKGGeometryData *geomData =
-      [[GPKGGeometryData alloc] initWithSrsId:[NSNumber numberWithInt:4326]];
-  [geomData setGeometry:mp];
-  return geomData;
+  return mp;
 }
 
 @end

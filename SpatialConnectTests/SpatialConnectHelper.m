@@ -54,40 +54,23 @@
       [fm contentsOfDirectoryAtPath:path error:&error];
 
   NSString *documentsPath = NSHomeDirectory();
-  //  [directoryAndFileNames enumerateObjectsUsingBlock:^(NSString *fileName,
-  //                                                      NSUInteger idx,
-  //                                                      BOOL *stop) {
-  //    if ([fileName containsString:@"scfg"] ||
-  //        [fileName containsString:@"json"] ||
-  //        [fileName containsString:@"geojson"]) {
-  //      NSError *error;
-  //      [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@",
-  //      documentsPath,
-  //                                                      fileName]
-  //                     error:&error];
-  //      if (error) {
-  //        NSLog(@"Error: %@", error.description);
-  //      }
-  //    }
-  //  }];
-  [directoryAndFileNames
-      enumerateObjectsUsingBlock:^(NSString *fileName, NSUInteger idx,
-                                   BOOL *stop) {
-        if ([fileName containsString:@"scfg"] ||
-            [fileName containsString:@"json"] ||
-            [fileName containsString:@"geojson"]) {
-          NSString *item = [NSString stringWithFormat:@"%@/%@", path, fileName];
-          NSString *to =
-              [NSString stringWithFormat:@"%@/%@", documentsPath, fileName];
-          NSError *error;
-          [fm copyItemAtPath:item toPath:to error:&error];
-          if (error) {
-            if (error.code != 516) {
-              NSLog(@"Error: %@", error.description);
-            }
-          }
+  [directoryAndFileNames enumerateObjectsUsingBlock:^(
+                             NSString *fileName, NSUInteger idx, BOOL *stop) {
+    if ([fileName containsString:@"scfg"] ||
+        [fileName containsString:@"json"] ||
+        [fileName containsString:@"geojson"]) {
+      NSString *item = [NSString stringWithFormat:@"%@/%@", path, fileName];
+      NSString *to =
+          [NSString stringWithFormat:@"%@/%@", documentsPath, fileName];
+      NSError *error;
+      [fm copyItemAtPath:item toPath:to error:&error];
+      if (error) {
+        if (error.code != 516) {
+          NSLog(@"Error: %@", error.description);
         }
-      }];
+      }
+    }
+  }];
 }
 
 @end

@@ -21,7 +21,7 @@
 #import "SCGeoJSON.h"
 
 @implementation SCGeoFilter
-
+@synthesize bbox;
 - (id)initWithGeometry:(SCGeometry *)g andKeyPath:(NSString *)keypath {
   self = [super init];
   if (!self) {

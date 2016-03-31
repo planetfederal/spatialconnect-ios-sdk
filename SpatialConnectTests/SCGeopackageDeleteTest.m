@@ -45,17 +45,21 @@
   SCQueryFilter *filter = [[SCQueryFilter alloc] init];
   filter.limit = 1;
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
-      subscribeNext:^(GeopackageStore *ds) {
+      subscribeNext:^(id<SCSpatialStore> ds) {
         [[[ds query:filter] flattenMap:^RACStream *(SCSpatialFeature *f) {
           return [ds delete:f.key];
         }] subscribeError:^(NSError *error) {
-          XCTFail(@"Error loading GPGK");
+          XCTFail(@"Error Deleting Feature");
           [expect fulfill];
         }
             completed:^{
-              XCTAssert(YES, @"Delete successfully");
               [expect fulfill];
             }];
+
+      }
+      error:^(NSError *error) {
+        XCTFail(@"Error getting store");
+        [expect fulfill];
       }];
 
   [self.sc startAllServices];

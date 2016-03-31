@@ -85,6 +85,10 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   return [(GeoJSONAdapter *)adapter query:filter];
 }
 
+- (RACSignal*)queryById:(SCKeyTuple *)key {
+  return nil;
+}
+
 - (RACSignal *)create:(SCSpatialFeature *)feature {
   return [(GeoJSONAdapter *)adapter create:feature];
 }

@@ -3,6 +3,9 @@ xcode_project: SpatialConnect.xcodeproj
 xcode_scheme: SpatialConnect
 
 osx_image: xcode7.1
+notifications:
+  email: 
+    - spatialconnect@boundlessgeo.com
 
 script:
 

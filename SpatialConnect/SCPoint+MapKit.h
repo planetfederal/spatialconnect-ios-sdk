@@ -19,8 +19,7 @@
 
 #import "SCPoint.h"
 #import <Foundation/Foundation.h>
-
-@import MapKit;
+#import <MapKit/MapKit.h>
 
 @interface SCPoint (Mapkit) <MKAnnotation>
 
