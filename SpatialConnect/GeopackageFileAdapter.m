@@ -140,47 +140,6 @@
 
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView {
-//  __block MKTileOverlay *overlay = nil;
-//  NSArray *arr = self.gpkg.tileContents;
-
-//  @weakify(self);
-//  [arr enumerateObjectsUsingBlock:^(NSString *table, NSUInteger idx,
-//                                    BOOL *_Nonnull stop) {
-//    if ([layer isEqualToString:table]) {
-//      @strongify(self);
-//      GPKGTileDao *tileDao = [self.gpkg getTileDaoWithTableName:layer];
-//      overlay = [GPKGOverlayFactory getTileOverlayWithTileDao:tileDao];
-//      overlay.canReplaceMapContent = false;
-//
-//      GPKGTileMatrixSet *tileMatrixSet = tileDao.tileMatrixSet;
-//      GPKGContents *contents =
-//          [[self.gpkg getTileMatrixSetDao] getContents:tileMatrixSet];
-//      GPKGContentsDao *contentsDao = [self.gpkg contentsDao];
-//      GPKGProjection *projection = [contentsDao getProjection:contents];
-//
-//      GPKGProjectionTransform *transformToWebMercator =
-//          [[GPKGProjectionTransform alloc]
-//              initWithFromProjection:projection
-//                           andToEpsg:PROJ_EPSG_WEB_MERCATOR];
-//
-//      GPKGBoundingBox *contentsBoundingBox = [contents getBoundingBox];
-//      if ([projection.epsg intValue] == PROJ_EPSG_WORLD_GEODETIC_SYSTEM) {
-//        contentsBoundingBox = [GPKGTileBoundingBoxUtils
-//            boundWgs84BoundingBoxWithWebMercatorLimits:contentsBoundingBox];
-//      }
-//
-//      GPKGBoundingBox *webMercatorBoundingBox =
-//          [transformToWebMercator transformWithBoundingBox:contentsBoundingBox];
-//      GPKGProjectionTransform *transform = [[GPKGProjectionTransform alloc]
-//          initWithFromEpsg:PROJ_EPSG_WEB_MERCATOR
-//                 andToEpsg:PROJ_EPSG_WORLD_GEODETIC_SYSTEM];
-//      GPKGBoundingBox *boundingBox =
-//          [transform transformWithBoundingBox:webMercatorBoundingBox];
-//
-//      [mapView addOverlay:overlay];
-//    }
-//  }];
-
   return nil;
 }
 

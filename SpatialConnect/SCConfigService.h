@@ -14,19 +14,21 @@
  * limitations under the License
  */
 
-#import <Foundation/Foundation.h>
+#import "SCService.h"
 
-extern NSString *const kTableName;
+typedef NS_ENUM(NSInteger, SCConfigEvent) {
+  SC_CONFIG_SERVICE_ADDED,
+  SC_CONFIG_SERVICE_REMOVED,
+  SC_CONFIG_DATASERVICE_STORE_ADDED,
+  SC_CONFIG_DATASERVICE_STORE_REMOVED
+};
 
-@interface SCGpkgTable : NSObject {
-  NSString *tableName;
+@interface SCConfigService : SCService {
+  NSMutableArray *configPaths;
 }
 
-@property(strong, readonly) FMDatabaseQueue *queue;
-
-- (id)initWithQueue:(FMDatabasePool *)q;
-- (id)initWithQueue:(FMDatabasePool *)q tableName:(NSString *)t;
-- (RACSignal *)all;
-- (NSString *)allQueryString;
+- (id)initWithFilepath:(NSString *)filepath;
+- (id)initWithFilepaths:(NSArray *)filepaths;
+- (RACSignal *)load;
 
 @end

@@ -25,31 +25,31 @@
 
 @implementation SCGeopackage
 
-@synthesize queue;
+@synthesize pool;
 
 - (id)initWithFilename:(NSString *)filepath {
   self = [super init];
   if (self) {
-    queue = [[FMDatabaseQueue alloc] initWithPath:filepath];
+    pool = [[FMDatabasePool alloc] initWithPath:filepath];
   }
   return self;
 }
 
 - (RACSignal *)contents {
   SCGpkgContentsTable *ct =
-      [[SCGpkgContentsTable alloc] initWithQueue:self.queue];
+      [[SCGpkgContentsTable alloc] initWithQueue:self.pool];
   return [ct all];
 }
 
 - (RACSignal *)extensions {
   SCGpkgExtensionsTable *et =
-      [[SCGpkgExtensionsTable alloc] initWithQueue:self.queue];
+      [[SCGpkgExtensionsTable alloc] initWithQueue:self.pool];
   return [et all];
 }
 
 - (NSArray *)tileContents {
   SCGpkgContentsTable *tc =
-      [[SCGpkgContentsTable alloc] initWithQueue:self.queue];
+      [[SCGpkgContentsTable alloc] initWithQueue:self.pool];
   return [[tc.tiles.rac_sequence.signal map:^SCGpkgTileSource*(SCGpkgContent *c) {
     return [[SCGpkgTileSource alloc] init];
   }] toArray];
@@ -57,16 +57,21 @@
 
 - (NSArray *)featureContents {
   SCGpkgContentsTable *tc =
-      [[SCGpkgContentsTable alloc] initWithQueue:self.queue];
+      [[SCGpkgContentsTable alloc] initWithQueue:self.pool];
   return [[tc.vectors.rac_sequence.signal map:^SCGpkgFeatureSource*(SCGpkgContent *c) {
-    return [[SCGpkgFeatureSource alloc] initWithQueue:self.queue andName:c.tableName isIndexed:YES];
+    return [[SCGpkgFeatureSource alloc] initWithQueue:self.pool andName:c.tableName isIndexed:YES];
   }] toArray];
 }
 
 - (SCGpkgFeatureSource *)featureSource:(NSString *)name {
-  return [[SCGpkgFeatureSource alloc] initWithQueue:self.queue
-                                            andName:name
-                                          isIndexed:YES];
+  __block SCGpkgFeatureSource *featureSource = nil;
+  [[self featureContents] enumerateObjectsUsingBlock:^(SCGpkgFeatureSource *fs, NSUInteger idx, BOOL * _Nonnull stop) {
+    if ([fs.name isEqualToString:name]) {
+      featureSource = fs;
+      *stop = YES;
+    }
+  }];
+  return featureSource;
 }
 
 - (RACSignal*)query:(SCQueryFilter*)filter {

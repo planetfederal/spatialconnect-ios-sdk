@@ -47,11 +47,6 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
 
 @implementation SCGeometry (GPKG)
 
-- (NSData *)wkb {
-  NSAssert(NO, @"This is an abstract method and should be overridden");
-  return nil;
-}
-
 - (WKBGeometry *)wkGeometry {
   NSAssert(NO, @"This is an abstract method and should be overridden");
   return nil;
@@ -90,6 +85,57 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   : CFByteOrderLittleEndian;
   [reader setByteOrder:byteOrder];
   NSNumber *srsId = [reader readInt];
+
+  WKBGeometryEnvelope * envelope = nil;
+  if(envelopeIndicator > 0){
+
+    // Read x and y values and create envelope
+    NSDecimalNumber * minX = [reader readDouble];
+    NSDecimalNumber * maxX = [reader readDouble];
+    NSDecimalNumber * minY = [reader readDouble];
+    NSDecimalNumber * maxY = [reader readDouble];
+
+    BOOL hasZ = false;
+    NSDecimalNumber *  minZ = nil;
+    NSDecimalNumber *  maxZ = nil;
+
+    BOOL hasM = false;
+    NSDecimalNumber *  minM = nil;
+    NSDecimalNumber *  maxM = nil;
+
+    // Read z values
+    if (envelopeIndicator == 2 || envelopeIndicator == 4) {
+      hasZ = true;
+      minZ = [reader readDouble];
+      maxZ = [reader readDouble];
+    }
+
+    // Read m values
+    if (envelopeIndicator == 3 || envelopeIndicator == 4) {
+      hasM = true;
+      minM = [reader readDouble];
+      maxM = [reader readDouble];
+    }
+
+    envelope = [[WKBGeometryEnvelope alloc] initWithHasZ:hasZ andHasM:hasM];
+
+    [envelope setMinX:minX];
+    [envelope setMaxX:maxX];
+    [envelope setMinY:minY];
+    [envelope setMaxY:maxY];
+
+    if (hasZ) {
+      [envelope setMinZ:minZ];
+      [envelope setMaxZ:maxZ];
+    }
+
+    if (hasM) {
+      [envelope setMinM:minM];
+      [envelope setMaxM:maxM];
+    }
+    
+  }
+
   WKBGeometry *geometry = nil;
   if(!empty){
     geometry = [WKBGeometryReader readGeometryWithReader:reader];
@@ -142,7 +188,7 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   int emptyValue = empty ? 1 : 0;
   flag += (emptyValue << 4);
 
-  int envelopeIndicator = 1;
+  int envelopeIndicator = 1; //1 xy, 2 xyz, 3 xyzm
   flag += (envelopeIndicator << 1);
 
   CFByteOrder byteOrder = CFByteOrderBigEndian;
@@ -154,23 +200,17 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   [writer setByteOrder:byteOrder];
 
   [writer writeInt:self.srsId];
+  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.lowerLeft.longitude]];
+  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.upperRight.longitude]];
+  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.lowerLeft.latitude ]];
+  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.upperRight.latitude ]];
+
   if (!empty) {
     [WKBGeometryWriter writeGeometry:[self wkGeometry] withWriter:writer];
   }
   NSData *bytes = [writer getData];
   [writer close];
   return bytes;
-}
-
--(int) getIndicatorWithEnvelope: (WKBGeometryEnvelope *) envelope{
-  int indicator = 1;
-  if(envelope.hasZ){
-    indicator++;
-  }
-  if(envelope.hasM){
-    indicator += 2;
-  }
-  return indicator;
 }
 
 @end

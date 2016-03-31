@@ -38,8 +38,15 @@
   return self;
 }
 
-- (NSData *)wkb {
-  return nil;
+- (WKBGeometry*)wkGeometry {
+  WKBMultiPolygon *mp = [[WKBMultiPolygon alloc] initWithType:WKB_MULTIPOLYGON
+                                                       andHasZ:NO
+                                                       andHasM:NO];
+  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *poly, NSUInteger idx,
+                                              BOOL *_Nonnull stop) {
+    [mp addPolygon:poly.wkGeometry];
+  }];
+  return mp;
 }
 
 @end

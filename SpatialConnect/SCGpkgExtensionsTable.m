@@ -25,7 +25,7 @@ NSString *const kETScopeColName = @"scope";
 
 @implementation SCGpkgExtensionsTable
 
-- (id)initWithQueue:(FMDatabaseQueue *)q {
+- (id)initWithQueue:(FMDatabasePool *)q {
   return [super initWithQueue:q tableName:kETTableName];
 }
 

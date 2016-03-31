@@ -165,9 +165,11 @@
     SCGpkgFeatureSource *pointFeatures =
         [gpkg featureSource:@"polygon_features"];
     SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(80), @(30) ]];
-    [[[[[pointFeatures create:p] materialize] filter:^BOOL(RACEvent *evt) {
+    RACSignal *create = [pointFeatures create:p];
+    RACSignal *complete = [[create materialize] filter:^BOOL(RACEvent *evt) {
       return evt.eventType == RACEventTypeCompleted;
-    }] flattenMap:^RACStream *(id value) {
+    }];
+    [[complete flattenMap:^RACStream *(id value) {
       return [pointFeatures findById:p.identifier];
     }] subscribeNext:^(SCSpatialFeature *x) {
       XCTAssertEqual(p.identifier, x.identifier);
@@ -177,7 +179,7 @@
       [expect fulfill];
     }];
   }];
-  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 @end

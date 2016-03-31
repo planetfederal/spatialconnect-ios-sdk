@@ -55,6 +55,8 @@
 		561686131C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 561686111C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m */; };
 		561686171C752F6E00FC7FA6 /* SCGpkgFeatureSourceTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 561686151C752F6E00FC7FA6 /* SCGpkgFeatureSourceTable.h */; };
 		561686181C752F6E00FC7FA6 /* SCGpkgFeatureSourceTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 561686161C752F6E00FC7FA6 /* SCGpkgFeatureSourceTable.m */; };
+		562428991CAC60740087756C /* SCConfigService.h in Headers */ = {isa = PBXBuildFile; fileRef = 562428971CAC60740087756C /* SCConfigService.h */; };
+		5624289A1CAC60740087756C /* SCConfigService.m in Sources */ = {isa = PBXBuildFile; fileRef = 562428981CAC60740087756C /* SCConfigService.m */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		5645C4E01BED31F1006E4128 /* SCGeometry+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4DE1BED31F1006E4128 /* SCGeometry+GPKG.h */; };
@@ -345,6 +347,8 @@
 		561686111C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgDataColumnConstraint.m; sourceTree = "<group>"; };
 		561686151C752F6E00FC7FA6 /* SCGpkgFeatureSourceTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgFeatureSourceTable.h; sourceTree = "<group>"; };
 		561686161C752F6E00FC7FA6 /* SCGpkgFeatureSourceTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgFeatureSourceTable.m; sourceTree = "<group>"; };
+		562428971CAC60740087756C /* SCConfigService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCConfigService.h; sourceTree = "<group>"; };
+		562428981CAC60740087756C /* SCConfigService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCConfigService.m; sourceTree = "<group>"; };
 		56345CE61BFAB274008416AF /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
@@ -749,6 +753,15 @@
 			name = FeatureSource;
 			sourceTree = "<group>";
 		};
+		562428961CAC60610087756C /* Config Service */ = {
+			isa = PBXGroup;
+			children = (
+				562428971CAC60740087756C /* SCConfigService.h */,
+				562428981CAC60740087756C /* SCConfigService.m */,
+			);
+			name = "Config Service";
+			sourceTree = "<group>";
+		};
 		563BEC531BE500C500778EDA /* DataService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1115,6 +1128,7 @@
 		5649B4951BE27C6A009947EF /* SpatialConnect */ = {
 			isa = PBXGroup;
 			children = (
+				562428961CAC60610087756C /* Config Service */,
 				56F4374D1CA094FF00EA1344 /* Vendor */,
 				567B1FD31BFD5CB6003254C7 /* Events */,
 				563BEC6B1BE52A6B00778EDA /* NetworkService */,
@@ -1320,6 +1334,7 @@
 				5616860E1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.h in Headers */,
 				561685E81C73D00500FC7FA6 /* SCGpkgSpatialRefSysTable.h in Headers */,
 				56F4375B1CA0955200EA1344 /* FMDatabase.h in Headers */,
+				562428991CAC60740087756C /* SCConfigService.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 				560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */,
 				560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */,
@@ -1664,6 +1679,7 @@
 				5645C4FB1BED9708006E4128 /* SCMultiPoint+GPKG.m in Sources */,
 				56F437621CA0955200EA1344 /* FMDatabaseAdditions.m in Sources */,
 				5649B5F21BE280D6009947EF /* SCPoint.m in Sources */,
+				5624289A1CAC60740087756C /* SCConfigService.m in Sources */,
 				561686061C75024200FC7FA6 /* SCGpkgDataColumnsTable.m in Sources */,
 				5649B5CD1BE280D6009947EF /* SCLinearRing+GeoJSON.m in Sources */,
 				5649B5941BE280D6009947EF /* SCFileUtils.m in Sources */,

@@ -51,8 +51,4 @@
   return p;
 }
 
-- (NSData *)wkb {
-  return nil;
-}
-
 @end

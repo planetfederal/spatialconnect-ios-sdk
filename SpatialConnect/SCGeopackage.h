@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 @interface SCGeopackage : NSObject
 
-@property(nonatomic, strong) FMDatabaseQueue *queue;
+@property(nonatomic, strong) FMDatabasePool *pool;
 
 /*!
  *  @brief Initializes a geopackage object with a geopackage file

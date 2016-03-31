@@ -5,7 +5,6 @@ target 'SpatialConnect' do
     pod 'ReactiveCocoa', '2.5'
     pod 'zipzap','8.0.6'
     pod 'wkb-ios', '~>1.0'
-    pod 'AFNetworking', '~> 2.1'
     pod 'libextobjc', '0.4.1'
     pod 'objc-geohash'
     pod 'ofxiOSBoost', :git => 'https://github.com/tetriscode/ofxiOSBoost'

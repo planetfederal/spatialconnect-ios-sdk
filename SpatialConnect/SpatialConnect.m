@@ -32,7 +32,7 @@
 
 - (id)init {
   if (self = [super init]) {
-    self.manager = [[SCServiceManager alloc] init]; // TODO sweep common dirs
+    self.manager = [[SCServiceManager alloc] init];
     [self startAssertionHandler];
   }
   return self;

@@ -37,8 +37,4 @@
   return p;
 }
 
-- (WKBGeometry *)wkb {
-  return [self wkGeometry] ;
-}
-
 @end

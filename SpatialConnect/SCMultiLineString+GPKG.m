@@ -35,8 +35,14 @@
   return self;
 }
 
-- (NSData *)wkb {
-  return nil;
+- (WKBGeometry*)wkGeometry {
+  WKBMultiLineString *wkbml = [[WKBMultiLineString alloc] initWithHasZ:NO andHasM:NO];
+  [self.linestrings
+   enumerateObjectsUsingBlock:^(SCLineString *ls, NSUInteger idx,
+                                BOOL *_Nonnull stop) {
+     [wkbml addLineString:ls.wkGeometry];
+   }];
+  return wkbml;
 }
 
 @end

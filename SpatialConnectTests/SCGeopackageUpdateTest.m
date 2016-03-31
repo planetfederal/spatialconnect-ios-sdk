@@ -46,7 +46,12 @@
 
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(GeopackageStore *ds) {
-        [[[[ds query:nil] take:1] flattenMap:^RACStream *(SCSpatialFeature *f) {
+        RACSignal *query = [[ds query:nil] take:1];
+        RACSignal *complete = [[query materialize] filter:^BOOL(RACEvent *evt) {
+          return RACEventTypeCompleted == evt.eventType;
+        }];
+        [[[query combineLatestWith:complete] flattenMap:^RACStream *(RACTuple *t) {
+          SCSpatialFeature *f = (SCSpatialFeature*)t.first;
           NSString *key = [[f.properties allKeys] objectAtIndex:0];
           [f.properties setObject:[SCTestString randomStringWithLength:200]
                            forKey:key];

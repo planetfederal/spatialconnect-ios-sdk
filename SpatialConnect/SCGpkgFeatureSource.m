@@ -29,7 +29,6 @@
 @property(strong, readwrite) NSString *geomColName;
 
 - (SCSpatialFeature *)featureFromResultSet:(FMResultSet *)rs; // Category
-- (NSString *)featureToSqlString:(SCSpatialFeature *)f;       // Category
 - (void)defineTable;
 @end
 
@@ -109,7 +108,7 @@
         [NSMutableString stringWithFormat:@"SELECT "];
         [sql appendString:[NSString stringWithFormat:@"%@,",self.pkColName]];
         [sql appendString:[[self.colsTypes allKeys] componentsJoinedByString:@","]];
-        [sql appendString:[NSString stringWithFormat:@",ST_AsBinary(%@)",self.geomColName]];
+        [sql appendString:[NSString stringWithFormat:@",%@",self.geomColName]];
         [sql appendString:[NSString stringWithFormat:@" FROM %@", name]];
         if (f) {
           [sql appendString:@" WHERE "];
@@ -137,7 +136,7 @@
           }];
 
         }
-        [sql appendString:[NSString stringWithFormat:@" LIMIT %ld",(long)f.limit]];
+        [sql appendString:[NSString stringWithFormat:@" LIMIT %ld",f.limit == 0? 100 : (long)f.limit]];
         [self query:sql toSubscriber:subscriber];
         return nil;
       }];
@@ -173,7 +172,7 @@
           if (err) {
             NSLog(@"%@", err.description);
           }
-
+          
           dispatch_async(
               dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 if ([rs next]) {
@@ -216,23 +215,29 @@
                         id<RACSubscriber> subscriber) {
     NSMutableString *sql = [NSMutableString new];
     [sql appendString:[NSString stringWithFormat:@"UPDATE %@ SET ", self.name]];
-    NSMutableOrderedSet *vals = [NSMutableOrderedSet new];
+    NSMutableArray *vals = [NSMutableArray new];
     if ([f isKindOfClass:[SCGeometry class]]) {
       SCGeometry *g = (SCGeometry *)f;
       [sql appendString:[NSString stringWithFormat:@"%@ = ?", self.geomColName]];
       [vals addObject:g.bytes];
     }
     __block NSMutableString *set = nil;
+    __block int count = 0;
     [f.properties enumerateKeysAndObjectsUsingBlock:^(
                       NSString *key, NSObject *obj, BOOL *stop) {
       if (![obj isKindOfClass:[NSNull class]]) {
         if (set) {
-          [sql appendString:@","];
+          [set appendString:@","];
         } else {
           set = [NSMutableString new];
         }
         [set appendString:[NSString stringWithFormat:@"%@ = ?", key]];
         [vals addObject:obj];
+        count++;
+        if (count == [vals count]) {
+          NSLog(@"Yo");
+        }
+
       }
     }];
 
@@ -245,7 +250,8 @@
                                                  [f.identifier longLongValue]]];
 
     [self.queue inDatabase:^(FMDatabase *db) {
-      BOOL success = [db executeUpdate:sql withArgumentsInArray:[vals array]];
+      int count = [f.properties count];
+      BOOL success = [db executeUpdate:sql withArgumentsInArray:vals];
       if (success) {
         dispatch_async(
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -278,12 +284,12 @@
       [colsSql appendString:key];
       [vals addObject:obj];
     }];
-    NSMutableSet *remCols = [NSMutableSet setWithArray:colsTypes.allKeys];
-    NSSet *allProps = [NSSet setWithArray:f.properties.allKeys];
-    [remCols minusSet:allProps];
-    [remCols enumerateObjectsUsingBlock:^(NSString *key, BOOL * _Nonnull stop) {
-      [f.properties setObject:[NSNull new] forKey:key];
-    }];
+//    NSMutableSet *remCols = [NSMutableSet setWithArray:colsTypes.allKeys];
+//    NSSet *allProps = [NSSet setWithArray:f.properties.allKeys];
+//    [remCols minusSet:allProps];
+//    [remCols enumerateObjectsUsingBlock:^(NSString *key, BOOL * _Nonnull stop) {
+//      [f.properties setObject:[NSNull new] forKey:key];
+//    }];
 
     NSString *sql = [NSString
         stringWithFormat:@"INSERT INTO %@ (%@) VALUES (?)", self.name, colsSql];
@@ -313,13 +319,14 @@
 - (SCSpatialFeature *)featureFromResultSet:(FMResultSet *)rs {
   // check if geometry
   SCSpatialFeature *f;
+  long long ident = [rs longLongIntForColumn:self.pkColName];
   if (self.geomColName) {
     f = [SCGeometry fromGeometryBinary:[rs dataForColumn:self.geomColName]];
   } else {
     f = [[SCSpatialFeature alloc] init];
   }
   f.identifier = [NSString
-      stringWithFormat:@"%lld", [rs longLongIntForColumn:self.pkColName]];
+      stringWithFormat:@"%lld", ident];
   NSMutableDictionary *dict = [[rs resultDictionary] mutableCopy];
   [dict removeObjectForKey:self.pkColName];
   [dict removeObjectForKey:self.geomColName];

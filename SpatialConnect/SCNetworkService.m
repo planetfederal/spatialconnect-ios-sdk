@@ -17,11 +17,24 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
+#import "JSONKit.h"
 #import "SCNetworkService.h"
 
 @implementation SCNetworkService
+
+- (RACSignal *)requestURLAsDict:(NSURL *)url {
+  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+  return [[[NSURLConnection rac_sendAsynchronousRequest:request]
+      reduceEach:^id(NSURLResponse *response, NSData *data) {
+        return data;
+      }] flattenMap:^RACSignal *(NSData *d) {
+    NSError *err;
+    NSDictionary *dict = [[JSONDecoder decoder] objectWithData:d error:&err];
+    if (err) {
+      return [RACSignal error:err];
+    }
+    return [RACSignal return:dict];
+  }];
+}
 
 @end
