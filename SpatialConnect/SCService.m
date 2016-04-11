@@ -21,12 +21,12 @@
 
 #import "SCService.h"
 
-@interface SCService (PrivateMethods)
+@interface SCService ()
 
 - (void)generateId;
 
 @property(nonatomic, strong) NSString *identifier;
-@property(nonatomic) SCServiceStatus status;
+@property(nonatomic, readwrite) SCServiceStatus status;
 
 @end
 
@@ -48,19 +48,27 @@
 #pragma mark - Service Lifecycle
 
 - (void)start {
-  _status = SC_SERVICE_RUNNING;
+  self.status = SC_SERVICE_RUNNING;
 }
 
 - (void)stop {
-  _status = SC_SERVICE_STOPPED;
+  self.status = SC_SERVICE_STOPPED;
 }
 
 - (void)resume {
   self.status = SC_SERVICE_RUNNING;
 }
 
+- (void)startError {
+  self.status = SC_SERVICE_ERROR;
+}
+
 - (void)pause {
   self.status = SC_SERVICE_PAUSED;
+}
+
+- (NSArray*)requires {
+  return nil;
 }
 
 #pragma mark - Private

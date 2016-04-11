@@ -28,7 +28,7 @@ NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
 
-        RACMulticastConnection *c = sc.manager.dataService.storeEvents;
+        RACMulticastConnection *c = sc.dataService.storeEvents;
         [c connect];
         RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
           if ([evt.storeId isEqualToString:storeId] &&
@@ -40,7 +40,7 @@ NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
         }];
 
         [evts subscribeNext:^(SCStoreStatusEvent *evt) {
-          SCDataStore *ds = [sc.manager.dataService storeByIdentifier:storeId];
+          SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
           [subscriber sendNext:ds];
           [subscriber sendCompleted];
         }];

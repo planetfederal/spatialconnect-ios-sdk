@@ -31,8 +31,8 @@ NSString *const kSRSDescriptionColName = @"description";
 
 @implementation SCGpkgSpatialRefSysTable
 
-- (id)initWithQueue:(FMDatabaseQueue *)q {
-  return [super initWithQueue:q tableName:kSRSTableName];
+- (id)initWithPool:(FMDatabasePool *)p {
+  return [super initWithPool:p tableName:kSRSTableName];
 }
 
 - (NSString *)allQueryString {

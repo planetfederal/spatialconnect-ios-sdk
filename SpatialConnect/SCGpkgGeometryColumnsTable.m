@@ -27,8 +27,8 @@ NSString *const kGCMColName = @"m";
 
 @implementation SCGpkgGeometryColumnsTable
 
-- (id)initWithQueue:(FMDatabaseQueue *)q {
-  return [super initWithQueue:q tableName:kGCTableName];
+- (id)initWithPool:(FMDatabasePool *)p {
+  return [super initWithPool:p tableName:kGCTableName];
 }
 
 - (RACSignal *)all {

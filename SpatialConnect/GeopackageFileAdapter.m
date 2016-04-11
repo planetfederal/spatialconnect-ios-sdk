@@ -44,7 +44,7 @@
 @synthesize gpkg;
 @synthesize parentStore;
 
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg {
+- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)cfg {
   if (self = [super init]) {
     _uri = cfg.uri;
     _storeId = cfg.uniqueid;
@@ -95,6 +95,12 @@
                                      code:SC_GEOPACKAGE_FILENOTFOUND
                                  userInfo:nil];
   return [RACSignal error:err];
+}
+
+- (void)disconnect {
+  if (self.gpkg) {
+    [self.gpkg close];
+  }
 }
 
 - (RACSignal *)attemptFileDownload:(NSURL *)fileUrl {

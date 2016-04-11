@@ -34,8 +34,8 @@ NSString *const kCTSRSIdColName = @"srs_id";
 
 @implementation SCGpkgContentsTable
 
-- (id)initWithQueue:(FMDatabasePool *)q {
-  return [super initWithQueue:q tableName:kCTTableName];
+- (id)initWithPool:(FMDatabasePool *)q {
+  return [super initWithPool:q tableName:kCTTableName];
 }
 
 - (RACSignal *)all {

@@ -23,7 +23,7 @@
 
 @interface SCGpkgFeatureSource ()
 @property(strong, readwrite) NSString *name;
-@property(strong, readwrite) FMDatabaseQueue *queue;
+@property(strong, readwrite) FMDatabasePool *pool;
 @property(strong, readwrite) NSString *pkColName;
 @property(strong, readwrite) NSDictionary *colsTypes;
 @property(strong, readwrite) NSString *geomColName;
@@ -36,20 +36,20 @@
 
 @synthesize name, pkColName, colsTypes;
 
-- (id)initWithQueue:(FMDatabaseQueue *)q andName:(NSString *)n {
+- (id)initWithPool:(FMDatabasePool *)p andName:(NSString *)n {
   self = [super init];
   if (self) {
     self.name = n;
-    self.queue = q;
+    self.pool = p;
     [self defineTable];
   }
   return self;
 }
 
-- (id)initWithQueue:(FMDatabaseQueue *)q
+- (id)initWithPool:(FMDatabasePool *)p
             andName:(NSString *)n
           isIndexed:(BOOL)i {
-  self = [self initWithQueue:q andName:n];
+  self = [self initWithPool:p andName:n];
   if (self) {
     if (i) {
       [self indexTable];
@@ -59,7 +59,7 @@
 }
 
 - (void)indexTable {
-  [self.queue inDatabase:^(FMDatabase *db) {
+  [self.pool inDatabase:^(FMDatabase *db) {
 
     NSString *sql = [NSString stringWithFormat:@"SELECT CreateSpatialIndex('%@','%@','%@')",self.name,self.geomColName,self.pkColName];
     int res = [db executeStatements:sql];
@@ -72,7 +72,7 @@
 
 - (void)defineTable {
 
-  [self.queue inDatabase:^(FMDatabase *db) {
+  [self.pool inDatabase:^(FMDatabase *db) {
     FMResultSet *rs = [db getTableSchema:self.name];
     NSMutableDictionary *cols = [NSMutableDictionary new];
     while ([rs next]) {
@@ -143,7 +143,7 @@
 }
 
 - (void)query:(NSString *)sql toSubscriber:(id<RACSubscriber>)subscriber {
-  [self.queue inDatabase:^(FMDatabase *db) {
+  [self.pool inDatabase:^(FMDatabase *db) {
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
       SCSpatialFeature *f = [self featureFromResultSet:rs];
@@ -163,7 +163,7 @@
         NSString *sql =
             [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = ?",
                                        self.name, self.pkColName];
-        [self.queue inDatabase:^(FMDatabase *db) {
+        [self.pool inDatabase:^(FMDatabase *db) {
           NSError *err;
 
           FMResultSet *rs = [db executeQuery:sql
@@ -194,7 +194,7 @@
         NSString *sql = [NSString
             stringWithFormat:@"DELETE FROM %@ WHERE %@ = %lld", self.name,
                              self.pkColName, [f.featureId longLongValue]];
-        [self.queue inDatabase:^(FMDatabase *db) {
+        [self.pool inDatabase:^(FMDatabase *db) {
           BOOL success = [db executeStatements:sql];
           if (success) {
             dispatch_async(
@@ -249,8 +249,7 @@
                                                  self.pkColName,
                                                  [f.identifier longLongValue]]];
 
-    [self.queue inDatabase:^(FMDatabase *db) {
-      int count = [f.properties count];
+    [self.pool inDatabase:^(FMDatabase *db) {
       BOOL success = [db executeUpdate:sql withArgumentsInArray:vals];
       if (success) {
         dispatch_async(
@@ -284,17 +283,17 @@
       [colsSql appendString:key];
       [vals addObject:obj];
     }];
-//    NSMutableSet *remCols = [NSMutableSet setWithArray:colsTypes.allKeys];
-//    NSSet *allProps = [NSSet setWithArray:f.properties.allKeys];
-//    [remCols minusSet:allProps];
-//    [remCols enumerateObjectsUsingBlock:^(NSString *key, BOOL * _Nonnull stop) {
-//      [f.properties setObject:[NSNull new] forKey:key];
-//    }];
+    NSMutableSet *remCols = [NSMutableSet setWithArray:colsTypes.allKeys];
+    NSSet *allProps = [NSSet setWithArray:f.properties.allKeys];
+    [remCols minusSet:allProps];
+    [remCols enumerateObjectsUsingBlock:^(NSString *key, BOOL * _Nonnull stop) {
+      [f.properties setObject:[NSNull new] forKey:key];
+    }];
 
     NSString *sql = [NSString
         stringWithFormat:@"INSERT INTO %@ (%@) VALUES (?)", self.name, colsSql];
 
-    [self.queue inDatabase:^(FMDatabase *db) {
+    [self.pool inDatabase:^(FMDatabase *db) {
       NSError *err;
       BOOL success = [db executeUpdate:sql values:vals error:&err];
       if (err) {

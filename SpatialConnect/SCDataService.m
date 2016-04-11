@@ -17,6 +17,8 @@
 * under the License.
 ******************************************************************************/
 
+#import "SpatialConnect.h"
+#import "SCConfigService.h"
 #import "GeoJSONStore.h"
 #import "GeopackageStore.h"
 #import "SCDataService.h"
@@ -66,26 +68,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (void)startAllStores {
-  __block NSUInteger count = self.stores.count;
-  __block NSUInteger startCount = 0;
-  RACMulticastConnection *c = self.storeEvents;
-  [c connect];
-  [[c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_EVT_STARTED) {
-      return YES;
-    }
-    return NO;
-  }] subscribeNext:^(id x) {
-    startCount++;
-    if (startCount == count) {
-      [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_ALLSTARTED
-                                      andStoreId:nil]];
-    }
-  }
-      error:^(NSError *error) {
-        NSLog(@"%@", error.description);
-      }];
   [self.stores enumerateKeysAndObjectsUsingBlock:^(
                    NSString *key, SCDataStore *store, BOOL *stop) {
     [self startStore:store];
@@ -99,11 +81,11 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   }];
 }
 
-- (RACSignal *)allStoresStartedSignal {
+- (RACSignal *)storeStarted:(NSString*)storeId {
   RACMulticastConnection *rmcc = self.storeEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_EVT_ALLSTARTED) {
+    if (evt.status == SC_DATASTORE_EVT_STARTED && evt.storeId == storeId) {
       return YES;
     }
     return NO;
@@ -151,12 +133,36 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (void)start {
   [super start];
+  //These are added by a developer if they are already present.
   [self startAllStores];
+
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  RACSignal *cse = [sc.configService connect:kSERVICENAME];
+
+  [[cse filter:^BOOL(SCMessage *m) {
+    if(m.action == SCACTION_DATASERVICE_ADDSTORE)
+      return YES;
+    else return NO;
+  }] subscribeNext:^(SCMessage *m) {
+    SCDataServiceStoreConfig *c = [[SCDataServiceStoreConfig alloc] initWithDictionary:m.payload];
+    [self addAndStartStore:c];
+  }];
 }
 
 - (void)stop {
   [super stop];
   [self stopAllStores];
+}
+
+- (void)addAndStartStore:(SCDataServiceStoreConfig*)cfg {
+  Class store = [self
+                 supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
+                                      (long)cfg.version]];
+  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
+  if (gmStore.key) {
+    [self registerStore:gmStore];
+  }
+  [self startStore:gmStore];
 }
 
 /**

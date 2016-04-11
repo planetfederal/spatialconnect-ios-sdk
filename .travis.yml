@@ -7,8 +7,9 @@ notifications:
   email: 
     - spatialconnect@boundlessgeo.com
 
-script:
+install: travis_wait 60 pod install
 
+script:
   xctool
   -workspace SpatialConnect.xcworkspace
   -scheme SpatialConnect
@@ -22,4 +23,4 @@ script:
 
 before_install:
   - brew update
-  - brew uninstall xctool && brew install --HEAD xctool
+  - brew uninstall xctool && travis_wait 30 brew install --HEAD xctool

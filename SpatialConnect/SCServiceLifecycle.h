@@ -26,5 +26,7 @@
 - (void)pause;
 - (void)resume;
 - (void)stop;
+- (void)startError;
+- (NSArray*)requires;
 
 @end

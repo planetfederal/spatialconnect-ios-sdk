@@ -28,8 +28,8 @@ NSString *const kDCConstraintNameColName = @"constraint_name";
 
 @implementation SCGpkgDataColumnsTable
 
-- (id)initWithQueue:(FMDatabaseQueue *)q {
-  return [super initWithQueue:q tableName:kDCTableName];
+- (id)initWithPool:(FMDatabasePool *)pool {
+  return [super initWithPool:pool tableName:kDCTableName];
 }
 
 - (RACSignal *)all {

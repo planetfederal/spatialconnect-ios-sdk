@@ -44,7 +44,7 @@
   return self;
 }
 
-- (id)initWithStoreConfig:(SCStoreConfig *)config {
+- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config {
   self = [self init];
   if (!self) {
     return nil;
@@ -54,7 +54,7 @@
   return self;
 }
 
-- (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style {
+- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config withStyle:(SCStyle *)style {
   self = [self initWithStoreConfig:config];
   if (!self) {
     return nil;

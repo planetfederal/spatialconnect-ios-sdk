@@ -71,8 +71,8 @@ NSString *const SCJavascriptBridgeErrorDomain =
                      }];
                }];
 
-  [self.spatialConnect.manager.sensorService enableGPS];
-  [self.spatialConnect.manager.sensorService.lastKnown
+  [self.spatialConnect.sensorService enableGPS];
+  [self.spatialConnect.sensorService.lastKnown
       subscribeNext:^(CLLocation *loc) {
         CLLocationDistance alt = loc.altitude;
         float lat = loc.coordinate.latitude;
@@ -146,14 +146,14 @@ NSString *const SCJavascriptBridgeErrorDomain =
 
 - (void)activeStoreList:(id<RACSubscriber>)subscriber {
   NSArray *arr =
-      [self.spatialConnect.manager.dataService activeStoreListDictionary];
+      [self.spatialConnect.dataService activeStoreListDictionary];
   [subscriber sendCompleted];
   [self.bridge callHandler:@"storesList" data:@{ @"stores" : arr }];
 }
 
 - (void)activeStoreById:(NSDictionary *)value
      responseSubscriber:(id<RACSubscriber>)subscriber {
-  NSDictionary *dict = [self.spatialConnect.manager.dataService
+  NSDictionary *dict = [self.spatialConnect.dataService
       storeByIdAsDictionary:value[@"storeId"]];
   [subscriber sendCompleted];
   [self.bridge callHandler:@"store" data:@{ @"store" : dict }];
@@ -163,7 +163,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
     responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter =
       [SCQueryFilter filterFromDictionary:value[@"filters"]];
-  [[self.spatialConnect.manager.dataService queryAllStores:filter]
+  [[self.spatialConnect.dataService queryAllStores:filter]
       subscribeNext:^(SCGeometry *g) {
         [self.bridge callHandler:@"spatialQuery" data:g.geoJSONDict];
         [subscriber sendCompleted];
@@ -172,7 +172,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
 
 - (void)queryStoreById:(NSDictionary *)value
      responseSubcriber:(id<RACSubscriber>)subscriber {
-  [[self.spatialConnect.manager.dataService
+  [[self.spatialConnect.dataService
       queryStoreById:[value[@"id"] stringValue]
           withFilter:nil] subscribeNext:^(SCGeometry *g) {
     NSDictionary *gj = g.geoJSONDict;
@@ -184,7 +184,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value];
-  [[self.spatialConnect.manager.dataService
+  [[self.spatialConnect.dataService
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter] subscribeNext:^(SCGeometry *g) {
     NSDictionary *gj = g.geoJSONDict;
@@ -196,7 +196,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
 - (void)queryGeoStoreById:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value];
-  [[self.spatialConnect.manager.dataService
+  [[self.spatialConnect.dataService
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter] subscribeNext:^(SCGeometry *g) {
     NSDictionary *gj = g.geoJSONDict;
@@ -210,9 +210,9 @@ NSString *const SCJavascriptBridgeErrorDomain =
 - (void)spatialConnectGPS:(id)value {
   BOOL enable = [value boolValue];
   if (enable) {
-    [self.spatialConnect.manager.sensorService enableGPS];
+    [self.spatialConnect.sensorService enableGPS];
   } else {
-    [self.spatialConnect.manager.sensorService disableGPS];
+    [self.spatialConnect.sensorService disableGPS];
   }
 }
 
@@ -222,7 +222,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
   NSString *layerId = [value objectForKey:@"layerId"];
   NSString *geoJson = [value objectForKey:@"feature"];
   SCDataStore *store =
-      [self.spatialConnect.manager.dataService storeByIdentifier:storeId];
+      [self.spatialConnect.dataService storeByIdentifier:storeId];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     NSError *err;
@@ -265,7 +265,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
   geom.identifier = t.featureId;
 
   SCDataStore *store =
-      [self.spatialConnect.manager.dataService storeByIdentifier:geom.storeId];
+      [self.spatialConnect.dataService storeByIdentifier:geom.storeId];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     [[s update:geom] subscribeError:^(NSError *error) {
@@ -290,7 +290,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
    responseSubscriber:(id<RACSubscriber>)subscriber {
   SCKeyTuple *key = [SCKeyTuple tupleFromEncodedCompositeKey:value];
   SCDataStore *store =
-      [self.spatialConnect.manager.dataService storeByIdentifier:key.storeId];
+      [self.spatialConnect.dataService storeByIdentifier:key.storeId];
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     [[s delete:key] subscribeError:^(NSError *error) {

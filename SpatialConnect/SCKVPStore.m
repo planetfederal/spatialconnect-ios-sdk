@@ -36,24 +36,46 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   return self;
 }
 
+- (NSError*)open {
+  return [self openDatabase];
+}
+
+- (void)close {
+  [self closeDatabase];
+}
+
 - (BOOL)createDatabase {
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                        NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
   NSString *path = [documentsDirectory stringByAppendingString:@"/kvp.db"];
   database = [[FMDatabase alloc] initWithPath:path];
-  [database open];
-  NSString *createTable = @"CREATE TABLE kvp ( _id INTEGER NOT NULL PRIMARY KEY "
-                          @"AUTOINCREMENT, key STRING UNIQUE NOT NULL, value "
-                          @"BLOB NOT NULL, value_type INT NOT NULL);";
-  NSString *createIndex = @"CREATE UNIQUE INDEX kIdx ON kvp(key);";
-  int res = [database
-      executeStatements:[NSString stringWithFormat:@"%@%@", createTable,
-                                                   createIndex]];
-  if (res == SQLITE_OK) {
+  if (database) {
     return YES;
   } else {
     return NO;
+  }
+}
+
+- (NSError*)openDatabase {
+  [database open];
+  NSString *createTable = @"CREATE TABLE kvp ( _id INTEGER NOT NULL PRIMARY KEY "
+  @"AUTOINCREMENT, key STRING UNIQUE NOT NULL, value "
+  @"BLOB NOT NULL, value_type INT NOT NULL);";
+  NSString *createIndex = @"CREATE UNIQUE INDEX kIdx ON kvp(key);";
+  int res = [database
+             executeStatements:[NSString stringWithFormat:@"%@%@", createTable,
+                                createIndex]];
+  if (res == SQLITE_OK) {
+    return nil;
+  } else {
+    return database.lastError;
+  }
+}
+
+- (void)closeDatabase {
+  if (database) {
+    [database close];
   }
 }
 

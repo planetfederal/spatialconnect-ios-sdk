@@ -35,21 +35,27 @@
   return self;
 }
 
+- (void)close {
+  if (pool) {
+      [pool releaseAllDatabases];
+  }
+}
+
 - (RACSignal *)contents {
   SCGpkgContentsTable *ct =
-      [[SCGpkgContentsTable alloc] initWithQueue:self.pool];
+      [[SCGpkgContentsTable alloc] initWithPool:self.pool];
   return [ct all];
 }
 
 - (RACSignal *)extensions {
   SCGpkgExtensionsTable *et =
-      [[SCGpkgExtensionsTable alloc] initWithQueue:self.pool];
+      [[SCGpkgExtensionsTable alloc] initWithPool:self.pool];
   return [et all];
 }
 
 - (NSArray *)tileContents {
   SCGpkgContentsTable *tc =
-      [[SCGpkgContentsTable alloc] initWithQueue:self.pool];
+      [[SCGpkgContentsTable alloc] initWithPool:self.pool];
   return [[tc.tiles.rac_sequence.signal map:^SCGpkgTileSource*(SCGpkgContent *c) {
     return [[SCGpkgTileSource alloc] init];
   }] toArray];
@@ -57,9 +63,9 @@
 
 - (NSArray *)featureContents {
   SCGpkgContentsTable *tc =
-      [[SCGpkgContentsTable alloc] initWithQueue:self.pool];
+      [[SCGpkgContentsTable alloc] initWithPool:self.pool];
   return [[tc.vectors.rac_sequence.signal map:^SCGpkgFeatureSource*(SCGpkgContent *c) {
-    return [[SCGpkgFeatureSource alloc] initWithQueue:self.pool andName:c.tableName isIndexed:YES];
+    return [[SCGpkgFeatureSource alloc] initWithPool:self.pool andName:c.tableName isIndexed:YES];
   }] toArray];
 }
 

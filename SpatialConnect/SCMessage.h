@@ -15,6 +15,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SCLoggingAssertionHandler : NSAssertionHandler
+@interface SCMessage : NSObject
+
+@property NSString* serviceIdentifier;
+@property NSUInteger action;
+@property NSDictionary* payload;
+
++ (instancetype)fromBytes:(NSData*)d;
+- (id)initWithAction:(NSInteger)a payload:(NSDictionary*)p serviceIdentifier:(NSString*)s;
 
 @end

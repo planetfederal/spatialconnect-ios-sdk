@@ -49,7 +49,7 @@
       [self expectationWithDescription:@"testing query all stores"];
   SCQueryFilter *qf = [[SCQueryFilter alloc] init];
   NSMutableArray *arr = [NSMutableArray new];
-  [[sc.manager.dataService queryAllStores:qf]
+  [[sc.dataService queryAllStores:qf]
       subscribeNext:^(SCSpatialFeature *x) {
         [arr addObject:x];
       }
