@@ -30,13 +30,13 @@ typedef NS_ENUM(NSInteger, SCGpkgColType) {
 @interface SCGpkgFeatureSource : NSObject
 
 @property(strong, readonly) NSString *name;
-@property(strong, readonly) FMDatabaseQueue *queue;
+@property(strong, readonly) FMDatabasePool *pool;
 @property(strong, readonly) NSString *pkColName;
 @property(strong, readonly) NSString *geomColName;
 @property(strong, readonly) NSDictionary *colsTypes;
 
-- (id)initWithQueue:(FMDatabaseQueue *)q andName:(NSString *)n;
-- (id)initWithQueue:(FMDatabaseQueue *)q
+- (id)initWithPool:(FMDatabasePool *)p andName:(NSString *)n;
+- (id)initWithPool:(FMDatabasePool *)p
             andName:(NSString *)n
           isIndexed:(BOOL)i;
 - (RACSignal *)queryWithFilter:(SCQueryFilter *)f;

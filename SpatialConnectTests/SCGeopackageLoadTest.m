@@ -40,6 +40,7 @@
 
 - (void)tearDown {
   [super tearDown];
+  [self.sc stopAllServices];
 }
 
 - (void)testGpkgDownload {
@@ -50,7 +51,7 @@
         if (ds) {
           XCTAssertNotNil(ds.defaultLayerName, @"Layer Name shall be set");
           XCTAssertNotNil(ds.layerList, @"Layer list as array");
-          XCTAssertNoThrow([sc.manager stopAllServices]);
+          XCTAssertNoThrow([sc stopAllServices]);
         } else {
           XCTAssert(NO, @"Store is nil");
         }
@@ -61,7 +62,7 @@
         [expect fulfill];
       }];
 
-  [sc.manager startAllServices];
+  [sc startAllServices];
   [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 

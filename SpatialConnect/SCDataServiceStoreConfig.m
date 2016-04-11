@@ -16,13 +16,11 @@
 * specific language governing permissions and limitations
 * under the License.
 ******************************************************************************/
+#import "SCDataService.h"
+#import "SCDataServiceStoreConfig.h"
+#import "SCMessage.h"
 
-
-
-
-#import "SCStoreConfig.h"
-
-@implementation SCStoreConfig
+@implementation SCDataServiceStoreConfig
 
 @synthesize type;
 @synthesize version;
@@ -46,6 +44,22 @@
     self.name = dict[@"name"];
   }
   return self;
+}
+
+- (SCMessage*)message {
+  NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
+  [d setObject:self.type forKey:@"type"];
+  [d setObject:@(self.version) forKey:@"version"];
+  [d setObject:self.uniqueid forKey:@"id"];
+  [d setObject:self.uri forKey:@"uri"];
+  [d setObject:@(self.isMainBundle) forKey:@"isMainBundle"];
+  [d setObject:self.name forKey:@"name"];
+
+  SCMessage *msg = [SCMessage new];
+  msg.serviceIdentifier = @"DATASERVICE";
+  msg.action = SCACTION_DATASERVICE_ADDSTORE;
+  msg.payload = d;
+  return msg;
 }
 
 @end

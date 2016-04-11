@@ -15,6 +15,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SCLoggingAssertionHandler : NSAssertionHandler
+@interface SCLocalConfig : NSObject {
+  NSMutableArray *dataServiceStores;
+}
+
+- (id)initWithDictionary:(NSDictionary*)d;
+- (NSArray*)messages;
 
 @end

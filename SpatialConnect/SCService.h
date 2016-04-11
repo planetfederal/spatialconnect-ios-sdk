@@ -23,7 +23,8 @@ typedef NS_ENUM(NSInteger, SCServiceStatus) {
   SC_SERVICE_STARTED,
   SC_SERVICE_PAUSED,
   SC_SERVICE_RUNNING,
-  SC_SERVICE_STOPPED
+  SC_SERVICE_STOPPED,
+  SC_SERVICE_ERROR
 };
 
 @interface SCService : NSObject <SCServiceLifecycle>

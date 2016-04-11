@@ -36,18 +36,33 @@
 
 - (void)tearDown {
   [super tearDown];
+  [sc stopAllServices];
 }
 
 - (void)testAutoConfig {
+  XCTestExpectation *expect = [self expectationWithDescription:@"AutoConf"];
   NSMutableArray *arr = [NSMutableArray new];
-  RACSignal *result = [sc.manager.dataService queryAllStores:nil];
-  [result subscribeNext:^(SCSpatialFeature *geom) {
-    [arr addObject:geom];
-  } error:^(NSError *error) {
-    XCTFail(@"Error Querying stores");
-  } completed:^(void) {
-    XCTAssert(arr.count > 0, @"Pass");
+  RACMulticastConnection *s = [sc.dataService storeEvents];
+  RACSignal *starts = [[s.signal filter:^BOOL(SCStoreStatusEvent *e) {
+    if (e.status == SC_DATASTORE_EVT_STARTED) {
+      return YES;
+    }
+    return NO;
+  }] take:1];
+  [starts subscribeNext:^(SCStoreStatusEvent *e) {
+    RACSignal *result = [sc.dataService queryAllStores:nil];
+    [result subscribeNext:^(SCSpatialFeature *geom) {
+      [arr addObject:geom];
+    } error:^(NSError *error) {
+      XCTFail(@"Error Querying stores");
+    } completed:^(void) {
+      XCTAssert(arr.count > 0, @"Pass");
+      [expect fulfill];
+    }];
   }];
+  [s connect];
+  [sc startAllServices];
+  [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 
 @end

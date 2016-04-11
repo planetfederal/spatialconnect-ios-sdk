@@ -20,10 +20,10 @@
 #import <Foundation/Foundation.h>
 #import "SCService.h"
 
-@interface SCServiceStatusEvent : NSObject
-
-@property(nonatomic, readonly) NSInteger status;
-@property(nonatomic, readonly) NSString *serviceName;
+@interface SCServiceStatusEvent : NSObject {
+  NSInteger status;
+  NSString *serviceName;
+}
 
 + (instancetype)fromEvent:(SCServiceStatus)s andServiceName:(NSString *)sName;
 - (id)initWithEvent:(SCServiceStatus)s andStoreName:(NSString *)sName;

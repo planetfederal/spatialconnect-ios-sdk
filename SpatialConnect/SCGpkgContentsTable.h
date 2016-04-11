@@ -33,7 +33,7 @@ extern NSString *const kCTMaxYColName;
 extern NSString *const kCTSRSIdColName;
 
 @interface SCGpkgContentsTable : SCGpkgTable <SCGpkgTableProtocol>
-- (id)initWithQueue:(FMDatabaseQueue *)q;
+- (id)initWithPool:(FMDatabasePool *)pool;
 - (NSArray *)tiles;
 - (NSArray *)vectors;
 @end

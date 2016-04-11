@@ -24,8 +24,8 @@ extern NSString *const kTableName;
 
 @property(strong, readonly) FMDatabaseQueue *queue;
 
-- (id)initWithQueue:(FMDatabasePool *)q;
-- (id)initWithQueue:(FMDatabasePool *)q tableName:(NSString *)t;
+- (id)initWithPool:(FMDatabasePool *)q;
+- (id)initWithPool:(FMDatabasePool *)q tableName:(NSString *)t;
 - (RACSignal *)all;
 - (NSString *)allQueryString;
 

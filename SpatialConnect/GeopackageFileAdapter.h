@@ -19,7 +19,7 @@
 
 #import "SCAdapterKeyValue.h"
 #import "SCQueryFilter.h"
-#import "SCStoreConfig.h"
+#import "SCDataServiceStoreConfig.h"
 #import "SCGeopackage.h"
 #import <Foundation/Foundation.h>
 
@@ -37,8 +37,9 @@
 @property(readonly, nonatomic, strong) SCGeopackage *gpkg;
 @property(nonatomic, weak) GeopackageStore *parentStore;
 
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
+- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)cfg;
 - (RACSignal *)connect;
+- (void)disconnect;
 
 - (RACSignal *)query:(SCQueryFilter *)filter;
 - (RACSignal *)queryById:(SCKeyTuple *)key;

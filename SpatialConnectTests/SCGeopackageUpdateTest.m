@@ -39,6 +39,7 @@
 
 - (void)tearDown {
   [super tearDown];
+  [self.sc stopAllServices];
 }
 
 - (void)testGpkgFeatureUpdate {
@@ -66,8 +67,8 @@
             }];
       }];
 
-  [sc.manager startAllServices];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [sc startAllServices];
+  [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 
 @end

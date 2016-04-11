@@ -24,7 +24,17 @@
 
 extern NSString *const kSERVICENAME;
 
-@interface SCDataService : SCService
+typedef NS_ENUM(NSUInteger, SCActionDataService) {
+  SCACTION_DATASERVICE_ADDSTORE = 0,
+  SCACTION_DATASERVICE_REMOVESTORE = 1,
+  SCACTION_DATASERVICE_UPDATESTORE = 2
+};
+
+@interface SCDataService : SCService {
+  RACSignal *addStore;
+  RACSignal *updateStore;
+  RACSignal *removeStore;
+}
 
 @property(readonly, nonatomic) SCServiceStatus status;
 @property(nonatomic) RACMulticastConnection *storeEvents;
@@ -49,5 +59,4 @@ extern NSString *const kSERVICENAME;
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter;
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter;
-- (RACSignal *)allStoresStartedSignal;
 @end

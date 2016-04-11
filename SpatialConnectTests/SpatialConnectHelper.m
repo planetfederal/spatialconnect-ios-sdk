@@ -26,7 +26,8 @@
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
-  SpatialConnect *sc = [[SpatialConnect alloc] initWithFilepath:filePath];
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
 
   [NSURLRequest

@@ -14,37 +14,40 @@
  */
 
 #import <XCTest/XCTest.h>
-#import "SCKVPStore.h"
+#import "SpatialConnectHelper.h"
 #import "SCTestString.h"
 
-@interface SCKVPTest : XCTestCase {
-  SCKVPStore *s;
-}
-
+@interface SCKVPTest : XCTestCase
+@property(nonatomic) SpatialConnect *sc;
+@property(nonatomic) SCKVPStore *kvp;
 @end
 
 @implementation SCKVPTest
 
+@synthesize sc,kvp;
+
 - (void)setUp {
   [super setUp];
-  s = [[SCKVPStore alloc] init];
+  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
+  self.kvp = self.sc.kvpService.kvpStore;
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+  [super tearDown];
+  [self.sc stopAllServices];
+
 }
 
 - (void)testFloat {
-  [s putValue:@(67.3f) forKey:@"floatTest"];
-  NSNumber *obj = (NSNumber*)[s valueForKey:@"floatTest"];
+  [self.kvp putValue:@(67.3f) forKey:@"floatTest"];
+  NSNumber *obj = (NSNumber*)[self.kvp valueForKey:@"floatTest"];
   XCTAssertEqual(obj.floatValue, 67.3f);
 }
 
 - (void)testData {
   NSData *fileData = [NSData dataWithContentsOfFile:@"simple.json"];
-  [s putValue:fileData forKey:@"datatest"];
-  NSData *obj = (NSData*)[s valueForKey:@"datatest"];
+  [self.kvp putValue:fileData forKey:@"datatest"];
+  NSData *obj = (NSData*)[self.kvp valueForKey:@"datatest"];
   NSString *str = [[NSString alloc] initWithBytes:[fileData bytes] length:fileData.length encoding:NSUTF8StringEncoding];
   NSString *str2 = [[NSString alloc] initWithBytes:[obj bytes] length:obj.length encoding:NSUTF8StringEncoding];
   XCTAssertEqual(obj.length, fileData.length);
@@ -54,20 +57,20 @@
 
 - (void)testString {
   NSString *str = [SCTestString randomStringWithLength:1000];
-  [s putValue:str forKey:@"stringTest"];
-  NSString *obj = (NSString*)[s valueForKey:@"stringTest"];
+  [self.kvp putValue:str forKey:@"stringTest"];
+  NSString *obj = (NSString*)[self.kvp valueForKey:@"stringTest"];
   XCTAssertTrue([obj isEqualToString:str]);
 }
 
 - (void)testBoolean {
-  [s putValue:[NSNumber numberWithBool:YES] forKey:@"booltest"];
-  NSNumber *obj = (NSNumber*)[s valueForKey:@"booltest"];
+  [self.kvp putValue:[NSNumber numberWithBool:YES] forKey:@"booltest"];
+  NSNumber *obj = (NSNumber*)[self.kvp valueForKey:@"booltest"];
   XCTAssertTrue(obj.boolValue);
 }
 
 - (void)testInt {
-  [s putValue:@(67) forKey:@"intTest"];
-  NSObject *obj = [s valueForKey:@"intTest"];
+  [self.kvp putValue:@(67) forKey:@"intTest"];
+  NSObject *obj = [self.kvp valueForKey:@"intTest"];
   XCTAssertNotNil(obj);
 }
 

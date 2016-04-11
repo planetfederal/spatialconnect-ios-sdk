@@ -14,7 +14,9 @@
  * limitations under the License
  */
 
+#import "SCMessage.h"
 #import "SCService.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef NS_ENUM(NSInteger, SCConfigEvent) {
   SC_CONFIG_SERVICE_ADDED,
@@ -25,10 +27,11 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 
 @interface SCConfigService : SCService {
   NSMutableArray *configPaths;
+  RACSignal *configEvents;
+  RACSignal *dataServiceSignals;
 }
 
-- (id)initWithFilepath:(NSString *)filepath;
-- (id)initWithFilepaths:(NSArray *)filepaths;
-- (RACSignal *)load;
+- (id)initWithSignal:(RACSignal*)bus;
+- (RACSignal*)connect:(NSString*)storeIdent;
 
 @end

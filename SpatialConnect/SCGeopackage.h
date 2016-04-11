@@ -34,6 +34,8 @@
  */
 - (id)initWithFilename:(NSString *)filepath;
 
+- (void)close;
+
 /*!
  *  @brief Array of SCGpkgContent objects
  *

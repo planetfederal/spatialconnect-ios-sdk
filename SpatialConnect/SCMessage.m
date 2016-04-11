@@ -10,37 +10,31 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ * See the License for the specific language governing permissions and limitations under the License
  */
 
-#import "SCGpkgTable.h"
+#import "SCMessage.h"
 
-@interface SCGpkgTable ()
-@property(strong, readwrite) FMDatabaseQueue *queue;
-@end
+@implementation SCMessage
 
-@implementation SCGpkgTable
+@synthesize serviceIdentifier,action,payload;
 
-- (id)initWithPool:(FMDatabaseQueue *)q tableName:(NSString *)t {
++ (instancetype)fromBytes:(NSData*)d {
+  SCMessage *m = [SCMessage new];
+  m.action = 0;
+  m.payload = nil;
+  m.serviceIdentifier = nil;
+  return m;
+}
+
+- (id)initWithAction:(NSInteger)a payload:(NSDictionary*)p serviceIdentifier:(NSString*)s {
   self = [super init];
   if (self) {
-    self.queue = q;
-    tableName = t;
+    self.action = a;
+    self.payload = p;
+    self.serviceIdentifier = s;
   }
   return self;
-}
-
-- (id)initWithPool:(FMDatabaseQueue *)q {
-  return nil;
-}
-
-- (RACSignal *)all {
-  return [RACSignal empty];
-}
-
-- (NSString *)allQueryString {
-  return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
 }
 
 @end

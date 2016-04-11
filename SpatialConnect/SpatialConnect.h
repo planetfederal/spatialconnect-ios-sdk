@@ -21,9 +21,11 @@
 #import "SCFileUtils.h"
 #import "SCNetworkService.h"
 #import "SCRasterStore.h"
+#import "SCRasterService.h"
+#import "SCConfigService.h"
 #import "SCSensorService.h"
+#import "SCKVPService.h"
 #import "SCService.h"
-#import "SCServiceManager.h"
 #import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
 #import "SCSpatialStore.h"
@@ -32,13 +34,32 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-@interface SpatialConnect : NSObject
+@interface SpatialConnect : NSObject {
+  NSMutableArray *filepaths;
+  RACSubject *bus;
+}
 
-@property(nonatomic, strong) SCServiceManager *manager;
+@property(readonly, strong) NSMutableDictionary *services;
+@property(readonly, strong) SCDataService *dataService;
+@property(readonly, strong) SCNetworkService *networkService;
+@property(readonly, strong) SCSensorService *sensorService;
+@property(readonly, strong) SCRasterService *rasterService;
+@property(readonly, strong) SCConfigService *configService;
+@property(readonly, strong) SCKVPService *kvpService;
 
-- (instancetype)initWithFilepath:(NSString *)filepath;
-- (instancetype)initWithFilepaths:(NSArray *)filepaths;
++ (id)sharedInstance;
+
 - (void)startAllServices;
 - (void)stopAllServices;
+- (void)restartAllServices;
+- (void)addConfigFilepath:(NSString*)fp;
+- (instancetype)initWithFilepaths:(NSArray *)filepaths;
+
+- (void)addService:(SCService *)service;
+- (void)removeService:(NSString *)serviceId;
+- (SCService*)serviceById:(NSString*)ident;
+- (void)startService:(NSString *)serviceId;
+- (void)stopService:(NSString *)serviceId;
+- (void)restartService:(NSString *)serviceId;
 
 @end

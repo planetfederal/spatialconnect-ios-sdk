@@ -17,13 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import <Foundation/Foundation.h>
+#import "SCMessage.h"
 
-@interface SCStoreConfig : NSObject
+@interface SCDataServiceStoreConfig : NSObject {
+
+}
 
 @property (nonatomic,weak) NSString *type;
 @property (nonatomic) NSInteger version;
@@ -34,4 +33,6 @@
 @property (nonatomic) NSString *defaultLayer;
 
 - (id)initWithDictionary:(NSDictionary*)dict;
+- (SCMessage*)message;
+
 @end

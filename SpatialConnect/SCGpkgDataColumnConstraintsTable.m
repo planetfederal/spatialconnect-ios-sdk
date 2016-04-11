@@ -29,8 +29,8 @@ NSString *const kDCCDescriptionColName = @"description";
 
 @implementation SCGpkgDataColumnConstraintsTable
 
-- (id)initWithQueue:(FMDatabaseQueue *)q {
-  return [super initWithQueue:q tableName:kDCCTableName];
+- (id)initWithPool:(FMDatabasePool *)p {
+  return [super initWithPool:p tableName:kDCCTableName];
 }
 
 - (RACSignal *)all {

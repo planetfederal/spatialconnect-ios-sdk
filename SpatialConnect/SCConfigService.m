@@ -16,93 +16,58 @@
 
 #import "SCConfigService.h"
 #import "SCFileUtils.h"
-#import "SCStoreConfig.h"
+#import "SCDataServiceStoreConfig.h"
+#import "SCDataService.h"
+
+@interface SCConfigService()
+- (void)setupSignals;
+@end
 
 @implementation SCConfigService
 
-- (id)init {
-  self = [super init];
+- (id)initWithSignal:(RACSignal *)bus{
+  self = [self init];
   if (self) {
     configPaths = [NSMutableArray new];
-    [self sweepDataDirectory];
+    configEvents = bus;
   }
   return self;
 }
 
-- (id)initWithFilepath:(NSString *)filepath {
-  self = [super init];
-  if (self) {
-    configPaths = [NSMutableArray new];
-    [configPaths addObject:filepath];
-  }
-
-  return self;
+- (void)setupSignals {
+  dataServiceSignals = [[configEvents filter:^BOOL(SCMessage *m) {
+    switch (m.action) {
+      case SCACTION_DATASERVICE_ADDSTORE:
+        return YES;
+      case SCACTION_DATASERVICE_REMOVESTORE:
+        return YES;
+      case SCACTION_DATASERVICE_UPDATESTORE:
+        return YES;
+      default:
+        return NO;
+    }
+  }] map:^SCMessage*(SCMessage *m) {
+    m.serviceIdentifier = kSERVICENAME;
+    return m;
+  }];
 }
 
-- (id)initWithFilepaths:(NSArray *)filepaths {
-  self = [super init];
-  if (self) {
-    configPaths = [NSMutableArray new];
-    [configPaths addObjectsFromArray:filepaths];
+- (RACSignal*)connect:(NSString*)serviceIdent {
+  if ([serviceIdent isEqualToString:kSERVICENAME]) {
+    return dataServiceSignals;
   }
-  return self;
-}
-
-- (RACSignal *)load {
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [configPaths enumerateObjectsUsingBlock:^(NSString *fp, NSUInteger idx,
-                                                  BOOL *_Nonnull stop) {
-          NSError *error;
-          NSDictionary *cfg = [SCFileUtils jsonFileToDict:fp error:&error];
-          if (error) {
-            [subscriber sendError:error];
-          }
-
-          [cfg[@"stores"] enumerateObjectsUsingBlock:^(NSDictionary *d,
-                                                       NSUInteger i, BOOL *s) {
-            SCStoreConfig *cfg = [[SCStoreConfig alloc] initWithDictionary:d];
-            RACTuple *tuple =
-                [RACTuple tupleWithObjects:@(SC_CONFIG_DATASERVICE_STORE_ADDED),
-                                           cfg, nil];
-            [subscriber sendNext:tuple];
-          }];
-
-          [subscriber sendCompleted];
-        }];
-        return nil;
-      }];
+  return nil;
 }
 
 - (void)start {
   [super start];
+  [self setupSignals];
 }
 
 - (void)stop {
   [super stop];
 }
 
-#pragma mark -
-#pragma mark Private
 
-- (void)sweepDataDirectory {
-  NSString *path = [NSSearchPathForDirectoriesInDomains(
-      NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  NSArray *dirs =
-      [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
-                                                          error:NULL];
-
-  [[[dirs.rac_sequence filter:^BOOL(NSString *filename) {
-    if ([filename.pathExtension.lowercaseString isEqualToString:@"scfg"]) {
-      return YES;
-    } else {
-      return NO;
-    }
-  }] signal] subscribeNext:^(NSString *cfgFileName) {
-    [configPaths
-        addObject:[NSString stringWithFormat:@"%@/%@", path, cfgFileName]];
-
-  }];
-}
 
 @end

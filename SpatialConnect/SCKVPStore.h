@@ -21,8 +21,8 @@
   FMDatabase *database;
 }
 
-@property NSObject *obj;
-
+- (NSError*)open;
+- (void)close;
 - (void)putValue:(id)value forKey:(NSString*)key;
 - (void)putDictionary:(NSDictionary*)dict;
 - (NSObject*)valueForKey:(NSString*)key;

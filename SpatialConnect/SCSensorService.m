@@ -18,10 +18,8 @@
 ******************************************************************************/
 
 
-
-
+#import "SpatialConnect.h"
 #import "SCSensorService.h"
-#import "SCUserPrefs.h"
 
 @interface SCSensorService ()
 
@@ -101,24 +99,31 @@
 }
 
 -(void)enableGPS {
-    if (self.status != SC_SERVICE_RUNNING) {
-        [self start];
-    }
-    [SCUserPrefs setPreference:@(YES) forKey:GPS_ENABLED];
-    [self startLocationManager];
+  if (self.status != SC_SERVICE_RUNNING) {
+    [self start];
+  }
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCKVPStore *kvp = sc.kvpService.kvpStore;
+  [kvp putValue:@(YES) forKey:GPS_ENABLED];
+  [self startLocationManager];
 }
 
 -(void)disableGPS {
-    [self stopLocationManager];
-    [SCUserPrefs setPreference:@(NO) forKey:GPS_ENABLED];
+  [self stopLocationManager];
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCKVPStore *kvp = sc.kvpService.kvpStore;
+  [kvp setValue:@(NO) forKey:GPS_ENABLED];
 }
 
 -(BOOL)shoudlEnableGPS {
-    if ([(NSNumber*)[SCUserPrefs preference:GPS_ENABLED] isEqual:@(YES)]) {
-        return YES;
-    } else {
-        return NO;
-    }
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCKVPStore *kvp = sc.kvpService.kvpStore;
+  NSNumber *enabled = (NSNumber*)[kvp valueForKey:GPS_ENABLED];
+  if ([(NSNumber*)enabled isEqual:@(YES)]) {
+    return YES;
+  } else {
+    return NO;
+  }
 }
 
 -(void)startLocationManager {

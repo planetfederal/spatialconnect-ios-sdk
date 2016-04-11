@@ -39,7 +39,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 @synthesize type = _type;
 @synthesize version = _version;
 
-- (id)initWithStoreConfig:(SCStoreConfig *)config {
+- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (!self) {
     return nil;
@@ -52,7 +52,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return self;
 }
 
-- (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style {
+- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config withStyle:(SCStyle *)style {
   self = [self initWithStoreConfig:config];
   if (!self) {
     return nil;
@@ -82,6 +82,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (void)stop {
+  [self.adapter disconnect];
   self.status = SC_DATASTORE_STOPPED;
 }
 

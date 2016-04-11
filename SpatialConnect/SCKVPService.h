@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and limitations under the License
  */
 
-#import <Foundation/Foundation.h>
+#import "SCService.h"
+#import "SCKVPStore.h"
 
-@interface SCLoggingAssertionHandler : NSAssertionHandler
+@interface SCKVPService : SCService
+
+@property (readonly) SCKVPStore *kvpStore;
 
 @end
