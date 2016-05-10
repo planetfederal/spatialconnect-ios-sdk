@@ -39,4 +39,7 @@
               layerId:(NSString *)l
             featureId:(NSString *)f;
 
++ (NSString*)encodeString:(NSString*)s;
++ (NSString*)decodeString:(NSString*)s;
+
 @end

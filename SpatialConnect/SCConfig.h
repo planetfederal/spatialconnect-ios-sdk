@@ -16,16 +16,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SCMessage : NSObject
+/*!
+ *  @brief This is a mapping from the json config file to
+ *  what the mobile architecture speak
+ */
+@interface SCConfig : NSObject {
+  NSMutableArray *dataServiceStores;
+  NSMutableArray *forms;
+}
 
-@property NSString *serviceIdentifier;
-@property NSUInteger action;
-@property NSObject *payload;
-
-+ (instancetype)fromBytes:(NSData *)d;
-- (id)initWithAction:(NSInteger)a
-             payload:(NSDictionary *)p
-   serviceIdentifier:(NSString *)s;
-- (NSData *)data;
+- (id)initWithDictionary:(NSDictionary *)d;
+- (NSArray *)forms;
+- (NSArray *)dataServiceStores;
 
 @end

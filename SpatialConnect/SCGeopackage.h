@@ -33,6 +33,7 @@
  *  @return instance of SCGeopackage
  */
 - (id)initWithFilename:(NSString *)filepath;
+- (id)initEmptyGeopackageWithFilename:(NSString *)filepath;
 
 - (void)close;
 
@@ -68,6 +69,9 @@
 
 - (RACSignal *)tileSource:(NSString *)name;
 
-- (RACSignal*)query:(SCQueryFilter*)filter;
+- (RACSignal *)query:(SCQueryFilter *)filter;
+
+- (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types;
+- (void)removeFeatureSource:(NSString *)name;
 
 @end

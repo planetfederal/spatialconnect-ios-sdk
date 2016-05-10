@@ -35,4 +35,7 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
 
 @property(strong, readonly, nonatomic) GeopackageFileAdapter *adapter;
 
+- (void)addLayer:(NSString *)name withDef:(NSDictionary *)def;
+- (void)removeLayer:(NSString *)name;
+
 @end

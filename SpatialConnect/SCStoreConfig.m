@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 #import "SCDataService.h"
-#import "SCDataServiceStoreConfig.h"
+#import "SCStoreConfig.h"
 #import "SCMessage.h"
 
-@implementation SCDataServiceStoreConfig
+@implementation SCStoreConfig
 
 @synthesize type;
 @synthesize version;
@@ -28,13 +28,13 @@
 @synthesize uri;
 @synthesize isMainBundle;
 
-- (id)initWithDictionary:(NSDictionary*)dict
-{
+- (id)initWithDictionary:(NSDictionary *)dict {
   self = [super init];
   if (self) {
     self.type = dict[@"type"];
     self.version = [dict[@"version"] integerValue];
-    self.uniqueid = dict[@"id"] == nil ? [[NSUUID UUID] UUIDString] : dict[@"id"];
+    self.uniqueid =
+        dict[@"id"] == nil ? [[NSUUID UUID] UUIDString] : dict[@"id"];
     self.uri = dict[@"uri"];
     self.isMainBundle = [dict[@"isMainBundle"] boolValue];
     if (!self.isMainBundle) {
@@ -44,22 +44,6 @@
     self.name = dict[@"name"];
   }
   return self;
-}
-
-- (SCMessage*)message {
-  NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
-  [d setObject:self.type forKey:@"type"];
-  [d setObject:@(self.version) forKey:@"version"];
-  [d setObject:self.uniqueid forKey:@"id"];
-  [d setObject:self.uri forKey:@"uri"];
-  [d setObject:@(self.isMainBundle) forKey:@"isMainBundle"];
-  [d setObject:self.name forKey:@"name"];
-
-  SCMessage *msg = [SCMessage new];
-  msg.serviceIdentifier = @"DATASERVICE";
-  msg.action = SCACTION_DATASERVICE_ADDSTORE;
-  msg.payload = d;
-  return msg;
 }
 
 @end

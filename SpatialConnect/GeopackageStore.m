@@ -39,7 +39,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 @synthesize type = _type;
 @synthesize version = _version;
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config {
+- (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (!self) {
     return nil;
@@ -52,7 +52,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return self;
 }
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config withStyle:(SCStyle *)style {
+- (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style {
   self = [self initWithStoreConfig:config];
   if (!self) {
     return nil;
@@ -94,6 +94,13 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (NSString *)defaultLayerName {
   return self.adapter.defaultLayerName;
+}
+
+- (void)addLayer:(NSString *)name withDef:(NSDictionary *)def {
+  [self.adapter addLayer:name typeDefs:def];
+}
+
+- (void)removeLayer:(NSString *)name {
 }
 
 #pragma mark -

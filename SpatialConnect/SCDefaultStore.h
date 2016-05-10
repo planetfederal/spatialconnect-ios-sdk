@@ -14,18 +14,15 @@
  * limitations under the License
  */
 
+#import "GeopackageStore.h"
+#import "SCSpatialStore.h"
 #import <Foundation/Foundation.h>
 
-@interface SCMessage : NSObject
-
-@property NSString *serviceIdentifier;
-@property NSUInteger action;
-@property NSObject *payload;
-
-+ (instancetype)fromBytes:(NSData *)d;
-- (id)initWithAction:(NSInteger)a
-             payload:(NSDictionary *)p
-   serviceIdentifier:(NSString *)s;
-- (NSData *)data;
-
+@interface SCDefaultStore
+    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore> {
+  NSMutableDictionary *formIds;
+}
+- (void)addLayer:(NSString *)n
+         withDef:(NSDictionary *)d
+       andFormId:(NSInteger)formId;
 @end

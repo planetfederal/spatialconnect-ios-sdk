@@ -17,22 +17,20 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCMessage.h"
+#import <Foundation/Foundation.h>
 
-@interface SCDataServiceStoreConfig : NSObject {
-
+@interface SCStoreConfig : NSObject {
 }
 
-@property (nonatomic,weak) NSString *type;
-@property (nonatomic) NSInteger version;
-@property (nonatomic,weak) NSString *uri;
-@property (nonatomic,weak) NSString *uniqueid;
+@property(nonatomic, weak) NSString *type;
+@property(nonatomic) NSInteger version;
+@property(nonatomic, weak) NSString *uri;
+@property(nonatomic, weak) NSString *uniqueid;
 @property BOOL isMainBundle;
-@property (nonatomic,weak) NSString *name;
-@property (nonatomic) NSString *defaultLayer;
+@property(nonatomic, weak) NSString *name;
+@property(nonatomic) NSString *defaultLayer;
 
-- (id)initWithDictionary:(NSDictionary*)dict;
-- (SCMessage*)message;
+- (id)initWithDictionary:(NSDictionary *)dict;
 
 @end

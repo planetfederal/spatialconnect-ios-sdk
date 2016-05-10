@@ -18,10 +18,11 @@
 ******************************************************************************/
 
 #import "SCService.h"
-#import <Foundation/Foundation.h>
+#import <MQTTKit/MQTTKit.h>
 
 @interface SCNetworkService : SCService
 
+@property(nonatomic, strong) MQTTClient *client;
 /*!
  *  @brief returns NSDictionary on signal
  *
@@ -29,6 +30,40 @@
  *
  *  @return NSDictionary over RACSignal
  */
-- (RACSignal *)requestURLAsDict:(NSURL *)url;
+- (RACSignal *)getRequestURLAsDict:(NSURL *)url;
+
+- (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url;
+
+/*!
+ *  @brief returns NSData on signal
+ *
+ * @return NSData over RACSignal
+ */
+- (RACSignal *)getRequestURLAsData:(NSURL *)url;
+
+/*!
+ *  @brief returns NSDictionary on signal
+ */
+- (RACSignal *)postRequestAsDict:(NSURL *)url body:(NSData *)data;
+
+/*!
+ *  @brief returns NSData on signal
+ */
+- (RACSignal *)postRequestAsData:(NSURL *)url body:(NSData *)data;
+
+- (RACSignal *)postDictRequestAsDict:(NSURL *)url body:(NSDictionary *)dict;
+
+/*!
+ *  @brief Basic Auth for a url
+ *
+ *  @param url login url
+ *  @param un  basic auth username
+ *  @param pw  basic auth password
+ *
+ *  @return NSURLCredential with Token
+ */
+- (NSURLCredential *)authenticateWithURL:(NSURL *)url
+                                username:(NSString *)un
+                                password:(NSString *)pw;
 
 @end
