@@ -18,11 +18,9 @@
 ******************************************************************************/
 
 #import "SCService.h"
-#import <MQTTKit/MQTTKit.h>
 
 @interface SCNetworkService : SCService
 
-@property(nonatomic, strong) MQTTClient *client;
 /*!
  *  @brief returns NSDictionary on signal
  *

@@ -24,8 +24,6 @@
 
 @implementation SCNetworkService
 
-@synthesize client;
-
 - (RACSignal *)getRequestURLAsDict:(NSURL *)url {
   return [[self getRequestURLAsData:url] flattenMap:^RACSignal *(NSData *d) {
     NSError *err;
@@ -92,35 +90,6 @@
 }
 
 - (void)start {
-  NSString *clientID = [[NSUUID UUID] UUIDString];
-  self.client = [[MQTTClient alloc] initWithClientId:clientID];
-  [self.client setMessageHandler:^(MQTTMessage *message) {
-    NSString *text = message.payloadString;
-    NSLog(@"Received Message:%@", text);
-  }];
-
-  [self.client connectToHost:@"localhost"
-           completionHandler:^(MQTTConnectionReturnCode code) {
-             if (code == ConnectionAccepted) {
-               [self.client subscribe:@"/SPACON/device_id"
-                   withCompletionHandler:nil];
-               [self.client publishString:@"device_id"
-                                  toTopic:@"/SPACON/registration"
-                                  withQos:AtLeastOnce
-                                   retain:NO
-                        completionHandler:^(int mid) {
-                          NSLog(@"Device has been registered");
-                        }];
-             }
-           }];
-}
-
-- (void)pushMessage:(SCMessage *)m topic:(NSString *)t {
-  [self.client publishString:[m data]
-                     toTopic:t
-                     withQos:AtLeastOnce
-                      retain:NO
-           completionHandler:nil];
 }
 
 - (NSURLCredential *)authenticateWithURL:(NSURL *)url
@@ -143,7 +112,7 @@
 
   NSString *result =
       [NSString stringWithCString:[data bytes] length:[data length]];
-  return nil; // todo
+  return nil; // basic auth
 }
 
 @end

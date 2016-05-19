@@ -17,66 +17,34 @@
 * under the License.
 ******************************************************************************/
 
-
-
-#import "SCGeometry+GeoJSON.h"
 #import "SCBoundingBox.h"
+#import "SCGeometry+GeoJSON.h"
 #import "SCPoint+GeoJSON.h"
 
 @implementation SCGeometry (GeoJSON)
 
 - (id)initWithGeoJSON:(SCGeoJSON *)gj {
   self = [self initWithCoordinateArray:gj.coordinates];
-  self.properties = [NSMutableDictionary dictionaryWithDictionary:gj.properties];
+  self.properties =
+      [NSMutableDictionary dictionaryWithDictionary:gj.properties];
   self.identifier = gj.identifier;
   return self;
 }
 
-- (NSMutableDictionary*)geoJSONDict {
-  NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-  if (self.identifier) {
-    dict[@"id"] = self.key.encodedCompositeKey;
-  }
-  if (self.properties) {
-    dict[@"properties"] = self.properties;
-  } else {
-    dict[@"properties"] = [NSNull null];
-  }
-  if (self.bboxArray) {
-    dict[@"bbox"] = self.bboxArray;
-  }
-  dict[@"type"] = @"Feature";
-  dict[@"crs"] = @{
-                   @"type" : @"name",
-                   @"properties": @{
-                       @"name" : @"EPSG:4326"
-                       }
-                   };
-  
-  return dict;
-}
-
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   NSError *error;
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self geoJSONDict]
-                                                     options:NSJSONWritingPrettyPrinted
-                                                       error:&error];
-  
-  if (! jsonData) {
+  NSData *jsonData =
+      [NSJSONSerialization dataWithJSONObject:[self JSONDict]
+                                      options:NSJSONWritingPrettyPrinted
+                                        error:&error];
+
+  if (!jsonData) {
     NSLog(@"GeoJSON string generation: error: %@", error.localizedDescription);
     return @"[]";
   } else {
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return
+        [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
   }
-}
-
-- (NSArray*)bboxArray {
-  return @[
-           [NSNumber numberWithDouble:self.bbox.lowerLeft.longitude],
-           [NSNumber numberWithDouble:self.bbox.lowerLeft.latitude],
-           [NSNumber numberWithDouble:self.bbox.upperRight.longitude],
-           [NSNumber numberWithDouble:self.bbox.upperRight.latitude]
-          ];
 }
 
 @end

@@ -17,25 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-#import "SCPoint+GeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
+#import "SCPoint+GeoJSON.h"
 
 @implementation SCPoint (GeoJSON)
 
-- (NSDictionary*)geoJSONDict {
-  NSMutableDictionary *dict = [super geoJSONDict];
-  NSDictionary *geometry = [NSDictionary dictionaryWithObjects:@[@"Point",[self coordinateArray]] forKeys:@[@"type",@"coordinates"]];
-  [dict setObject:geometry forKey:@"geometry"];
-  return [NSDictionary dictionaryWithDictionary:dict];
-}
-
-- (NSArray*)coordinateArray {
-  return @[[NSNumber numberWithDouble:self.x],[NSNumber numberWithDouble:self.y],[NSNumber numberWithDouble:self.z]];
-}
-
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   return [super geoJSONString];
 }
 

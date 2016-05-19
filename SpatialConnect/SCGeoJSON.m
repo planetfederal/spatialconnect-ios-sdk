@@ -19,13 +19,13 @@
 
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
-#import "SCPoint+GeoJSON.h"
+#import "SCGeometryCollection+GeoJSON.h"
 #import "SCLineString+GeoJSON.h"
-#import "SCPolygon+GeoJSON.h"
+#import "SCMultiLineString+GeoJSON.h"
 #import "SCMultiPoint+GeoJSON.h"
 #import "SCMultiPolygon+GeoJSON.h"
-#import "SCMultiLineString+GeoJSON.h"
-#import "SCGeometryCollection+GeoJSON.h"
+#import "SCPoint+GeoJSON.h"
+#import "SCPolygon+GeoJSON.h"
 
 @interface SCGeoJSON ()
 
@@ -88,8 +88,7 @@
     return GEOJSON_LINESTRING;
   } else if ([typeStr isEqualToString:@"MultiLineString"]) {
     return GEOJSON_MULTILINESTRING;
-  }
-  if ([typeStr isEqualToString:@"Polygon"]) {
+  } else if ([typeStr isEqualToString:@"Polygon"]) {
     return GEOJSON_POLYGON;
   } else if ([typeStr isEqualToString:@"MultiPolygon"]) {
     return GEOJSON_MULTIPOLYGON;

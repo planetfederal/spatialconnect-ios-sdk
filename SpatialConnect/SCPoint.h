@@ -17,23 +17,19 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
+#import "SCGeometry.h"
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "SCGeometry.h"
 
 @interface SCPoint : SCGeometry
 
-@property (nonatomic) double x;
-@property (nonatomic) double y;
-@property (nonatomic) double z;
+@property(nonatomic) double x;
+@property(nonatomic) double y;
+@property(nonatomic) double z;
 
 - (double)longitude;
 - (double)latitude;
 - (double)altitude;
-- (BOOL)equals:(SCPoint*)point;
+- (BOOL)equals:(SCPoint *)point;
 
 @end

@@ -17,13 +17,9 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCPoint.h"
 
 @interface SCPoint (GeoJSON)
-- (NSDictionary*)geoJSONDict;
-- (NSArray*)coordinateArray;
-- (NSString*)geoJSONString;
+
+- (NSString *)geoJSONString;
 @end

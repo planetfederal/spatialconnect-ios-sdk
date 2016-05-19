@@ -88,4 +88,41 @@
                                         Y:(y / self.points.count)];
 }
 
+- (NSDictionary *)JSONDict {
+  NSMutableDictionary *dict = [super JSONDict];
+  NSDictionary *geometry =
+      [NSDictionary dictionaryWithObjects:@[ @"Polygon", self.coordinateArray ]
+                                  forKeys:@[ @"type", @"coordinates" ]];
+  [dict setObject:geometry forKey:@"geometry"];
+  return dict;
+}
+
+- (NSArray *)coordinateArray {
+  NSMutableArray *coords = [[NSMutableArray alloc]
+      initWithObjects:[[[self.points rac_sequence] map:^NSArray *(SCPoint *p) {
+                        return @[
+                          [NSNumber numberWithDouble:p.x],
+                          [NSNumber numberWithDouble:p.y],
+                          [NSNumber numberWithDouble:p.z]
+                        ];
+                      }] array],
+                      nil];
+
+  if (self.holes) {
+    [coords addObjectsFromArray:[[[self.holes.rac_sequence
+                                    map:^NSArray *(SCLinearRing *ring) {
+                                      return ring.points;
+                                    }] map:^NSArray *(NSArray *p) {
+              return [[p.rac_sequence map:^NSArray *(SCPoint *p) {
+                return @[
+                  [NSNumber numberWithDouble:p.x],
+                  [NSNumber numberWithDouble:p.y],
+                  [NSNumber numberWithDouble:p.z]
+                ];
+              }] array];
+            }] array]];
+  }
+  return [NSArray arrayWithArray:coords];
+}
+
 @end

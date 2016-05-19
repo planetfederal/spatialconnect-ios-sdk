@@ -87,4 +87,21 @@
                                         Y:(y / self.linestrings.count)];
 }
 
+- (NSDictionary *)JSONDict {
+  NSMutableDictionary *dict =
+      [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
+  NSDictionary *geometry = [NSDictionary
+      dictionaryWithObjects:@[ @"MultiLineString", [self coordinateArray] ]
+                    forKeys:@[ @"type", @"coordinates" ]];
+  [dict setObject:geometry forKey:@"geometry"];
+  return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSArray *)coordinateArray {
+  return
+      [[self.linestrings.rac_sequence map:^NSArray *(SCLineString *lineString) {
+        return lineString.coordinateArray;
+      }] array];
+}
+
 @end

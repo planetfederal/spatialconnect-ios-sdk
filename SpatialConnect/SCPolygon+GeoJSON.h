@@ -17,15 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCPolygon.h"
 
 @interface SCPolygon (GeoJSON)
 
-- (NSDictionary*)geoJSONDict;
-- (NSArray*)coordinateArray;
-- (NSString*)geoJSONString;
+- (NSString *)geoJSONString;
 
 @end

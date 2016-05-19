@@ -89,7 +89,7 @@
                          [[formIds objectForKey:feature.layerId] integerValue]];
     NSURL *url = [NSURL URLWithString:urlStr];
     SCPoint *p = (SCPoint *)feature;
-    return [sc.networkService postDictRequestAsDict:url body:p.properties];
+    return [sc.networkService postDictRequestAsDict:url body:p.JSONDict];
   }];
 }
 

@@ -21,7 +21,6 @@
 #import "SCSpatialFeature.h"
 
 @class SCBoundingBox;
-@class SCPoint;
 
 typedef NS_ENUM(NSInteger, GeometryType) {
   POINT,
@@ -43,5 +42,8 @@ typedef NS_ENUM(NSInteger, GeometryType) {
 - (GeometryType)type;
 - (BOOL)isContained:(SCBoundingBox *)bbox;
 - (SCSimplePoint *)centroid;
+- (NSArray *)bboxArray;
+- (NSDictionary *)JSONDict;
+- (NSArray *)coordinateArray;
 
 @end

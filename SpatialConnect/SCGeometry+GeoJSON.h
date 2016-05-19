@@ -17,15 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-#import "SCGeometry.h"
 #import "SCGeoJSON.h"
+#import "SCGeometry.h"
 
 @interface SCGeometry (GeoJSON)
-- (NSMutableDictionary*)geoJSONDict;
-- (NSString*)geoJSONString;
-- (NSArray*)bboxArray;
-- (id)initWithGeoJSON:(SCGeoJSON*)gj;
+- (NSMutableDictionary *)JSONDict;
+- (NSString *)geoJSONString;
+- (NSArray *)bboxArray;
+- (id)initWithGeoJSON:(SCGeoJSON *)gj;
 @end

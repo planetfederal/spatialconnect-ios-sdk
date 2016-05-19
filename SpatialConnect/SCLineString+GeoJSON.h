@@ -17,15 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCLineString.h"
 
 @interface SCLineString (GeoJSON)
 
-- (NSDictionary*)geoJSONDict;
-- (NSArray*)coordinateArray;
-- (NSString*)geoJSONString;
+- (NSString *)geoJSONString;
 
 @end

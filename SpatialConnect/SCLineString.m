@@ -86,4 +86,20 @@
                                         Y:(y / self.points.count)];
 }
 
+- (NSDictionary *)JSONDict {
+  NSMutableDictionary *dict =
+      [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
+  NSDictionary *geometry = [NSDictionary
+      dictionaryWithObjects:@[ @"LineString", [self coordinateArray] ]
+                    forKeys:@[ @"type", @"coordinates" ]];
+  [dict setObject:geometry forKey:@"geometry"];
+  return dict;
+}
+
+- (NSArray *)coordinateArray {
+  return [[self.points.rac_sequence map:^NSArray *(SCPoint *p) {
+    return p.coordinateArray;
+  }] array];
+}
+
 @end

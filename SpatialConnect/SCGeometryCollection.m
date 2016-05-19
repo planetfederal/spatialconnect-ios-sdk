@@ -88,4 +88,24 @@
   return response;
 }
 
+- (NSMutableDictionary *)JSONDict {
+  NSArray *features =
+      [[self.geometries.rac_sequence map:^NSDictionary *(SCGeometry *geom) {
+        return geom.JSONDict;
+      }] array];
+
+  NSMutableDictionary *dict = [[NSMutableDictionary alloc]
+      initWithObjects:@[ @"FeatureCollection", features ]
+              forKeys:@[ @"type", @"features" ]];
+  if (self.identifier) {
+    dict[@"id"] = self.identifier;
+  }
+  dict[@"properties"] = self.properties ? self.properties : [NSNull null];
+  dict[@"crs"] = @{
+    @"type" : @"name",
+    @"properties" : @{@"name" : @"EPSG:4326"}
+  };
+  return dict;
+}
+
 @end

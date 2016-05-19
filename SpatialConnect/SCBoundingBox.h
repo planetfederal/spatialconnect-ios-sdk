@@ -23,11 +23,6 @@
 
 @class SCPoint;
 
-typedef struct {
-  double x;
-  double y;
-} GMBoundingBoxCorner;
-
 @interface SCBoundingBox : NSObject
 
 @property(strong, nonatomic) SCPoint *lowerLeft;
