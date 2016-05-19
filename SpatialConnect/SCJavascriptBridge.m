@@ -145,16 +145,15 @@ NSString *const SCJavascriptBridgeErrorDomain =
 }
 
 - (void)activeStoreList:(id<RACSubscriber>)subscriber {
-  NSArray *arr =
-      [self.spatialConnect.dataService activeStoreListDictionary];
+  NSArray *arr = [self.spatialConnect.dataService activeStoreListDictionary];
   [subscriber sendCompleted];
   [self.bridge callHandler:@"storesList" data:@{ @"stores" : arr }];
 }
 
 - (void)activeStoreById:(NSDictionary *)value
      responseSubscriber:(id<RACSubscriber>)subscriber {
-  NSDictionary *dict = [self.spatialConnect.dataService
-      storeByIdAsDictionary:value[@"storeId"]];
+  NSDictionary *dict =
+      [self.spatialConnect.dataService storeByIdAsDictionary:value[@"storeId"]];
   [subscriber sendCompleted];
   [self.bridge callHandler:@"store" data:@{ @"store" : dict }];
 }
@@ -165,20 +164,20 @@ NSString *const SCJavascriptBridgeErrorDomain =
       [SCQueryFilter filterFromDictionary:value[@"filters"]];
   [[self.spatialConnect.dataService queryAllStores:filter]
       subscribeNext:^(SCGeometry *g) {
-        [self.bridge callHandler:@"spatialQuery" data:g.geoJSONDict];
+        [self.bridge callHandler:@"spatialQuery" data:g.JSONDict];
         [subscriber sendCompleted];
       }];
 }
 
 - (void)queryStoreById:(NSDictionary *)value
      responseSubcriber:(id<RACSubscriber>)subscriber {
-  [[self.spatialConnect.dataService
-      queryStoreById:[value[@"id"] stringValue]
-          withFilter:nil] subscribeNext:^(SCGeometry *g) {
-    NSDictionary *gj = g.geoJSONDict;
-    [subscriber sendCompleted];
-    [self.bridge callHandler:@"spatialQuery" data:gj];
-  }];
+  [[self.spatialConnect.dataService queryStoreById:[value[@"id"] stringValue]
+                                        withFilter:nil]
+      subscribeNext:^(SCGeometry *g) {
+        NSDictionary *gj = g.JSONDict;
+        [subscriber sendCompleted];
+        [self.bridge callHandler:@"spatialQuery" data:gj];
+      }];
 }
 
 - (void)queryAllGeoStores:(NSDictionary *)value
@@ -187,7 +186,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
   [[self.spatialConnect.dataService
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter] subscribeNext:^(SCGeometry *g) {
-    NSDictionary *gj = g.geoJSONDict;
+    NSDictionary *gj = g.JSONDict;
     [subscriber sendCompleted];
     [self.bridge callHandler:@"spatialQuery" data:gj];
   }];
@@ -199,7 +198,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
   [[self.spatialConnect.dataService
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter] subscribeNext:^(SCGeometry *g) {
-    NSDictionary *gj = g.geoJSONDict;
+    NSDictionary *gj = g.JSONDict;
     [self.bridge callHandler:@"spatialQuery" data:gj];
   }
       completed:^{
@@ -239,7 +238,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
     }
         completed:^{
           SCGeometry *g = (SCGeometry *)feat;
-          [self.bridge callHandler:@"createFeature" data:g.geoJSONDict];
+          [self.bridge callHandler:@"createFeature" data:g.JSONDict];
         }];
 
   } else {

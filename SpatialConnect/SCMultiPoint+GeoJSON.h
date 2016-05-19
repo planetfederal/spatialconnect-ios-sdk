@@ -17,12 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCMultiPoint.h"
 
 @interface SCMultiPoint (GeoJSON)
-- (NSDictionary*)geoJSONDict;
-- (NSString*)geoJSONString;
+- (NSString *)geoJSONString;
 @end

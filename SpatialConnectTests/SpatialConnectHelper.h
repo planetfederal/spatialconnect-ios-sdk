@@ -24,5 +24,7 @@
 
 + (SpatialConnect *)loadConfigAndStartServices;
 + (SpatialConnect *)loadConfig;
++ (SpatialConnect *)loadRemoteConfigAndStartServices;
++ (SpatialConnect *)loadRemoteConfig;
 
 @end

@@ -17,15 +17,13 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCConfig.h"
 #import "SCDataService.h"
 #import "SCLoggingAssertionHandler.h"
 #import "SCNetworkService.h"
 #import "SpatialConnect.h"
-#import "SCLocalConfig.h"
 
 @interface SpatialConnect ()
-
-- (void)startAssertionHandler;
 
 @end
 
@@ -55,7 +53,6 @@
     _kvpService = [SCKVPService new];
     [self createConfigService];
     [self initServices];
-    [self startAssertionHandler];
   }
   return self;
 }
@@ -67,7 +64,7 @@
     }
     return NO;
   }];
-  _configService = [[SCConfigService alloc] initWithSignal:configSignal];
+  _configService = [[SCConfigService alloc] init];
 }
 
 - (void)initServices {
@@ -81,10 +78,10 @@
 
 - (void)addDefaultServices {
   [self addService:self.kvpService];
-  //Config services relies on the keyvalue service
-  //Order matters here
-  [self addService:self.configService];
+  // Config services relies on the keyvalue service
+  // Order matters here
   [self addService:self.dataService];
+  [self addService:self.configService];
   [self addService:self.networkService];
   [self addService:self.sensorService];
   [self addService:self.rasterService];
@@ -100,7 +97,7 @@
   [self.services removeObjectForKey:serviceId];
 }
 
-- (SCService*)serviceById:(NSString*)ident {
+- (SCService *)serviceById:(NSString *)ident {
   return [self.services objectForKey:ident];
 }
 
@@ -120,10 +117,10 @@
 }
 
 - (void)startAllServices {
-  [self.services enumerateKeysAndObjectsUsingBlock:^(NSString* k, SCService *s, BOOL *stop) {
+  [self.services enumerateKeysAndObjectsUsingBlock:^(NSString *k, SCService *s,
+                                                     BOOL *stop) {
     [s start];
   }];
-  [self loadLocalConfigs];
 }
 
 - (void)stopAllServices {
@@ -135,50 +132,6 @@
 - (void)restartAllServices {
   [self stopAllServices];
   [self startAllServices];
-}
-
-- (void)addConfigFilepath:(NSString *)fp {
-  [filepaths addObject:fp];
-}
-
-- (void)addConfigFilepaths:(NSArray*)fps {
-  [filepaths addObjectsFromArray:fps];
-}
-
-- (void)sweepDataDirectory {
-  NSString *path = [NSSearchPathForDirectoriesInDomains(
-                                                        NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  NSArray *dirs =
-  [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
-                                                      error:NULL];
-
-  [[[dirs.rac_sequence filter:^BOOL(NSString *filename) {
-    if ([filename.pathExtension.lowercaseString isEqualToString:@"scfg"]) {
-      return YES;
-    } else {
-      return NO;
-    }
-  }] signal] subscribeNext:^(NSString *cfgFileName) {
-    [filepaths
-     addObject:[NSString stringWithFormat:@"%@/%@", path, cfgFileName]];
-  }];
-}
-
-- (void)loadLocalConfigs {
-  [filepaths enumerateObjectsUsingBlock:^(NSString *fp, NSUInteger idx,
-                                            BOOL *_Nonnull stop) {
-    NSError *error;
-    NSDictionary *cfg = [SCFileUtils jsonFileToDict:fp error:&error];
-    if (error) {
-      NSLog(@"%@",error.description);
-    }
-    SCLocalConfig *lcfg = [[SCLocalConfig alloc] initWithDictionary:cfg];
-    [[lcfg messages] enumerateObjectsUsingBlock:^(SCMessage *m, NSUInteger idx, BOOL *stop) {
-      m.serviceIdentifier = @"CONFIG_SERVICE";
-      m.action = SCACTION_DATASERVICE_ADDSTORE;
-      [bus sendNext:m];
-    }];
-  }];
 }
 
 @end

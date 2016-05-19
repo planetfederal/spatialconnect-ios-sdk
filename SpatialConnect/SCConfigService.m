@@ -13,61 +13,105 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-
+#import "SCConfig.h"
 #import "SCConfigService.h"
-#import "SCFileUtils.h"
-#import "SCDataServiceStoreConfig.h"
 #import "SCDataService.h"
+#import "SCFileUtils.h"
+#import "SCFormConfig.h"
+#import "SCStoreConfig.h"
+#import "SpatialConnect.h"
 
-@interface SCConfigService()
+@interface SCConfigService ()
 - (void)setupSignals;
 @end
 
 @implementation SCConfigService
 
-- (id)initWithSignal:(RACSignal *)bus{
-  self = [self init];
+- (id)init {
+  self = [super init];
   if (self) {
     configPaths = [NSMutableArray new];
-    configEvents = bus;
   }
   return self;
 }
 
 - (void)setupSignals {
-  dataServiceSignals = [[configEvents filter:^BOOL(SCMessage *m) {
-    switch (m.action) {
-      case SCACTION_DATASERVICE_ADDSTORE:
-        return YES;
-      case SCACTION_DATASERVICE_REMOVESTORE:
-        return YES;
-      case SCACTION_DATASERVICE_UPDATESTORE:
-        return YES;
-      default:
-        return NO;
-    }
-  }] map:^SCMessage*(SCMessage *m) {
-    m.serviceIdentifier = kSERVICENAME;
-    return m;
-  }];
-}
-
-- (RACSignal*)connect:(NSString*)serviceIdent {
-  if ([serviceIdent isEqualToString:kSERVICENAME]) {
-    return dataServiceSignals;
-  }
-  return nil;
 }
 
 - (void)start {
   [super start];
-  [self setupSignals];
+  [self sweepDataDirectory];
+  [self loadConfigs];
 }
 
 - (void)stop {
   [super stop];
 }
 
+- (void)addConfigFilepath:(NSString *)fp {
+  [configPaths addObject:fp];
+}
 
+- (void)addConfigFilepaths:(NSArray *)fps {
+  [configPaths addObjectsFromArray:fps];
+}
+
+- (void)sweepDataDirectory {
+  NSString *path = [NSSearchPathForDirectoriesInDomains(
+      NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+  NSArray *dirs =
+      [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path
+                                                          error:NULL];
+
+  [dirs enumerateObjectsUsingBlock:^(NSString *filename, NSUInteger idx,
+                                     BOOL *stop) {
+    if ([filename.pathExtension.lowercaseString isEqualToString:@"scfg"]) {
+      [configPaths
+          addObject:[NSString stringWithFormat:@"%@/%@", path, filename]];
+    }
+  }];
+}
+
+- (void)loadConfigs {
+  [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [configPaths enumerateObjectsUsingBlock:^(NSString *fp, NSUInteger idx,
+                                              BOOL *_Nonnull stop) {
+      NSError *error;
+      NSMutableDictionary *cfg = [NSMutableDictionary
+          dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp
+                                                         error:&error]];
+      if (error) {
+        NSLog(@"%@", error.description);
+      }
+      NSString *uri;
+      if ((uri = [cfg objectForKey:@"remote"])) {
+        [cfg removeObjectForKey:@"remote"];
+        NSURL *url = [NSURL URLWithString:uri];
+        SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
+        NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:url];
+        [subscriber sendNext:[[SCConfig alloc] initWithDictionary:dict]];
+      }
+      if (cfg.count > 0) {
+        [subscriber sendNext:[[SCConfig alloc] initWithDictionary:cfg]];
+      }
+    }];
+
+    return nil;
+  }] subscribeNext:^(SCConfig *s) {
+    [self loadConfig:s];
+  }];
+}
+
+- (void)loadConfig:(SCConfig *)c {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [c.forms enumerateObjectsUsingBlock:^(SCFormConfig *f, NSUInteger idx,
+                                        BOOL *stop) {
+    [sc.dataService registerFormByConfig:f];
+  }];
+  [c.dataServiceStores enumerateObjectsUsingBlock:^(
+                           SCStoreConfig *c, NSUInteger idx, BOOL *stop) {
+    [sc.dataService registerStoreByConfig:c];
+  }];
+}
 
 @end

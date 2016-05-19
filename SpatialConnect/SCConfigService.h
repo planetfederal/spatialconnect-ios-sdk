@@ -27,11 +27,9 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 
 @interface SCConfigService : SCService {
   NSMutableArray *configPaths;
-  RACSignal *configEvents;
-  RACSignal *dataServiceSignals;
 }
 
-- (id)initWithSignal:(RACSignal*)bus;
-- (RACSignal*)connect:(NSString*)storeIdent;
+- (id)init;
+- (void)addConfigFilepath:(NSString *)p;
 
 @end

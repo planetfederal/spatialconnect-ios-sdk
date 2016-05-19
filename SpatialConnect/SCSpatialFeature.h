@@ -32,4 +32,5 @@
 @property(strong, nonatomic) SCStyle *style;
 
 - (SCKeyTuple *)key;
+- (NSDictionary *)JSONDict;
 @end

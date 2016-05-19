@@ -20,13 +20,13 @@
 #import "GeopackageStore.h"
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
-#import "SCKeyTuple.h"
-#import "SCPoint.h"
 #import "SCGeopackage.h"
 #import "SCGpkgTileSource.h"
+#import "SCKeyTuple.h"
+#import "SCPoint.h"
 
 @interface GeopackageFileAdapter ()
-- (RACSignal *)attemptFileDownload:(NSURL*)fileUrl;
+- (RACSignal *)attemptFileDownload:(NSURL *)fileUrl;
 @end
 
 @interface GeopackageFileAdapter ()
@@ -44,7 +44,16 @@
 @synthesize gpkg;
 @synthesize parentStore;
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)cfg {
+- (id)initWithFileName:(NSString *)dbname {
+  if (self = [super init]) {
+    _storeId = dbname;
+    _filepath = [NSString stringWithFormat:@"%@.db", _storeId];
+    _uri = _filepath;
+  }
+  return self;
+}
+
+- (id)initWithStoreConfig:(SCStoreConfig *)cfg {
   if (self = [super init]) {
     _uri = cfg.uri;
     _storeId = cfg.uniqueid;
@@ -54,11 +63,15 @@
 }
 
 - (RACSignal *)connect {
+  if (self.gpkg) { // The Store is already connected and may have been
+                   // initialized as the default
+    return [RACSignal empty];
+  }
   BOOL saveToDocsDir = ![SCFileUtils isTesting];
   // The Database's name on disk is its store ID. This is to guaruntee
   // uniqueness
   // when being stored on disk.
-  NSString *dbName = [NSString stringWithFormat:@"%@.db", self.storeId];
+  NSString *dbName = [NSString stringWithFormat:@"%@.gpkg", self.storeId];
   NSString *path;
   if (saveToDocsDir) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -85,11 +98,14 @@
             [subscriber sendCompleted];
           }
               error:^(NSError *error) {
-                NSLog(@"%@", error.description);
                 [subscriber sendError:error];
               }];
           return nil;
         }];
+  } else if ([path containsString:@"DEFAULT_STORE"]) {
+    // initialize empty geopackage
+    self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
+    return [RACSignal empty];
   }
   NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
                                      code:SC_GEOPACKAGE_FILENOTFOUND
@@ -112,12 +128,22 @@
 }
 
 - (NSString *)defaultLayerName {
-  SCGpkgFeatureSource *fs = (SCGpkgFeatureSource*)[self.gpkg.featureContents firstObject];
+  SCGpkgFeatureSource *fs =
+      (SCGpkgFeatureSource *)[self.gpkg.featureContents firstObject];
   return fs.name;
 }
 
+- (void)addLayer:(NSString *)name typeDefs:(NSDictionary *)t {
+  [self.gpkg addFeatureSource:name withTypes:t];
+}
+
+- (void)removeLayer:(NSString *)name {
+  [self.gpkg removeFeatureSource:name];
+}
+
 - (NSString *)defaultRasterName {
-  SCGpkgTileSource *ts = (SCGpkgTileSource *)[self.gpkg.tileContents firstObject];
+  SCGpkgTileSource *ts =
+      (SCGpkgTileSource *)[self.gpkg.tileContents firstObject];
   return ts.name;
 }
 
@@ -149,7 +175,6 @@
   return nil;
 }
 
-
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature {
   return [[self.gpkg featureSource:feature.layerId] create:feature];
 }
@@ -173,7 +198,7 @@
   return [self.gpkg query:filter];
 }
 
-- (RACSignal*)queryById:(SCKeyTuple *)key {
+- (RACSignal *)queryById:(SCKeyTuple *)key {
   return [[self.gpkg featureSource:key.layerId] findById:key.featureId];
 }
 

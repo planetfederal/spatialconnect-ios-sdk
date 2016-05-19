@@ -17,14 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCGeometryCollection.h"
 
 @interface SCGeometryCollection (GeoJSON)
 
-- (NSMutableDictionary*)geoJSONDict;
-- (NSString*)geoJSONString;
+- (NSString *)geoJSONString;
 
 @end

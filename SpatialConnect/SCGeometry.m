@@ -19,6 +19,7 @@
 
 #import "SCBoundingBox.h"
 #import "SCGeometry.h"
+#import "SCPoint.h"
 
 @implementation SCGeometry
 
@@ -56,4 +57,33 @@
 - (SCSimplePoint *)centroid {
   return nil;
 }
+
+- (NSArray *)bboxArray {
+  return @[
+    [NSNumber numberWithDouble:self.bbox.lowerLeft.longitude],
+    [NSNumber numberWithDouble:self.bbox.lowerLeft.latitude],
+    [NSNumber numberWithDouble:self.bbox.upperRight.longitude],
+    [NSNumber numberWithDouble:self.bbox.upperRight.latitude]
+  ];
+}
+
+- (NSMutableDictionary *)JSONDict {
+  NSMutableDictionary *dict =
+      [[NSMutableDictionary alloc] initWithDictionary:[super JSONDict]];
+  if (self.bboxArray) {
+    dict[@"bbox"] = self.bboxArray;
+  }
+  dict[@"type"] = @"Feature";
+  dict[@"crs"] = @{
+    @"type" : @"name",
+    @"properties" : @{@"name" : @"EPSG:4326"}
+  };
+
+  return dict;
+}
+
+- (NSArray *)coordinateArray {
+  return nil;
+}
+
 @end

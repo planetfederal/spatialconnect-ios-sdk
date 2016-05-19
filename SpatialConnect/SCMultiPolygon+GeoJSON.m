@@ -17,29 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-
-
-#import "SCMultiPolygon+GeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
+#import "SCMultiPolygon+GeoJSON.h"
 #import "SCPolygon+GeoJSON.h"
 
 @implementation SCMultiPolygon (GeoJSON)
 
-- (NSDictionary*)geoJSONDict {
-  NSMutableDictionary *dict = [super geoJSONDict];
-  NSArray *coords = [self coordinateArray];
-  NSDictionary *geometry = [NSDictionary dictionaryWithObjects:@[@"MultiPolygon",coords] forKeys:@[@"type",@"coordinates"]];
-  [dict setObject:geometry forKey:@"geometry"];
-  return dict;
-}
-
-- (NSArray*)coordinateArray {
-  return [[self.polygons.rac_sequence map:^NSArray*(SCPolygon *poly) {
-    return poly.coordinateArray;
-  }] array];
-}
-
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   return [super geoJSONString];
 }
 

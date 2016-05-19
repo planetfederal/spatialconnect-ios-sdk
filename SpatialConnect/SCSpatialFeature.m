@@ -45,7 +45,7 @@
   return _identifier;
 }
 
-- (NSMutableDictionary*)properties {
+- (NSMutableDictionary *)properties {
   if (!_properties) {
     _properties = [NSMutableDictionary new];
   }
@@ -57,6 +57,19 @@
                                      layerId:layerId
                                    featureId:self.identifier];
   ;
+}
+
+- (NSDictionary *)JSONDict {
+  NSMutableDictionary *dict = [NSMutableDictionary new];
+  if (self.identifier) {
+    dict[@"id"] = self.key.encodedCompositeKey;
+  }
+  if (self.properties) {
+    dict[@"properties"] = self.properties;
+  } else {
+    dict[@"properties"] = [NSNull null];
+  }
+  return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 @end

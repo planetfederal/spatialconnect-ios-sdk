@@ -17,29 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-
-
-#import "SCLinearRing+GeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
+#import "SCLinearRing+GeoJSON.h"
 #import "SCPoint+GeoJSON.h"
 
 @implementation SCLinearRing (GeoJSON)
 
-- (NSDictionary*)geoJSONDict {
-  NSMutableDictionary *dict = [super geoJSONDict];
-  
-  NSDictionary *geometry = [NSDictionary dictionaryWithObjects:@[@"LineString",[self coordinateArray]] forKeys:@[@"type",@"coordinates"]];
-  dict[@"geometry"] = geometry;
-  return dict;
-}
-
-- (NSArray*)coordinateArray {
-  return [[self.points.rac_sequence map:^NSArray*(SCPoint *p) {
-    return p.coordinateArray;
-  }] array];
-}
-
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   return [super geoJSONString];
 }
 

@@ -21,7 +21,7 @@
 
 @interface SCMultiPolygon (GeoJSON)
 
-- (NSDictionary *)geoJSONDict;
+- (NSDictionary *)JSONDict;
 - (NSArray *)coordinateArray;
 - (NSString *)geoJSONString;
 

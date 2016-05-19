@@ -18,9 +18,9 @@
  ******************************************************************************/
 
 #import "SCAdapterKeyValue.h"
-#import "SCQueryFilter.h"
-#import "SCDataServiceStoreConfig.h"
 #import "SCGeopackage.h"
+#import "SCQueryFilter.h"
+#import "SCStoreConfig.h"
 #import <Foundation/Foundation.h>
 
 @class GeopackageStore;
@@ -37,7 +37,8 @@
 @property(readonly, nonatomic, strong) SCGeopackage *gpkg;
 @property(nonatomic, weak) GeopackageStore *parentStore;
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)cfg;
+- (id)initWithFileName:(NSString *)dbname;
+- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
 - (RACSignal *)connect;
 - (void)disconnect;
 
@@ -46,6 +47,8 @@
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature;
 - (RACSignal *)deleteFeature:(SCKeyTuple *)tuple;
 - (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
+- (void)addLayer:(NSString *)name typeDefs:(NSDictionary *)t;
+- (void)removeLayer:(NSString *)name;
 - (NSArray *)layerList;
 - (NSArray *)rasterList;
 - (NSString *)defaultLayerName;

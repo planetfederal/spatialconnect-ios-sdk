@@ -20,7 +20,7 @@
 #import "SCDataStoreLifeCycle.h"
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
-#import "SCDataServiceStoreConfig.h"
+#import "SCStoreConfig.h"
 #import "SCStyle.h"
 #import <Foundation/Foundation.h>
 
@@ -50,8 +50,8 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 @property SCDataStoreStatus status;
 @property SCDataStorePermission permission;
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config;
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config withStyle:(SCStyle *)style;
+- (id)initWithStoreConfig:(SCStoreConfig *)config;
+- (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style;
 
 - (NSDictionary *)dictionary;
 + (NSString *)versionKey;

@@ -85,4 +85,21 @@
                                         Y:(y / self.polygons.count)];
 }
 
+- (NSDictionary *)JSONDict {
+  NSMutableDictionary *dict =
+      [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
+  NSArray *coords = [self coordinateArray];
+  NSDictionary *geometry =
+      [NSDictionary dictionaryWithObjects:@[ @"MultiPolygon", coords ]
+                                  forKeys:@[ @"type", @"coordinates" ]];
+  [dict setObject:geometry forKey:@"geometry"];
+  return dict;
+}
+
+- (NSArray *)coordinateArray {
+  return [[self.polygons.rac_sequence map:^NSArray *(SCPolygon *poly) {
+    return poly.coordinateArray;
+  }] array];
+}
+
 @end

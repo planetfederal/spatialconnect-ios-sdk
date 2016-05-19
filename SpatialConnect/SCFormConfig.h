@@ -10,16 +10,26 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License
+ * See the License for the specific language governing permissions and
+ * limitations under the License
  */
 
 #import <Foundation/Foundation.h>
 
-@interface SCLocalConfig : NSObject {
-  NSMutableArray *dataServiceStores;
-}
+typedef NS_ENUM(NSInteger, SCFormItemType) {
+  SCFORM_TYPE_INTEGER,
+  SCFORM_TYPE_STRING,
+  SCFORM_TYPE_BOOLEAN,
+  SCFORM_TYPE_NUMBER
+};
 
-- (id)initWithDictionary:(NSDictionary*)d;
-- (NSArray*)messages;
+@interface SCFormConfig : NSObject
+
+@property(nonatomic) NSInteger identifier;
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSArray *fields;
+
+- (id)initWithDict:(NSDictionary *)d;
+- (NSDictionary *)sqlTypes;
 
 @end

@@ -17,35 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-
-
+#import "SCGeometry+GeoJSON.h"
 #import "SCMultiPoint+GeoJSON.h"
 #import "SCPoint+GeoJSON.h"
-#import "SCGeometry+GeoJSON.h"
 
 @implementation SCMultiPoint (GeoJSON)
 
-//- (id)initWithGeoJSON:(SCGeoJSON *)gj {
-//  self = [self initWithCoordinateArray:gj.coordinates];
-//  if (!self) {
-//    return nil;
-//  }
-//  self.identifier = gj.identifier;
-//  self.properties = [NSMutableDictionary dictionaryWithDictionary:gj.properties];
-//  return self;
-//}
-
-- (NSDictionary*)geoJSONDict {
-  NSMutableDictionary *dict = [super geoJSONDict];
-  NSArray *coords = [[[self.points rac_sequence] map:^NSArray*(SCPoint* p) {
-    return p.coordinateArray;
-  }] array ];
-  NSDictionary *geometry = [NSDictionary dictionaryWithObjects:@[@"MultiPoint",coords] forKeys:@[@"type",@"coordinates"]];
-  [dict setObject:geometry forKey:@"geometry"];
-  return dict;
-}
-
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   return [super geoJSONString];
 }
 

@@ -18,8 +18,8 @@
  ******************************************************************************/
 
 #import "SCGeopackage.h"
-#import "SCGpkgContentsTable.h"
 #import "SCGpkgContent.h"
+#import "SCGpkgContentsTable.h"
 #import "SCGpkgExtensionsTable.h"
 #import "SCGpkgTileSource.h"
 
@@ -35,9 +35,23 @@
   return self;
 }
 
+- (id)initEmptyGeopackageWithFilename:(NSString *)filepath {
+  self = [super init];
+  if (self) {
+    pool = [[FMDatabasePool alloc] initWithPath:filepath];
+    [pool inDatabase:^(FMDatabase *db) {
+      BOOL b = [db executeStatements:@"SELECT InitSpatialMetaData()"];
+      if (!b) {
+        @throw [db lastError];
+      }
+    }];
+  }
+  return self;
+}
+
 - (void)close {
   if (pool) {
-      [pool releaseAllDatabases];
+    [pool releaseAllDatabases];
   }
 }
 
@@ -56,34 +70,88 @@
 - (NSArray *)tileContents {
   SCGpkgContentsTable *tc =
       [[SCGpkgContentsTable alloc] initWithPool:self.pool];
-  return [[tc.tiles.rac_sequence.signal map:^SCGpkgTileSource*(SCGpkgContent *c) {
-    return [[SCGpkgTileSource alloc] init];
-  }] toArray];
+  return
+      [[tc.tiles.rac_sequence.signal map:^SCGpkgTileSource *(SCGpkgContent *c) {
+        return [[SCGpkgTileSource alloc] init];
+      }] toArray];
 }
 
 - (NSArray *)featureContents {
   SCGpkgContentsTable *tc =
       [[SCGpkgContentsTable alloc] initWithPool:self.pool];
-  return [[tc.vectors.rac_sequence.signal map:^SCGpkgFeatureSource*(SCGpkgContent *c) {
-    return [[SCGpkgFeatureSource alloc] initWithPool:self.pool andName:c.tableName isIndexed:YES];
-  }] toArray];
+  return [[tc.vectors.rac_sequence.signal
+      map:^SCGpkgFeatureSource *(SCGpkgContent *c) {
+        return [[SCGpkgFeatureSource alloc] initWithPool:self.pool
+                                                 andName:c.tableName
+                                               isIndexed:YES];
+      }] toArray];
+}
+
+- (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types {
+  [self.pool inDatabase:^(FMDatabase *db) {
+    [db beginTransaction];
+    NSMutableString *createSql = [NSMutableString
+        stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
+                         @"PRIMARY KEY AUTOINCREMENT",
+                         name];
+    [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *v,
+                                               BOOL *stop) {
+      [createSql appendFormat:@",%@ %@", k, v];
+    }];
+    [createSql appendString:@")"];
+    BOOL success = [db executeStatements:createSql];
+    NSString *addColSql =
+        [NSString stringWithFormat:@"SELECT "
+                                   @"AddGeometryColumn('%@','geom','"
+                                   @"Geometry',4326)",
+                                   name];
+    BOOL geomAdded = [db executeStatements:addColSql];
+    if (!geomAdded) {
+      NSLog(@"Error:%@", db.lastError.description);
+    }
+    NSString *addGpkgContentsSql = [NSString
+        stringWithFormat:@"INSERT INTO gpkg_contents "
+                         @"(table_name,data_type,identifier,description,min_x,"
+                         @"min_y,max_x,max_y,srs_id) VALUES "
+                         @"('%@','features','%@','%@',0,0,0,0,4326)",
+                         name, name, name];
+    success = [db executeStatements:addGpkgContentsSql];
+    if (success) {
+      [db commit];
+    } else {
+      [db rollback];
+    }
+  }];
+}
+
+- (void)removeFeatureSource:(NSString *)name {
+  [self.pool inDatabase:^(FMDatabase *db) {
+    NSString *dropSql = [NSString stringWithFormat:@"DROP TABLE %@", name];
+    BOOL success = [db executeStatements:dropSql];
+    if (!success) {
+      NSLog(@"Error Dropping Table %@", name);
+    }
+  }];
 }
 
 - (SCGpkgFeatureSource *)featureSource:(NSString *)name {
   __block SCGpkgFeatureSource *featureSource = nil;
-  [[self featureContents] enumerateObjectsUsingBlock:^(SCGpkgFeatureSource *fs, NSUInteger idx, BOOL * _Nonnull stop) {
-    if ([fs.name isEqualToString:name]) {
-      featureSource = fs;
-      *stop = YES;
-    }
-  }];
+  [[self featureContents]
+      enumerateObjectsUsingBlock:^(SCGpkgFeatureSource *fs, NSUInteger idx,
+                                   BOOL *_Nonnull stop) {
+        if ([fs.name isEqualToString:name]) {
+          featureSource = fs;
+          *stop = YES;
+        }
+      }];
   return featureSource;
 }
 
-- (RACSignal*)query:(SCQueryFilter*)filter {
-  return [[[[self featureContents] rac_sequence] signal] flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
-    return [fs queryWithFilter:filter];
-  }];
+- (RACSignal *)query:(SCQueryFilter *)filter {
+  return [[[[self featureContents] rac_sequence] signal]
+      flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
+        return [fs queryWithFilter:filter];
+      }];
 }
 
 - (RACSignal *)tileSource:(NSString *)name {

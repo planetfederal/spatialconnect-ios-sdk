@@ -17,49 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-
-
+#import "SCGeometry+GeoJSON.h"
 #import "SCPoint+GeoJSON.h"
 #import "SCPolygon+GeoJSON.h"
-#import "SCGeometry+GeoJSON.h"
 
 @implementation SCPolygon (GeoJSON)
 
-//- (id)initWithGeoJSON:(SCGeoJSON *)gj {
-//  self = [self initWithCoordinateArray:gj.coordinates];
-//  if (!self) {
-//    return nil;
-//  }
-//  self.identifier = gj.identifier;
-//  self.properties = [NSMutableDictionary dictionaryWithDictionary:gj.properties];
-//  return self;
-//}
-
-- (NSDictionary*)geoJSONDict {
-  NSMutableDictionary *dict = [super geoJSONDict];
-  NSDictionary *geometry = [NSDictionary dictionaryWithObjects:@[@"Polygon",self.coordinateArray] forKeys:@[@"type",@"coordinates"]];
-  [dict setObject:geometry forKey:@"geometry"];
-  return dict;
-}
-
-- (NSArray*)coordinateArray {
-  NSMutableArray *coords = [[NSMutableArray alloc] initWithObjects:[[[self.points rac_sequence] map:^NSArray*(SCPoint* p) {
-    return @[[NSNumber numberWithDouble:p.x],[NSNumber numberWithDouble:p.y],[NSNumber numberWithDouble:p.z]];
-  }] array ], nil];
-  
-  if (self.holes) {
-    [coords addObjectsFromArray:[[[self.holes.rac_sequence map:^NSArray*(SCLinearRing *ring) {
-      return ring.points;
-    }] map:^NSArray*(NSArray *p) {
-      return [[p.rac_sequence map:^NSArray*(SCPoint *p) {
-        return @[[NSNumber numberWithDouble:p.x],[NSNumber numberWithDouble:p.y],[NSNumber numberWithDouble:p.z]];
-      }] array];
-    }] array]];
-  }
-  return [NSArray arrayWithArray:coords];
-}
-
-- (NSString*)geoJSONString {
+- (NSString *)geoJSONString {
   return [super geoJSONString];
 }
 

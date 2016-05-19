@@ -23,22 +23,6 @@
 
 @implementation SCMultiLineString (GeoJSON)
 
-- (NSDictionary *)geoJSONDict {
-  NSMutableDictionary *dict = [super geoJSONDict];
-  NSDictionary *geometry = [NSDictionary
-      dictionaryWithObjects:@[ @"MultiLineString", [self coordinateArray] ]
-                    forKeys:@[ @"type", @"coordinates" ]];
-  [dict setObject:geometry forKey:@"geometry"];
-  return [NSDictionary dictionaryWithDictionary:dict];
-}
-
-- (NSArray *)coordinateArray {
-  return
-      [[self.linestrings.rac_sequence map:^NSArray *(SCLineString *lineString) {
-        return lineString.coordinateArray;
-      }] array];
-}
-
 - (NSString *)geoJSONString {
   return [super geoJSONString];
 }

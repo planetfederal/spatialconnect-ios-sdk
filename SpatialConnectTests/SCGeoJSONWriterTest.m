@@ -17,11 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import <XCTest/XCTest.h>
 #import "SCFileUtils.h"
 #import "SCGeoJSON.h"
 #import "SCGeometryCollection+GeoJSON.h"
+#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 @interface SCGeoJSONWriterTest : XCTestCase
 - (NSString *)filePathFromSelfBundle:(NSString *)fileName;
@@ -43,10 +43,11 @@
   if (strs.count == 2) {
     filePrefix = strs.firstObject;
   } else {
-    filePrefix =
-        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
-                                                NSMakeRange(0, strs.count - 2)]]
-            componentsJoinedByString:@"."];
+    filePrefix = [[strs
+        objectsAtIndexes:[NSIndexSet
+                             indexSetWithIndexesInRange:NSMakeRange(
+                                                            0, strs.count - 2)]]
+        componentsJoinedByString:@"."];
   }
   NSString *extension = [strs lastObject];
   NSString *filePath =
@@ -63,7 +64,7 @@
   if (featureContent) {
     SCGeometryCollection *features =
         (SCGeometryCollection *)[SCGeoJSON parseDict:featureContent];
-    NSDictionary *geoJSONDict = [features geoJSONDict];
+    NSDictionary *geoJSONDict = [features JSONDict];
     XCTAssert(geoJSONDict, @"FeatureCollection");
   } else {
     XCTAssertTrue(NO, @"File could not be read");

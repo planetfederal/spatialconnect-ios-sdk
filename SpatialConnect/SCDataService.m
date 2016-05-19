@@ -17,15 +17,15 @@
 * under the License.
 ******************************************************************************/
 
-#import "SpatialConnect.h"
-#import "SCConfigService.h"
 #import "GeoJSONStore.h"
 #import "GeopackageStore.h"
+#import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCGeometry.h"
 #import "SCServiceStatusEvent.h"
 #import "SCSpatialStore.h"
 #import "SCStoreStatusEvent.h"
+#import "SpatialConnect.h"
 
 NSString *const kSERVICENAME = @"DATASERVICE";
 
@@ -40,12 +40,14 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     NSMutableDictionary *supportedStoreImpls;
 @property(readwrite, atomic, strong) NSMutableDictionary *stores;
 @property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
+@property(readwrite, nonatomic, strong) SCDefaultStore *defaultStore;
 @end
 
 @implementation SCDataService
 
 @synthesize storeEvents = _storeEvents;
 @synthesize status;
+@synthesize defaultStore = _defaultStore;
 
 - (id)init {
   if (self = [super init]) {
@@ -56,8 +58,22 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
+    [self setupDefaultStore];
   }
   return self;
+}
+
+- (void)setupDefaultStore {
+  SCStoreConfig *config = [[SCStoreConfig alloc] init];
+  config.uniqueid = @"DEFAULT_STORE";
+  config.uri = @"spacon_default_store.db";
+  config.name = @"DEFAULT_STORE";
+  _defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
+  [_stores setObject:_defaultStore forKey:config.uniqueid];
+}
+
+- (NSArray *)defaultStoreLayers {
+  return [self.defaultStore layerList];
 }
 
 - (void)addDefaultStoreImpls {
@@ -81,7 +97,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   }];
 }
 
-- (RACSignal *)storeStarted:(NSString*)storeId {
+- (RACSignal *)storeStarted:(NSString *)storeId {
   RACMulticastConnection *rmcc = self.storeEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCStoreStatusEvent *evt) {
@@ -133,20 +149,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (void)start {
   [super start];
-  //These are added by a developer if they are already present.
   [self startAllStores];
-
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  RACSignal *cse = [sc.configService connect:kSERVICENAME];
-
-  [[cse filter:^BOOL(SCMessage *m) {
-    if(m.action == SCACTION_DATASERVICE_ADDSTORE)
-      return YES;
-    else return NO;
-  }] subscribeNext:^(SCMessage *m) {
-    SCDataServiceStoreConfig *c = [[SCDataServiceStoreConfig alloc] initWithDictionary:m.payload];
-    [self addAndStartStore:c];
-  }];
 }
 
 - (void)stop {
@@ -154,10 +157,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   [self stopAllStores];
 }
 
-- (void)addAndStartStore:(SCDataServiceStoreConfig*)cfg {
-  Class store = [self
-                 supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
-                                      (long)cfg.version]];
+- (void)addAndStartStore:(SCStoreConfig *)cfg {
+  Class store =
+      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
+                                                           (long)cfg.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
   if (gmStore.key) {
     [self registerStore:gmStore];
@@ -175,7 +178,19 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     NSCAssert(store.storeId, @"Store Id not set");
   } else {
     [self.stores setObject:store forKey:store.storeId];
+    if (self.status == SC_DATASTORE_RUNNING) {
+      [(id<SCDataStoreLifeCycle>)store start];
+    }
   }
+}
+
+- (void)registerStoreByConfig:(SCStoreConfig *)c {
+  NSCAssert(c.uniqueid, @"Store Id not set");
+  [self addAndStartStore:c];
+}
+
+- (void)registerFormByConfig:(SCFormConfig *)f {
+  [_defaultStore addLayer:f.name withDef:[f sqlTypes] andFormId:f.identifier];
 }
 
 - (void)unregisterStore:(SCDataStore *)store {
@@ -229,6 +244,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running {
+
   NSMutableArray *arr = [NSMutableArray new];
   [self.stores enumerateKeysAndObjectsUsingBlock:^(
                    NSString *key, SCDataStore *ds, BOOL *stop) {

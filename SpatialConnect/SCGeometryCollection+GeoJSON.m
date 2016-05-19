@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCGeometryCollection+GeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
+#import "SCGeometryCollection+GeoJSON.h"
 
 @class SCPoint;
 
@@ -42,30 +42,10 @@
   return self;
 }
 
-- (NSMutableDictionary *)geoJSONDict {
-  NSArray *features =
-      [[self.geometries.rac_sequence map:^NSDictionary *(SCGeometry *geom) {
-        return geom.geoJSONDict;
-      }] array];
-
-  NSMutableDictionary *dict = [[NSMutableDictionary alloc]
-      initWithObjects:@[ @"FeatureCollection", features ]
-              forKeys:@[ @"type", @"features" ]];
-  if (self.identifier) {
-    dict[@"id"] = self.identifier;
-  }
-  dict[@"properties"] = self.properties ? self.properties : [NSNull null];
-  dict[@"crs"] = @{
-    @"type" : @"name",
-    @"properties" : @{@"name" : @"EPSG:4326"}
-  };
-  return dict;
-}
-
 - (NSString *)geoJSONString {
   NSError *error;
   NSData *jsonData =
-      [NSJSONSerialization dataWithJSONObject:[self geoJSONDict]
+      [NSJSONSerialization dataWithJSONObject:[self JSONDict]
                                       options:NSJSONWritingPrettyPrinted
                                         error:&error];
 

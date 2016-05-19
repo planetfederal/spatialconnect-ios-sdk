@@ -17,15 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCLinearRing.h"
 
 @interface SCLinearRing (GeoJSON)
 
-- (NSDictionary*)geoJSONDict;
-- (NSArray*)coordinateArray;
-- (NSString*)geoJSONString;
+- (NSString *)geoJSONString;
 
 @end

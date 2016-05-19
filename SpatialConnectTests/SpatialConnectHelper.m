@@ -27,7 +27,7 @@
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [sc addConfigFilepath:filePath];
+  [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
 
   [NSURLRequest
@@ -43,6 +43,32 @@
 
 + (SpatialConnect *)loadConfigAndStartServices {
   SpatialConnect *sc = [SpatialConnectHelper loadConfig];
+  [sc startAllServices];
+  return sc;
+}
+
++ (SpatialConnect *)loadRemoteConfig {
+  [self moveTestBundleToDocsDir];
+  NSString *filePath =
+      [[NSBundle bundleForClass:[self class]] pathForResource:@"remote"
+                                                       ofType:@"scfg"];
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc.configService addConfigFilepath:filePath];
+  NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
+
+  [NSURLRequest
+          .class performSelector:NSSelectorFromString(
+                                     @"setAllowsAnyHTTPSCertificate:forHost:")
+                      withObject:NSNull.null // Just need to pass non-nil here
+                      // to appear as a BOOL YES, using
+                      // the NSNull.null singleton is
+                      // pretty safe
+                      withObject:[URL host]];
+  return sc;
+}
+
++ (SpatialConnect *)loadRemoteConfigAndStartServices {
+  SpatialConnect *sc = [SpatialConnectHelper loadRemoteConfig];
   [sc startAllServices];
   return sc;
 }

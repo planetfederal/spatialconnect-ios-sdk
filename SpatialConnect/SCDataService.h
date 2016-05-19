@@ -16,8 +16,10 @@
 * specific language governing permissions and limitations
 * under the License.
 ******************************************************************************/
+#import "GeopackageStore.h"
 #import "SCDataStore.h"
-#import "SCDataStore.h"
+#import "SCDefaultStore.h"
+#import "SCFormConfig.h"
 #import "SCQueryFilter.h"
 #import "SCService.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -27,20 +29,30 @@ extern NSString *const kSERVICENAME;
 typedef NS_ENUM(NSUInteger, SCActionDataService) {
   SCACTION_DATASERVICE_ADDSTORE = 0,
   SCACTION_DATASERVICE_REMOVESTORE = 1,
-  SCACTION_DATASERVICE_UPDATESTORE = 2
+  SCACTION_DATASERVICE_UPDATESTORE = 2,
+  SCACTION_DATASERVICE_ADDFORM = 3,
+  SCACTION_DATASERVICE_UPDATEFORM = 4,
+  SCACTION_DATASERVICE_REMOVEFORM = 5
 };
 
 @interface SCDataService : SCService {
   RACSignal *addStore;
   RACSignal *updateStore;
   RACSignal *removeStore;
+  NSMutableArray *defaultStoreForms;
 }
+
+@property(readonly, nonatomic) SCDefaultStore *defaultStore;
 
 @property(readonly, nonatomic) SCServiceStatus status;
 @property(nonatomic) RACMulticastConnection *storeEvents;
 
 - (void)registerStore:(SCDataStore *)store;
 - (void)unregisterStore:(SCDataStore *)store;
+- (void)registerStoreByConfig:(SCStoreConfig *)c;
+- (void)registerFormByConfig:(SCFormConfig *)f;
+- (NSArray *)defaultStoreLayers;
+
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;
 - (NSArray *)storeList;

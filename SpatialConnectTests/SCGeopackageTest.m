@@ -131,11 +131,12 @@
       [p.properties setObject:@"foo" forKey:key];
       return [pointFeatures update:p];
     }] subscribeError:^(NSError *error) {
-      XCTFail(@"Error %@",error.description);
+      XCTFail(@"Error %@", error.description);
       [expect fulfill];
-    } completed:^{
-      [expect fulfill];
-    }];
+    }
+        completed:^{
+          [expect fulfill];
+        }];
 
   }];
   [self waitForExpectationsWithTimeout:50.0 handler:nil];
@@ -152,11 +153,12 @@
     }] flattenMap:^RACStream *(id value) {
       return [pointFeatures remove:p.key];
     }] subscribeError:^(NSError *error) {
-      XCTFail(@"%@",error.description);
+      XCTFail(@"%@", error.description);
       [expect fulfill];
-    } completed:^{
-      [expect fulfill];
-    }];
+    }
+        completed:^{
+          [expect fulfill];
+        }];
   }];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
@@ -177,12 +179,23 @@
     }] subscribeNext:^(SCSpatialFeature *x) {
       XCTAssertEqual(p.identifier, x.identifier);
       [expect fulfill];
-    } error:^(NSError *error) {
-      XCTFail(@"%@",error.description);
-      [expect fulfill];
-    }];
+    }
+        error:^(NSError *error) {
+          XCTFail(@"%@", error.description);
+          [expect fulfill];
+        }];
   }];
   [self waitForExpectationsWithTimeout:15.0 handler:nil];
+}
+
+- (void)testAddTable {
+  XCTestExpectation *expect = [self expectationWithDescription:@"Add Table"];
+  [[SCGeopackageHelper downloadGpkgFile] subscribeNext:^(NSString *filename) {
+    gpkg = [[SCGeopackage alloc] initWithFilename:filename];
+    [gpkg addFeatureSource:@"foo" withTypes:nil];
+    [expect fulfill];
+  }];
+  [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 
 @end

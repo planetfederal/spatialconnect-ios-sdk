@@ -97,4 +97,22 @@
   return [[SCSimplePoint alloc] initWithX:self.x Y:self.y];
 }
 
+- (NSDictionary *)JSONDict {
+  NSMutableDictionary *dict =
+      [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
+  NSDictionary *geometry =
+      [NSDictionary dictionaryWithObjects:@[ @"Point", [self coordinateArray] ]
+                                  forKeys:@[ @"type", @"coordinates" ]];
+  [dict setObject:geometry forKey:@"geometry"];
+  return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSArray *)coordinateArray {
+  return @[
+    [NSNumber numberWithDouble:self.x],
+    [NSNumber numberWithDouble:self.y],
+    [NSNumber numberWithDouble:self.z]
+  ];
+}
+
 @end

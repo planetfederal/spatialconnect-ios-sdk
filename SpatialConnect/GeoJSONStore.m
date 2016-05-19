@@ -27,7 +27,7 @@ BOOL const isUnitTesting = NO;
 #endif
 
 @interface GeoJSONStore ()
-- (void)initializeAdapter:(SCDataServiceStoreConfig *)config;
+- (void)initializeAdapter:(SCStoreConfig *)config;
 @end
 
 @implementation GeoJSONStore
@@ -36,7 +36,7 @@ const int kVERSION = 1;
 const NSString *kTYPE = @"geojson";
 const NSString *kSTORE_NAME = @"GeoJSONStore";
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config {
+- (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (!self) {
     return nil;
@@ -46,7 +46,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   return self;
 }
 
-- (id)initWithStoreConfig:(SCDataServiceStoreConfig *)config withStyle:(SCStyle *)style {
+- (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style {
   self = [self initWithStoreConfig:config];
   if (!self) {
     return nil;
@@ -55,7 +55,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   return self;
 }
 
-- (void)initializeAdapter:(SCDataServiceStoreConfig *)config {
+- (void)initializeAdapter:(SCStoreConfig *)config {
   NSString *filePath;
   if (config.isMainBundle) {
     filePath = [SCFileUtils filePathFromMainBundle:config.uri];

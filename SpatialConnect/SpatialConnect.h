@@ -17,14 +17,14 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
-#import "SCNetworkService.h"
-#import "SCRasterStore.h"
-#import "SCRasterService.h"
-#import "SCConfigService.h"
-#import "SCSensorService.h"
 #import "SCKVPService.h"
+#import "SCNetworkService.h"
+#import "SCRasterService.h"
+#import "SCRasterStore.h"
+#import "SCSensorService.h"
 #import "SCService.h"
 #import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
@@ -52,12 +52,11 @@
 - (void)startAllServices;
 - (void)stopAllServices;
 - (void)restartAllServices;
-- (void)addConfigFilepath:(NSString*)fp;
 - (instancetype)initWithFilepaths:(NSArray *)filepaths;
 
 - (void)addService:(SCService *)service;
 - (void)removeService:(NSString *)serviceId;
-- (SCService*)serviceById:(NSString*)ident;
+- (SCService *)serviceById:(NSString *)ident;
 - (void)startService:(NSString *)serviceId;
 - (void)stopService:(NSString *)serviceId;
 - (void)restartService:(NSString *)serviceId;
