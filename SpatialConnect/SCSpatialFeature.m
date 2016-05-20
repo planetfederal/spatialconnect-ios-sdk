@@ -24,6 +24,10 @@
 
 @implementation SCSpatialFeature
 
+@synthesize location;
+@synthesize author;
+@synthesize deviceId;
+@synthesize createdAt;
 @synthesize identifier = _identifier;
 @synthesize date;
 @synthesize properties = _properties;
@@ -34,6 +38,7 @@
 - (id)init {
   if (self = [super init]) {
     _properties = [NSMutableDictionary new];
+    createdAt = [NSDate dateWithTimeIntervalSinceNow:0];
   }
   return self;
 }
@@ -61,6 +66,7 @@
 
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
+  dict[@"type"] = @"Feature";
   if (self.identifier) {
     dict[@"id"] = self.key.encodedCompositeKey;
   }
@@ -69,7 +75,21 @@
   } else {
     dict[@"properties"] = [NSNull null];
   }
+  dict[@"metadata"] = [NSMutableDictionary new];
+  NSDateFormatter *df = [NSDateFormatter new];
+  [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
+  dict[@"metadata"][@"created_at"] = [df stringFromDate:self.createdAt];
+  dict[@"metadata"][@"client"] = [self appleIFV];
   return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSString *)appleIFV {
+  if (NSClassFromString(@"UIDevice") &&
+      [UIDevice instancesRespondToSelector:@selector(identifierForVendor)]) {
+    // only available in iOS >= 6.0
+    return [[UIDevice currentDevice].identifierForVendor UUIDString];
+  }
+  return nil;
 }
 
 @end
