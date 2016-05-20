@@ -82,7 +82,13 @@
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   request.HTTPMethod = @"POST";
   [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+  NSError *error;
   request.HTTPBody = dict.JSONData;
+  if (error) {
+    NSLog(@"%@", error.description);
+    return [RACSignal error:error];
+  }
+
   return [[NSURLConnection rac_sendAsynchronousRequest:request]
       reduceEach:^id(NSURLResponse *response, NSData *data) {
         return data;

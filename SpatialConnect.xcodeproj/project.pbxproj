@@ -282,6 +282,8 @@
 		56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		56DC516D1BFD22AB002C71B3 /* SCServiceStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DC516B1BFD22AB002C71B3 /* SCServiceStatusEvent.h */; };
 		56DC516E1BFD22AB002C71B3 /* SCServiceStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DC516C1BFD22AB002C71B3 /* SCServiceStatusEvent.m */; };
+		56E2F41A1CEE9CB8001CCD86 /* SCFormFeature.h in Headers */ = {isa = PBXBuildFile; fileRef = 56E2F4181CEE9CB8001CCD86 /* SCFormFeature.h */; };
+		56E2F41B1CEE9CB8001CCD86 /* SCFormFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F4191CEE9CB8001CCD86 /* SCFormFeature.m */; };
 		56ED69C61CE212FC00843C44 /* remote.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 56ED69C51CE212FC00843C44 /* remote.scfg */; };
 		56ED69C81CE2151000843C44 /* SCConfigServiceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56ED69C71CE2151000843C44 /* SCConfigServiceTest.m */; };
 		56F4375A1CA0955200EA1344 /* FMDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 56F4374F1CA0955200EA1344 /* FMDB.h */; };
@@ -598,6 +600,8 @@
 		56DC51681BFC230B002C71B3 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		56DC516B1BFD22AB002C71B3 /* SCServiceStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServiceStatusEvent.h; sourceTree = "<group>"; };
 		56DC516C1BFD22AB002C71B3 /* SCServiceStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCServiceStatusEvent.m; sourceTree = "<group>"; };
+		56E2F4181CEE9CB8001CCD86 /* SCFormFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFormFeature.h; sourceTree = "<group>"; };
+		56E2F4191CEE9CB8001CCD86 /* SCFormFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFormFeature.m; sourceTree = "<group>"; };
 		56ED69C51CE212FC00843C44 /* remote.scfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote.scfg; sourceTree = "<group>"; };
 		56ED69C71CE2151000843C44 /* SCConfigServiceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCConfigServiceTest.m; sourceTree = "<group>"; };
 		56F4374F1CA0955200EA1344 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
@@ -883,6 +887,8 @@
 				563BEC641BE5283800778EDA /* Geometry */,
 				563BEC631BE5283100778EDA /* GeoJSON */,
 				563BEC621BE5282900778EDA /* MapKit */,
+				56E2F4181CEE9CB8001CCD86 /* SCFormFeature.h */,
+				56E2F4191CEE9CB8001CCD86 /* SCFormFeature.m */,
 			);
 			name = SpatialDataType;
 			sourceTree = "<group>";
@@ -1436,6 +1442,7 @@
 				5649B5EB1BE280D6009947EF /* SCMultiPolygon+MapKit.h in Headers */,
 				56CC07951C6E90F700407D4A /* SCGeopackage.h in Headers */,
 				5649B59F1BE280D6009947EF /* SCFilterIn.h in Headers */,
+				56E2F41A1CEE9CB8001CCD86 /* SCFormFeature.h in Headers */,
 				56789C401C32C0AC001B5ABE /* SCSimplePoint.h in Headers */,
 				5649B5C51BE280D6009947EF /* SCJavascriptBridge.h in Headers */,
 				5649B5B21BE280D6009947EF /* SCGeoFilterContains.h in Headers */,
@@ -1731,6 +1738,7 @@
 				5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */,
 				5649B5911BE280D6009947EF /* SCDataStore.m in Sources */,
 				5649B5E61BE280D6009947EF /* SCMultiPoint+MapKit.m in Sources */,
+				56E2F41B1CEE9CB8001CCD86 /* SCFormFeature.m in Sources */,
 				5645C4FB1BED9708006E4128 /* SCMultiPoint+GPKG.m in Sources */,
 				56F437621CA0955200EA1344 /* FMDatabaseAdditions.m in Sources */,
 				5649B5F21BE280D6009947EF /* SCPoint.m in Sources */,

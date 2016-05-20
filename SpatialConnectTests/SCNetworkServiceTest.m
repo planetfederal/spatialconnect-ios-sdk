@@ -14,6 +14,7 @@
  * limitations under the License
  */
 
+#import "SCFormFeature.h"
 #import "SCGeopackageHelper.h"
 #import "SCNetworkService.h"
 #import "SCPoint.h"
@@ -67,11 +68,13 @@
   NSArray *arr = [self.sc.dataService defaultStoreLayers];
   XCTAssertNotNil(arr);
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(22.3), @(56.2) ]];
+  SCFormFeature *f = [[SCFormFeature alloc] init];
   GeopackageStore *ds = self.sc.dataService.defaultStore;
-  p.layerId = @"one";
-  p.storeId = ds.storeId;
-  [p.properties setObject:@"Joe Jackson" forKey:@"Father"];
-  [[ds create:p] subscribeError:^(NSError *error) {
+  f.layerId = @"one";
+  f.storeId = ds.storeId;
+  f.geometry = p;
+  [f.properties setObject:@"Joe Jackson" forKey:@"Father"];
+  [[ds create:f] subscribeError:^(NSError *error) {
     [expect fulfill];
   }
       completed:^{

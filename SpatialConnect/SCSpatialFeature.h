@@ -22,6 +22,9 @@
 
 @interface SCSpatialFeature : NSObject
 
+@property(nonatomic) NSArray *location;
+@property(nonatomic) NSString *author;
+@property(nonatomic) NSString *deviceId;
 @property(nonatomic) NSString *identifier;
 @property(nonatomic) NSDate *date;
 @property(nonatomic) NSDate *createdAt;
