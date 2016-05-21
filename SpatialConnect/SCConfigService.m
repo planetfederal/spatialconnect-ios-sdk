@@ -86,10 +86,24 @@
       NSString *uri;
       if ((uri = [cfg objectForKey:@"remote"])) {
         [cfg removeObjectForKey:@"remote"];
-        NSURL *url = [NSURL URLWithString:uri];
+        NSURL *cfgUrl = [NSURL URLWithString:uri];
         SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-        NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:url];
-        [subscriber sendNext:[[SCConfig alloc] initWithDictionary:dict]];
+        NSURL *regUrl =
+            [NSURL URLWithString:@"http://localhost:8085/device/register"];
+        NSString *ident =
+            [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+        if (!ident) {
+          ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
+          [[NSUserDefaults standardUserDefaults] setObject:ident
+                                                    forKey:@"UNIQUE_ID"];
+        }
+        NSDictionary *regDict = @{
+          @"identifier" : ident,
+          @"name" : @"test_device"
+        };
+        [ns postDictRequestAsDictBLOCKING:regUrl body:regDict];
+        NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
+        [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
       }
       if (cfg.count > 0) {
         [subscriber sendNext:[[SCConfig alloc] initWithDictionary:cfg]];
@@ -97,8 +111,7 @@
     }];
 
     return nil;
-  }] subscribeNext:^(SCConfig *s) {
-    [self loadConfig:s];
+  }] subscribeNext:^(SCConfig *s){
   }];
 }
 

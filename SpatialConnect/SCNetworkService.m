@@ -95,6 +95,20 @@
       }];
 }
 
+- (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
+                                           body:(NSDictionary *)dict {
+  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+  request.HTTPMethod = @"POST";
+  [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+  NSError *err;
+  NSURLResponse *response;
+  request.HTTPBody = dict.JSONData;
+  NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                       returningResponse:&response
+                                                   error:&err];
+  return [[JSONDecoder decoder] objectWithData:data];
+}
+
 - (void)start {
 }
 

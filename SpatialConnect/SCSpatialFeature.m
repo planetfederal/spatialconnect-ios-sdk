@@ -79,17 +79,9 @@
   NSDateFormatter *df = [NSDateFormatter new];
   [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
   dict[@"metadata"][@"created_at"] = [df stringFromDate:self.createdAt];
-  dict[@"metadata"][@"client"] = [self appleIFV];
+  dict[@"metadata"][@"client"] =
+      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
   return [NSDictionary dictionaryWithDictionary:dict];
-}
-
-- (NSString *)appleIFV {
-  if (NSClassFromString(@"UIDevice") &&
-      [UIDevice instancesRespondToSelector:@selector(identifierForVendor)]) {
-    // only available in iOS >= 6.0
-    return [[UIDevice currentDevice].identifierForVendor UUIDString];
-  }
-  return nil;
 }
 
 @end
