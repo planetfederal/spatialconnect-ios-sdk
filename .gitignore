@@ -20,3 +20,5 @@ Carthage/
 Pods/
 Podfile.lock
 *.xcworkspace
+Carthage
+libs
