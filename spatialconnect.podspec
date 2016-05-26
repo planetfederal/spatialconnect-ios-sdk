@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.platform      = :ios, '8.0'
     s.ios.deployment_target = '8.0'
     s.requires_arc = true
-
+    s.compiler_flags = '-DSQLITE_CORE -DSQLITE_ENABLE_RTREE=1'
     s.source_files = 'SpatialConnect/**/*.{h,m}'
     s.public_header_files = 'SpatialConnect/**/*.h'
     s.prefix_header_file = 'SpatialConnect/SpatialConnect-Prefix.h'
