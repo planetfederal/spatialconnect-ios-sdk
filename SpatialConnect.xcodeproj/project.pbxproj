@@ -1959,11 +1959,11 @@
 					"COCOAPODS=1",
 					"LIBGPKG_VERSION=1",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/libs/**";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/**";
 				INFOPLIST_FILE = SpatialConnect/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/libs/boost/ios";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/ios";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-DSQLITE_CORE",
@@ -1996,11 +1996,11 @@
 					"COCOAPODS=1",
 					"LIBGPKG_VERSION=1",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/libs/**";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/**";
 				INFOPLIST_FILE = SpatialConnect/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/libs/boost/ios";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/ios";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-DSQLITE_CORE",
