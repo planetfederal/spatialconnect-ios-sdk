@@ -17,9 +17,9 @@
  * under the License.
  ******************************************************************************/
 
-#import "WKBPoint.h"
-#import "SCPoint.h"
 #import "SCGeometry+GPKG.h"
+#import "SCPoint.h"
+#import <wkb_ios/WKBPoint.h>
 
 @interface SCPoint (GPKG)
 - (id)initWithWKB:(WKBPoint *)w;

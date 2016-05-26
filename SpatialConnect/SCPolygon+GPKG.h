@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCPolygon.h"
-#import "WKBPolygon.h"
+#import <wkb_ios/WKBPolygon.h>
 
 @interface SCPolygon (GPKG)
 

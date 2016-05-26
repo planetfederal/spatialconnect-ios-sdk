@@ -17,6 +17,7 @@
  * under the License.
  ******************************************************************************/
 
+#import "SCBoundingBox.h"
 #import "SCGeometry+GPKG.h"
 #import "SCLineString+GPKG.h"
 #import "SCMultiLineString+GPKG.h"
@@ -24,25 +25,24 @@
 #import "SCMultiPolygon+GPKG.h"
 #import "SCPoint+GPKG.h"
 #import "SCPolygon+GPKG.h"
-#import "SCBoundingBox.h"
-#import "WKBGeometryTypes.h"
 
-#import <wkb-ios/wkb_ios.h>
-#import <wkb-ios/WKBByteReader.h>
-#import <wkb-ios/WKBByteWriter.h>
-#import <wkb-ios/WKBGeometryReader.h>
-#import <wkb-ios/WKBGeometryWriter.h>
-#import <wkb-ios/WKBGeometryEnvelope.h>
+#import <wkb_ios/WKBByteReader.h>
+#import <wkb_ios/WKBByteWriter.h>
+#import <wkb_ios/WKBGeometryEnvelope.h>
+#import <wkb_ios/WKBGeometryReader.h>
+#import <wkb_ios/WKBGeometryTypes.h>
+#import <wkb_ios/WKBGeometryWriter.h>
+#import <wkb_ios/wkb_ios.h>
 
 extern "C" {
-  #import <libgpkgios/binstream.h>
-  #import <libgpkgios/spatialdb.h>
-  #import <libgpkgios/gpkg_geom.h>
-  #import <libgpkgios/wkb.h>
+#import <libgpkgios/binstream.h>
+#import <libgpkgios/gpkg_geom.h>
+#import <libgpkgios/spatialdb.h>
+#import <libgpkgios/wkb.h>
 }
 #import <libgpkgios/boost_geom_io.hpp>
 
-NSString * const GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER = @"GP";
+NSString *const GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER = @"GP";
 NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
 
 @implementation SCGeometry (GPKG)
@@ -52,56 +52,69 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   return nil;
 }
 
-+ (SCGeometry*)fromGeometryBinary:(NSData *)bytes {
-  WKBByteReader * reader = [[WKBByteReader alloc] initWithData:bytes];
++ (SCGeometry *)fromGeometryBinary:(NSData *)bytes {
+  WKBByteReader *reader = [[WKBByteReader alloc] initWithData:bytes];
   BOOL empty = true;
   // Get 2 bytes as the magic number and validate
-  NSString * magic = [reader readString:2];
-  if(![magic isEqualToString:GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER]){
-    [NSException raise:@"Invalid Magic Number" format:@"Unexpected GeoPackage Geometry magic number: %@, Expected: %@", magic, GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER];
+  NSString *magic = [reader readString:2];
+  if (![magic isEqualToString:GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER]) {
+    [NSException
+         raise:@"Invalid Magic Number"
+        format:@"Unexpected GeoPackage Geometry magic number: %@, Expected: %@",
+               magic, GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER];
   }
 
-  NSNumber * version = [reader readByte];
-  if([version intValue] != GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1){
-    [NSException raise:@"Invalid Version" format:@"Unexpected GeoPackage Geometry version: %@, Expected: %ld", version, (long)GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1];
+  NSNumber *version = [reader readByte];
+  if ([version intValue] != GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1) {
+    [NSException
+         raise:@"Invalid Version"
+        format:@"Unexpected GeoPackage Geometry version: %@, Expected: %ld",
+               version, (long)GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1];
   }
 
-  NSNumber * flags = [reader readByte];
+  NSNumber *flags = [reader readByte];
   int flagsInt = [flags intValue];
 
   int reserved7 = (flagsInt >> 7) & 1;
   int reserved6 = (flagsInt >> 6) & 1;
   if (reserved7 != 0 || reserved6 != 0) {
-    [NSException raise:@"GPKGGeometry Flags" format:@"Unexpected GeoPackage Geometry flags. Flag bit 7 and 6 should both be 0, 7=%d, 6=%d", reserved7, reserved6];
+    [NSException raise:@"GPKGGeometry Flags"
+                format:@"Unexpected GeoPackage Geometry flags. Flag bit 7 and "
+                       @"6 should both be 0, 7=%d, 6=%d",
+                       reserved7, reserved6];
   }
   int emptyValue = (flagsInt >> 4) & 1;
   empty = emptyValue == 1;
   int envelopeIndicator = (flagsInt >> 1) & 7;
   if (envelopeIndicator > 4) {
-    [NSException raise:@"Geometry Flags" format:@"Unexpected GeoPackage Geometry flags. Envelope contents indicator must be between 0 and 4. Actual: %d", envelopeIndicator];
+    [NSException
+         raise:@"Geometry Flags"
+        format:@"Unexpected GeoPackage Geometry flags. Envelope contents "
+               @"indicator must be between 0 and 4. Actual: %d",
+               envelopeIndicator];
   }
   int byteOrderValue = flagsInt & 1;
-  CFByteOrder byteOrder = byteOrderValue == 0 ? CFByteOrderBigEndian
-  : CFByteOrderLittleEndian;
+  CFByteOrder byteOrder =
+      byteOrderValue == 0 ? CFByteOrderBigEndian : CFByteOrderLittleEndian;
   [reader setByteOrder:byteOrder];
   NSNumber *srsId = [reader readInt];
 
-  WKBGeometryEnvelope * envelope = nil;
-  if(envelopeIndicator > 0){
+  WKBGeometryEnvelope *envelope = nil;
+  if (envelopeIndicator > 0) {
 
     // Read x and y values and create envelope
-    NSDecimalNumber * minX = [reader readDouble];
-    NSDecimalNumber * maxX = [reader readDouble];
-    NSDecimalNumber * minY = [reader readDouble];
-    NSDecimalNumber * maxY = [reader readDouble];
+    NSDecimalNumber *minX = [reader readDouble];
+    NSDecimalNumber *maxX = [reader readDouble];
+    NSDecimalNumber *minY = [reader readDouble];
+    NSDecimalNumber *maxY = [reader readDouble];
 
     BOOL hasZ = false;
-    NSDecimalNumber *  minZ = nil;
-    NSDecimalNumber *  maxZ = nil;
+    NSDecimalNumber *minZ = nil;
+    NSDecimalNumber *maxZ = nil;
 
     BOOL hasM = false;
-    NSDecimalNumber *  minM = nil;
-    NSDecimalNumber *  maxM = nil;
+    NSDecimalNumber *minM = nil;
+    NSDecimalNumber *maxM = nil;
 
     // Read z values
     if (envelopeIndicator == 2 || envelopeIndicator == 4) {
@@ -133,37 +146,36 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
       [envelope setMinM:minM];
       [envelope setMaxM:maxM];
     }
-    
   }
 
   WKBGeometry *geometry = nil;
-  if(!empty){
+  if (!empty) {
     geometry = [WKBGeometryReader readGeometryWithReader:reader];
   }
 
   SCGeometry *g;
   WKBGeometry *wkb = geometry;
   switch (wkb.geometryType) {
-    case WKB_POINT:
-      g = [[SCPoint alloc] initWithWKB:(WKBPoint *)wkb];
-      break;
-    case WKB_MULTIPOINT:
-      g = [[SCMultiPoint alloc] initWithWKB:(WKBMultiPoint *)wkb];
-      break;
-    case WKB_LINESTRING:
-      g = [[SCLineString alloc] initWithWKB:(WKBLineString *)wkb];
-      break;
-    case WKB_MULTILINESTRING:
-      g = [[SCMultiLineString alloc] initWithWKB:(WKBMultiLineString *)wkb];
-      break;
-    case WKB_POLYGON:
-      g = [[SCPolygon alloc] initWithWKB:(WKBPolygon *)wkb];
-      break;
-    case WKB_MULTIPOLYGON:
-      g = [[SCMultiPolygon alloc] initWithWKB:(WKBMultiPolygon *)wkb];
-      break;
-    default:
-      break;
+  case WKB_POINT:
+    g = [[SCPoint alloc] initWithWKB:(WKBPoint *)wkb];
+    break;
+  case WKB_MULTIPOINT:
+    g = [[SCMultiPoint alloc] initWithWKB:(WKBMultiPoint *)wkb];
+    break;
+  case WKB_LINESTRING:
+    g = [[SCLineString alloc] initWithWKB:(WKBLineString *)wkb];
+    break;
+  case WKB_MULTILINESTRING:
+    g = [[SCMultiLineString alloc] initWithWKB:(WKBMultiLineString *)wkb];
+    break;
+  case WKB_POLYGON:
+    g = [[SCPolygon alloc] initWithWKB:(WKBPolygon *)wkb];
+    break;
+  case WKB_MULTIPOLYGON:
+    g = [[SCMultiPolygon alloc] initWithWKB:(WKBMultiPolygon *)wkb];
+    break;
+  default:
+    break;
   }
 
   if (g) {
@@ -173,11 +185,11 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   return g;
 }
 
--(NSData *)bytes
-{
-  WKBByteWriter * writer = [[WKBByteWriter alloc] init];
+- (NSData *)bytes {
+  WKBByteWriter *writer = [[WKBByteWriter alloc] init];
   [writer writeString:GPKG_GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER];
-  [writer writeByte:[NSNumber numberWithInteger:GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1]];
+  [writer writeByte:[NSNumber
+                        numberWithInteger:GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1]];
 
   int flag = 0;
 
@@ -188,7 +200,7 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   int emptyValue = empty ? 1 : 0;
   flag += (emptyValue << 4);
 
-  int envelopeIndicator = 1; //1 xy, 2 xyz, 3 xyzm
+  int envelopeIndicator = 1; // 1 xy, 2 xyz, 3 xyzm
   flag += (envelopeIndicator << 1);
 
   CFByteOrder byteOrder = CFByteOrderBigEndian;
@@ -200,10 +212,14 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   [writer setByteOrder:byteOrder];
 
   [writer writeInt:self.srsId];
-  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.lowerLeft.longitude]];
-  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.upperRight.longitude]];
-  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.lowerLeft.latitude ]];
-  [writer writeDouble:[[NSDecimalNumber alloc] initWithDouble:self.bbox.upperRight.latitude ]];
+  [writer writeDouble:[[NSDecimalNumber alloc]
+                          initWithDouble:self.bbox.lowerLeft.longitude]];
+  [writer writeDouble:[[NSDecimalNumber alloc]
+                          initWithDouble:self.bbox.upperRight.longitude]];
+  [writer writeDouble:[[NSDecimalNumber alloc]
+                          initWithDouble:self.bbox.lowerLeft.latitude]];
+  [writer writeDouble:[[NSDecimalNumber alloc]
+                          initWithDouble:self.bbox.upperRight.latitude]];
 
   if (!empty) {
     [WKBGeometryWriter writeGeometry:[self wkGeometry] withWriter:writer];

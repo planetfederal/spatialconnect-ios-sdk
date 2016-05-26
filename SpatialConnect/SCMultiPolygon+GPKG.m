@@ -19,8 +19,8 @@
 
 #import "SCMultiPolygon+GPKG.h"
 #import "SCPolygon+GPKG.h"
-#import "WKBMultiPolygon.h"
-#import "WKBLineString.h"
+#import <wkb_ios/WKBLineString.h>
+#import <wkb_ios/WKBMultiPolygon.h>
 
 @implementation SCMultiPolygon (GPKG)
 
@@ -38,10 +38,10 @@
   return self;
 }
 
-- (WKBGeometry*)wkGeometry {
+- (WKBGeometry *)wkGeometry {
   WKBMultiPolygon *mp = [[WKBMultiPolygon alloc] initWithType:WKB_MULTIPOLYGON
-                                                       andHasZ:NO
-                                                       andHasM:NO];
+                                                      andHasZ:NO
+                                                      andHasM:NO];
   [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *poly, NSUInteger idx,
                                               BOOL *_Nonnull stop) {
     [mp addPolygon:poly.wkGeometry];

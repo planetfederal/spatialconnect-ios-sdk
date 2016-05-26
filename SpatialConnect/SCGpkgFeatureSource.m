@@ -19,7 +19,7 @@
 #import "SCGeometry+GPKG.h"
 #import "SCGpkgFeatureSource.h"
 #import "SCPoint+GPKG.h"
-#import <libgpkgios/sqlite3.h>
+#import "sqlite3.h"
 
 @interface SCGpkgFeatureSource ()
 @property(strong, readwrite) NSString *name;

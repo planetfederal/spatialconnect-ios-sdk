@@ -15,6 +15,8 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "FMDB.h"
+#import "FMDatabasePool.h"
 
 extern NSString *const kTableName;
 

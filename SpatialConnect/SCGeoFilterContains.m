@@ -24,7 +24,6 @@
 #import "SCMultiPolygon.h"
 #import "SCPoint.h"
 #import "SCPolygon.h"
-#import <objc-geohash/GeoHash.h>
 
 @implementation SCGeoFilterContains
 
@@ -35,7 +34,7 @@
   return YES;
 }
 
-- (NSString*)asSQL {
+- (NSString *)asSQL {
   return nil;
 }
 @end
