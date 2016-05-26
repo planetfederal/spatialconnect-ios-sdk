@@ -17,10 +17,10 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCPolygon+GPKG.h"
-#import "WKBPolygon.h"
-#import "WKBLineString.h"
 #import "SCPoint+GPKG.h"
+#import "SCPolygon+GPKG.h"
+#import <wkb_ios/WKBLineString.h>
+#import <wkb_ios/WKBPolygon.h>
 
 @implementation SCPolygon (GPKG)
 

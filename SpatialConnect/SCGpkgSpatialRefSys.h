@@ -15,6 +15,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "FMResultSet.h"
 
 @interface SCGpkgSpatialRefSys : NSObject
 

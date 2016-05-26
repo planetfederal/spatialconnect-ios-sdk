@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCPoint+GPKG.h"
-#import "WKBGeometry.h"
+#import <wkb_ios/WKBPoint.h>
 
 @implementation SCPoint (GPKG)
 

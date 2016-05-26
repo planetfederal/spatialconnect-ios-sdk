@@ -17,6 +17,7 @@
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
 #import <Foundation/Foundation.h>
+#import "FMDB.h"
 
 typedef NS_ENUM(NSInteger, SCGpkgColType) {
   NULL_COL,

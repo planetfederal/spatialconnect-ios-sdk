@@ -18,13 +18,12 @@
  ******************************************************************************/
 
 #import "SCGeometry.h"
-#import "WKBGeometry.h"
-#import <objc-geohash/GeoHash.h>
+#import <wkb_ios/WKBGeometry.h>
 
 @interface SCGeometry (GPKG)
 
-+ (SCGeometry *)fromGeometryBinary:(NSData*)d;
++ (SCGeometry *)fromGeometryBinary:(NSData *)d;
 - (WKBGeometry *)wkGeometry;
-- (NSData*)bytes;
+- (NSData *)bytes;
 
 @end

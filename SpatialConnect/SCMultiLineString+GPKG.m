@@ -17,9 +17,9 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCMultiLineString+GPKG.h"
-#import "WKBMultiLineString.h"
 #import "SCLineString+GPKG.h"
+#import "SCMultiLineString+GPKG.h"
+#import <wkb_ios/WKBMultiLineString.h>
 
 @implementation SCMultiLineString (GPKG)
 
@@ -35,13 +35,13 @@
   return self;
 }
 
-- (WKBGeometry*)wkGeometry {
-  WKBMultiLineString *wkbml = [[WKBMultiLineString alloc] initWithHasZ:NO andHasM:NO];
-  [self.linestrings
-   enumerateObjectsUsingBlock:^(SCLineString *ls, NSUInteger idx,
-                                BOOL *_Nonnull stop) {
-     [wkbml addLineString:ls.wkGeometry];
-   }];
+- (WKBGeometry *)wkGeometry {
+  WKBMultiLineString *wkbml =
+      [[WKBMultiLineString alloc] initWithHasZ:NO andHasM:NO];
+  [self.linestrings enumerateObjectsUsingBlock:^(
+                        SCLineString *ls, NSUInteger idx, BOOL *_Nonnull stop) {
+    [wkbml addLineString:ls.wkGeometry];
+  }];
   return wkbml;
 }
 

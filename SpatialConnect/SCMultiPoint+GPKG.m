@@ -19,7 +19,7 @@
 
 #import "SCMultiPoint+GPKG.h"
 #import "SCPoint+GPKG.h"
-#import "WKBMultiPoint.h"
+#import <wkb_ios/WKBMultiPoint.h>
 
 @implementation SCMultiPoint (GPKG)
 
@@ -31,9 +31,9 @@
   return self;
 }
 
-- (WKBGeometry*)wkGeometry {
+- (WKBGeometry *)wkGeometry {
   WKBMultiPoint *mp =
-  [[WKBMultiPoint alloc] initWithType:WKB_MULTIPOINT andHasZ:NO andHasM:NO];
+      [[WKBMultiPoint alloc] initWithType:WKB_MULTIPOINT andHasZ:NO andHasM:NO];
   [self.points enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx,
                                             BOOL *_Nonnull stop) {
     [mp addPoint:p.wkGeometry];

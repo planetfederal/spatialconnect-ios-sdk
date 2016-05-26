@@ -1,6 +1,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import "FMResultSet.h"
 
 @interface SCGpkgDataColumnConstraint : NSObject
 

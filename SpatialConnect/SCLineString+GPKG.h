@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCLineString.h"
-#import "WKBLineString.h"
+#import <wkb_ios/WKBLineString.h>
 
 @interface SCLineString (GPKG)
 

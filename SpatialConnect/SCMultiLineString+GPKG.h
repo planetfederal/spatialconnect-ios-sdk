@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCMultiLineString.h"
-#import "WKBMultiLineString.h"
+#import <wkb_ios/WKBMultiLineString.h>
 
 @interface SCMultiLineString (GPKG)
 - (id)initWithWKB:(WKBMultiLineString *)w;

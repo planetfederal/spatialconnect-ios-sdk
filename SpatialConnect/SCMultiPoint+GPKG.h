@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCMultiPoint.h"
-#import "WKBMultiPoint.h"
+#import <wkb_ios/WKBMultiPoint.h>
 
 @interface SCMultiPoint (GPKG)
 
