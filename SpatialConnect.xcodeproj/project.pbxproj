@@ -297,6 +297,11 @@
 		56FB3EB61CF6A20B00C3DA4B /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */; };
 		56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56FB3EBA1CF6A2BD00C3DA4B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */; };
+		56FB3F4F1CF8878300C3DA4B /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */; };
+		56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
+		56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC881CF652ED00D502C3 /* wkb_ios.framework */; };
+		56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
+		56FB3F561CF8AADE00C3DA4B /* SCFormTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FB3F551CF8AADE00C3DA4B /* SCFormTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -638,6 +643,7 @@
 		56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = "../../../../Library/Developer/Xcode/DerivedData/libgpkgios-hkeldejkxsieftabfbvtnapspbsp/Build/Products/Debug-iphonesimulator/libgpkgios.framework"; sourceTree = "<group>"; };
 		56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		56FB3F551CF8AADE00C3DA4B /* SCFormTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFormTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -657,6 +663,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */,
+				56FB3F4F1CF8878300C3DA4B /* libgpkgios.framework in Frameworks */,
+				56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */,
+				56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */,
+				56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1221,6 +1231,7 @@
 		5649B4A11BE27C6A009947EF /* SpatialConnectTests */ = {
 			isa = PBXGroup;
 			children = (
+				56FB3F541CF8A98B00C3DA4B /* Forms */,
 				566617551CE139CC00874119 /* Network */,
 				56CC07981C6EA85700407D4A /* Storage */,
 				560E31C51BF15C90009DA680 /* TestingUtils */,
@@ -1397,6 +1408,14 @@
 			name = FMDB;
 			sourceTree = "<group>";
 		};
+		56FB3F541CF8A98B00C3DA4B /* Forms */ = {
+			isa = PBXGroup;
+			children = (
+				56FB3F551CF8AADE00C3DA4B /* SCFormTest.m */,
+			);
+			name = Forms;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1569,6 +1588,7 @@
 				5649B4991BE27C6A009947EF /* Sources */,
 				5649B49A1BE27C6A009947EF /* Frameworks */,
 				5649B49B1BE27C6A009947EF /* Resources */,
+				56FB3F531CF888CC00C3DA4B /* Carthage Copy Frameworks Run Script */,
 			);
 			buildRules = (
 			);
@@ -1677,6 +1697,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		56FB3F531CF888CC00C3DA4B /* Carthage Copy Frameworks Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/libgpkgios.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/wkb_ios.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ZipZap.framework",
+			);
+			name = "Carthage Copy Frameworks Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5649B48E1BE27C6A009947EF /* Sources */ = {
@@ -1819,6 +1860,7 @@
 				5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */,
 				560E31BD1BF10F42009DA680 /* SCGeopackageCreateTest.m in Sources */,
 				5649B4D41BE28079009947EF /* SpatialConnectAutoConfigTest.m in Sources */,
+				56FB3F561CF8AADE00C3DA4B /* SCFormTest.m in Sources */,
 				5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */,
 				5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */,
 				5649B4D11BE28079009947EF /* SCQueryFilterTest.m in Sources */,
@@ -1964,7 +2006,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/ios";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-DSQLITE_CORE",
 					"-DSQLITE_ENABLE_RTREE=1",
@@ -2001,7 +2043,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/ios";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-DSQLITE_CORE",
 					"-DSQLITE_ENABLE_RTREE=1",
@@ -2016,7 +2058,11 @@
 		5649B4AB1BE27C6A009947EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREFIX_HEADER = "SpatialConnect/SpatialConnect-Prefix.h";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREFIX_HEADER = SpatialConnect/SCPrefixHeader.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
@@ -2038,7 +2084,11 @@
 		5649B4AC1BE27C6A009947EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREFIX_HEADER = "SpatialConnect/SpatialConnect-Prefix.h";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREFIX_HEADER = SpatialConnect/SCPrefixHeader.pch;
 				INFOPLIST_FILE = SpatialConnectTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

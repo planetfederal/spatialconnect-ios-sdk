@@ -47,7 +47,7 @@
   XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
   [[self.net
       getRequestURLAsDict:[NSURL
-                              URLWithString:@"http://localhost:8085/config/1"]]
+                              URLWithString:@"http://localhost:8085/config"]]
       subscribeNext:^(NSDictionary *d) {
         XCTAssertNotNil(d);
         [expect fulfill];
@@ -70,7 +70,7 @@
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(22.3), @(56.2) ]];
   SCFormFeature *f = [[SCFormFeature alloc] init];
   GeopackageStore *ds = self.sc.dataService.defaultStore;
-  f.layerId = @"one";
+  f.layerId = @"Weed Inspector";
   f.storeId = ds.storeId;
   f.geometry = p;
   [f.properties setObject:@"Joe Jackson" forKey:@"Father"];

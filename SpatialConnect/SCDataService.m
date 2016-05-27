@@ -69,11 +69,16 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   config.uri = @"spacon_default_store.db";
   config.name = @"DEFAULT_STORE";
   _defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
+  defaultStoreForms = [NSMutableArray new];
   [_stores setObject:_defaultStore forKey:config.uniqueid];
 }
 
 - (NSArray *)defaultStoreLayers {
   return [self.defaultStore layerList];
+}
+
+- (NSArray*)defaultStoreForms {
+  return [NSArray arrayWithArray:defaultStoreForms];
 }
 
 - (void)addDefaultStoreImpls {
@@ -190,6 +195,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (void)registerFormByConfig:(SCFormConfig *)f {
+  [defaultStoreForms addObject:f];
   [_defaultStore addLayer:f.name withDef:[f sqlTypes] andFormId:f.identifier];
 }
 

@@ -31,6 +31,7 @@
     formIds = [NSMutableDictionary new];
     _type = @"default";
     _version = 1;
+    [self.adapter connectBlocking];
   }
   return self;
 }

@@ -132,6 +132,9 @@ NSString *const SCJavascriptBridgeErrorDomain =
     case DATASERVICE_DELETEFEATURE:
       [self deleteFeature:command[@"payload"] responseSubscriber:subscriber];
       break;
+    case DATASERVICE_FORMLIST:
+      [self formList:subscriber];
+      break;
     case SENSORSERVICE_GPS:
       num = [NSNumber numberWithLong:(long)command[@"payload"]];
       [self spatialConnectGPS:num];
@@ -148,6 +151,12 @@ NSString *const SCJavascriptBridgeErrorDomain =
   NSArray *arr = [self.spatialConnect.dataService activeStoreListDictionary];
   [subscriber sendCompleted];
   [self.bridge callHandler:@"storesList" data:@{ @"stores" : arr }];
+}
+
+- (void)formList:(id<RACSubscriber>)subscriber {
+  NSArray *arr = [self.spatialConnect.dataService defaultStoreForms];
+  [subscriber sendCompleted];
+  [self.bridge callHandler:@"formList" data:@{@"forms":arr}];
 }
 
 - (void)activeStoreById:(NSDictionary *)value
