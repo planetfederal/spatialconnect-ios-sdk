@@ -52,6 +52,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 - (void)registerStoreByConfig:(SCStoreConfig *)c;
 - (void)registerFormByConfig:(SCFormConfig *)f;
 - (NSArray *)defaultStoreLayers;
+- (NSArray *)defaultStoreForms;
 
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;

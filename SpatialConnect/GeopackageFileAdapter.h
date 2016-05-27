@@ -40,6 +40,7 @@
 - (id)initWithFileName:(NSString *)dbname;
 - (id)initWithStoreConfig:(SCStoreConfig *)cfg;
 - (RACSignal *)connect;
+- (void)connectBlocking;
 - (void)disconnect;
 
 - (RACSignal *)query:(SCQueryFilter *)filter;

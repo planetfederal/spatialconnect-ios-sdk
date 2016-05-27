@@ -24,7 +24,7 @@
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.name = dict[@"name"];
+    self.name = [[dict[@"name"] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     self.identifier = [dict[@"id"] integerValue];
     self.fields = dict[@"fields"];
   }
@@ -40,9 +40,16 @@
     return SCFORM_TYPE_BOOLEAN;
   } else if ([s containsString:@"integer"]) {
     return SCFORM_TYPE_INTEGER;
-  } else {
-    return -1;
+  } else if ([s containsString:@"date"]){
+    return SCFORM_TYPE_DATE;
+  } else if ([s containsString:@"slider"]) {
+    return SCFORM_TYPE_SLIDER;
+  } else if ([s containsString:@"counter"]) {
+    return SCFORM_TYPE_COUNTER;
+  } else if ([s containsString:@"select"]) {
+    return SCFORM_TYPE_SELECT;
   }
+  return -1;
 }
 
 - (NSString *)formTypeToStr:(NSNumber *)n {
@@ -55,6 +62,14 @@
     return @"boolean";
   } else if (t == SCFORM_TYPE_INTEGER) {
     return @"integer";
+  } else if (t == SCFORM_TYPE_DATE) {
+    return @"date";
+  } else if (t == SCFORM_TYPE_SLIDER) {
+    return @"slider";
+  } else if (t == SCFORM_TYPE_COUNTER) {
+    return @"counter";
+  } else if (t == SCFORM_TYPE_SELECT) {
+    return @"select";
   }
   return nil;
 }
@@ -68,8 +83,16 @@
     return @"INTEGER";
   } else if (t == SCFORM_TYPE_INTEGER) {
     return @"INTEGER";
+  } else if (t == SCFORM_TYPE_DATE) {
+    return @"DATETIME";
+  } else if (t == SCFORM_TYPE_SLIDER) {
+    return @"REAL";
+  } else if (t == SCFORM_TYPE_COUNTER) {
+    return @"INTEGER";
+  } else if (t == SCFORM_TYPE_SELECT) {
+    return @"TEXT";
   }
-  return nil;
+  return @"NULL";
 }
 
 - (NSString *)stringToSQLType:(NSString *)t {
@@ -79,17 +102,35 @@
     return @"REAL";
   } else if ([t isEqualToString:@"boolean"]) {
     return @"INTEGER";
+  } else if ([t isEqualToString:@"date"]) {
+    return @"DATETIME";
+  } else if ([t isEqualToString:@"slider"]) {
+    return @"REAL";
+  } else if ([t isEqualToString:@"counter"]) {
+    return @"INTEGER";
+  } else if ([t isEqualToString:@"select"]) {
+    return @"TEXT";
   }
-  return nil;
+  return @"NULL";
 }
 
 - (NSDictionary *)sqlTypes {
   NSMutableDictionary *t = [NSMutableDictionary new];
   [self.fields enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
                                             BOOL *stop) {
-    [t setValue:[self stringToSQLType:d[@"type"]] forKey:d[@"label"]];
+    NSString *key = [NSString stringWithString:d[@"key"]];
+    NSString *type = d[@"type"];
+    [t setValue:[self stringToSQLType:type] forKey:key];
   }];
   return [NSDictionary dictionaryWithDictionary:t];
+}
+
+- (NSDictionary*)JSONDict {
+  NSMutableDictionary *dict = [NSMutableDictionary new];
+  dict[@"name"] = self.name;
+  dict[@"id"] = @(self.identifier);
+  dict[@"fields"] = self.fields;
+  return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 @end

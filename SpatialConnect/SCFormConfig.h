@@ -20,7 +20,11 @@ typedef NS_ENUM(NSInteger, SCFormItemType) {
   SCFORM_TYPE_INTEGER,
   SCFORM_TYPE_STRING,
   SCFORM_TYPE_BOOLEAN,
-  SCFORM_TYPE_NUMBER
+  SCFORM_TYPE_NUMBER,
+  SCFORM_TYPE_DATE,
+  SCFORM_TYPE_SLIDER,
+  SCFORM_TYPE_COUNTER,
+  SCFORM_TYPE_SELECT
 };
 
 @interface SCFormConfig : NSObject
@@ -31,5 +35,5 @@ typedef NS_ENUM(NSInteger, SCFormItemType) {
 
 - (id)initWithDict:(NSDictionary *)d;
 - (NSDictionary *)sqlTypes;
-
+- (NSDictionary *)JSONDict;
 @end

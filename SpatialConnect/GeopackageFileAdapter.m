@@ -62,17 +62,10 @@
   return self;
 }
 
-- (RACSignal *)connect {
-  if (self.gpkg) { // The Store is already connected and may have been
-                   // initialized as the default
-    return [RACSignal empty];
-  }
-  BOOL saveToDocsDir = ![SCFileUtils isTesting];
-  // The Database's name on disk is its store ID. This is to guaruntee
-  // uniqueness
-  // when being stored on disk.
+- (NSString*)path {
+  NSString *path = nil;
   NSString *dbName = [NSString stringWithFormat:@"%@.gpkg", self.storeId];
-  NSString *path;
+  BOOL saveToDocsDir = ![SCFileUtils isTesting];
   if (saveToDocsDir) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                          NSUserDomainMask, YES);
@@ -81,6 +74,18 @@
   } else {
     path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
   }
+  return path;
+}
+
+- (RACSignal *)connect {
+  if (self.gpkg) { // The Store is already connected and may have been
+                   // initialized as the default
+    return [RACSignal empty];
+  }
+  // The Database's name on disk is its store ID. This is to guaruntee
+  // uniqueness
+  // when being stored on disk.
+  NSString *path = [self path];
   BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
 
   if (b) {
@@ -111,6 +116,11 @@
                                      code:SC_GEOPACKAGE_FILENOTFOUND
                                  userInfo:nil];
   return [RACSignal error:err];
+}
+
+- (void)connectBlocking {
+  NSString *path = [self path];
+  self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
 }
 
 - (void)disconnect {
