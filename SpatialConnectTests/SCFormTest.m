@@ -55,7 +55,8 @@
   [arr enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx, BOOL *stop) {
     NSDictionary *d = [c JSONDict];
     XCTAssertNotNil(d[@"id"]);
-    XCTAssertNotNil(d[@"name"]);
+    XCTAssertNotNil(d[@"layer_name"]);
+    XCTAssertNotNil(d[@"display_name"]);
     XCTAssertNotNil(d[@"fields"]);
   }];
 }
