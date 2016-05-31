@@ -24,7 +24,7 @@
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.name = [[dict[@"name"] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    self.name = dict[@"name"];
     self.identifier = [dict[@"id"] integerValue];
     self.fields = dict[@"fields"];
   }
@@ -125,9 +125,14 @@
   return [NSDictionary dictionaryWithDictionary:t];
 }
 
+- (NSString*)name {
+  return [[name lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+}
+
 - (NSDictionary*)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
-  dict[@"name"] = self.name;
+  dict[@"layer_name"] = self.name;
+  dict[@"display_name"] = name;
   dict[@"id"] = @(self.identifier);
   dict[@"fields"] = self.fields;
   return [NSDictionary dictionaryWithDictionary:dict];
