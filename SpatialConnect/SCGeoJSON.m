@@ -26,6 +26,7 @@
 #import "SCMultiPolygon+GeoJSON.h"
 #import "SCPoint+GeoJSON.h"
 #import "SCPolygon+GeoJSON.h"
+#import "SCKeyTuple.h"
 
 @interface SCGeoJSON ()
 
@@ -38,12 +39,8 @@
 - (id)initWithDictionary:(NSDictionary *)dictionary {
   if (self = [super init]) {
     type = [self typeFromString:[dictionary objectForKey:@"type"]];
-    identifer = [dictionary objectForKey:@"id"];
+    identifier = dictionary[@"id"];
     properties = [dictionary objectForKey:@"properties"];
-    if (type < 0) {
-      self = nil;
-      return self;
-    }
     if (type == GEOJSON_FEATURE_COLLECTION) {
       features = [dictionary objectForKey:@"features"];
     } else if (type == GEOJSON_GEOMETRY_COLLECTION) {
@@ -73,7 +70,7 @@
   return geometry;
 }
 - (NSString *)identifier {
-  return identifer;
+  return identifier;
 }
 - (NSDictionary *)properties {
   return properties;
@@ -165,10 +162,14 @@
     geom = [[SCMultiPolygon alloc] initWithCoordinateArray:geoJson.coordinates];
     break;
   default:
+      geom = (SCGeometry*)[[SCSpatialFeature alloc] init];
     break;
   }
   if (geoJson.identifier) {
-    geom.identifier = geoJson.identifier;
+    SCKeyTuple *k = [SCKeyTuple tupleFromEncodedCompositeKey:geoJson.identifier];
+    geom.identifier = k.featureId;
+    geom.layerId = k.layerId;
+    geom.storeId = k.storeId;
   }
   if (geoJson.properties && ![geoJson.properties isKindOfClass:NSNull.class]) {
     geom.properties =

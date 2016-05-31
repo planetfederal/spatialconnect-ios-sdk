@@ -72,6 +72,14 @@
   }
 }
 
+- (void)testSCSpatialFeatureRead {
+  SCSpatialFeature *feat = [[SCSpatialFeature alloc] init];
+  NSDictionary *d = [feat JSONDict];
+  SCSpatialFeature *sf = [SCGeoJSON parseDict:d];
+  XCTAssertNotNil(sf.identifier);
+  XCTAssert([sf.identifier isEqualToString:feat.identifier]);
+}
+
 - (void)testSimpleGeoJSONReads {
   NSError *error;
   NSDictionary *geometryContent =

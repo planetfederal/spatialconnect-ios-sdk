@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, GeoJSONType) {
   NSArray *features;
   SCGeoJSON *geometry;
   NSDictionary *properties;
-  NSString *identifer; //"id"
+  NSString *identifier; //"id"
 }
 
 - (id)initWithDictionary:(NSDictionary *)dictionary;
