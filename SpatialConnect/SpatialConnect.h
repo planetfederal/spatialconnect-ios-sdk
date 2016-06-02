@@ -20,6 +20,8 @@
 #import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
+#import "SCGeoJSON.h"
+#import "SCJavascriptCommands.h"
 #import "SCKVPService.h"
 #import "SCNetworkService.h"
 #import "SCRasterService.h"
