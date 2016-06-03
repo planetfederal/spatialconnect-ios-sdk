@@ -27,6 +27,8 @@
 
 @implementation SCConfigService
 
+@synthesize remoteUri;
+
 - (id)init {
   self = [super init];
   if (self) {
@@ -85,11 +87,12 @@
       }
       NSString *uri;
       if ((uri = [cfg objectForKey:@"remote"])) {
+        self.remoteUri = uri;
         [cfg removeObjectForKey:@"remote"];
-        NSURL *cfgUrl = [NSURL URLWithString:uri];
+        NSURL *cfgUrl = [NSURL URLWithString: [uri stringByAppendingString:@"/config"]];
         SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
         NSURL *regUrl =
-            [NSURL URLWithString:@"http://localhost:8085/device/register"];
+            [NSURL URLWithString:[uri stringByAppendingString:@"/device/register"]];
         NSString *ident =
             [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
         if (!ident) {

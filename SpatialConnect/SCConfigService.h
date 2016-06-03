@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
   NSMutableArray *configPaths;
 }
 
+@property (nonatomic,strong) NSString *remoteUri;
+
 - (id)init;
 - (void)addConfigFilepath:(NSString *)p;
 

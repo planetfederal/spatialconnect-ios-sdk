@@ -86,10 +86,15 @@
         }
       }] flattenMap:^RACStream *(id value) {
     NSInteger formid = [[formIds objectForKey:feature.layerId] integerValue];
-    NSString *urlStr = [NSString
-        stringWithFormat:@"http://localhost:8085/form/%d/submit", formid];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    return [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
+        if (sc.configService.remoteUri) {
+          NSString *urlStr = [NSString
+                              stringWithFormat:@"%@/form/%ld/submit", sc.configService.remoteUri,(long)formid];
+          NSURL *url = [NSURL URLWithString:urlStr];
+          return [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
+        } else {
+          return [RACSignal empty];
+        }
+
   }];
 }
 
