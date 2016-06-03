@@ -67,7 +67,7 @@
   [self.sc startAllServices];
   NSArray *arr = [self.sc.dataService defaultStoreLayers];
   XCTAssertNotNil(arr);
-  SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(22.3), @(56.2) ]];
+  SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(-22.3), @(56.2) ]];
   SCFormFeature *f = [[SCFormFeature alloc] init];
   GeopackageStore *ds = self.sc.dataService.defaultStore;
   f.layerId = @"baseball_team";
