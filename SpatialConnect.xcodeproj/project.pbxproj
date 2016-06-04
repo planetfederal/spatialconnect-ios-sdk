@@ -65,7 +65,7 @@
 		5641B19D1CB5F2C100334907 /* SCMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B19B1CB5F2C100334907 /* SCMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5641B19E1CB5F2C100334907 /* SCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5641B19C1CB5F2C100334907 /* SCMessage.m */; };
 		5645C4E01BED31F1006E4128 /* SCGeometry+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4DE1BED31F1006E4128 /* SCGeometry+GPKG.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5645C4E11BED31F1006E4128 /* SCGeometry+GPKG.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5645C4DF1BED31F1006E4128 /* SCGeometry+GPKG.mm */; };
+		5645C4E11BED31F1006E4128 /* SCGeometry+GPKG.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5645C4DF1BED31F1006E4128 /* SCGeometry+GPKG.mm */; settings = {COMPILER_FLAGS = "-ObjC++"; }; };
 		5645C4E41BED5BA1006E4128 /* SCPoint+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4E21BED5BA1006E4128 /* SCPoint+GPKG.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5645C4E51BED5BA1006E4128 /* SCPoint+GPKG.m in Sources */ = {isa = PBXBuildFile; fileRef = 5645C4E31BED5BA1006E4128 /* SCPoint+GPKG.m */; };
 		5645C4EA1BED796D006E4128 /* SCPolygon+GPKG.h in Headers */ = {isa = PBXBuildFile; fileRef = 5645C4E81BED796D006E4128 /* SCPolygon+GPKG.h */; settings = {ATTRIBUTES = (Public, ); }; };
