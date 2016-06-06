@@ -112,7 +112,7 @@
   [self stopLocationManager];
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCKVPStore *kvp = sc.kvpService.kvpStore;
-  [kvp setValue:@(NO) forKey:GPS_ENABLED];
+  [kvp putValue:@(NO) forKey:GPS_ENABLED];
 }
 
 -(BOOL)shoudlEnableGPS {
