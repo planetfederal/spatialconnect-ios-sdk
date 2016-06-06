@@ -63,6 +63,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 - (NSArray *)storesByProtocol:(Protocol *)protocol;
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
 - (NSArray *)storesRaster;
+- (RACSignal *)storeStarted:(NSString *)storeId;
 
 - (RACSignal *)queryAllStoresOfProtocol:(Protocol *)protocol
                                  filter:(SCQueryFilter *)filter;

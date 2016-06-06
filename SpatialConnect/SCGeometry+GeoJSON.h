@@ -21,8 +21,6 @@
 #import "SCGeometry.h"
 
 @interface SCGeometry (GeoJSON)
-- (NSMutableDictionary *)JSONDict;
-- (NSString *)geoJSONString;
-- (NSArray *)bboxArray;
 - (id)initWithGeoJSON:(SCGeoJSON *)gj;
+- (NSString *)geoJSONString;
 @end

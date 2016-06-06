@@ -112,27 +112,4 @@
 - (void)start {
 }
 
-- (NSURLCredential *)authenticateWithURL:(NSURL *)url
-                                username:(NSString *)un
-                                password:(NSString *)pw {
-  NSError *err = nil;
-  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-
-  request.HTTPMethod = @"POST";
-  NSString *loginData = [NSString stringWithFormat:@"%@:%@", un, pw];
-  NSString *headerValue =
-      [@"Basic " stringByAppendingString:[SCKeyTuple encodeString:loginData]];
-  [request addValue:headerValue forHTTPHeaderField:@"Authorization"];
-
-  NSURLResponse *response;
-
-  NSData *data = [NSURLConnection sendSynchronousRequest:request
-                                       returningResponse:&response
-                                                   error:&err];
-
-  NSString *result =
-      [NSString stringWithCString:[data bytes] length:[data length]];
-  return nil; // basic auth
-}
-
 @end

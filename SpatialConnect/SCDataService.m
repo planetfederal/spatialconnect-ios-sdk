@@ -103,10 +103,14 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (RACSignal *)storeStarted:(NSString *)storeId {
+  if ([[self storeByIdentifier:storeId] status] == SC_DATASTORE_RUNNING) {
+    SCStoreStatusEvent *evt = [[SCStoreStatusEvent alloc] initWithEvent:SC_DATASTORE_EVT_STARTED andStoreId:storeId];
+    return [RACSignal return:evt];
+  }
   RACMulticastConnection *rmcc = self.storeEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_EVT_STARTED && evt.storeId == storeId) {
+    if (evt.status == SC_DATASTORE_EVT_STARTED && [evt.storeId isEqualToString:storeId]) {
       return YES;
     }
     return NO;

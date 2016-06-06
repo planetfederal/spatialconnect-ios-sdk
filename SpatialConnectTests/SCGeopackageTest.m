@@ -195,7 +195,7 @@
     [gpkg addFeatureSource:@"foo" withTypes:nil];
     [expect fulfill];
   }];
-  [self waitForExpectationsWithTimeout:120.0 handler:nil];
+  [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
 @end

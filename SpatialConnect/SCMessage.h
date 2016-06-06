@@ -26,6 +26,5 @@
 - (id)initWithAction:(NSInteger)a
              payload:(NSDictionary *)p
    serviceIdentifier:(NSString *)s;
-- (NSData *)data;
 
 @end

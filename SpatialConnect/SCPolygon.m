@@ -89,12 +89,12 @@
 }
 
 - (NSDictionary *)JSONDict {
-  NSMutableDictionary *dict = [super JSONDict];
+  NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
   NSDictionary *geometry =
       [NSDictionary dictionaryWithObjects:@[ @"Polygon", self.coordinateArray ]
                                   forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];
-  return dict;
+  return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 - (NSArray *)coordinateArray {

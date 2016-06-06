@@ -58,12 +58,6 @@
 }
 
 - (void)createConfigService {
-  RACSignal *configSignal = [bus filter:^BOOL(SCMessage *m) {
-    if ([m.serviceIdentifier isEqualToString:@"CONFIG_SERVICE"]) {
-      return YES;
-    }
-    return NO;
-  }];
   _configService = [[SCConfigService alloc] init];
 }
 

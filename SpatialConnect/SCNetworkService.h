@@ -53,17 +53,4 @@
 - (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict;
 
-/*!
- *  @brief Basic Auth for a url
- *
- *  @param url login url
- *  @param un  basic auth username
- *  @param pw  basic auth password
- *
- *  @return NSURLCredential with Token
- */
-- (NSURLCredential *)authenticateWithURL:(NSURL *)url
-                                username:(NSString *)un
-                                password:(NSString *)pw;
-
 @end

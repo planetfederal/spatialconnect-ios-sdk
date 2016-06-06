@@ -57,6 +57,7 @@
 		5624289A1CAC60740087756C /* SCConfigService.m in Sources */ = {isa = PBXBuildFile; fileRef = 562428981CAC60740087756C /* SCConfigService.m */; };
 		5624289E1CADCFEF0087756C /* SCKVPStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5624289C1CADCFEF0087756C /* SCKVPStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5624289F1CADCFEF0087756C /* SCKVPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5624289D1CADCFEF0087756C /* SCKVPStore.m */; };
+		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		5641B1911CB43D3700334907 /* SCKVPService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B18F1CB43D3700334907 /* SCKVPService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -285,7 +286,6 @@
 		56E2F41A1CEE9CB8001CCD86 /* SCFormFeature.h in Headers */ = {isa = PBXBuildFile; fileRef = 56E2F4181CEE9CB8001CCD86 /* SCFormFeature.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56E2F41B1CEE9CB8001CCD86 /* SCFormFeature.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E2F4191CEE9CB8001CCD86 /* SCFormFeature.m */; };
 		56ED69C61CE212FC00843C44 /* remote.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 56ED69C51CE212FC00843C44 /* remote.scfg */; };
-		56ED69C81CE2151000843C44 /* SCConfigServiceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56ED69C71CE2151000843C44 /* SCConfigServiceTest.m */; };
 		56F4375A1CA0955200EA1344 /* FMDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 56F4374F1CA0955200EA1344 /* FMDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56F4375B1CA0955200EA1344 /* FMDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 56F437501CA0955200EA1344 /* FMDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56F4375C1CA0955200EA1344 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F437511CA0955200EA1344 /* FMDatabase.m */; };
@@ -295,7 +295,6 @@
 		56F437601CA0955200EA1344 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F437551CA0955200EA1344 /* FMDatabaseQueue.m */; };
 		56F437631CA0955200EA1344 /* FMDatabasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = 56F437581CA0955200EA1344 /* FMDatabasePool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56F437641CA0955200EA1344 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F437591CA0955200EA1344 /* FMDatabasePool.m */; };
-		56FB3EB61CF6A20B00C3DA4B /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */; };
 		56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56FB3EBA1CF6A2BD00C3DA4B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */; };
 		56FB3F4F1CF8878300C3DA4B /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */; };
@@ -396,6 +395,7 @@
 		562428981CAC60740087756C /* SCConfigService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCConfigService.m; sourceTree = "<group>"; };
 		5624289C1CADCFEF0087756C /* SCKVPStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKVPStore.h; sourceTree = "<group>"; };
 		5624289D1CADCFEF0087756C /* SCKVPStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKVPStore.m; sourceTree = "<group>"; };
+		563090661D0646D0001FE1B5 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
 		5641B18F1CB43D3700334907 /* SCKVPService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKVPService.h; sourceTree = "<group>"; };
@@ -632,7 +632,6 @@
 		56E2F4181CEE9CB8001CCD86 /* SCFormFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFormFeature.h; sourceTree = "<group>"; };
 		56E2F4191CEE9CB8001CCD86 /* SCFormFeature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFormFeature.m; sourceTree = "<group>"; };
 		56ED69C51CE212FC00843C44 /* remote.scfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote.scfg; sourceTree = "<group>"; };
-		56ED69C71CE2151000843C44 /* SCConfigServiceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCConfigServiceTest.m; sourceTree = "<group>"; };
 		56F4374F1CA0955200EA1344 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
 		56F437501CA0955200EA1344 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		56F437511CA0955200EA1344 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -654,7 +653,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */,
-				56FB3EB61CF6A20B00C3DA4B /* libgpkgios.framework in Frameworks */,
+				563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */,
 				5678FC8C1CF652ED00D502C3 /* wkb_ios.framework in Frameworks */,
 				5678FC8D1CF652ED00D502C3 /* ZipZap.framework in Frameworks */,
 			);
@@ -678,6 +677,7 @@
 		0B5FE958508C82B8D8FF4D5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				563090661D0646D0001FE1B5 /* libgpkgios.framework */,
 				56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */,
 				5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */,
 				5678FC881CF652ED00D502C3 /* wkb_ios.framework */,
@@ -1215,6 +1215,7 @@
 				563BEC681BE529ED00778EDA /* SensorService */,
 				563BEC581BE526E000778EDA /* JavascriptBridge */,
 				563BEC531BE500C500778EDA /* DataService */,
+				56CC07971C6E92EF00407D4A /* Storage */,
 				5649B5331BE280D6009947EF /* SCLoggingAssertionHandler.h */,
 				5649B5341BE280D6009947EF /* SCLoggingAssertionHandler.m */,
 				5649B55A1BE280D6009947EF /* SCPrefixHeader.pch */,
@@ -1224,7 +1225,6 @@
 				5649B6211BE283EC009947EF /* SpatialConnect.h */,
 				5649B57B1BE280D6009947EF /* SpatialConnect.m */,
 				5649B4981BE27C6A009947EF /* Info.plist */,
-				56CC07971C6E92EF00407D4A /* Storage */,
 				5641B19B1CB5F2C100334907 /* SCMessage.h */,
 				5641B19C1CB5F2C100334907 /* SCMessage.m */,
 			);
@@ -1247,7 +1247,6 @@
 				5649B4C31BE28079009947EF /* tests.scfg */,
 				5649B4A41BE27C6A009947EF /* Info.plist */,
 				56ED69C51CE212FC00843C44 /* remote.scfg */,
-				56ED69C71CE2151000843C44 /* SCConfigServiceTest.m */,
 			);
 			path = SpatialConnectTests;
 			sourceTree = "<group>";
@@ -1876,7 +1875,6 @@
 				5649B4C71BE28079009947EF /* LocalFilterTests.m in Sources */,
 				566617571CE139E000874119 /* SCNetworkServiceTest.m in Sources */,
 				5649B4D01BE28079009947EF /* SCPolygonTest.m in Sources */,
-				56ED69C81CE2151000843C44 /* SCConfigServiceTest.m in Sources */,
 				564BAD111BF2A10000D6F5F0 /* SCGeopackageQueryTest.m in Sources */,
 				5649B4CB1BE28079009947EF /* SCGeoJSONWriterTest.m in Sources */,
 			);
@@ -1915,6 +1913,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1964,6 +1963,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2010,7 +2010,7 @@
 					"COCOAPODS=1",
 					"LIBGPKG_VERSION=1",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/**";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/include/**";
 				INFOPLIST_FILE = SpatialConnect/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2053,7 +2053,7 @@
 					"COCOAPODS=1",
 					"LIBGPKG_VERSION=1",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/**";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/include/**";
 				INFOPLIST_FILE = SpatialConnect/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

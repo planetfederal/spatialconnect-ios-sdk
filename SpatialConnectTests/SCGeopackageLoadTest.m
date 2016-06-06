@@ -63,7 +63,7 @@
       }];
 
   [sc startAllServices];
-  [self waitForExpectationsWithTimeout:120.0 handler:nil];
+  [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
 @end

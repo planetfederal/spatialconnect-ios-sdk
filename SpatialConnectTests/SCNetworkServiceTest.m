@@ -44,16 +44,15 @@
 }
 
 - (void)testGetRequest {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
+  XCTestExpectation *expect = [self expectationWithDescription:@"Ping Server"];
   [[self.net
-      getRequestURLAsDict:[NSURL
-                              URLWithString:@"http://localhost:8085/config"]]
-      subscribeNext:^(NSDictionary *d) {
+      getRequestURLAsData:[NSURL
+                              URLWithString:@"http://efc.boundlessgeo.com:8085/ping"]]
+      subscribeNext:^(NSData *d) {
         XCTAssertNotNil(d);
         [expect fulfill];
       }];
-  [self.sc startAllServices];
-  [self waitForExpectationsWithTimeout:120.0 handler:nil];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testRemoteConfig {
@@ -76,6 +75,7 @@
   [f.properties setObject:@"Baltimore Orioles" forKey:@"team"];
   [f.properties setObject:@"Why Not?" forKey:@"why"];
   [[ds create:f] subscribeError:^(NSError *error) {
+    NSLog(@"%@",error.description);
     [expect fulfill];
   }
       completed:^{

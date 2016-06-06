@@ -59,10 +59,10 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
 
 - (NSError*)openDatabase {
   [database open];
-  NSString *createTable = @"CREATE TABLE kvp ( _id INTEGER NOT NULL PRIMARY KEY "
+  NSString *createTable = @"CREATE TABLE IF NOT EXISTS kvp ( _id INTEGER NOT NULL PRIMARY KEY "
   @"AUTOINCREMENT, key STRING UNIQUE NOT NULL, value "
   @"BLOB NOT NULL, value_type INT NOT NULL);";
-  NSString *createIndex = @"CREATE UNIQUE INDEX kIdx ON kvp(key);";
+  NSString *createIndex = @"CREATE UNIQUE INDEX IF NOT EXISTS kIdx ON kvp(key);";
   int res = [database
              executeStatements:[NSString stringWithFormat:@"%@%@", createTable,
                                 createIndex]];

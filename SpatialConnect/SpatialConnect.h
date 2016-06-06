@@ -54,7 +54,6 @@
 - (void)startAllServices;
 - (void)stopAllServices;
 - (void)restartAllServices;
-- (instancetype)initWithFilepaths:(NSArray *)filepaths;
 
 - (void)addService:(SCService *)service;
 - (void)removeService:(NSString *)serviceId;

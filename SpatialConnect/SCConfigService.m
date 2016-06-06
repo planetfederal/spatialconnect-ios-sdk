@@ -115,6 +115,7 @@
 
     return nil;
   }] subscribeNext:^(SCConfig *s){
+    [self loadConfig:s];
   }];
 }
 

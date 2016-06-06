@@ -22,31 +22,13 @@
 
 @implementation SCGeopackageHelper
 
-NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85heh6b";
+NSString *storeId = @"f6dcc750-1349-46b9-a324-0223764d46d1";
 
 + (RACSignal *)loadGPKGDataStore:(SpatialConnect *)sc {
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-
-        RACMulticastConnection *c = sc.dataService.storeEvents;
-        [c connect];
-        RACSignal *evts = [c.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-          if ([evt.storeId isEqualToString:storeId] &&
-              evt.status == SC_DATASTORE_RUNNING) {
-            return YES;
-          } else {
-            return NO;
-          }
-        }];
-
-        [evts subscribeNext:^(SCStoreStatusEvent *evt) {
+  return [[sc.dataService storeStarted:storeId] map:^SCDataStore*(SCStoreStatusEvent *evt) {
           SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-          [subscriber sendNext:ds];
-          [subscriber sendCompleted];
+          return ds;
         }];
-
-        return nil;
-      }];
 }
 
 + (RACSignal *)downloadGpkgFile {

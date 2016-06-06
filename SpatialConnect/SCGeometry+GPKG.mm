@@ -26,14 +26,6 @@
 #import "SCPoint+GPKG.h"
 #import "SCPolygon+GPKG.h"
 
-#import <wkb_ios/WKBByteReader.h>
-#import <wkb_ios/WKBByteWriter.h>
-#import <wkb_ios/WKBGeometryEnvelope.h>
-#import <wkb_ios/WKBGeometryReader.h>
-#import <wkb_ios/WKBGeometryTypes.h>
-#import <wkb_ios/WKBGeometryWriter.h>
-#import <wkb_ios/wkb_ios.h>
-
 extern "C" {
 #import <libgpkgios/binstream.h>
 #import <libgpkgios/gpkg_geom.h>

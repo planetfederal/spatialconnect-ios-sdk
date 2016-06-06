@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCGeometry.h"
-#import <wkb_ios/WKBGeometry.h>
+#import <wkb_ios/wkb_ios.h>
 
 @interface SCGeometry (GPKG)
 

@@ -18,8 +18,8 @@
 "type":"gpkg",
 "version":"1",
 "name":"Haiti",
-"uri":"http://www.geopackage.org/data/haiti-vectors-split.gpkg",
-"id":"a5d93796-5026-46f7-a2ff-e5dec85heh6b"
+"uri":"https://s3.amazonaws.com/test.spacon/haiti4mobile.gpkg",
+"id":"f6dcc750-1349-46b9-a324-0223764d46d1"
 },
 {
 "type":"gpkg",
