@@ -33,7 +33,7 @@
 
 - (void)setUp {
   [super setUp];
-  sc = [SpatialConnectHelper loadConfigAndStartServices];
+  sc = [SpatialConnectHelper loadConfig];
 }
 
 - (void)tearDown {
@@ -45,22 +45,29 @@
 }
 
 - (void)testQueryAllStores {
-  XCTestExpectation *expectation =
-      [self expectationWithDescription:@"testing query all stores"];
-  SCQueryFilter *qf = [[SCQueryFilter alloc] init];
+  XCTestExpectation *expect = [self expectationWithDescription:@"AutoConf"];
   NSMutableArray *arr = [NSMutableArray new];
-  [[sc.dataService queryAllStores:qf]
-      subscribeNext:^(SCSpatialFeature *x) {
-        [arr addObject:x];
-      }
-      error:^(NSError *error) {
-        NSLog(@"Error");
-      }
-      completed:^{
-        XCTAssertTrue(arr.count > 0);
-        [expectation fulfill];
-      }];
-  [self waitForExpectationsWithTimeout:50 handler:nil];
+  RACMulticastConnection *s = [sc.dataService storeEvents];
+  RACSignal *starts = [[s.signal filter:^BOOL(SCStoreStatusEvent *e) {
+    if (e.status == SC_DATASTORE_EVT_STARTED) {
+      return YES;
+    }
+    return NO;
+  }] take:1];
+  [starts subscribeNext:^(SCStoreStatusEvent *e) {
+    RACSignal *result = [sc.dataService queryAllStores:nil];
+    [result subscribeNext:^(SCSpatialFeature *geom) {
+      [arr addObject:geom];
+    } error:^(NSError *error) {
+      XCTFail(@"Error Querying stores");
+    } completed:^(void) {
+      XCTAssert(arr.count > 0, @"Pass");
+      [expect fulfill];
+    }];
+  }];
+  [s connect];
+  [sc startAllServices];
+  [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
 @end

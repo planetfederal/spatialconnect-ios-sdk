@@ -304,6 +304,9 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter {
   NSArray *arr = [self storesByProtocol:@protocol(SCSpatialStore)];
+  if (arr.count == 0) {
+    return [RACSignal empty];
+  }
   return [self queryStores:arr filter:filter];
 }
 
@@ -312,6 +315,9 @@ NSString *const kSERVICENAME = @"DATASERVICE";
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         __block NSUInteger queryCompleted = 0;
         __block NSUInteger count = stores.count;
+        if (count == 0) {
+          [subscriber sendCompleted];
+        }
         [[[[stores rac_sequence] signal]
             flattenMap:^RACStream *(id<SCSpatialStore> store) {
               return [RACSignal

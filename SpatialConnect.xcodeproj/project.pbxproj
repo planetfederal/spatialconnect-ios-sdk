@@ -297,7 +297,6 @@
 		56F437641CA0955200EA1344 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F437591CA0955200EA1344 /* FMDatabasePool.m */; };
 		56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56FB3EBA1CF6A2BD00C3DA4B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */; };
-		56FB3F4F1CF8878300C3DA4B /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */; };
 		56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
 		56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC881CF652ED00D502C3 /* wkb_ios.framework */; };
 		56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
@@ -641,7 +640,6 @@
 		56F437551CA0955200EA1344 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 		56F437581CA0955200EA1344 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
 		56F437591CA0955200EA1344 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
-		56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = "../../../../Library/Developer/Xcode/DerivedData/libgpkgios-hkeldejkxsieftabfbvtnapspbsp/Build/Products/Debug-iphonesimulator/libgpkgios.framework"; sourceTree = "<group>"; };
 		56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		56FB3F551CF8AADE00C3DA4B /* SCFormTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFormTest.m; sourceTree = "<group>"; };
@@ -664,7 +662,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */,
-				56FB3F4F1CF8878300C3DA4B /* libgpkgios.framework in Frameworks */,
 				56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */,
 				56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */,
 				56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */,
@@ -678,7 +675,6 @@
 			isa = PBXGroup;
 			children = (
 				563090661D0646D0001FE1B5 /* libgpkgios.framework */,
-				56FB3EB51CF6A20B00C3DA4B /* libgpkgios.framework */,
 				5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */,
 				5678FC881CF652ED00D502C3 /* wkb_ios.framework */,
 				5678FC891CF652ED00D502C3 /* ZipZap.framework */,
@@ -1997,7 +1993,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2040,7 +2036,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2074,6 +2070,7 @@
 		5649B4AB1BE27C6A009947EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -2100,6 +2097,7 @@
 		5649B4AC1BE27C6A009947EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

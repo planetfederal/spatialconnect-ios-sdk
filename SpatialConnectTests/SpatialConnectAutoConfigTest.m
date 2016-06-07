@@ -51,7 +51,7 @@
   }] take:1];
   [starts subscribeNext:^(SCStoreStatusEvent *e) {
     RACSignal *result = [sc.dataService queryAllStores:nil];
-    [result subscribeNext:^(SCSpatialFeature *geom) {
+    [[result take:5] subscribeNext:^(SCSpatialFeature *geom) {
       [arr addObject:geom];
     } error:^(NSError *error) {
       XCTFail(@"Error Querying stores");

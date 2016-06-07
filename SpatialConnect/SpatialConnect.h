@@ -27,6 +27,7 @@
 #import "SCRasterService.h"
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
+#import "SCLineString.h"
 #import "SCService.h"
 #import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
