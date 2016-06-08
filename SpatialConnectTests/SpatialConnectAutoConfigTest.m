@@ -31,7 +31,7 @@
 
 - (void)setUp {
   [super setUp];
-  sc = [SpatialConnectHelper loadConfigAndStartServices];
+  sc = [SpatialConnectHelper loadRemoteConfig];
 }
 
 - (void)tearDown {

@@ -50,7 +50,10 @@
 - (RACSignal *)postRequestAsData:(NSURL *)url body:(NSData *)data;
 
 - (RACSignal *)postDictRequestAsDict:(NSURL *)url body:(NSDictionary *)dict;
+
 - (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict;
+
+- (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict;
 
 @end

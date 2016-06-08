@@ -95,7 +95,7 @@
       }];
 }
 
-- (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
+- (NSData *)postDictRequestBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict {
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   request.HTTPMethod = @"POST";
@@ -106,6 +106,11 @@
   NSData *data = [NSURLConnection sendSynchronousRequest:request
                                        returningResponse:&response
                                                    error:&err];
+  return data;
+}
+
+- (NSDictionary*)postDictRequestAsDictBLOCKING:(NSURL *)url body:(NSDictionary *)dict {
+  NSData *data = [self postDictRequestBLOCKING:url body:dict];
   return [[JSONDecoder decoder] objectWithData:data];
 }
 

@@ -79,14 +79,17 @@
     [configPaths enumerateObjectsUsingBlock:^(NSString *fp, NSUInteger idx,
                                               BOOL *_Nonnull stop) {
       NSError *error;
+      NSLog(@"Loading Config");
       NSMutableDictionary *cfg = [NSMutableDictionary
           dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp
                                                          error:&error]];
+      NSLog(@"Config Loaded");
       if (error) {
         NSLog(@"%@", error.description);
       }
       NSString *uri;
       if ((uri = [cfg objectForKey:@"remote"])) {
+        NSLog(@"URL:%@",uri);
         self.remoteUri = uri;
         [cfg removeObjectForKey:@"remote"];
         NSURL *cfgUrl = [NSURL URLWithString: [uri stringByAppendingString:@"/config"]];
@@ -104,8 +107,13 @@
           @"identifier" : ident,
           @"name" : @"test_device"
         };
-        [ns postDictRequestAsDictBLOCKING:regUrl body:regDict];
+        NSLog(@"REGDICT:%@",regDict);
+        NSLog(@"URL:%@",uri);
+        NSLog(@"UUID:%@",ident);
+        [ns postDictRequestBLOCKING:regUrl body:regDict];
+        NSLog(@"Registration Posted");
         NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
+        NSLog(@"Received Config");
         [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
       }
       if (cfg.count > 0) {

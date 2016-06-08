@@ -26,6 +26,11 @@
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
+  BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
+  NSLog(@"LocalConfigPath:%@",filePath);
+  if (!b) {
+    NSLog(@"No config at:%@",filePath);
+  }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
@@ -64,6 +69,7 @@
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"remote"
                                                        ofType:@"scfg"];
+  NSLog(@"RemoteConfigPath:%@",filePath);
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];

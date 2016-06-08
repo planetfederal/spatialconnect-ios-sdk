@@ -149,7 +149,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   } else {
     NSLog(@"%@",
           [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
-                                     @"was not started. Make sure the store "
+                                     @"was not stopped. Make sure the store "
                                      @"conforms to the SCDataStoreLifeCycle",
                                      store.name, store.key, (long)store.version,
                                      store.storeId]);
