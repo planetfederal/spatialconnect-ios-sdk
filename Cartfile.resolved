@@ -1,4 +1,0 @@
-github "ReactiveCocoa/ReactiveCocoa" "v2.5"
-github "boundlessgeo/geopackage-wkb-ios" "489692d586db77dcf0805cd2dc43404805afadd6"
-git "./../libgpkgios" "0276d9ba9f12c0c6833165ab82e10c88a35101a8"
-github "pixelglow/zipzap" "8.0.6"
