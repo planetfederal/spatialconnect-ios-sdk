@@ -14,7 +14,6 @@ script:
   -sdk iphonesimulator
   -destination 'platform=iOS Simulator,name=iPhone 6 Plus'
   build
-  test
   ONLY_ACTIVE_ARCH=NO
   CODE_SIGN_IDENTITY=""
   CODE_SIGNING_REQUIRED=NO
