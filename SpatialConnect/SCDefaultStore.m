@@ -88,7 +88,7 @@
     NSInteger formid = [[formIds objectForKey:feature.layerId] integerValue];
         if (sc.configService.remoteUri) {
           NSString *urlStr = [NSString
-                              stringWithFormat:@"%@/forms/%ld/submit", sc.configService.remoteUri,(long)formid];
+                              stringWithFormat:@"%@/api/forms/%ld/submit", sc.configService.remoteUri,(long)formid];
           NSURL *url = [NSURL URLWithString:urlStr];
           NSString *uniqueId =  [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
           feature.layerId = self.storeId;
