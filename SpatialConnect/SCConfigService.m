@@ -89,10 +89,10 @@
       if ((uri = [cfg objectForKey:@"remote"])) {
         self.remoteUri = uri;
         [cfg removeObjectForKey:@"remote"];
-        NSURL *cfgUrl = [NSURL URLWithString: [uri stringByAppendingString:@"/config"]];
+        NSURL *cfgUrl = [NSURL URLWithString: [uri stringByAppendingString:@"/api/config"]];
         SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
         NSURL *regUrl =
-            [NSURL URLWithString:[uri stringByAppendingString:@"/device/register"]];
+            [NSURL URLWithString:[uri stringByAppendingString:@"/api/device/register"]];
         NSString *ident =
             [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
         if (!ident) {
