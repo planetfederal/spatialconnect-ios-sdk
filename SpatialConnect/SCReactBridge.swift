@@ -156,18 +156,13 @@ public class SCReactBridge: NSObject {
         }
         if store!.conformsToProtocol(SCSpatialStore.self) {
             let s: GeopackageStore = (store as! GeopackageStore)
-            do {
-                let feat: SCSpatialFeature = SCGeoJSON.parseDict(geoJsonDict)
-                feat.layerId = layerId
-                s.create(feat).subscribeError({(error:NSError!) -> Void in
-                    NSLog("Error creating Feature %@", error);
-                    }, completed: {() -> Void in
-                        subscriber.sendNext(["key": "createFeature", "body":feat.JSONDict()])
-                })
-            } catch {
-                let err: NSError = NSError(domain: SCJavascriptBridgeErrorDomain, code: -57, userInfo: nil)
-                subscriber.sendError(err)
-            }
+            let feat: SCSpatialFeature = SCGeoJSON.parseDict(geoJsonDict)
+            feat.layerId = layerId
+            s.create(feat).subscribeError({(error:NSError!) -> Void in
+                NSLog("Error creating Feature %@", error);
+            }, completed: {() -> Void in
+                subscriber.sendNext(["key": "createFeature", "body":feat.JSONDict()])
+            })
         }
         else {
             let err: NSError = NSError(domain: SCJavascriptBridgeErrorDomain, code: -57, userInfo: nil)
@@ -176,46 +171,38 @@ public class SCReactBridge: NSObject {
     }
     
     func updateFeature(value: NSDictionary, responseSubscriber subscriber: RACSubscriber) {
-        let jsonStr = String(value["feature"])
-        do {
-            let geoJsonDict: [NSObject : AnyObject] = try SCFileUtils.jsonStringToDict(jsonStr)
-            let geom: SCGeometry = SCGeoJSON.parseDict(geoJsonDict)
-            let t: SCKeyTuple = SCKeyTuple(fromEncodedCompositeKey: geom.identifier)
-            geom.storeId = t.storeId
-            geom.layerId = t.layerId
-            geom.identifier = t.featureId
-            let store: SCDataStore = self.sc.dataService.storeByIdentifier(geom.storeId)
-            if store.conformsToProtocol(SCSpatialStore.self) {
-                let s: SCSpatialStore = (store as! SCSpatialStore)
-                s.update(geom).subscribeError({(error:NSError!) -> Void in
-                    let err: NSError = NSError(domain: self.SCJavascriptBridgeErrorDomain, code: SCJavascriptError.SCJSERROR_DATASERVICE_UPDATEFEATURE.rawValue, userInfo: nil)
-                    subscriber.sendError(err)
-                    }, completed: {() -> Void in
-                        subscriber.sendCompleted()
-                })
-            } else {
-                let err: NSError = NSError(domain: self.SCJavascriptBridgeErrorDomain, code: SCJavascriptError.SCJSERROR_DATASERVICE_UPDATEFEATURE.rawValue, userInfo: nil)
-                subscriber.sendError(err)
-            }
-        } catch {
-            let err: NSError = NSError(domain: self.SCJavascriptBridgeErrorDomain, code: SCJavascriptError.SCJSERROR_DATASERVICE_UPDATEFEATURE.rawValue, userInfo: nil)
+        let geoJsonDict = (value["feature"] as! [NSObject : AnyObject])
+        let featureId = (geoJsonDict["id"] as! String)
+        let key: SCKeyTuple? = SCKeyTuple(fromEncodedCompositeKey: featureId)
+        var store: SCDataStore? = self.sc.dataService.storeByIdentifier(key!.storeId)
+        if (store == nil) {
+            store = self.sc.dataService.defaultStore
+        }
+        if store!.conformsToProtocol(SCSpatialStore.self) {
+            let s: GeopackageStore = (store as! GeopackageStore)
+            let feat: SCSpatialFeature = SCGeoJSON.parseDict(geoJsonDict)
+            feat.layerId = key!.layerId
+            s.update(feat)
+            subscriber.sendNext(["key": "createFeature", "body":feat.JSONDict()])
+            subscriber.sendCompleted()
+        }
+        else {
+            let err: NSError = NSError(domain: SCJavascriptBridgeErrorDomain, code: -57, userInfo: nil)
             subscriber.sendError(err)
         }
     }
     
     func deleteFeature(value: String, responseSubscriber subscriber: RACSubscriber) {
         let key: SCKeyTuple = SCKeyTuple(fromEncodedCompositeKey: value)
-        let store: SCDataStore = self.sc.dataService.storeByIdentifier(key.storeId)
-        if store.conformsToProtocol(SCSpatialStore.self) {
-            let s: SCSpatialStore = (store as! SCSpatialStore)
-            s.delete(key).subscribeError({(error:NSError!) -> Void in
-                let err: NSError = NSError(domain: self.SCJavascriptBridgeErrorDomain, code: SCJavascriptError.SCJSERROR_DATASERVICE_DELETEFEATURE.rawValue, userInfo: nil)
-                subscriber.sendError(err)
-                }, completed: {() -> Void in
-                    subscriber.sendCompleted()
-            })
+        var store: SCDataStore? = self.sc.dataService.storeByIdentifier(key.storeId)
+        if (store == nil) {
+          store = self.sc.dataService.defaultStore
         }
-        else {
+        if store!.conformsToProtocol(SCSpatialStore.self) {
+            let s: GeopackageStore = (store as! GeopackageStore)
+            s.delete(key)
+            subscriber.sendCompleted()
+        } else {
             let err: NSError = NSError(domain: self.SCJavascriptBridgeErrorDomain, code: SCJavascriptError.SCJSERROR_DATASERVICE_DELETEFEATURE.rawValue, userInfo: nil)
             subscriber.sendError(err)
         }
