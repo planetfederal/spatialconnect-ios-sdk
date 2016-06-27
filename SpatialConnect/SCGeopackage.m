@@ -89,16 +89,23 @@
 
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types {
   [self.pool inDatabase:^(FMDatabase *db) {
-    [db beginTransaction];
     NSString *formattedName = [[name lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    if ([db tableExists:formattedName]) {
+      return;
+    }
+    [db beginTransaction];
     NSMutableString *createSql = [NSMutableString
         stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
                          @"PRIMARY KEY AUTOINCREMENT",
                          formattedName];
 
-    [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *v,
+    [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
                                                BOOL *stop) {
-      [createSql appendFormat:@",%@ %@", k, v];
+      NSString *key = [k lowercaseString];
+      NSString *type = [t lowercaseString];
+      if (![key isEqualToString:@"geom"]) {
+        [createSql appendFormat:@",%@ %@", key, type];
+      }
     }];
     [createSql appendString:@")"];
     BOOL success = [db executeStatements:createSql];

@@ -109,7 +109,7 @@
     [sql appendString:[[self.colsTypes allKeys] componentsJoinedByString:@","]];
     [sql appendString:[NSString stringWithFormat:@",%@", self.geomColName]];
     [sql appendString:[NSString stringWithFormat:@" FROM %@", name]];
-    if (f) {
+    if (f && (f.geometryFilters.count > 0 || f.propertyFilters.count > 0)) {
       [sql appendString:@" WHERE "];
       NSString *q = [f buildWhereClause];
       [sql appendString:q];
