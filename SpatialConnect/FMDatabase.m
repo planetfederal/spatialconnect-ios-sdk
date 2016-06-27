@@ -1308,7 +1308,7 @@ int FMDBExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
                     (__bridge void *)(block), &errmsg);
 
   if (errmsg && [self logsErrors]) {
-    NSLog(@"Error inserting batch: %s", errmsg);
+    NSLog(@"Error inserting batch: %s for %@", errmsg, sql);
     sqlite3_free(errmsg);
   }
 
