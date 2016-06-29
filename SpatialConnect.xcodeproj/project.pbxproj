@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		543056AF1CFF3D9C00AF39B4 /* SCReactBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543056AE1CFF3D9C00AF39B4 /* SCReactBridge.swift */; };
+		546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 546D088F1D2462E200EBB95A /* SCRCTBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 546D08901D2462E200EBB95A /* SCRCTBridge.m */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
 		560A71251BE84DB200CE473F /* SCGeopackageLoadTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71241BE84DB200CE473F /* SCGeopackageLoadTest.m */; };
@@ -342,7 +343,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		543056AE1CFF3D9C00AF39B4 /* SCReactBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCReactBridge.swift; sourceTree = "<group>"; };
+		546D088F1D2462E200EBB95A /* SCRCTBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRCTBridge.h; sourceTree = "<group>"; };
+		546D08901D2462E200EBB95A /* SCRCTBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRCTBridge.m; sourceTree = "<group>"; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
 		560A71241BE84DB200CE473F /* SCGeopackageLoadTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageLoadTest.m; sourceTree = "<group>"; };
@@ -954,7 +956,8 @@
 				5649B5221BE280D6009947EF /* SCJavascriptBridgeAPI.h */,
 				5649B5231BE280D6009947EF /* SCJavascriptBridgeAPI.m */,
 				5649B5241BE280D6009947EF /* SCJavascriptCommands.h */,
-				543056AE1CFF3D9C00AF39B4 /* SCReactBridge.swift */,
+				546D088F1D2462E200EBB95A /* SCRCTBridge.h */,
+				546D08901D2462E200EBB95A /* SCRCTBridge.m */,
 			);
 			name = Bridge;
 			sourceTree = "<group>";
@@ -1553,6 +1556,7 @@
 				5649B5FD1BE280D6009947EF /* SCPredicate.h in Headers */,
 				5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */,
 				56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */,
+				546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 			);
@@ -1745,7 +1749,6 @@
 				5649B5D11BE280D6009947EF /* SCLineString.m in Sources */,
 				5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */,
 				5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */,
-				543056AF1CFF3D9C00AF39B4 /* SCReactBridge.swift in Sources */,
 				5649B5911BE280D6009947EF /* SCDataStore.m in Sources */,
 				5649B5E61BE280D6009947EF /* SCMultiPoint+MapKit.m in Sources */,
 				56E2F41B1CEE9CB8001CCD86 /* SCFormFeature.m in Sources */,
@@ -1813,6 +1816,7 @@
 				5649B60A1BE280D6009947EF /* SCService.m in Sources */,
 				5649B5B71BE280D6009947EF /* SCGeoJSON.m in Sources */,
 				5649B5A01BE280D6009947EF /* SCFilterIn.m in Sources */,
+				546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */,
 				5649B6101BE280D6009947EF /* SCSpatialFeature.m in Sources */,
 				5649B5A41BE280D6009947EF /* SCFilterLessThanEqual.m in Sources */,
 				5649B5CF1BE280D6009947EF /* SCLinearRing+MapKit.m in Sources */,

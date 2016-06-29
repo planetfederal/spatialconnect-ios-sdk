@@ -21,6 +21,7 @@
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSON.h"
+#import "SCRCTBridge.h"
 #import "SCJavascriptCommands.h"
 #import "SCKVPService.h"
 #import "SCNetworkService.h"
