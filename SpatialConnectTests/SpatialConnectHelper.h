@@ -26,5 +26,6 @@
 + (SpatialConnect *)loadConfig;
 + (SpatialConnect *)loadRemoteConfigAndStartServices;
 + (SpatialConnect *)loadRemoteConfig;
++ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc storeId:(NSString*)storeId;
 
 @end

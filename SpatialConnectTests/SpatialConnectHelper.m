@@ -97,6 +97,13 @@
   return sc;
 }
 
++ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc storeId:(NSString*)storeId {
+  return [[sc.dataService storeStarted:storeId] map:^SCDataStore*(SCStoreStatusEvent *evt) {
+    SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
+    return ds;
+  }];
+}
+
 + (SpatialConnect *)loadRemoteConfigAndStartServices {
   SpatialConnect *sc = [SpatialConnectHelper loadRemoteConfig];
   [sc startAllServices];
