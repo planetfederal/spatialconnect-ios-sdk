@@ -77,6 +77,8 @@
   NSDictionary *d = [feat JSONDict];
   SCSpatialFeature *sf = [SCGeoJSON parseDict:d];
   XCTAssertNotNil(sf.identifier);
+  SCKeyTuple *kt = [SCKeyTuple tupleFromEncodedCompositeKey:sf.identifier];
+  sf.identifier = kt.featureId;
   XCTAssert([sf.identifier isEqualToString:feat.identifier]);
 }
 
