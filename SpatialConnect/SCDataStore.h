@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 @property(readonly, nonatomic) NSArray *layerList;
 @property(nonatomic) NSString *name;
 @property(nonatomic, strong) SCStyle *style;
-@property(readonly) NSInteger version;
+@property(readonly) NSString *version;
 @property(readonly) NSString *type;
 @property(readonly) NSString *key;
 @property(nonatomic) NSString *defaultLayerName;
