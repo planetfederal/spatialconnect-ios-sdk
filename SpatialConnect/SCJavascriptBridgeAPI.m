@@ -126,7 +126,6 @@
     }] toArray] rac_sequence] signal] subscribeNext:^(NSArray *arr) {
         [subscriber sendNext:@{ @"action": @"spatialQuery", @"payload": arr }];
     }];
-
 }
 
 - (void)queryGeoStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber {

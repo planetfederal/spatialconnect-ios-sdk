@@ -166,10 +166,7 @@
     break;
   }
   if (geoJson.identifier) {
-    SCKeyTuple *k = [SCKeyTuple tupleFromEncodedCompositeKey:geoJson.identifier];
-    geom.identifier = k.featureId;
-    geom.layerId = k.layerId;
-    geom.storeId = k.storeId;
+    geom.identifier = geoJson.identifier;
   }
   if (geoJson.properties && ![geoJson.properties isKindOfClass:NSNull.class]) {
     geom.properties =

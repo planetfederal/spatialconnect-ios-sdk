@@ -27,6 +27,13 @@
 "name":"Whitehorse",
 "uri":"https://portal.opengeospatial.org/files/63156",
 "id":"ba293796-5026-46f7-a2ff-e5dec85heh6b"
+},
+{
+"store_type":"wfs",
+"version":"1",
+"name":"WFS Demo",
+"uri":"http://demo.boundlessgeo.com/geoserver/wfs",
+"id":"0f193979-b871-47cd-b60d-e271d6504359"
 }
 ]
 }
