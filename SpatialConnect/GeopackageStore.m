@@ -29,7 +29,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 #define STORE_NAME @"Geopackage"
 #define TYPE @"gpkg"
-#define VERSION 1
+#define VERSION @"1"
 
 @synthesize adapter = _adapter;
 

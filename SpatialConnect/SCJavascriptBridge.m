@@ -267,10 +267,12 @@ NSString *const SCJavascriptBridgeErrorDomain =
     NSLog(@"%@", err.description);
   }
   SCGeometry *geom = [SCGeoJSON parseDict:gjDict];
-  SCKeyTuple *t = [SCKeyTuple tupleFromEncodedCompositeKey:geom.identifier];
-  geom.storeId = t.storeId;
-  geom.layerId = t.layerId;
-  geom.identifier = t.featureId;
+//  NSLog(@"%@",geom.identifier);
+//  SCKeyTuple *t = [SCKeyTuple tupleFromEncodedCompositeKey:geom.identifier];
+//  geom.storeId = t.storeId;
+//  geom.layerId = t.layerId;
+//  geom.identifier = t.featureId;
+  NSLog(@"%@",gjDict);
 
   SCDataStore *store =
       [self.spatialConnect.dataService storeByIdentifier:geom.storeId];
@@ -296,6 +298,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
 
 - (void)deleteFeature:(NSString *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
+  NSLog(@"%@",value);
   SCKeyTuple *key = [SCKeyTuple tupleFromEncodedCompositeKey:value];
   SCDataStore *store =
       [self.spatialConnect.dataService storeByIdentifier:key.storeId];
