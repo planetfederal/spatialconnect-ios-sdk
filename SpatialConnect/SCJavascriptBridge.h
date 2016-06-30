@@ -19,6 +19,7 @@
 
 #import <Foundation/Foundation.h>
 #import "WebViewJavascriptBridge.h"
+#import "SCJavascriptBridgeAPI.h"
 #import "SpatialConnect.h"
 
 /// The domain for errors originating within `SCJavascriptBridge`.
@@ -31,6 +32,7 @@ extern NSString *const SCJavascriptBridgeErrorDomain;
 @property(strong, nonatomic) UIWebView *webview;
 @property(strong, nonatomic) NSObject<UIWebViewDelegate> *webViewDelegate;
 @property(strong, nonatomic) WebViewJavascriptBridge *bridge;
+@property(nonatomic) SCJavascriptBridgeAPI *jsbridge;
 
 - (id)initWithWebView:(UIWebView *)wv
              delegate:(id<UIWebViewDelegate>)del

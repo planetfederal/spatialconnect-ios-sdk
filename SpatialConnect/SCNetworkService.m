@@ -36,16 +36,21 @@
 }
 
 - (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url {
+  NSData *data = [self getRequestURLAsDataBLOCKING:url];
+  NSDictionary *dict = [[JSONDecoder decoder] objectWithData:data];
+  return dict;
+}
+
+- (NSData*)getRequestURLAsDataBLOCKING:(NSURL *)url {
   NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
   NSURLResponse *response = nil;
   NSError *error = nil;
   NSData *data = [NSURLConnection sendSynchronousRequest:request
                                        returningResponse:&response
                                                    error:&error];
-
-  NSDictionary *dict = [[JSONDecoder decoder] objectWithData:data];
-  return dict;
+  return data;
 }
+
 
 - (RACSignal *)getRequestURLAsData:(NSURL *)url {
   NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];

@@ -26,6 +26,7 @@
 #import "SCSpatialStore.h"
 #import "SCStoreStatusEvent.h"
 #import "SpatialConnect.h"
+#import "WFSDataStore.h"
 
 NSString *const kSERVICENAME = @"DATASERVICE";
 
@@ -86,6 +87,8 @@ NSString *const kSERVICENAME = @"DATASERVICE";
                                forKey:[GeoJSONStore versionKey]];
   [self.supportedStoreImpls setObject:[GeopackageStore class]
                                forKey:[GeopackageStore versionKey]];
+  [self.supportedStoreImpls setObject:[WFSDataStore class]
+                               forKey:[WFSDataStore versionKey]];
 }
 
 - (void)startAllStores {

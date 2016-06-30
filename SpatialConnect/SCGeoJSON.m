@@ -50,6 +50,7 @@
     } else {
       coordinates = [dictionary objectForKey:@"coordinates"];
     }
+    metadata = [dictionary objectForKey:@"metadata"];
   }
   return self;
 }
@@ -74,6 +75,10 @@
 }
 - (NSDictionary *)properties {
   return properties;
+}
+
+- (NSDictionary *)metadata {
+  return metadata;
 }
 
 - (GeoJSONType)typeFromString:(NSString *)typeStr {
@@ -166,14 +171,15 @@
     break;
   }
   if (geoJson.identifier) {
-    SCKeyTuple *k = [SCKeyTuple tupleFromEncodedCompositeKey:geoJson.identifier];
-    geom.identifier = k.featureId;
-    geom.layerId = k.layerId;
-    geom.storeId = k.storeId;
+    geom.identifier = geoJson.identifier;
   }
   if (geoJson.properties && ![geoJson.properties isKindOfClass:NSNull.class]) {
     geom.properties =
         [NSMutableDictionary dictionaryWithDictionary:geoJson.properties];
+  }
+  if (geoJson.metadata) {
+    geom.layerId = geoJson.metadata[@"layerId"];
+    geom.storeId = geoJson.metadata[@"storeId"];
   }
   return geom;
 }

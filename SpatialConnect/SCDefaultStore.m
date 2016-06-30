@@ -30,7 +30,7 @@
     self.permission = SC_DATASTORE_READWRITE;
     formIds = [NSMutableDictionary new];
     _type = @"default";
-    _version = 1;
+    _version = @"1";
     [self.adapter connectBlocking];
   }
   return self;

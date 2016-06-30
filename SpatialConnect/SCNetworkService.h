@@ -32,6 +32,8 @@
 
 - (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url;
 
+- (NSData*)getRequestURLAsDataBLOCKING:(NSURL *)url;
+
 /*!
  *  @brief returns NSData on signal
  *

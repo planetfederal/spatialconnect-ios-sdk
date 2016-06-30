@@ -18,15 +18,20 @@
  ******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "WebViewJavascriptBridge.h"
 
 @interface SCJavascriptBridgeAPI : NSObject
 
-@property(strong, nonatomic) UIWebView *webview;
-@property(strong, nonatomic) NSObject<UIWebViewDelegate> *webViewDelegate;
-@property(strong, nonatomic) WebViewJavascriptBridge *bridge;
-
-- (id)initWithWebView:(UIWebView *)webView
-          andDelegate:(NSObject<UIWebViewDelegate> *)delegate;
+- (RACSignal *)parseJSCommand:(NSDictionary *)data;
+- (void)activeStoreList:(id<RACSubscriber>)subscriber;
+- (void)formList:(id<RACSubscriber>)subscriber;
+- (void)activeStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryAllStores:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryAllGeoStores:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryGeoStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)createFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)updateFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)deleteFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)spatialConnectGPS:(id)value responseSubscriber:(id<RACSubscriber>)subscriber;
 
 @end

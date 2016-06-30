@@ -67,20 +67,22 @@
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
   dict[@"type"] = @"Feature";
-  if (self.identifier) {
-    dict[@"id"] = self.key.encodedCompositeKey;
-  }
+  dict[@"id"] = self.identifier;
+
   if (self.properties) {
     dict[@"properties"] = self.properties;
   } else {
     dict[@"properties"] = [NSNull null];
   }
+
   dict[@"metadata"] = [NSMutableDictionary new];
   NSDateFormatter *df = [NSDateFormatter new];
   [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
   dict[@"metadata"][@"created_at"] = [df stringFromDate:self.createdAt];
   dict[@"metadata"][@"client"] =
       [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+  dict[@"metadata"][@"storeId"] = self.storeId;
+  dict[@"metadata"][@"layerId"] = self.layerId;
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 
