@@ -25,7 +25,10 @@
 
 @implementation WFSDataStore
 
-@synthesize baseUri;
+#define TYPE @"wfs"
+#define VERSION @"1.1"
+
+@synthesize baseUri,storeVersion,storeType;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -63,12 +66,12 @@
   return [[self layerList] firstObject];
 }
 
-- (NSString*)type {
+- (NSString*)storeType {
   return @"wfs";
 }
 
-- (NSInteger)version {
-  return 1;
+- (NSString*)storeVersion {
+  return @"1.1";
 }
 
 #pragma mark -
@@ -131,7 +134,7 @@
 }
 
 + (NSString *)versionKey {
-  return [NSString stringWithFormat:@"%@.%d", @"wfs", 1];
+  return [NSString stringWithFormat:@"%@.%@", TYPE, VERSION];
 }
 
 @end

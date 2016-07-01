@@ -20,8 +20,8 @@
 
 @implementation SCDefaultStore
 
-@synthesize type = _type;
-@synthesize version = _version;
+@synthesize storeType = _storeType;
+@synthesize storeVersion = _storeVersion;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -29,8 +29,8 @@
     self.name = @"DEFAULT_STORE";
     self.permission = SC_DATASTORE_READWRITE;
     formIds = [NSMutableDictionary new];
-    _type = @"default";
-    _version = 1;
+    _storeType = @"default";
+    _storeVersion = @"1";
     [self.adapter connectBlocking];
   }
   return self;

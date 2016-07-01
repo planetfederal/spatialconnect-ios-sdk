@@ -135,10 +135,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
   } else {
     NSLog(@"%@",
-          [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
+          [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
                                      @"was not started. Make sure the store "
                                      @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key, (long)store.version,
+                                     store.name, store.key,
                                      store.storeId]);
   }
 }
@@ -151,11 +151,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
                                     andStoreId:store.storeId]];
   } else {
     NSLog(@"%@",
-          [NSString stringWithFormat:@"Store %@ with key:%@ version:%ld id:%@ "
+          [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
                                      @"was not stopped. Make sure the store "
                                      @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key, (long)store.version,
-                                     store.storeId]);
+                                     store.name, store.key, store.storeId]);
   }
 }
 
@@ -171,8 +170,8 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (void)addAndStartStore:(SCStoreConfig *)cfg {
   Class store =
-      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%ld", cfg.type,
-                                                           (long)cfg.version]];
+      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", cfg.type,
+                                                           cfg.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
   if (gmStore.key) {
     [self registerStore:gmStore];
@@ -241,7 +240,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     [store setObject:ds.storeId forKey:@"storeId"];
     [store setObject:ds.name forKey:@"name"];
     [store setObject:kSERVICENAME forKey:@"service"];
-    [store setObject:ds.type forKey:@"type"];
+    [store setObject:ds.storeType forKey:@"type"];
     [arr addObject:store];
   }];
   return [NSArray arrayWithArray:arr];

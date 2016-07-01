@@ -21,8 +21,8 @@
 
 @interface SCDataStore ()
 @property(readwrite, nonatomic, strong) NSString *storeId;
-@property(readwrite, nonatomic) NSInteger version;
-@property(readwrite, nonatomic, strong) NSString *type;
+@property(readwrite, nonatomic, strong) NSString *storeVersion;
+@property(readwrite, nonatomic, strong) NSString *storeType;
 @property(readwrite, nonatomic, strong) NSArray *layerList;
 @end
 
@@ -32,6 +32,8 @@
 @synthesize defaultLayerName;
 @synthesize key = _key;
 @synthesize status, permission;
+@synthesize storeVersion = _storeVersion;
+@synthesize storeType = _storeType;
 
 - (id)init {
   self = [super init];
@@ -65,7 +67,7 @@
 
 - (NSString *)key {
   if (!_key) {
-    _key = [NSString stringWithFormat:@"%@.%ld", _type, (long)_version];
+    _key = [NSString stringWithFormat:@"%@.%@", _storeType, _storeVersion];
   }
   return _key;
 }
@@ -75,8 +77,8 @@
     @"storeId" : self.storeId,
     @"name" : self.name,
     @"style" : self.style,
-    @"type" : self.type,
-    @"version" : [NSNumber numberWithLong:self.version],
+    @"type" : self.storeType,
+    @"version" : self.storeVersion,
     @"key" : self.key
   };
 }

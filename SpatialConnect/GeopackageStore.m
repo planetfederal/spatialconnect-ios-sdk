@@ -29,15 +29,15 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 #define STORE_NAME @"Geopackage"
 #define TYPE @"gpkg"
-#define VERSION 1
+#define VERSION @"1"
 
 @synthesize adapter = _adapter;
 
 #pragma mark -
 #pragma mark Init Methods
 
-@synthesize type = _type;
-@synthesize version = _version;
+@synthesize storeType = _storeType;
+@synthesize storeVersion = _storeVersion;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -47,8 +47,8 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   _adapter = [[GeopackageFileAdapter alloc] initWithStoreConfig:config];
   self.name = config.name;
   self.permission = SC_DATASTORE_READWRITE;
-  _type = TYPE;
-  _version = VERSION;
+  _storeType = TYPE;
+  _storeVersion = VERSION;
   return self;
 }
 
@@ -150,12 +150,12 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark -
 #pragma mark Override Parent
 - (NSString *)key {
-  NSString *str = [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
+  NSString *str = [NSString stringWithFormat:@"%@.%@", _storeType, _storeVersion];
   return str;
 }
 
 + (NSString *)versionKey {
-  return [NSString stringWithFormat:@"%@.%d", TYPE, VERSION];
+  return [NSString stringWithFormat:@"%@.%@", TYPE, VERSION];
 }
 
 @end

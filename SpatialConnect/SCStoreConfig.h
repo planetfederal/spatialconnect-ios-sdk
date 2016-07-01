@@ -24,7 +24,7 @@
 }
 
 @property(nonatomic, weak) NSString *type;
-@property(nonatomic) NSInteger version;
+@property(nonatomic, weak) NSString *version;
 @property(nonatomic, weak) NSString *uri;
 @property(nonatomic, weak) NSString *uniqueid;
 @property BOOL isMainBundle;
