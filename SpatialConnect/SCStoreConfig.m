@@ -32,7 +32,7 @@
   self = [super init];
   if (self) {
     self.type = dict[@"store_type"];
-    self.version = [dict[@"version"] integerValue];
+    self.version = dict[@"version"];
     self.uniqueid =
         dict[@"id"] == nil ? [[NSUUID UUID] UUIDString] : dict[@"id"];
     self.uri = dict[@"uri"];
