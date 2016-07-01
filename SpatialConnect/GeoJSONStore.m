@@ -71,7 +71,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   adapter.storeId = self.storeId;
 }
 
-- (NSString *)type {
+- (NSString *)storeType {
   return [NSString stringWithFormat:@"%@", kTYPE];
 }
 
