@@ -96,7 +96,7 @@
   return [[ns getRequestURLAsDict:[NSURL URLWithString:url]]
           map:^SCGeometry*(NSDictionary *d) {
             SCGeometry *g = [SCGeoJSON parseDict:d];
-            g.layerId = filter.layerIds[0];
+            g.layerId = layer;
             g.storeId = self.storeId;
             return g;
           }];

@@ -45,9 +45,11 @@
 
 - (void)testGetRequest {
   XCTestExpectation *expect = [self expectationWithDescription:@"Ping Server"];
+  [self.sc startAllServices];
+  NSString *url = [NSString stringWithFormat:@"%@/ping",self.sc.configService.remoteUri];
   [[self.net
       getRequestURLAsData:[NSURL
-                              URLWithString:@"http://efc.boundlessgeo.com:8085/ping"]]
+                              URLWithString:url]]
       subscribeNext:^(NSData *d) {
         XCTAssertNotNil(d);
         [expect fulfill];
