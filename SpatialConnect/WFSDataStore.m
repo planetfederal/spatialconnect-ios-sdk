@@ -26,7 +26,7 @@
 @implementation WFSDataStore
 
 #define TYPE @"wfs"
-#define VERSION @"1.1"
+#define VERSION @"1.1.0"
 
 @synthesize baseUri,storeVersion,storeType;
 
@@ -50,7 +50,7 @@
 }
 
 - (NSArray*) layerList {
-  NSString *url = [NSString stringWithFormat:@"%@?service=WFS&version=1.1.0&request=GetCapabilities",self.baseUri];
+  NSString *url = [NSString stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",self.storeVersion, self.baseUri];
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   NSData *data = [ns getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary* d = [NSDictionary dictionaryWithXMLData:data];
@@ -62,8 +62,12 @@
   return [NSArray arrayWithArray:layers];
 }
 
-- (NSString*)defaultLayerName {
-  return [[self layerList] firstObject];
+- (NSString*)defaultLayer {
+  if (self.defaultLayerName == nil) {
+    return [[self layerList] firstObject];
+  } else {
+    return self.defaultLayerName;
+  }
 }
 
 - (NSString*)storeType {
@@ -71,13 +75,14 @@
 }
 
 - (NSString*)storeVersion {
-  return @"1.1";
+  return @"1.1.0";
 }
 
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal*)query:(SCQueryFilter *)filter {
-  NSMutableString *url = [NSMutableString stringWithFormat:@"%@?service=WFS&version=1.1&request=GetFeature&typeName=%@&outputFormat=application/json&srsname=EPSG:4326&maxFeatures=%ld",self.baseUri,filter.layerIds[0],(long)filter.limit];
+  NSString *layer = filter.layerIds[0] == nil ? [self defaultLayer] : filter.layerIds[0];
+  NSMutableString *url = [NSMutableString stringWithFormat:@"%@?service=WFS&version=%@&request=GetFeature&typeName=%@&outputFormat=application/json&srsname=EPSG:4326&maxFeatures=%ld",self.baseUri,self.storeVersion,layer,(long)filter.limit];
 
   SCPredicate *p = [[filter geometryFilters] firstObject];
   if ([p.filter isKindOfClass:[SCGeoFilterContains class]]) {

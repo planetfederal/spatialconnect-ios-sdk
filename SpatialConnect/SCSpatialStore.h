@@ -68,7 +68,7 @@
  *
  *  @return string representing layer name
  */
-- (NSString *)defaultLayerName;
+- (NSString *)defaultLayer;
 
 /**
  *  List of layers in the store

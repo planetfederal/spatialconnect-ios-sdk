@@ -51,7 +51,6 @@
                                    storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
    subscribeNext:^(SCDataStore *ds) {
      if (ds) {
-       XCTAssertNotNil(ds.defaultLayerName, @"Layer Name shall be set");
        XCTAssertNotNil(ds.layerList, @"Layer list as array");
        XCTAssertNoThrow([sc stopAllServices]);
      } else {
