@@ -96,9 +96,7 @@
           NSString *urlStr = [NSString
                               stringWithFormat:@"%@/api/forms/%ld/submit", sc.configService.remoteUri,(long)formid];
           NSURL *url = [NSURL URLWithString:urlStr];
-          NSString *uniqueId =  [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
-          feature.layerId = self.storeId;
-          feature.layerId = [NSString stringWithFormat:@"%@-%@",feature.layerId,uniqueId];
+          feature.layerId = [NSString stringWithFormat:@"%@",feature.layerId];
           return [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
         } else {
           return [RACSignal empty];
