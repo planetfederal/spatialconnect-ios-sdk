@@ -78,7 +78,6 @@
        XCTAssertNotNil(defaultLayer, @"Layer Name shall be set");
        XCTAssertNotNil(ds.layerList, @"Layer list as array");
        SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-       [filter addLayerId:defaultLayer];
        SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[@(-124.07438528127528),@(42.922397667217076),@(-64.76484934151024),@(58.79784328722645)]];
        SCGeoFilterContains *gfc = [[SCGeoFilterContains alloc] initWithBBOX:bbox];
        SCPredicate *predicate = [[SCPredicate alloc] initWithFilter:gfc];

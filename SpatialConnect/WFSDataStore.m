@@ -81,7 +81,7 @@
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal*)query:(SCQueryFilter *)filter {
-  NSString *layer = filter.layerIds[0] == nil ? [self defaultLayer] : filter.layerIds[0];
+  NSString *layer = filter.layerIds.count == 0 ? [self defaultLayer] : filter.layerIds[0];
   NSMutableString *url = [NSMutableString stringWithFormat:@"%@?service=WFS&version=%@&request=GetFeature&typeName=%@&outputFormat=application/json&srsname=EPSG:4326&maxFeatures=%ld",self.baseUri,self.storeVersion,layer,(long)filter.limit];
 
   SCPredicate *p = [[filter geometryFilters] firstObject];
