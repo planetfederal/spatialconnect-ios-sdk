@@ -40,7 +40,7 @@
     if (!self.isMainBundle) {
       self.isMainBundle = NO;
     }
-    self.defaultLayer = dict[@"default"];
+    self.defaultLayer = dict[@"default_layer"];
     self.name = dict[@"name"];
   }
   return self;

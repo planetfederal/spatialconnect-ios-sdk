@@ -24,12 +24,13 @@
 @property(readwrite, nonatomic, strong) NSString *storeVersion;
 @property(readwrite, nonatomic, strong) NSString *storeType;
 @property(readwrite, nonatomic, strong) NSArray *layerList;
+@property(readwrite, nonatomic, strong) NSString *defaultLayerName;
 @end
 
 @implementation SCDataStore
 
 @synthesize name;
-@synthesize defaultLayerName;
+@synthesize defaultLayerName = _defaultLayerName;
 @synthesize key = _key;
 @synthesize status, permission;
 @synthesize storeVersion = _storeVersion;
@@ -53,6 +54,7 @@
   }
   self.storeId = config.uniqueid;
   self.name = config.name;
+  self.defaultLayerName = config.defaultLayer;
   return self;
 }
 
@@ -79,7 +81,8 @@
     @"style" : self.style,
     @"type" : self.storeType,
     @"version" : self.storeVersion,
-    @"key" : self.key
+    @"key" : self.key,
+    @"default_layer" : self.defaultLayerName
   };
 }
 
