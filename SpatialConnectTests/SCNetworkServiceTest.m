@@ -46,7 +46,7 @@
 - (void)testGetRequest {
   XCTestExpectation *expect = [self expectationWithDescription:@"Ping Server"];
   [self.sc startAllServices];
-  NSString *url = [NSString stringWithFormat:@"%@/ping",self.sc.configService.remoteUri];
+  NSString *url = [NSString stringWithFormat:@"%@/api/ping",self.sc.configService.remoteUri];
   [[self.net
       getRequestURLAsData:[NSURL
                               URLWithString:url]]
