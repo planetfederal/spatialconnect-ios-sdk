@@ -17,6 +17,7 @@
 #import "XMLDictionary.h"
 #import "SCGeoFilterContains.h"
 #import "SCBoundingBox.h"
+#import "SCGeometryCollection.h"
 #import "SCPoint.h"
 
 @interface WFSDataStore()
@@ -50,7 +51,7 @@
 }
 
 - (NSArray*) layerList {
-  NSString *url = [NSString stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",self.storeVersion, self.baseUri];
+  NSString *url = [NSString stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",self.baseUri, self.storeVersion];
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   NSData *data = [ns getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary* d = [NSDictionary dictionaryWithXMLData:data];
@@ -93,9 +94,16 @@
   }
 
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-  return [[ns getRequestURLAsDict:[NSURL URLWithString:url]]
-          map:^SCGeometry*(NSDictionary *d) {
+  return [[[ns getRequestURLAsDict:[NSURL URLWithString:url]]
+          flattenMap:^RACStream*(NSDictionary *d) {
             SCGeometry *g = [SCGeoJSON parseDict:d];
+            if ([g isKindOfClass:[SCGeometryCollection class]]) {
+              SCGeometryCollection *gc = (SCGeometryCollection*)g;
+              return [[gc.geometries rac_sequence] signal];
+            } else {
+              return [RACStream return:g];
+            }
+          }] map:^SCGeometry*(SCGeometry *g) {
             g.layerId = layer;
             g.storeId = self.storeId;
             return g;
