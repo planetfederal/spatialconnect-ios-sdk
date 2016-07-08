@@ -75,48 +75,59 @@
 }
 
 - (void)loadConfigs {
-  [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [configPaths enumerateObjectsUsingBlock:^(NSString *fp, NSUInteger idx,
-                                              BOOL *_Nonnull stop) {
-      NSError *error;
-      NSMutableDictionary *cfg = [NSMutableDictionary
-          dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp
-                                                         error:&error]];
-      if (error) {
-        NSLog(@"%@", error.description);
-      }
-      NSString *uri;
-      if ((uri = [cfg objectForKey:@"remote"])) {
-        self.remoteUri = uri;
-        [cfg removeObjectForKey:@"remote"];
-        NSURL *cfgUrl = [NSURL URLWithString: [uri stringByAppendingString:@"/api/config"]];
-        SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-        NSURL *regUrl =
-            [NSURL URLWithString:[uri stringByAppendingString:@"/api/device/register"]];
-        NSString *ident =
-            [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
-        if (!ident) {
-          ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
-          [[NSUserDefaults standardUserDefaults] setObject:ident
-                                                    forKey:@"UNIQUE_ID"];
+  [configPaths enumerateObjectsUsingBlock:^(NSString *fp, NSUInteger idx,
+                                            BOOL *_Nonnull stop) {
+    NSError *error;
+    NSMutableDictionary *cfg = [NSMutableDictionary
+        dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp
+                                                       error:&error]];
+    if (error) {
+      NSLog(@"%@", error.description);
+    }
+    NSString *uri;
+    if ((uri = [cfg objectForKey:@"remote"])) {
+      [cfg removeObjectForKey:@"remote"];
+      self.remoteUri = uri;
+      SpatialConnect *sc = [SpatialConnect sharedInstance];
+      SCAuthService *as = sc.authService;
+      //You have the url to the server. Wait for someone to properly
+      //authenticate before fetching the config
+      [[as loginStatus] subscribeNext:^(NSNumber *n) {
+        SCAuthStatus s = [n integerValue];
+        if (s == SCAUTH_AUTHENTICATED) {
+          [self registerAndFetchConfig];
         }
-        NSDictionary *regDict = @{
-          @"identifier" : ident,
-          @"name" : @"test_device"
-        };
-        [ns postDictRequestBLOCKING:regUrl body:regDict];
-        NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
-        [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
-      }
-      if (cfg.count > 0) {
-        [subscriber sendNext:[[SCConfig alloc] initWithDictionary:cfg]];
-      }
-    }];
+      }];
 
-    return nil;
-  }] subscribeNext:^(SCConfig *s){
-    [self loadConfig:s];
+    }
+    if (cfg.count > 0) {
+      SCConfig *s = [[SCConfig alloc] initWithDictionary:cfg];
+      [self loadConfig:s];
+    }
   }];
+}
+
+- (void)registerAndFetchConfig {
+  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
+  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
+  NSURL *regUrl =
+  [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/devices/register?token=%@",self.remoteUri,[as xAccessToken]]];
+
+  NSString *ident =
+  [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+  if (!ident) {
+    ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:ident
+                                              forKey:@"UNIQUE_ID"];
+  }
+  NSDictionary *regDict = @{
+                            @"identifier" : ident,
+                            @"name" : @"test_device"
+                            };
+  [ns postDictRequestBLOCKING:regUrl body:regDict];
+  NSURL *cfgUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/api/config?token=%@",self.remoteUri,as.xAccessToken]];
+  NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
+  [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
 }
 
 - (void)loadConfig:(SCConfig *)c {

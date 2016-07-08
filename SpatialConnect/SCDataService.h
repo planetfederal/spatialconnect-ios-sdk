@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
   SCACTION_DATASERVICE_REMOVEFORM = 5
 };
 
-@interface SCDataService : SCService {
+@interface SCDataService : SCService <SCServiceLifecycle> {
   RACSignal *addStore;
   RACSignal *updateStore;
   RACSignal *removeStore;

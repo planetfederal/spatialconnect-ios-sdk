@@ -147,10 +147,15 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return self.adapter.rasterList;
 }
 
+- (NSString *)defaultLayer {
+  return @"DEFAULT";
+}
+
 #pragma mark -
 #pragma mark Override Parent
 - (NSString *)key {
-  NSString *str = [NSString stringWithFormat:@"%@.%@", _storeType, _storeVersion];
+  NSString *str =
+      [NSString stringWithFormat:@"%@.%@", _storeType, _storeVersion];
   return str;
 }
 
