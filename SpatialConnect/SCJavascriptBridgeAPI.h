@@ -33,5 +33,7 @@
 - (void)updateFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)deleteFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)spatialConnectGPS:(id)value responseSubscriber:(id<RACSubscriber>)subscriber;
-
+- (void)authenticate:(NSDictionary*)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)logout:(id<RACSubscriber>)subscriber;
+- (void)authXAccessToken:(id<RACSubscriber>)subscriber;
 @end
