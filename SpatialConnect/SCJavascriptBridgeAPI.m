@@ -94,10 +94,7 @@
 - (void)activeStoreList:(id<RACSubscriber>)subscriber {
   NSArray *arr =
       [[[SpatialConnect sharedInstance] dataService] activeStoreListDictionary];
-  [subscriber sendNext:@{
-    @"action" : @"storesList",
-    @"payload" : @{@"stores" : arr}
-  }];
+  [subscriber sendNext:@{@"stores" : arr}];
   [subscriber sendCompleted];
 }
 
@@ -108,10 +105,7 @@
   for (id formConfig in arr) {
     [forms addObject:[formConfig JSONDict]];
   }
-  [subscriber sendNext:@{
-    @"action" : @"formsList",
-    @"payload" : @{@"forms" : forms}
-  }];
+  [subscriber sendNext:@{@"forms" : forms}];
   [subscriber sendCompleted];
 }
 
@@ -119,10 +113,7 @@
      responseSubscriber:(id<RACSubscriber>)subscriber {
   NSDictionary *dict = [[[SpatialConnect sharedInstance] dataService]
       storeByIdAsDictionary:value[@"storeId"]];
-  [subscriber sendNext:@{
-    @"action" : @"store",
-    @"payload" : @{@"store" : dict}
-  }];
+  [subscriber sendNext:@{@"store" : dict}];
   [subscriber sendCompleted];
 }
 
@@ -135,7 +126,7 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSArray *arr) {
-    [subscriber sendNext:@{ @"action" : @"spatialQuery", @"payload" : arr }];
+    [subscriber sendNext:arr];
   }];
 }
 
@@ -144,10 +135,7 @@
   [[[[SpatialConnect sharedInstance] dataService]
       queryStoreById:[value[@"storeId"] stringValue]
           withFilter:nil] subscribeNext:^(SCGeometry *g) {
-    [subscriber sendNext:@{
-      @"action" : @"spatialQuery",
-      @"payload" : [g JSONDict]
-    }];
+    [subscriber sendNext:[g JSONDict]];
     [subscriber sendCompleted];
   }];
 }
@@ -159,7 +147,7 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] toArray] rac_sequence] signal] subscribeNext:^(NSArray *arr) {
-    [subscriber sendNext:@{ @"action" : @"spatialQuery", @"payload" : arr }];
+    [subscriber sendNext:arr];
   }];
 }
 
@@ -167,12 +155,9 @@
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
   [[[[SpatialConnect sharedInstance] dataService]
-      queryAllStoresOfProtocol:@protocol(SCSpatialStore)
-                        filter:filter] subscribeNext:^(SCGeometry *g) {
-    [subscriber sendNext:@{
-      @"action" : @"spatialQuery",
-      @"payload" : [g JSONDict]
-    }];
+      queryStoreById:[value[@"storeId"] stringValue]
+                        withFilter:filter] subscribeNext:^(SCGeometry *g) {
+    [subscriber sendNext:[g JSONDict]];
     [subscriber sendCompleted];
   }];
 }
@@ -188,13 +173,10 @@
           float lat = loc.coordinate.latitude;
           float lon = loc.coordinate.longitude;
           [subscriber sendNext:@{
-            @"action" : @"lastKnownLocation",
-            @"payload" : @{
               @"latitude" : [NSNumber numberWithFloat:lat],
               @"longitude" : [NSNumber numberWithFloat:lon],
               @"altitude" : [NSNumber numberWithFloat:alt]
-            }
-          }];
+            }];
         }];
   } else {
     [[[SpatialConnect sharedInstance] sensorService] disableGPS];
@@ -223,10 +205,7 @@
       NSLog(@"Error creating Feature");
     }
         completed:^{
-          [subscriber sendNext:@{
-            @"action" : @"createFeature",
-            @"payload" : [feat JSONDict]
-          }];
+          [subscriber sendNext:[feat JSONDict]];
         }];
 
   } else {
@@ -259,10 +238,7 @@
       [subscriber sendError:err];
     }
         completed:^{
-          [subscriber sendNext:@{
-            @"action" : @"createFeature",
-            @"payload" : [feat JSONDict]
-          }];
+          [subscriber sendNext:[feat JSONDict]];
           [subscriber sendCompleted];
         }];
   } else {
