@@ -289,7 +289,7 @@
 		56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBFA041D2F0CC600FFE4FF /* SCAuthService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DBFA071D2F0CC600FFE4FF /* SCAuthService.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DBFA051D2F0CC600FFE4FF /* SCAuthService.m */; };
 		56DBFA091D2F25F900FFE4FF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DBFA081D2F25F900FFE4FF /* Security.framework */; };
-		56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBFA0A1D2F269C00FFE4FF /* KeychainItemWrapper.h */; };
+		56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBFA0A1D2F269C00FFE4FF /* KeychainItemWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DBFA0D1D2F269C00FFE4FF /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DBFA0B1D2F269C00FFE4FF /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		56DC516D1BFD22AB002C71B3 /* SCServiceStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DC516B1BFD22AB002C71B3 /* SCServiceStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1530,7 +1530,6 @@
 				5649B5B81BE280D6009947EF /* SCGeoJSONExtensions.h in Headers */,
 				560B10E61C77C16000BA15B8 /* SCGpkgTable.h in Headers */,
 				5649B57C1BE280D6009947EF /* GeoJSONAdapter.h in Headers */,
-				56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */,
 				56CC079D1C6ED59000407D4A /* SCGpkgContentsTable.h in Headers */,
 				560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */,
 				5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */,
@@ -1631,6 +1630,7 @@
 				5649B5FD1BE280D6009947EF /* SCPredicate.h in Headers */,
 				5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */,
 				56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */,
+				56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */,
 				546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
