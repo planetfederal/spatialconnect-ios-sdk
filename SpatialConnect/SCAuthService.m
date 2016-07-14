@@ -65,6 +65,7 @@
 
 - (void)logout {
   [keychainItem resetKeychainItem];
+  [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
 }
 
 #pragma mark -
