@@ -21,7 +21,7 @@
 
 @interface SCJavascriptBridgeAPI : NSObject
 
-- (RACSignal *)parseJSCommand:(NSDictionary *)data;
+- (RACSignal *)parseJSAction:(NSDictionary *)action;
 - (void)activeStoreList:(id<RACSubscriber>)subscriber;
 - (void)formList:(id<RACSubscriber>)subscriber;
 - (void)activeStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
@@ -36,4 +36,5 @@
 - (void)authenticate:(NSDictionary*)value responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)logout:(id<RACSubscriber>)subscriber;
 - (void)authXAccessToken:(id<RACSubscriber>)subscriber;
+- (void)loginStatus:(id<RACSubscriber>)subscriber;
 @end

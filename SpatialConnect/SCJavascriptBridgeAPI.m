@@ -27,61 +27,62 @@
 
 @implementation SCJavascriptBridgeAPI
 
-- (RACSignal *)parseJSCommand:(id)data {
+- (RACSignal *)parseJSAction:(id)action {
   return [RACSignal createSignal:^RACDisposable *(
                         id<RACSubscriber> subscriber) {
-    NSDictionary *command = (NSDictionary *)data[@"data"];
-    NSLog(@"%@", command);
-    if (!command) {
+    if (!action) {
       [subscriber sendCompleted];
       return nil;
     }
-    NSInteger action = [command[@"action"] integerValue];
-    switch (action) {
+    NSInteger actionType = [action[@"type"] integerValue];
+    switch (actionType) {
     case DATASERVICE_ACTIVESTORESLIST:
       [self activeStoreList:subscriber];
       break;
     case DATASERVICE_ACTIVESTOREBYID:
-      [self activeStoreById:command[@"payload"] responseSubscriber:subscriber];
+      [self activeStoreById:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_SPATIALQUERY:
-      [self queryStoreById:command[@"payload"] responseSubscriber:subscriber];
+      [self queryStoreById:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_SPATIALQUERYALL:
-      [self queryAllStores:command[@"payload"] responseSubscriber:subscriber];
+      [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERY:
-      [self queryGeoStoreById:command[@"payload"]
+      [self queryGeoStoreById:action[@"payload"]
            responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERYALL:
-      [self queryAllGeoStores:command[@"payload"]
+      [self queryAllGeoStores:action[@"payload"]
            responseSubscriber:subscriber];
       break;
     case DATASERVICE_CREATEFEATURE:
-      [self createFeature:command[@"payload"] responseSubscriber:subscriber];
+      [self createFeature:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_UPDATEFEATURE:
-      [self updateFeature:command[@"payload"] responseSubscriber:subscriber];
+      [self updateFeature:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_DELETEFEATURE:
-      [self deleteFeature:command[@"payload"] responseSubscriber:subscriber];
+      [self deleteFeature:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_FORMLIST:
       [self formList:subscriber];
       break;
     case SENSORSERVICE_GPS:
-      [self spatialConnectGPS:command[@"payload"]
+      [self spatialConnectGPS:action[@"payload"]
            responseSubscriber:subscriber];
       break;
     case AUTHSERVICE_AUTHENTICATE:
-      [self authenticate:command[@"payload"] responseSubscriber:subscriber];
+      [self authenticate:action[@"payload"] responseSubscriber:subscriber];
       break;
     case AUTHSERVICE_LOGOUT:
       [self logout:subscriber];
       break;
     case AUTHSERVICE_ACCESS_TOKEN:
       [self authXAccessToken:subscriber];
+      break;
+    case AUTHSERVICE_LOGIN_STATUS:
+      [self loginStatus:subscriber];
       break;
     default:
       NSLog(@"break");
@@ -143,10 +144,10 @@
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  [[[[[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
+  [[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
-      }] toArray] rac_sequence] signal] subscribeNext:^(NSArray *arr) {
+      }]subscribeNext:^(NSArray *arr) {
     [subscriber sendNext:arr];
   }];
 }
@@ -300,6 +301,13 @@
     [subscriber sendCompleted];
   }
   [subscriber sendCompleted];
+}
+
+- (void)loginStatus:(id<RACSubscriber>)subscriber {
+    SCAuthService *as = [[SpatialConnect sharedInstance] authService];
+    [[as loginStatus] subscribeNext:^(NSNumber *status) {
+        [subscriber sendNext:status];
+    }];
 }
 
 @end

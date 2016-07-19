@@ -63,13 +63,17 @@ NSString *const SCJavascriptBridgeErrorDomain =
   self.bridge = [WebViewJavascriptBridge
       bridgeForWebView:self.webview
        webViewDelegate:self.webViewDelegate
-               handler:^(id data, WVJBResponseCallback responseCallback) {
-                 [[self.jsbridge parseJSCommand:data]
-                     subscribeNext:^(NSDictionary *responseData) {
+               handler:^(id action, WVJBResponseCallback responseCallback) {
+                   [[self.jsbridge parseJSAction:action]
+                     subscribeNext:^(NSDictionary *payload) {
                        NSLog(@"Response");
-                       NSLog(@"%@", responseData);
-                       [_bridge callHandler:responseData[@"action"]
-                                       data:responseData[@"payload"]];
+                       NSLog(@"%@", payload);
+                         NSDictionary *newAction = @{
+                             @"type": action[@"type"],
+                             @"payload": payload
+                        };
+                       [_bridge callHandler:action[@"type"]
+                                       data:newAction];
                      }];
                }];
 
@@ -79,27 +83,25 @@ NSString *const SCJavascriptBridgeErrorDomain =
         CLLocationDistance alt = loc.altitude;
         float lat = loc.coordinate.latitude;
         float lon = loc.coordinate.longitude;
+          NSDictionary *action = @{
+              @"type": @"lastKnownLocation",
+              @"payload": @{
+                  @"latitude" : [NSNumber numberWithFloat:lat],
+                  @"longitude" : [NSNumber numberWithFloat:lon],
+                  @"altitude" : [NSNumber numberWithFloat:alt]
+              }
+          };
         [_bridge callHandler:@"lastKnownLocation"
-                        data:@{
-                          @"latitude" : [NSNumber numberWithFloat:lat],
-                          @"longitude" : [NSNumber numberWithFloat:lon],
-                          @"altitude" : [NSNumber numberWithFloat:alt]
-                        }];
+            data:action];
       }];
   [[self.spatialConnect.authService loginStatus]
       subscribeNext:^(NSNumber *authStatus) {
-        SCAuthStatus status = [authStatus integerValue];
-        if (status == SCAUTH_AUTHENTICATED) {
-          [_bridge callHandler:@"authStatus"
-                          data:@{
-                            @"status" : @"SCAUTH_AUTHENTICATED"
-                          }];
-        } else if (status == SCAUTH_NOT_AUTHENTICATED) {
-          [_bridge callHandler:@"authStatus"
-                          data:@{
-                            @"status" : @"SCAUTH_NOT_AUTHENTICATED"
-                          }];
-        }
+          NSDictionary *action = @{
+            @"type":[@(AUTHSERVICE_LOGIN_STATUS) stringValue],
+            @"payload": authStatus
+          };
+          [_bridge callHandler: [@(AUTHSERVICE_LOGIN_STATUS) stringValue]
+              data:action];
       }];
 }
 

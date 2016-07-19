@@ -29,9 +29,13 @@
     return self;
 }
     
-- (void) handler:(NSDictionary *)data responseCallback:(void(^)(NSDictionary *data))callback {
-    [[self.bridge parseJSCommand:data] subscribeNext:^(NSDictionary *responseData) {
-        callback(responseData);
+- (void) handler:(NSDictionary *)action responseCallback:(void(^)(NSDictionary *data))callback {
+    [[self.bridge parseJSAction:action] subscribeNext:^(NSDictionary *payload) {
+        NSDictionary *newAction = @{
+            @"type": action[@"type"],
+            @"payload": payload
+        };
+        callback(newAction);
     }];
 }
 
