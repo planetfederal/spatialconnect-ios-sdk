@@ -18,8 +18,8 @@
 #import "SCServiceLifecycle.h"
 
 typedef NS_ENUM(NSUInteger, SCAuthStatus) {
-  SCAUTH_AUTHENTICATED = 0,
-  SCAUTH_NOT_AUTHENTICATED = 1
+  SCAUTH_AUTHENTICATED = 1,
+  SCAUTH_NOT_AUTHENTICATED = 0
 };
 
 @interface SCAuthService : SCService <SCServiceLifecycle> {
