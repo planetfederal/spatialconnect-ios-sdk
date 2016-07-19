@@ -10,7 +10,8 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License
+ * See the License for the specific language governing permissions and
+ * limitations under the License
  */
 
 #import "KeychainItemWrapper.h"
@@ -28,7 +29,18 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
   KeychainItemWrapper *keychainItem;
 }
 
-- (void)authenticate:(NSString *)username password:(NSString*)pass;
+/*!
+ *  @brief sets the token and auth status in the library for the
+ *  user and pass
+ *
+ *  @param username user's email address
+ *  @param pass clear text password
+ */
+- (void)authenticate:(NSString *)username password:(NSString *)pass;
+
+/*!
+ *  @brief this will void the x-access-token
+ */
 - (void)logout;
 
 /*!
@@ -36,7 +48,7 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
  *
  *  @return NSString
  */
-- (NSString*)xAccessToken;
+- (NSString *)xAccessToken;
 
 /*!
  *  @brief Observable that will send current status
@@ -44,6 +56,6 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
  *
  *  @return RACSignal<SCAuthStatus>
  */
-- (RACSignal*)loginStatus;
+- (RACSignal *)loginStatus;
 
 @end

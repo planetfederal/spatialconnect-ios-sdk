@@ -949,7 +949,6 @@
 				5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */,
 				5649B5311BE280D6009947EF /* SCLocalWebApp.h */,
 				5649B5321BE280D6009947EF /* SCLocalWebApp.m */,
-				563BEC5B1BE526F800778EDA /* Bridge */,
 				563BEC5A1BE526EF00778EDA /* Loader */,
 				563BEC591BE526E800778EDA /* Local */,
 			);
@@ -1226,6 +1225,7 @@
 		5649B4951BE27C6A009947EF /* SpatialConnect */ = {
 			isa = PBXGroup;
 			children = (
+				563BEC5B1BE526F800778EDA /* Bridge */,
 				56DBF9FF1D2F0C3300FFE4FF /* AuthService */,
 				5678FC771CF652A800D502C3 /* extobjc.xcodeproj */,
 				56F4374D1CA094FF00EA1344 /* Vendor */,
