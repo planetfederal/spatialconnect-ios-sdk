@@ -10,18 +10,19 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License
+ * See the License for the specific language governing permissions and
+ * limitations under the License
  */
 
-#import "WFSDataStore.h"
-#import "XMLDictionary.h"
-#import "SCGeoFilterContains.h"
 #import "SCBoundingBox.h"
+#import "SCGeoFilterContains.h"
 #import "SCGeometryCollection.h"
 #import "SCPoint.h"
+#import "WFSDataStore.h"
+#import "XMLDictionary.h"
 
-@interface WFSDataStore()
-@property (readwrite) NSString* baseUri;
+@interface WFSDataStore ()
+@property(readwrite) NSString *baseUri;
 @end
 
 @implementation WFSDataStore
@@ -29,7 +30,7 @@
 #define TYPE @"wfs"
 #define VERSION @"1.1.0"
 
-@synthesize baseUri,storeVersion,storeType;
+@synthesize baseUri, storeVersion, storeType;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -50,67 +51,75 @@
   return self;
 }
 
-- (NSArray*) layerList {
-  NSString *url = [NSString stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",self.baseUri, self.storeVersion];
+- (NSArray *)layerList {
+  NSString *url = [NSString
+      stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
+                       self.baseUri, self.storeVersion];
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   NSData *data = [ns getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
-  NSDictionary* d = [NSDictionary dictionaryWithXMLData:data];
+  NSDictionary *d = [NSDictionary dictionaryWithXMLData:data];
   NSMutableArray *layers = [NSMutableArray new];
   NSArray *a = d[@"FeatureTypeList"][@"FeatureType"];
-  [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL * _Nonnull stop) {
+  [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
+                                  BOOL *_Nonnull stop) {
     [layers addObject:d[@"Name"]];
   }];
   return [NSArray arrayWithArray:layers];
 }
 
-- (NSString*)defaultLayer {
-  if (self.defaultLayerName == nil) {
-    return [[self layerList] firstObject];
-  } else {
-    return self.defaultLayerName;
-  }
-}
-
-- (NSString*)storeType {
+- (NSString *)storeType {
   return @"wfs";
 }
 
-- (NSString*)storeVersion {
+- (NSString *)storeVersion {
   return @"1.1.0";
 }
 
 #pragma mark -
 #pragma mark SCSpatialStore
-- (RACSignal*)query:(SCQueryFilter *)filter {
-  NSString *layer = filter.layerIds.count == 0 ? [self defaultLayer] : filter.layerIds[0];
-  NSMutableString *url = [NSMutableString stringWithFormat:@"%@?service=WFS&version=%@&request=GetFeature&typeName=%@&outputFormat=application/json&srsname=EPSG:4326&maxFeatures=%ld",self.baseUri,self.storeVersion,layer,(long)filter.limit];
+- (RACSignal *)query:(SCQueryFilter *)filter {
+  NSArray *layers =
+      filter.layerIds.count == 0 ? [self defaultLayers] : filter.layerIds;
+  NSMutableString *url = [NSMutableString
+      stringWithFormat:@"%@?service=WFS&version=%@&request=GetFeature&typeName="
+                       @"%@&outputFormat=application/"
+                       @"json&srsname=EPSG:4326&maxFeatures=%ld",
+                       self.baseUri, self.storeVersion,
+                       [layers componentsJoinedByString:@","],
+                       (long)filter.limit];
 
   SCPredicate *p = [[filter geometryFilters] firstObject];
   if ([p.filter isKindOfClass:[SCGeoFilterContains class]]) {
     SCGeoFilterContains *fc = (SCGeoFilterContains *)p.filter;
     SCBoundingBox *b = fc.bbox;
-    [url appendFormat:@"&bbox=%f,%f,%f,%f,EPSG:4326",b.lowerLeft.longitude,b.lowerLeft.latitude,b.upperRight.longitude,b.upperRight.latitude];
-
+    [url appendFormat:@"&bbox=%f,%f,%f,%f,EPSG:4326", b.lowerLeft.longitude,
+                      b.lowerLeft.latitude, b.upperRight.longitude,
+                      b.upperRight.latitude];
   }
 
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   return [[[ns getRequestURLAsDict:[NSURL URLWithString:url]]
-          flattenMap:^RACStream*(NSDictionary *d) {
-            SCGeometry *g = [SCGeoJSON parseDict:d];
-            if ([g isKindOfClass:[SCGeometryCollection class]]) {
-              SCGeometryCollection *gc = (SCGeometryCollection*)g;
-              return [[gc.geometries rac_sequence] signal];
-            } else {
-              return [RACStream return:g];
-            }
-          }] map:^SCGeometry*(SCGeometry *g) {
-            g.layerId = layer;
-            g.storeId = self.storeId;
-            return g;
-          }];
+      flattenMap:^RACStream *(NSDictionary *d) {
+        SCGeometry *g = [SCGeoJSON parseDict:d];
+        if ([g isKindOfClass:[SCGeometryCollection class]]) {
+          SCGeometryCollection *gc = (SCGeometryCollection *)g;
+          return [[gc.geometries rac_sequence] signal];
+        } else {
+          return [RACStream return:g];
+        }
+      }] map:^SCGeometry *(SCGeometry *g) {
+    NSString *ident = g.identifier;
+    NSArray *arr = [ident componentsSeparatedByString:@"."];
+    if (arr.count > 1) {
+      NSArray *layerArr = [arr subarrayWithRange:NSMakeRange(0, arr.count - 1)];
+      g.layerId = [layerArr componentsJoinedByString:@"."];
+    }
+    g.storeId = self.storeId;
+    return g;
+  }];
 }
 
-- (RACSignal*)queryById:(SCKeyTuple *)key {
+- (RACSignal *)queryById:(SCKeyTuple *)key {
   return nil;
 }
 

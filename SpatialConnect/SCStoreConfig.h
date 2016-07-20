@@ -23,13 +23,13 @@
 @interface SCStoreConfig : NSObject {
 }
 
-@property(nonatomic, weak) NSString *type;
-@property(nonatomic, weak) NSString *version;
-@property(nonatomic, weak) NSString *uri;
-@property(nonatomic, weak) NSString *uniqueid;
-@property BOOL isMainBundle;
-@property(nonatomic, weak) NSString *name;
-@property(nonatomic) NSString *defaultLayer;
+@property(nonatomic, weak, readonly) NSString *type;
+@property(nonatomic, weak, readonly) NSString *version;
+@property(nonatomic, weak, readonly) NSString *uri;
+@property(nonatomic, weak, readonly) NSString *uniqueid;
+@property(readonly) BOOL isMainBundle;
+@property(nonatomic, weak, readonly) NSString *name;
+@property(nonatomic, readonly) NSArray *defaultLayers;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
 

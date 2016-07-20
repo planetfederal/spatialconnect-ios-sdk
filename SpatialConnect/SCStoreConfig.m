@@ -17,31 +17,32 @@
 * under the License.
 ******************************************************************************/
 #import "SCDataService.h"
-#import "SCStoreConfig.h"
 #import "SCMessage.h"
+#import "SCStoreConfig.h"
 
 @implementation SCStoreConfig
 
-@synthesize type;
-@synthesize version;
-@synthesize uniqueid;
-@synthesize uri;
-@synthesize isMainBundle;
+@synthesize type = _type;
+@synthesize version = _version;
+@synthesize uniqueid = _uniqueid;
+@synthesize uri = _uri;
+@synthesize isMainBundle = _isMainBundle;
+@synthesize defaultLayers = _defaultLayers;
+@synthesize name = _name;
 
 - (id)initWithDictionary:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.type = dict[@"store_type"];
-    self.version = dict[@"version"];
-    self.uniqueid =
-        dict[@"id"] == nil ? [[NSUUID UUID] UUIDString] : dict[@"id"];
-    self.uri = dict[@"uri"];
-    self.isMainBundle = [dict[@"isMainBundle"] boolValue];
+    _type = dict[@"store_type"];
+    _version = dict[@"version"];
+    _uniqueid = dict[@"id"] == nil ? [[NSUUID UUID] UUIDString] : dict[@"id"];
+    _uri = dict[@"uri"];
+    _isMainBundle = [dict[@"isMainBundle"] boolValue];
     if (!self.isMainBundle) {
-      self.isMainBundle = NO;
+      _isMainBundle = NO;
     }
-    self.defaultLayer = dict[@"default_layer"];
-    self.name = dict[@"name"];
+    _defaultLayers = dict[@"default_layers"];
+    _name = dict[@"name"];
   }
   return self;
 }

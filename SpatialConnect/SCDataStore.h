@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 @property(readonly) NSString *storeVersion;
 @property(readonly) NSString *storeType;
 @property(readonly) NSString *key;
-@property(readonly) NSString *defaultLayerName;
+@property(readonly) NSArray *defaultLayers;
 @property SCDataStoreStatus status;
 @property SCDataStorePermission permission;
 

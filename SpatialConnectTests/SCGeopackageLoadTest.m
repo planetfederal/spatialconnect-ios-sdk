@@ -49,7 +49,6 @@
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(SCDataStore *ds) {
         if (ds) {
-          XCTAssertNotNil(ds.defaultLayerName, @"Layer Name shall be set");
           XCTAssertNotNil(ds.layerList, @"Layer list as array");
           XCTAssertNoThrow([sc stopAllServices]);
         } else {
