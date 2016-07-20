@@ -21,9 +21,9 @@
 #import "SCFileUtils.h"
 
 #ifndef TEST
-BOOL const isUnitTesting = YES;
-#else
 BOOL const isUnitTesting = NO;
+#else
+BOOL const isUnitTesting = YES;
 #endif
 
 @interface GeoJSONStore ()
@@ -85,7 +85,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   return [(GeoJSONAdapter *)adapter query:filter];
 }
 
-- (RACSignal*)queryById:(SCKeyTuple *)key {
+- (RACSignal *)queryById:(SCKeyTuple *)key {
   return nil;
 }
 

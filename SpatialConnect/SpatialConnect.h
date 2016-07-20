@@ -28,6 +28,7 @@
 #import "SCRasterService.h"
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
+#import "SCAuthService.h"
 #import "SCLineString.h"
 #import "SCService.h"
 #import "SCSimplePoint.h"
@@ -50,6 +51,7 @@
 @property(readonly, strong) SCRasterService *rasterService;
 @property(readonly, strong) SCConfigService *configService;
 @property(readonly, strong) SCKVPService *kvpService;
+@property(readonly, strong) SCAuthService *authService;
 
 + (id)sharedInstance;
 

@@ -17,15 +17,15 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCQueryFilter.h"
 #import "SCGeoFilter.h"
+#import "SCQueryFilter.h"
 
 @interface SCQueryFilter ()
-@property (readwrite) NSMutableArray *predicates;
-@property (readwrite) NSMutableArray *layerIds;
+@property(readwrite) NSMutableArray *predicates;
+@property(readwrite) NSMutableArray *layerIds;
 @end
 
-@implementation SCQueryFilter 
+@implementation SCQueryFilter
 
 @synthesize limit;
 @synthesize predicates = _predicates;
@@ -44,12 +44,18 @@
 
 + (instancetype)filterFromDictionary:(NSDictionary *)dictionary {
   __block SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-  NSDictionary *filters = dictionary[@"filter"];
-  [filters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
-                                               BOOL *stop) {
+  [dictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
+                                                  BOOL *stop) {
     SCPredicate *p = [SCPredicate predicateType:key clause:obj];
-    [filter addPredicate:p];
+    if (p) {
+      [filter addPredicate:p];
+    }
   }];
+  NSNumber *l = dictionary[@"limit"];
+  if (l) {
+    filter.limit = l.integerValue;
+  }
+  [filter addLayerIds:dictionary[@"layerIds"]];
   return filter;
 }
 
@@ -83,8 +89,8 @@
 
 - (NSString *)buildWhereClause {
   __block NSMutableString *where = [NSMutableString new];
-  [[self propertyFilters] enumerateObjectsUsingBlock:^(SCPredicate *pred,
-                                                NSUInteger idx, BOOL *stop) {
+  [[self propertyFilters] enumerateObjectsUsingBlock:^(
+                              SCPredicate *pred, NSUInteger idx, BOOL *stop) {
     if (idx != 0) {
       [where appendString:@" AND "];
     }
@@ -94,10 +100,11 @@
   return where;
 }
 
-- (NSArray*)geometryFilters {
+- (NSArray *)geometryFilters {
   NSMutableArray *arr = [NSMutableArray new];
 
-  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *p, NSUInteger idx, BOOL * _Nonnull stop) {
+  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *p, NSUInteger idx,
+                                                BOOL *_Nonnull stop) {
     if ([p.filter isKindOfClass:[SCGeoFilter class]]) {
       [arr addObject:p];
     }
@@ -106,10 +113,11 @@
   return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray*)propertyFilters {
+- (NSArray *)propertyFilters {
   NSMutableArray *arr = [NSMutableArray new];
 
-  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *p, NSUInteger idx, BOOL * _Nonnull stop) {
+  [self.predicates enumerateObjectsUsingBlock:^(SCPredicate *p, NSUInteger idx,
+                                                BOOL *_Nonnull stop) {
     if (![p.filter isKindOfClass:[SCGeoFilter class]]) {
       [arr addObject:p];
     }

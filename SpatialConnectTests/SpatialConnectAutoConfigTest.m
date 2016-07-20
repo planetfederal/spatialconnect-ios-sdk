@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCGeometry.h"
+#import "SpatialConnectHelper.h"
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "SpatialConnectHelper.h"
-#import "SCGeometry.h"
 
 @interface SpatialConnectAutoConfigTest : XCTestCase {
   SpatialConnect *sc;
@@ -43,25 +43,32 @@
   XCTestExpectation *expect = [self expectationWithDescription:@"AutoConf"];
   NSMutableArray *arr = [NSMutableArray new];
   RACMulticastConnection *s = [sc.dataService storeEvents];
-  RACSignal *starts = [[s.signal filter:^BOOL(SCStoreStatusEvent *e) {
+  RACSignal *starts = [s.signal filter:^BOOL(SCStoreStatusEvent *e) {
     if (e.status == SC_DATASTORE_EVT_STARTED) {
       return YES;
     }
     return NO;
-  }] take:1];
+  }];
+  __block int count = 0;
   [starts subscribeNext:^(SCStoreStatusEvent *e) {
-    RACSignal *result = [sc.dataService queryAllStores:nil];
-    [[result take:5] subscribeNext:^(SCSpatialFeature *geom) {
-      [arr addObject:geom];
-    } error:^(NSError *error) {
-      XCTFail(@"Error Querying stores");
-    } completed:^(void) {
-      XCTAssert(arr.count > 0, @"Pass");
-      [expect fulfill];
-    }];
+    count++;
+    if (count > 4) {
+      RACSignal *result = [sc.dataService queryAllStores:nil];
+      [[result take:5] subscribeNext:^(SCSpatialFeature *geom) {
+        [arr addObject:geom];
+      }
+          error:^(NSError *error) {
+            XCTFail(@"Error Querying stores");
+          }
+          completed:^(void) {
+            XCTAssert(arr.count > 0, @"Pass");
+            [expect fulfill];
+          }];
+    }
   }];
   [s connect];
   [sc startAllServices];
+  [sc.authService authenticate:@"admin@somthing.com" password:@"admin"];
   [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 

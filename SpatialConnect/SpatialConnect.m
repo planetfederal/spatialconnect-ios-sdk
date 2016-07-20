@@ -36,6 +36,7 @@
 @synthesize rasterService = _rasterService;
 @synthesize configService = _configService;
 @synthesize kvpService = _kvpService;
+@synthesize authService = _authService;
 
 + (id)sharedInstance {
   static SpatialConnect *sc;
@@ -67,6 +68,7 @@
   _networkService = [SCNetworkService new];
   _sensorService = [SCSensorService new];
   _rasterService = [SCRasterService new];
+  _authService = [SCAuthService new];
   [self addDefaultServices];
 }
 
@@ -79,6 +81,7 @@
   [self addService:self.networkService];
   [self addService:self.sensorService];
   [self addService:self.rasterService];
+  [self addService:self.authService];
 }
 
 #pragma mark - Service Lifecycle
@@ -111,10 +114,13 @@
 }
 
 - (void)startAllServices {
-  [self.services enumerateKeysAndObjectsUsingBlock:^(NSString *k, SCService *s,
-                                                     BOOL *stop) {
-    [s start];
-  }];
+  [self.kvpService start];
+  [self.dataService start];
+  [self.configService start];
+  [self.networkService start];
+  [self.sensorService start];
+  [self.rasterService start];
+  [self.authService start];
 }
 
 - (void)stopAllServices {

@@ -17,15 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
 #import "SCLinearRing.h"
 
 @interface SCPolygon : SCLinearRing
 
-@property (nonatomic) NSArray* holes;
+@property(nonatomic) NSArray *holes;
 
 @end

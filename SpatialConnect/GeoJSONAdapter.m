@@ -73,8 +73,12 @@
         if (readError) {
           [subscriber sendError:readError];
         }
-        SCGeometry *geom = [SCGeoJSON parseDict:dict];
-        [subscriber sendNext:geom];
+        if (dict) {
+          SCGeometry *geom = [SCGeoJSON parseDict:dict];
+          if (geom) {
+            [subscriber sendNext:geom];
+          }
+        }
         [subscriber sendCompleted];
         return nil;
       }] flattenMap:^RACStream *(SCGeometry *g) {
