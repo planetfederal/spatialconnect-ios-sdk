@@ -44,17 +44,18 @@
 
 + (instancetype)filterFromDictionary:(NSDictionary *)dictionary {
   __block SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-  NSDictionary *filters = dictionary[@"filter"];
-  [filters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
-                                               BOOL *stop) {
+  [dictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *obj,
+                                                  BOOL *stop) {
     SCPredicate *p = [SCPredicate predicateType:key clause:obj];
-    [filter addPredicate:p];
+    if (p) {
+      [filter addPredicate:p];
+    }
   }];
-  NSNumber *l = filters[@"limit"];
+  NSNumber *l = dictionary[@"limit"];
   if (l) {
     filter.limit = l.integerValue;
   }
-  [filter addLayerIds:filters[@"layerIds"]];
+  [filter addLayerIds:dictionary[@"layerIds"]];
   return filter;
 }
 

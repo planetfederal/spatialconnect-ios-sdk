@@ -972,6 +972,7 @@
 		563BEC5B1BE526F800778EDA /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
+				563BEC581BE526E000778EDA /* JavascriptBridge */,
 				5649B5201BE280D6009947EF /* SCJavascriptBridge.h */,
 				5649B5211BE280D6009947EF /* SCJavascriptBridge.m */,
 				5649B5221BE280D6009947EF /* SCJavascriptBridgeAPI.h */,
@@ -1236,7 +1237,6 @@
 				563BEC6B1BE52A6B00778EDA /* NetworkService */,
 				563BEC691BE52A2400778EDA /* RasterService */,
 				563BEC681BE529ED00778EDA /* SensorService */,
-				563BEC581BE526E000778EDA /* JavascriptBridge */,
 				563BEC531BE500C500778EDA /* DataService */,
 				56CC07971C6E92EF00407D4A /* Storage */,
 				5649B5331BE280D6009947EF /* SCLoggingAssertionHandler.h */,

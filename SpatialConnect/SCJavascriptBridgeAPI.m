@@ -49,12 +49,10 @@
       [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERY:
-      [self queryGeoStoreById:action[@"payload"]
-           responseSubscriber:subscriber];
+      [self queryGeoStoreById:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERYALL:
-      [self queryAllGeoStores:action[@"payload"]
-           responseSubscriber:subscriber];
+      [self queryAllGeoStores:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_CREATEFEATURE:
       [self createFeature:action[@"payload"] responseSubscriber:subscriber];
@@ -69,8 +67,7 @@
       [self formList:subscriber];
       break;
     case SENSORSERVICE_GPS:
-      [self spatialConnectGPS:action[@"payload"]
-           responseSubscriber:subscriber];
+      [self spatialConnectGPS:action[@"payload"] responseSubscriber:subscriber];
       break;
     case AUTHSERVICE_AUTHENTICATE:
       [self authenticate:action[@"payload"] responseSubscriber:subscriber];
@@ -95,7 +92,7 @@
 - (void)activeStoreList:(id<RACSubscriber>)subscriber {
   NSArray *arr =
       [[[SpatialConnect sharedInstance] dataService] activeStoreListDictionary];
-  [subscriber sendNext:@{@"stores" : arr}];
+  [subscriber sendNext:@{ @"stores" : arr }];
   [subscriber sendCompleted];
 }
 
@@ -106,7 +103,7 @@
   for (id formConfig in arr) {
     [forms addObject:[formConfig JSONDict]];
   }
-  [subscriber sendNext:@{@"forms" : forms}];
+  [subscriber sendNext:@{ @"forms" : forms }];
   [subscriber sendCompleted];
 }
 
@@ -114,7 +111,7 @@
      responseSubscriber:(id<RACSubscriber>)subscriber {
   NSDictionary *dict = [[[SpatialConnect sharedInstance] dataService]
       storeByIdAsDictionary:value[@"storeId"]];
-  [subscriber sendNext:@{@"store" : dict}];
+  [subscriber sendNext:@{ @"store" : dict }];
   [subscriber sendCompleted];
 }
 
@@ -126,8 +123,8 @@
                         filter:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
-      }] subscribeNext:^(NSArray *arr) {
-    [subscriber sendNext:arr];
+      }] subscribeNext:^(NSDictionary *d) {
+    [subscriber sendNext:d];
   }];
 }
 
@@ -147,8 +144,8 @@
   [[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
-      }]subscribeNext:^(NSArray *arr) {
-    [subscriber sendNext:arr];
+      }] subscribeNext:^(NSDictionary *d) {
+    [subscriber sendNext:d];
   }];
 }
 
@@ -157,7 +154,7 @@
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
   [[[[SpatialConnect sharedInstance] dataService]
       queryStoreById:[value[@"storeId"] stringValue]
-                        withFilter:filter] subscribeNext:^(SCGeometry *g) {
+          withFilter:filter] subscribeNext:^(SCGeometry *g) {
     [subscriber sendNext:[g JSONDict]];
     [subscriber sendCompleted];
   }];
@@ -174,10 +171,10 @@
           float lat = loc.coordinate.latitude;
           float lon = loc.coordinate.longitude;
           [subscriber sendNext:@{
-              @"latitude" : [NSNumber numberWithFloat:lat],
-              @"longitude" : [NSNumber numberWithFloat:lon],
-              @"altitude" : [NSNumber numberWithFloat:alt]
-            }];
+            @"latitude" : [NSNumber numberWithFloat:lat],
+            @"longitude" : [NSNumber numberWithFloat:lon],
+            @"altitude" : [NSNumber numberWithFloat:alt]
+          }];
         }];
   } else {
     [[[SpatialConnect sharedInstance] sensorService] disableGPS];
@@ -304,10 +301,10 @@
 }
 
 - (void)loginStatus:(id<RACSubscriber>)subscriber {
-    SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-    [[as loginStatus] subscribeNext:^(NSNumber *status) {
-        [subscriber sendNext:status];
-    }];
+  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
+  [[as loginStatus] subscribeNext:^(NSNumber *status) {
+    [subscriber sendNext:status];
+  }];
 }
 
 @end

@@ -21,9 +21,9 @@
 #import "SCFileUtils.h"
 
 #ifndef TEST
-BOOL const isUnitTesting = YES;
-#else
 BOOL const isUnitTesting = NO;
+#else
+BOOL const isUnitTesting = YES;
 #endif
 
 @interface GeoJSONStore ()
