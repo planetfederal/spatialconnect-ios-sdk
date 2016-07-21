@@ -65,10 +65,11 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (void)setupDefaultStore {
-  SCStoreConfig *config = [[SCStoreConfig alloc] init];
-  config.uniqueid = @"DEFAULT_STORE";
-  config.uri = @"spacon_default_store.db";
-  config.name = @"DEFAULT_STORE";
+  SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:@{
+    @"id" : @"DEFAULT_STORE",
+    @"uri" : @"spacon_default_store.db",
+    @"name" : @"DEFAULT_STORE"
+  }];
   _defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
   defaultStoreForms = [NSMutableArray new];
   [_stores setObject:_defaultStore forKey:config.uniqueid];
@@ -78,7 +79,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   return [self.defaultStore layerList];
 }
 
-- (NSArray*)defaultStoreForms {
+- (NSArray *)defaultStoreForms {
   return [NSArray arrayWithArray:defaultStoreForms];
 }
 
@@ -107,13 +108,16 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (RACSignal *)storeStarted:(NSString *)storeId {
   if ([[self storeByIdentifier:storeId] status] == SC_DATASTORE_RUNNING) {
-    SCStoreStatusEvent *evt = [[SCStoreStatusEvent alloc] initWithEvent:SC_DATASTORE_EVT_STARTED andStoreId:storeId];
+    SCStoreStatusEvent *evt =
+        [[SCStoreStatusEvent alloc] initWithEvent:SC_DATASTORE_EVT_STARTED
+                                       andStoreId:storeId];
     return [RACSignal return:evt];
   }
   RACMulticastConnection *rmcc = self.storeEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCStoreStatusEvent *evt) {
-    if (evt.status == SC_DATASTORE_EVT_STARTED && [evt.storeId isEqualToString:storeId]) {
+    if (evt.status == SC_DATASTORE_EVT_STARTED &&
+        [evt.storeId isEqualToString:storeId]) {
       return YES;
     }
     return NO;
@@ -138,8 +142,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
           [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
                                      @"was not started. Make sure the store "
                                      @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key,
-                                     store.storeId]);
+                                     store.name, store.key, store.storeId]);
   }
 }
 

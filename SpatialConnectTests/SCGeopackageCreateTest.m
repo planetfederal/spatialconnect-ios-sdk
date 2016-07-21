@@ -46,7 +46,7 @@
       flattenMap:^RACStream *(GeopackageStore *ds) {
         SCPoint *p =
             [[SCPoint alloc] initWithCoordinateArray:@[ @(32.3), @(43.1) ]];
-        p.layerId = ds.defaultLayerName;
+        p.layerId = ds.defaultLayers[0];
         return [ds create:p];
       }] subscribeError:^(NSError *error) {
     NSLog(@"%@", error.description);

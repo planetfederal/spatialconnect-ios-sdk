@@ -63,12 +63,12 @@
 - (RACSignal *) delete:(SCKeyTuple *)key;
 
 /**
- *  Default layer to be used when no layer is present in
- *  SCSpatialFeature's layerId ivar
+ *  Default layers for searching when no layers
+ *  are present in SCQueryFilter
  *
  *  @return string representing layer name
  */
-- (NSString *)defaultLayer;
+- (NSArray *)defaultLayers;
 
 /**
  *  List of layers in the store
