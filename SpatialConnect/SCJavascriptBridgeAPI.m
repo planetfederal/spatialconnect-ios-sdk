@@ -81,6 +81,12 @@
     case AUTHSERVICE_LOGIN_STATUS:
       [self loginStatus:subscriber];
       break;
+    case NETWORKSERVICE_GET_REQUEST:
+      [self getRequest:action[@"payload"] responseSubscriber:subscriber];
+      break;
+    case NETWORKSERVICE_POST_REQUEST:
+      [self postRequest:action[@"payload"] responseSubscriber:subscriber];
+      break;
     default:
       NSLog(@"break");
       break;
@@ -305,6 +311,39 @@
   [[as loginStatus] subscribeNext:^(NSNumber *status) {
     [subscriber sendNext:status];
   }];
+}
+
+- (void)getRequest:(NSDictionary *)value
+responseSubscriber:(id<RACSubscriber>)subscriber {
+  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
+  NSString *url = value[@"url"];
+  [[ns getRequestURLAsDict:[NSURL URLWithString:url]]
+      subscribeNext:^(NSDictionary *d) {
+        [subscriber sendNext:d];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
+      completed:^{
+        [subscriber sendCompleted];
+      }];
+}
+
+- (void)postRequest:(NSDictionary *)value
+ responseSubscriber:(id<RACSubscriber>)subscriber {
+  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
+  NSString *url = value[@"url"];
+  NSDictionary *body = value[@"body"];
+  [[ns postDictRequestAsDict:[NSURL URLWithString:url] body:body]
+      subscribeNext:^(NSDictionary *d) {
+        [subscriber sendNext:d];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
+      completed:^{
+        [subscriber sendCompleted];
+      }];
 }
 
 @end

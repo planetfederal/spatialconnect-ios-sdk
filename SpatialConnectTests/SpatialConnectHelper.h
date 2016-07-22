@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SpatialConnect.h"
+#import <Foundation/Foundation.h>
 
 @interface SpatialConnectHelper : NSObject
 
@@ -26,6 +26,8 @@
 + (SpatialConnect *)loadConfig;
 + (SpatialConnect *)loadRemoteConfigAndStartServices;
 + (SpatialConnect *)loadRemoteConfig;
-+ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc storeId:(NSString*)storeId;
++ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc
+                         storeId:(NSString *)storeId;
++ (void)startServicesAndAuth:(SpatialConnect *)sc;
 
 @end

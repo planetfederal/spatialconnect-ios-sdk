@@ -137,4 +137,9 @@
   }];
 }
 
+- (void)startServicesAndAuth:(SpatialConnect*)sc {
+  [sc startAllServices];
+  [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+}
+
 @end

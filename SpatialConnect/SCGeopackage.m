@@ -89,53 +89,88 @@
 
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types {
   [self.pool inDatabase:^(FMDatabase *db) {
-    NSString *formattedName = [[name lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    if ([db tableExists:formattedName]) {
-      return;
-    }
-    [db beginTransaction];
-    NSMutableString *createSql = [NSMutableString
-        stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
-                         @"PRIMARY KEY AUTOINCREMENT",
-                         formattedName];
-
-    [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
-                                               BOOL *stop) {
-      NSString *key = [k lowercaseString];
-      NSString *type = [t lowercaseString];
-      if (![key isEqualToString:@"geom"]) {
-        [createSql appendFormat:@",%@ %@", key, type];
+    if ([db tableExists:name]) {
+      FMResultSet *rs = [db getTableSchema:name];
+      NSMutableArray *existingCols = [NSMutableArray new];
+      while ([rs next]) {
+        NSString *colName = [rs stringForColumn:@"name"];
+        [existingCols addObject:colName];
       }
-    }];
-    [createSql appendString:@")"];
-    BOOL success = [db executeStatements:createSql];
-    if (!success) {
-      NSLog(@"Error:%@", db.lastError.description);
-      [db rollback];
-      return;
-    }
-    NSString *addColSql =
-        [NSString stringWithFormat:@"SELECT "
-                                   @"AddGeometryColumn('%@','geom','"
-                                   @"Geometry',4326)",
-                                   formattedName];
-    BOOL geomAdded = [db executeStatements:addColSql];
-    if (!geomAdded) {
-      NSLog(@"Error:%@", db.lastError.description);
-      [db rollback];
-      return;
-    }
-    NSString *addGpkgContentsSql = [NSString
-        stringWithFormat:@"INSERT INTO gpkg_contents "
-                         @"(table_name,data_type,identifier,description,min_x,"
-                         @"min_y,max_x,max_y,srs_id) VALUES "
-                         @"('%@','features','%@','%@',0,0,0,0,4326)",
-                         formattedName, formattedName, name];
-    success = [db executeStatements:addGpkgContentsSql];
-    if (success) {
+      [rs close];
+      NSMutableDictionary *newSchemaCols =
+          [NSMutableDictionary dictionaryWithDictionary:types];
+
+      [existingCols enumerateObjectsUsingBlock:^(NSString *str, NSUInteger idx,
+                                                 BOOL *stop) {
+        [newSchemaCols removeObjectForKey:str];
+      }];
+
+      if ([newSchemaCols count] == 0) {
+        return;
+      }
+
+      [db beginTransaction];
+      NSMutableString *stmts = [NSMutableString new];
+      [newSchemaCols enumerateKeysAndObjectsUsingBlock:^(
+                         NSString *key, NSString *type, BOOL *stop) {
+        NSString *sql =
+            [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@;",
+                                       name, key, type];
+        [stmts appendString:sql];
+      }];
+      BOOL success = [db executeStatements:stmts];
+      if (success) {
+        [db commit];
+      } else {
+        [db rollback];
+      }
       [db commit];
     } else {
-      [db rollback];
+      [db beginTransaction];
+      NSMutableString *createSql = [NSMutableString
+          stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
+                           @"PRIMARY KEY AUTOINCREMENT",
+                           name];
+
+      [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
+                                                 BOOL *stop) {
+        NSString *key = [k lowercaseString];
+        NSString *type = [t lowercaseString];
+        if (![key isEqualToString:@"geom"]) {
+          [createSql appendFormat:@",%@ %@", key, type];
+        }
+      }];
+      [createSql appendString:@")"];
+      BOOL success = [db executeStatements:createSql];
+      if (!success) {
+        NSLog(@"Error:%@", db.lastError.description);
+        [db rollback];
+        return;
+      }
+      NSString *addColSql =
+          [NSString stringWithFormat:@"SELECT "
+                                     @"AddGeometryColumn('%@','geom','"
+                                     @"Geometry',4326)",
+                                     name];
+      BOOL geomAdded = [db executeStatements:addColSql];
+      if (!geomAdded) {
+        NSLog(@"Error:%@", db.lastError.description);
+        [db rollback];
+        return;
+      }
+      NSString *addGpkgContentsSql =
+          [NSString stringWithFormat:
+                        @"INSERT INTO gpkg_contents "
+                        @"(table_name,data_type,identifier,description,min_x,"
+                        @"min_y,max_x,max_y,srs_id) VALUES "
+                        @"('%@','features','%@','%@',0,0,0,0,4326)",
+                        name, name, name];
+      success = [db executeStatements:addGpkgContentsSql];
+      if (success) {
+        [db commit];
+      } else {
+        [db rollback];
+      }
     }
   }];
 }

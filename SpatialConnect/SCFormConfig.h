@@ -24,13 +24,15 @@ typedef NS_ENUM(NSInteger, SCFormItemType) {
   SCFORM_TYPE_DATE,
   SCFORM_TYPE_SLIDER,
   SCFORM_TYPE_COUNTER,
-  SCFORM_TYPE_SELECT
+  SCFORM_TYPE_SELECT,
+  SCFORM_TYPE_PHOTO
 };
 
 @interface SCFormConfig : NSObject
 
-@property(nonatomic) NSInteger identifier;
-@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSString *key;
+@property(nonatomic, strong) NSString *label;
+@property(nonatomic) NSInteger version;
 @property(nonatomic, strong) NSArray *fields;
 
 - (id)initWithDict:(NSDictionary *)d;
