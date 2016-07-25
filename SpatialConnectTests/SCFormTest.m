@@ -43,16 +43,16 @@
 
 - (void)testGetForms {
   [self.sc startAllServices];
-  NSArray *arr = [self.sc.dataService defaultStoreForms];
-  XCTAssertNotNil(arr);
+  NSDictionary *d = [self.sc.dataService defaultStoreForms];
+  XCTAssertNotNil(d);
 }
 
 - (void)testFormToDict {
   [self.sc startAllServices];
-  NSArray *arr = [self.sc.dataService defaultStoreForms];
-  [arr enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx,
-                                    BOOL *stop) {
-    NSDictionary *d = [c JSONDict];
+  NSDictionary *d = [self.sc.dataService defaultStoreForms];
+
+  [d enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCFormConfig *obj, BOOL *stop) {
+    NSDictionary *d = [obj JSONDict];
     XCTAssertNotNil(d[@"key"]);
     XCTAssertNotNil(d[@"label"]);
     XCTAssertNotNil(d[@"version"]);

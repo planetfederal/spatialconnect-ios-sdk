@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
   RACSignal *addStore;
   RACSignal *updateStore;
   RACSignal *removeStore;
-  NSMutableArray *defaultStoreForms;
+  NSMutableDictionary *defaultStoreForms;
 }
 
 @property(readonly, nonatomic) SCDefaultStore *defaultStore;
@@ -52,7 +52,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 - (void)registerStoreByConfig:(SCStoreConfig *)c;
 - (void)registerFormByConfig:(SCFormConfig *)f;
 - (NSArray *)defaultStoreLayers;
-- (NSArray *)defaultStoreForms;
+- (NSDictionary *)defaultStoreForms;
 
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;
