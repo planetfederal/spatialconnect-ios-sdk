@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, SCFormItemType) {
 
 @interface SCFormConfig : NSObject
 
+@property(nonatomic) NSInteger identifier;
 @property(nonatomic, strong) NSString *key;
 @property(nonatomic, strong) NSString *label;
 @property(nonatomic) NSInteger version;

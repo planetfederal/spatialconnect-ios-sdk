@@ -19,11 +19,12 @@
 
 @implementation SCFormConfig
 
-@synthesize key, label, version, fields;
+@synthesize key, label, version, fields, identifier;
 
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
+    self.identifier = [dict[@"id"] integerValue];
     self.key = dict[@"form_key"];
     self.label = dict[@"form_label"];
     self.version = [dict[@"version"] integerValue];
@@ -132,6 +133,7 @@
   dict[@"display_name"] = self.label;
   dict[@"version"] = @(self.version);
   dict[@"fields"] = self.fields;
+  dict[@"id"] = @(self.identifier);
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 

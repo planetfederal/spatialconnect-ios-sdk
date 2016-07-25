@@ -71,7 +71,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     @"name" : @"DEFAULT_STORE"
   }];
   _defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
-  defaultStoreForms = [NSMutableArray new];
+  defaultStoreForms = [NSMutableDictionary new];
   [_stores setObject:_defaultStore forKey:config.uniqueid];
 }
 
@@ -79,8 +79,8 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   return [self.defaultStore layerList];
 }
 
-- (NSArray *)defaultStoreForms {
-  return [NSArray arrayWithArray:defaultStoreForms];
+- (NSDictionary *)defaultStoreForms {
+  return [NSDictionary dictionaryWithDictionary:defaultStoreForms];
 }
 
 - (void)addDefaultStoreImpls {
@@ -204,8 +204,8 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 }
 
 - (void)registerFormByConfig:(SCFormConfig *)f {
-  [defaultStoreForms addObject:f];
-  [_defaultStore addLayer:f.key withDef:[f sqlTypes] andFormId:f.key];
+  [defaultStoreForms setObject:f forKey:f.key];
+  [_defaultStore addLayer:f.key withDef:[f sqlTypes] andFormId:f.identifier];
 }
 
 - (void)unregisterStore:(SCDataStore *)store {
