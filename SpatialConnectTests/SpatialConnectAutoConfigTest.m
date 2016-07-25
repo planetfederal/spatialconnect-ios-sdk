@@ -68,8 +68,8 @@
   }];
   [s connect];
   [sc startAllServices];
-  [sc.authService authenticate:@"admin@somthing.com" password:@"admin"];
-  [self waitForExpectationsWithTimeout:12.0 handler:nil];
+  [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 @end

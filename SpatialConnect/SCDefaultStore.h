@@ -22,7 +22,7 @@
     : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore> {
   NSMutableDictionary *formIds;
 }
-- (void)addLayer:(NSString *)n
+- (void)addLayer:(NSString *)formKey
          withDef:(NSDictionary *)d
        andFormId:(NSInteger)formId;
 @end

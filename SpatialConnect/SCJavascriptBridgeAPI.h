@@ -24,17 +24,32 @@
 - (RACSignal *)parseJSAction:(NSDictionary *)action;
 - (void)activeStoreList:(id<RACSubscriber>)subscriber;
 - (void)formList:(id<RACSubscriber>)subscriber;
-- (void)activeStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)queryAllStores:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)queryStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)queryAllGeoStores:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)queryGeoStoreById:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)createFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)updateFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)deleteFeature:(NSDictionary *)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)spatialConnectGPS:(id)value responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)authenticate:(NSDictionary*)value responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)activeStoreById:(NSDictionary *)value
+     responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryAllStores:(NSDictionary *)value
+    responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryStoreById:(NSDictionary *)value
+    responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryAllGeoStores:(NSDictionary *)value
+       responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)queryGeoStoreById:(NSDictionary *)value
+       responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)createFeature:(NSDictionary *)value
+   responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)updateFeature:(NSDictionary *)value
+   responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)deleteFeature:(NSDictionary *)value
+   responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)spatialConnectGPS:(id)value
+       responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)authenticate:(NSDictionary *)value
+  responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)logout:(id<RACSubscriber>)subscriber;
 - (void)authXAccessToken:(id<RACSubscriber>)subscriber;
 - (void)loginStatus:(id<RACSubscriber>)subscriber;
+- (void)getRequest:(NSDictionary *)value
+responseSubscriber:(id<RACSubscriber>)subscriber;
+- (void)postRequest:(NSDictionary *)value
+ responseSubscriber:(id<RACSubscriber>)subscribe;
+
 @end

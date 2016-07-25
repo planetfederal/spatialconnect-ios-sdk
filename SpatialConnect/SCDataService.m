@@ -205,7 +205,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 - (void)registerFormByConfig:(SCFormConfig *)f {
   [defaultStoreForms addObject:f];
-  [_defaultStore addLayer:f.name withDef:[f sqlTypes] andFormId:f.identifier];
+  [_defaultStore addLayer:f.key withDef:[f sqlTypes] andFormId:f.key];
 }
 
 - (void)unregisterStore:(SCDataStore *)store {

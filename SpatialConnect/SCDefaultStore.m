@@ -58,27 +58,29 @@
 - (void)pause {
 }
 
-- (void)addLayer:(NSString *)n
+- (void)addLayer:(NSString *)formKey
          withDef:(NSDictionary *)d
        andFormId:(NSInteger)formId {
-  [formIds setObject:@(formId) forKey:n];
-  [super addLayer:n withDef:d];
+  [formIds setObject:@(formId) forKey:formKey];
+  [super addLayer:formKey withDef:d];
 }
 
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [subscriber sendCompleted];
         return nil;
-    }];
+      }];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [subscriber sendCompleted];
         return nil;
-    }];
+      }];
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
@@ -92,15 +94,18 @@
         }
       }] flattenMap:^RACStream *(id value) {
     NSInteger formid = [[formIds objectForKey:feature.layerId] integerValue];
-        if (sc.configService.remoteUri) {
-          NSString *urlStr = [NSString
-                              stringWithFormat:@"%@/api/forms/%ld/submit?token=%@", sc.configService.remoteUri,(long)formid,sc.authService.xAccessToken];
-          NSURL *url = [NSURL URLWithString:urlStr];
-          feature.layerId = [NSString stringWithFormat:@"%@",feature.layerId];
-          return [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
-        } else {
-          return [RACSignal empty];
-        }
+    if (sc.configService.remoteUri) {
+      NSString *urlStr =
+          [NSString stringWithFormat:@"%@/api/forms/%ld/submit?token=%@",
+                                     sc.configService.remoteUri, (long)formid,
+                                     sc.authService.xAccessToken];
+      NSURL *url = [NSURL URLWithString:urlStr];
+      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
+      return
+          [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
+    } else {
+      return [RACSignal empty];
+    }
 
   }];
 }

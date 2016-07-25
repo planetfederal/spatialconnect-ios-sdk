@@ -7,12 +7,12 @@
 #import "SCPoint.h"
 #import <XCTest/XCTest.h>
 
-@interface SCGeopackageTest : XCTestCase {
+@interface SCGeopackageCRUDTest : XCTestCase {
   SCGeopackage *gpkg;
 }
 @end
 
-@implementation SCGeopackageTest
+@implementation SCGeopackageCRUDTest
 
 - (void)setUp {
   [super setUp];

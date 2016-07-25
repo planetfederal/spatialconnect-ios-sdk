@@ -50,11 +50,12 @@
 - (void)testFormToDict {
   [self.sc startAllServices];
   NSArray *arr = [self.sc.dataService defaultStoreForms];
-  [arr enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx, BOOL *stop) {
+  [arr enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx,
+                                    BOOL *stop) {
     NSDictionary *d = [c JSONDict];
-    XCTAssertNotNil(d[@"id"]);
-    XCTAssertNotNil(d[@"layer_name"]);
-    XCTAssertNotNil(d[@"display_name"]);
+    XCTAssertNotNil(d[@"key"]);
+    XCTAssertNotNil(d[@"label"]);
+    XCTAssertNotNil(d[@"version"]);
     XCTAssertNotNil(d[@"fields"]);
   }];
 }

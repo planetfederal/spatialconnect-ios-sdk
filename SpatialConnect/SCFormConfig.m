@@ -19,13 +19,14 @@
 
 @implementation SCFormConfig
 
-@synthesize identifier, fields, name;
+@synthesize key, label, version, fields;
 
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.name = dict[@"name"];
-    self.identifier = [dict[@"id"] integerValue];
+    self.key = dict[@"form_key"];
+    self.label = dict[@"form_label"];
+    self.version = [dict[@"version"] integerValue];
     self.fields = dict[@"fields"];
   }
   return self;
@@ -40,7 +41,7 @@
     return SCFORM_TYPE_BOOLEAN;
   } else if ([s containsString:@"integer"]) {
     return SCFORM_TYPE_INTEGER;
-  } else if ([s containsString:@"date"]){
+  } else if ([s containsString:@"date"]) {
     return SCFORM_TYPE_DATE;
   } else if ([s containsString:@"slider"]) {
     return SCFORM_TYPE_SLIDER;
@@ -118,22 +119,18 @@
   NSMutableDictionary *t = [NSMutableDictionary new];
   [self.fields enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
                                             BOOL *stop) {
-    NSString *key = [NSString stringWithString:d[@"key"]];
+    NSString *fieldKey = [NSString stringWithString:d[@"field_key"]];
     NSString *type = d[@"type"];
-    [t setValue:[self stringToSQLType:type] forKey:key];
+    [t setValue:[self stringToSQLType:type] forKey:fieldKey];
   }];
   return [NSDictionary dictionaryWithDictionary:t];
 }
 
-- (NSString*)name {
-  return [[name lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-}
-
-- (NSDictionary*)JSONDict {
+- (NSDictionary *)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
-  dict[@"layer_name"] = self.name;
-  dict[@"display_name"] = name;
-  dict[@"id"] = @(self.identifier);
+  dict[@"layer_name"] = self.key;
+  dict[@"display_name"] = self.label;
+  dict[@"version"] = @(self.version);
   dict[@"fields"] = self.fields;
   return [NSDictionary dictionaryWithDictionary:dict];
 }

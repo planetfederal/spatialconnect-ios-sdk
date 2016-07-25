@@ -111,7 +111,6 @@
           [expect fulfill];
         }
       }];
-
   [sc startAllServices];
   [self waitForExpectationsWithTimeout:15.0 handler:nil];
 }
@@ -156,7 +155,6 @@
           [expect fulfill];
         }
       }];
-
   [sc startAllServices];
   [self waitForExpectationsWithTimeout:15.0 handler:nil];
 }
