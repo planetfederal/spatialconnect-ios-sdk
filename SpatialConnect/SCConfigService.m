@@ -122,7 +122,9 @@
   }
   NSDictionary *regDict = @{
                             @"identifier" : ident,
-                            @"name" : @"test_device"
+                            @"device_info" : @{
+                                @"os" : @"ios"
+                                }
                             };
   [ns postDictRequestBLOCKING:regUrl body:regDict];
   NSURL *cfgUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/api/config?token=%@",self.remoteUri,as.xAccessToken]];
