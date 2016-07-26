@@ -249,6 +249,15 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   return [NSArray arrayWithArray:arr];
 }
 
+- (NSArray *)defaultStoreFormsDictionary {
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
+  [[self defaultStoreForms] enumerateKeysAndObjectsUsingBlock:^(
+                                                       id key, SCFormConfig *f, BOOL *stop) {
+    [arr addObject:[f JSONDict]];
+  }];
+  return [NSArray arrayWithArray:arr];
+}
+
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId {
   SCDataStore *ds = [self storeByIdentifier:storeId];
   NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
