@@ -59,6 +59,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 - (NSArray *)storeList;
 - (NSArray *)activeStoreList;
 - (NSArray *)activeStoreListDictionary;
+- (NSArray *)defaultStoreFormsDictionary;
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;
 - (NSArray *)storesByProtocol:(Protocol *)protocol;
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
