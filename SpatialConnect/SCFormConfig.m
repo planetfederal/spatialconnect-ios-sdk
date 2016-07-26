@@ -129,8 +129,8 @@
 
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
-  dict[@"layer_name"] = self.key;
-  dict[@"display_name"] = self.label;
+  dict[@"form_key"] = self.key;
+  dict[@"form_label"] = self.label;
   dict[@"version"] = @(self.version);
   dict[@"fields"] = self.fields;
   dict[@"id"] = @(self.identifier);
