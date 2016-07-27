@@ -1,4 +1,5 @@
 # SpatialConnect iOS Library
+Version 0.4
 
 # Overview
 
