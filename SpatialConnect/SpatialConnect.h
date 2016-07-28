@@ -17,19 +17,19 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCAuthService.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSON.h"
-#import "SCRCTBridge.h"
 #import "SCJavascriptCommands.h"
 #import "SCKVPService.h"
+#import "SCLineString.h"
 #import "SCNetworkService.h"
+#import "SCRCTBridge.h"
 #import "SCRasterService.h"
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
-#import "SCAuthService.h"
-#import "SCLineString.h"
 #import "SCService.h"
 #import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
@@ -41,7 +41,6 @@
 
 @interface SpatialConnect : NSObject {
   NSMutableArray *filepaths;
-  RACSubject *bus;
 }
 
 @property(readonly, strong) NSMutableDictionary *services;

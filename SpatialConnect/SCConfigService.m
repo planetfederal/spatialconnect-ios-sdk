@@ -79,8 +79,7 @@
                                             BOOL *_Nonnull stop) {
     NSError *error;
     NSMutableDictionary *cfg = [NSMutableDictionary
-        dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp
-                                                       error:&error]];
+        dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp error:&error]];
     if (error) {
       NSLog(@"%@", error.description);
     }
@@ -90,15 +89,14 @@
       self.remoteUri = uri;
       SpatialConnect *sc = [SpatialConnect sharedInstance];
       SCAuthService *as = sc.authService;
-      //You have the url to the server. Wait for someone to properly
-      //authenticate before fetching the config
+      // You have the url to the server. Wait for someone to properly
+      // authenticate before fetching the config
       [[as loginStatus] subscribeNext:^(NSNumber *n) {
         SCAuthStatus s = [n integerValue];
         if (s == SCAUTH_AUTHENTICATED) {
           [self registerAndFetchConfig];
         }
       }];
-
     }
     if (cfg.count > 0) {
       SCConfig *s = [[SCConfig alloc] initWithDictionary:cfg];
@@ -110,24 +108,23 @@
 - (void)registerAndFetchConfig {
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-  NSURL *regUrl =
-  [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/devices/register?token=%@",self.remoteUri,[as xAccessToken]]];
+  NSURL *regUrl = [NSURL
+      URLWithString:[NSString
+                        stringWithFormat:@"%@/api/devices/register?token=%@",
+                                         self.remoteUri, [as xAccessToken]]];
 
   NSString *ident =
-  [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
-  if (!ident) {
-    ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    [[NSUserDefaults standardUserDefaults] setObject:ident
-                                              forKey:@"UNIQUE_ID"];
-  }
+      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+
   NSDictionary *regDict = @{
-                            @"identifier" : ident,
-                            @"device_info" : @{
-                                @"os" : @"ios"
-                                }
-                            };
+    @"identifier" : ident,
+    @"device_info" : @{@"os" : @"ios"}
+  };
   [ns postDictRequestBLOCKING:regUrl body:regDict];
-  NSURL *cfgUrl = [NSURL URLWithString: [NSString stringWithFormat:@"%@/api/config?token=%@",self.remoteUri,as.xAccessToken]];
+  NSURL *cfgUrl =
+      [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/config?token=%@",
+                                                      self.remoteUri,
+                                                      as.xAccessToken]];
   NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
   [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
 }
@@ -136,7 +133,7 @@
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [c.forms enumerateObjectsUsingBlock:^(SCFormConfig *f, NSUInteger idx,
                                         BOOL *stop) {
-    [sc.dataService registerFormByConfig:f];
+    [sc.dataService.formStore registerFormByConfig:f];
   }];
   [c.dataServiceStores enumerateObjectsUsingBlock:^(
                            SCStoreConfig *c, NSUInteger idx, BOOL *stop) {

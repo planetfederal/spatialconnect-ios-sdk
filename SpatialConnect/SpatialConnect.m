@@ -24,7 +24,7 @@
 #import "SpatialConnect.h"
 
 @interface SpatialConnect ()
-
+- (void)createDeviceIdentifier;
 @end
 
 @implementation SpatialConnect
@@ -50,12 +50,21 @@
 - (id)init {
   if (self = [super init]) {
     filepaths = [NSMutableArray new];
-    bus = [RACSubject new];
     _kvpService = [SCKVPService new];
+    [self createDeviceIdentifier];
     [self createConfigService];
     [self initServices];
   }
   return self;
+}
+
+- (void)createDeviceIdentifier {
+  NSString *ident =
+      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+  if (!ident) {
+    ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:ident forKey:@"UNIQUE_ID"];
+  }
 }
 
 - (void)createConfigService {

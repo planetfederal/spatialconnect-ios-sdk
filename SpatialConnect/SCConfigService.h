@@ -14,7 +14,6 @@
  * limitations under the License
  */
 
-#import "SCMessage.h"
 #import "SCService.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
@@ -29,7 +28,7 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
   NSMutableArray *configPaths;
 }
 
-@property (nonatomic,strong) NSString *remoteUri;
+@property(nonatomic, strong) NSString *remoteUri;
 
 - (id)init;
 - (void)addConfigFilepath:(NSString *)p;
