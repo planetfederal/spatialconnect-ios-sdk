@@ -46,6 +46,8 @@
     return SCFORM_TYPE_DATE;
   } else if ([s containsString:@"slider"]) {
     return SCFORM_TYPE_SLIDER;
+  } else if ([s containsString:@"photo"]) {
+    return SCFORM_TYPE_PHOTO;
   } else if ([s containsString:@"counter"]) {
     return SCFORM_TYPE_COUNTER;
   } else if ([s containsString:@"select"]) {
@@ -68,6 +70,8 @@
     return @"date";
   } else if (t == SCFORM_TYPE_SLIDER) {
     return @"slider";
+  } else if (t == SCFORM_TYPE_PHOTO) {
+    return @"photo";
   } else if (t == SCFORM_TYPE_COUNTER) {
     return @"counter";
   } else if (t == SCFORM_TYPE_SELECT) {
@@ -89,6 +93,8 @@
     return @"DATETIME";
   } else if (t == SCFORM_TYPE_SLIDER) {
     return @"REAL";
+  } else if (t == SCFORM_TYPE_PHOTO) {
+    return @"TEXT";
   } else if (t == SCFORM_TYPE_COUNTER) {
     return @"INTEGER";
   } else if (t == SCFORM_TYPE_SELECT) {
@@ -108,6 +114,8 @@
     return @"DATETIME";
   } else if ([t isEqualToString:@"slider"]) {
     return @"REAL";
+  } else if ([t isEqualToString:@"photo"]) {
+    return @"TEXT";
   } else if ([t isEqualToString:@"counter"]) {
     return @"INTEGER";
   } else if ([t isEqualToString:@"select"]) {
