@@ -14,6 +14,7 @@
  * limitations under the License
  */
 #import "Commands.h"
+#import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
@@ -122,17 +123,16 @@
     @"identifier" : ident,
     @"device_info" : @{@"os" : @"ios"}
   };
-  //  [ns postDictRequestBLOCKING:regUrl body:regDict];
-  //  NSURL *cfgUrl =
-  //      [NSURL URLWithString:[NSString
-  //      stringWithFormat:@"%@/api/config?token=%@",
-  //                                                      self.remoteUri,
-  //                                                      as.xAccessToken]];
-  //  NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
-  SCMessage *msg = [[SCMessage alloc] init];
-  msg.action = CONFIG_SER
-
-      [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
+  SCMessage *regMsg = [[SCMessage alloc] init];
+  regMsg.action = CONFIG_REGISTER_DEVICE;
+  [ns publishExactlyOnce:regMsg onTopic:@"/config/register"];
+  SCMessage *cMsg = [SCMessage new];
+  cMsg.action = CONFIG_FULL;
+  [[ns publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
+    NSString *json = m.payload;
+    NSDictionary *dict = [json objectFromJSONString];
+    [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
+  }];
 }
 
 - (void)loadConfig:(SCConfig *)c {
