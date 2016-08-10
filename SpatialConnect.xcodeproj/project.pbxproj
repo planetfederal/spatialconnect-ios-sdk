@@ -1244,7 +1244,6 @@
 		5649B4951BE27C6A009947EF /* SpatialConnect */ = {
 			isa = PBXGroup;
 			children = (
-				5667E1711D58DA1B0044F195 /* Reducers */,
 				5667E16C1D58DA150044F195 /* Actions */,
 				56E257E01D4D145F00CA7ED8 /* Protobuf */,
 				563BEC5B1BE526F800778EDA /* Bridge */,
@@ -1379,13 +1378,6 @@
 				563E08711D5BB8D6003389F7 /* Commands.h */,
 			);
 			name = Actions;
-			sourceTree = "<group>";
-		};
-		5667E1711D58DA1B0044F195 /* Reducers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Reducers;
 			sourceTree = "<group>";
 		};
 		566F6E441CE3B5720043FF0C /* Form */ = {

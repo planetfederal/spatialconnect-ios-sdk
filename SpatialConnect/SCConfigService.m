@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+#import "Commands.h"
 #import "SCConfig.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
 #import "SCStoreConfig.h"
+#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 @interface SCConfigService ()
@@ -120,13 +122,17 @@
     @"identifier" : ident,
     @"device_info" : @{@"os" : @"ios"}
   };
-  [ns postDictRequestBLOCKING:regUrl body:regDict];
-  NSURL *cfgUrl =
-      [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/config?token=%@",
-                                                      self.remoteUri,
-                                                      as.xAccessToken]];
-  NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
-  [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
+  //  [ns postDictRequestBLOCKING:regUrl body:regDict];
+  //  NSURL *cfgUrl =
+  //      [NSURL URLWithString:[NSString
+  //      stringWithFormat:@"%@/api/config?token=%@",
+  //                                                      self.remoteUri,
+  //                                                      as.xAccessToken]];
+  //  NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
+  SCMessage *msg = [[SCMessage alloc] init];
+  msg.action = CONFIG_SER
+
+      [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
 }
 
 - (void)loadConfig:(SCConfig *)c {
