@@ -61,10 +61,9 @@
 		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
-		563E08571D592129003389F7 /* Geobuf.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E08551D592129003389F7 /* Geobuf.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		563E08581D592129003389F7 /* Geobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 563E08561D592129003389F7 /* Geobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		563E085F1D592368003389F7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E085D1D592368003389F7 /* Scmessage.pbobjc.h */; };
-		563E08601D592368003389F7 /* Scmessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 563E085E1D592368003389F7 /* Scmessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		563E086F1D5BB5CD003389F7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E086D1D5BB5CD003389F7 /* Scmessage.pbobjc.h */; };
+		563E08701D5BB5CD003389F7 /* Scmessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 563E086E1D5BB5CD003389F7 /* Scmessage.pbobjc.m */; };
+		563E08721D5BB8D6003389F7 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E08711D5BB8D6003389F7 /* Commands.h */; };
 		5641B1911CB43D3700334907 /* SCKVPService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B18F1CB43D3700334907 /* SCKVPService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5641B1921CB43D3700334907 /* SCKVPService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5641B1901CB43D3700334907 /* SCKVPService.m */; };
 		5641B1951CB5DFC700334907 /* SCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B1931CB5DFC700334907 /* SCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -417,10 +416,9 @@
 		563090661D0646D0001FE1B5 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
-		563E08551D592129003389F7 /* Geobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Geobuf.pbobjc.h; path = ProtocolBuffers/Geobuf.pbobjc.h; sourceTree = SOURCE_ROOT; };
-		563E08561D592129003389F7 /* Geobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Geobuf.pbobjc.m; path = ProtocolBuffers/Geobuf.pbobjc.m; sourceTree = SOURCE_ROOT; };
-		563E085D1D592368003389F7 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = ProtocolBuffers/Scmessage.pbobjc.h; sourceTree = SOURCE_ROOT; };
-		563E085E1D592368003389F7 /* Scmessage.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Scmessage.pbobjc.m; path = ProtocolBuffers/Scmessage.pbobjc.m; sourceTree = SOURCE_ROOT; };
+		563E086D1D5BB5CD003389F7 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = schema/Scmessage.pbobjc.h; sourceTree = SOURCE_ROOT; };
+		563E086E1D5BB5CD003389F7 /* Scmessage.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Scmessage.pbobjc.m; path = schema/Scmessage.pbobjc.m; sourceTree = SOURCE_ROOT; };
+		563E08711D5BB8D6003389F7 /* Commands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Commands.h; path = schema/Commands.h; sourceTree = SOURCE_ROOT; };
 		5641B18F1CB43D3700334907 /* SCKVPService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKVPService.h; sourceTree = "<group>"; };
 		5641B1901CB43D3700334907 /* SCKVPService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKVPService.m; sourceTree = "<group>"; };
 		5641B1931CB5DFC700334907 /* SCConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCConfig.h; sourceTree = "<group>"; };
@@ -1378,6 +1376,7 @@
 		5667E16C1D58DA150044F195 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				563E08711D5BB8D6003389F7 /* Commands.h */,
 			);
 			name = Actions;
 			sourceTree = "<group>";
@@ -1516,10 +1515,8 @@
 		56E257E01D4D145F00CA7ED8 /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				563E085D1D592368003389F7 /* Scmessage.pbobjc.h */,
-				563E085E1D592368003389F7 /* Scmessage.pbobjc.m */,
-				563E08551D592129003389F7 /* Geobuf.pbobjc.h */,
-				563E08561D592129003389F7 /* Geobuf.pbobjc.m */,
+				563E086D1D5BB5CD003389F7 /* Scmessage.pbobjc.h */,
+				563E086E1D5BB5CD003389F7 /* Scmessage.pbobjc.m */,
 			);
 			name = Protobuf;
 			sourceTree = "<group>";
@@ -1570,7 +1567,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				563E08571D592129003389F7 /* Geobuf.pbobjc.h in Headers */,
 				56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */,
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
 				5616860E1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.h in Headers */,
@@ -1614,6 +1610,7 @@
 				5649B6141BE280D6009947EF /* SCStyle.h in Headers */,
 				5649B61A1BE280D6009947EF /* SCTileOverlayRenderer.h in Headers */,
 				5649B5DB1BE280D6009947EF /* SCMultiLineString.h in Headers */,
+				563E086F1D5BB5CD003389F7 /* Scmessage.pbobjc.h in Headers */,
 				5649B5ED1BE280D6009947EF /* SCNetworkService.h in Headers */,
 				5645C4EE1BED8E56006E4128 /* SCLineString+GPKG.h in Headers */,
 				5645C4F61BED9570006E4128 /* SCMultiPolygon+GPKG.h in Headers */,
@@ -1643,9 +1640,9 @@
 				5649B5B61BE280D6009947EF /* SCGeoJSON.h in Headers */,
 				5649B6111BE280D6009947EF /* SCSpatialStore.h in Headers */,
 				561685F01C73DFE000FC7FA6 /* SCGpkgExtensionsTable.h in Headers */,
-				563E085F1D592368003389F7 /* Scmessage.pbobjc.h in Headers */,
 				5649B5B91BE280D6009947EF /* SCGeometry.h in Headers */,
 				56F437631CA0955200EA1344 /* FMDatabasePool.h in Headers */,
+				563E08721D5BB8D6003389F7 /* Commands.h in Headers */,
 				5667E1731D58EF490044F195 /* SpatialConnectFramework.h in Headers */,
 				5649B5E71BE280D6009947EF /* SCMultiPolygon.h in Headers */,
 				5649B59B1BE280D6009947EF /* SCFilterGreaterThan.h in Headers */,
@@ -1905,6 +1902,7 @@
 				5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */,
 				5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */,
 				5649B5911BE280D6009947EF /* SCDataStore.m in Sources */,
+				563E08701D5BB5CD003389F7 /* Scmessage.pbobjc.m in Sources */,
 				56DBFA071D2F0CC600FFE4FF /* SCAuthService.m in Sources */,
 				5649B5E61BE280D6009947EF /* SCMultiPoint+MapKit.m in Sources */,
 				56E2F41B1CEE9CB8001CCD86 /* SCFormFeature.m in Sources */,
@@ -1913,7 +1911,6 @@
 				56554E6A1D54EA03000D77E7 /* SCLocationStore.m in Sources */,
 				5624289A1CAC60740087756C /* SCConfigService.m in Sources */,
 				561686061C75024200FC7FA6 /* SCGpkgDataColumnsTable.m in Sources */,
-				563E08581D592129003389F7 /* Geobuf.pbobjc.m in Sources */,
 				5649B5CD1BE280D6009947EF /* SCLinearRing+GeoJSON.m in Sources */,
 				5649B5941BE280D6009947EF /* SCFileUtils.m in Sources */,
 				5649B5B31BE280D6009947EF /* SCGeoFilterContains.m in Sources */,
@@ -1984,7 +1981,6 @@
 				5649B5F41BE280D6009947EF /* SCPoint+GeoJSON.m in Sources */,
 				5649B5E41BE280D6009947EF /* SCMultiPoint+GeoJSON.m in Sources */,
 				56CC07A61C6EE85700407D4A /* SCGpkgContent.m in Sources */,
-				563E08601D592368003389F7 /* Scmessage.pbobjc.m in Sources */,
 				5649B5D31BE280D6009947EF /* SCLineString+GeoJSON.m in Sources */,
 				5649B57D1BE280D6009947EF /* GeoJSONAdapter.m in Sources */,
 				56DBFA0D1D2F269C00FFE4FF /* KeychainItemWrapper.m in Sources */,
