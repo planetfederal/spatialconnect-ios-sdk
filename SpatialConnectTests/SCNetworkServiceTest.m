@@ -46,10 +46,9 @@
 - (void)testGetRequest {
   XCTestExpectation *expect = [self expectationWithDescription:@"Ping Server"];
   [self.sc startAllServices];
-  NSString *url = [NSString stringWithFormat:@"%@/ping",self.sc.configService.remoteUri];
-  [[self.net
-      getRequestURLAsData:[NSURL
-                              URLWithString:url]]
+  NSString *url =
+      [NSString stringWithFormat:@"%@/ping", self.sc.configService.remoteUri];
+  [[self.net getRequestURLAsData:[NSURL URLWithString:url]]
       subscribeNext:^(NSData *d) {
         XCTAssertNotNil(d);
         [expect fulfill];
@@ -59,14 +58,14 @@
 
 - (void)testRemoteConfig {
   [self.sc startAllServices];
-  NSArray *arr = [self.sc.dataService defaultStoreLayers];
+  NSArray *arr = [self.sc.dataService.defaultStore layerList];
   XCTAssertNotNil(arr);
 }
 
 - (void)testFormSubmission {
   XCTestExpectation *expect = [self expectationWithDescription:@"FormSubmit"];
   [self.sc startAllServices];
-  NSArray *arr = [self.sc.dataService defaultStoreLayers];
+  NSArray *arr = [self.sc.dataService.defaultStore layerList];
   XCTAssertNotNil(arr);
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(-22.3), @(56.2) ]];
   SCFormFeature *f = [[SCFormFeature alloc] init];
@@ -77,7 +76,7 @@
   [f.properties setObject:@"Baltimore Orioles" forKey:@"team"];
   [f.properties setObject:@"Why Not?" forKey:@"why"];
   [[ds create:f] subscribeError:^(NSError *error) {
-    NSLog(@"%@",error.description);
+    NSLog(@"%@", error.description);
     [expect fulfill];
   }
       completed:^{

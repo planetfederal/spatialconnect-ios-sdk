@@ -20,6 +20,8 @@
 #import "SCDataStore.h"
 #import "SCDefaultStore.h"
 #import "SCFormConfig.h"
+#import "SCFormStore.h"
+#import "SCLocationStore.h"
 #import "SCQueryFilter.h"
 #import "SCService.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -39,10 +41,10 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
   RACSignal *addStore;
   RACSignal *updateStore;
   RACSignal *removeStore;
-  NSMutableDictionary *defaultStoreForms;
+  SCFormStore *formStore;
+  SCLocationStore *locationStore;
+  SCDefaultStore *defaultStore;
 }
-
-@property(readonly, nonatomic) SCDefaultStore *defaultStore;
 
 @property(readonly, nonatomic) SCServiceStatus status;
 @property(nonatomic) RACMulticastConnection *storeEvents;
@@ -50,16 +52,16 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 - (void)registerStore:(SCDataStore *)store;
 - (void)unregisterStore:(SCDataStore *)store;
 - (void)registerStoreByConfig:(SCStoreConfig *)c;
-- (void)registerFormByConfig:(SCFormConfig *)f;
-- (NSArray *)defaultStoreLayers;
-- (NSDictionary *)defaultStoreForms;
+
+- (SCDefaultStore *)defaultStore;
+- (SCFormStore *)formStore;
+- (SCLocationStore *)locationStore;
 
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;
 - (NSArray *)storeList;
 - (NSArray *)activeStoreList;
 - (NSArray *)activeStoreListDictionary;
-- (NSArray *)defaultStoreFormsDictionary;
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;
 - (NSArray *)storesByProtocol:(Protocol *)protocol;
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
@@ -74,4 +76,5 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter;
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter;
+
 @end

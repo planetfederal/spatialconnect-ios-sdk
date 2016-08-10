@@ -24,6 +24,7 @@
 #import "SCTestString.h"
 #import "SpatialConnect.h"
 #import "SpatialConnectHelper.h"
+#import <SpatialConnect/SpatialConnect.h>
 #import <XCTest/XCTest.h>
 
 @interface SCGeopackageTests : XCTestCase

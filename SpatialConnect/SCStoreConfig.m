@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 #import "SCDataService.h"
-#import "SCMessage.h"
 #import "SCStoreConfig.h"
 
 @implementation SCStoreConfig

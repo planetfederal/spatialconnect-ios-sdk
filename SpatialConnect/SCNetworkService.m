@@ -19,8 +19,12 @@
 
 #import "JSONKit.h"
 #import "SCKeyTuple.h"
-#import "SCMessage.h"
 #import "SCNetworkService.h"
+#import "SpatialConnect.h"
+
+@interface SCNetworkService ()
+- (void)setupMQTT;
+@end
 
 @implementation SCNetworkService
 
@@ -41,7 +45,7 @@
   return dict;
 }
 
-- (NSData*)getRequestURLAsDataBLOCKING:(NSURL *)url {
+- (NSData *)getRequestURLAsDataBLOCKING:(NSURL *)url {
   NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
   NSURLResponse *response = nil;
   NSError *error = nil;
@@ -50,7 +54,6 @@
                                                    error:&error];
   return data;
 }
-
 
 - (RACSignal *)getRequestURLAsData:(NSURL *)url {
   NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
@@ -100,8 +103,7 @@
       }];
 }
 
-- (NSData *)postDictRequestBLOCKING:(NSURL *)url
-                                           body:(NSDictionary *)dict {
+- (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict {
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   request.HTTPMethod = @"POST";
   [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -114,12 +116,104 @@
   return data;
 }
 
-- (NSDictionary*)postDictRequestAsDictBLOCKING:(NSURL *)url body:(NSDictionary *)dict {
+- (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
+                                           body:(NSDictionary *)dict {
   NSData *data = [self postDictRequestBLOCKING:url body:dict];
   return [[JSONDecoder decoder] objectWithData:data];
 }
 
 - (void)start {
+  [self setupMQTT];
+}
+
+- (void)setupMQTT {
+  MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
+  transport.host = @"localhost";
+  transport.port = 1883;
+
+  NSString *ident =
+      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+
+  session = [[MQTTSession alloc] init];
+  session.transport = transport;
+  session.clientId = ident;
+  RACSignal *d = [self
+      rac_signalForSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)
+               fromProtocol:@protocol(MQTTSessionDelegate)];
+
+  multicast = [[[d publish] autoconnect] map:^SCMessage *(RACTuple *t) {
+    NSData *d = (NSData *)[t second];
+    NSError *err;
+    SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
+    return msg;
+  }];
+
+  session.delegate = self;
+  [session connectAndWaitTimeout:30];
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [session
+      subscribeTopic:[NSString stringWithFormat:@"/device/%@-replyTo",
+                                                sc.configService.identifier]];
+}
+
+- (void)publish:(SCMessage *)msg onTopic:(NSString *)topic {
+  if (session) {
+    [session publishData:[msg data]
+                 onTopic:topic
+                  retain:NO
+                     qos:MQTTQosLevelExactlyOnce];
+  }
+}
+
+- (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+  if (session) {
+    [session publishData:msg.data
+                 onTopic:topic
+                  retain:NO
+                     qos:MQTTQosLevelAtMostOnce];
+  }
+}
+
+- (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+  if (session) {
+    [session publishData:msg.data
+                 onTopic:topic
+                  retain:NO
+                     qos:MQTTQosLevelAtLeastOnce];
+  }
+}
+
+- (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+  if (session) {
+    [session publishData:msg.data
+                 onTopic:topic
+                  retain:NO
+                     qos:MQTTQosLevelExactlyOnce];
+  }
+}
+
+- (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
+  msg.correlationId = ti;
+  msg.replyTo = [NSString
+      stringWithFormat:@"/device/%@-replyTo", sc.configService.identifier];
+  [session subscribeTopic:msg.replyTo];
+  if (session) {
+    [session publishData:[msg data] onTopic:topic];
+    return [multicast filter:^BOOL(SCMessage *m) {
+      if (m.correlationId == msg.correlationId) {
+        return YES;
+      }
+      return NO;
+    }];
+  }
+  return nil;
+}
+
+- (RACSignal *)listenOnTopic:(NSString *)topic {
+  [session subscribeTopic:topic];
+  return multicast;
 }
 
 @end

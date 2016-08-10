@@ -103,8 +103,8 @@
 }
 
 - (void)formList:(id<RACSubscriber>)subscriber {
-  NSArray *arr =
-      [[[SpatialConnect sharedInstance] dataService] defaultStoreFormsDictionary];
+  NSArray *arr = [[[[SpatialConnect sharedInstance] dataService] formStore]
+      formsDictionary];
   [subscriber sendNext:@{ @"forms" : arr }];
   [subscriber sendCompleted];
 }

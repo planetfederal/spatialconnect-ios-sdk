@@ -28,6 +28,9 @@
 #import "SpatialConnect.h"
 #import "WFSDataStore.h"
 
+NSString *const kDEFAULTSTORE = @"DEFAULT_STORE";
+NSString *const kFORMSTORE = @"FORM_STORE";
+NSString *const kLOCATIONSTORE = @"LOCATION_STORE";
 NSString *const kSERVICENAME = @"DATASERVICE";
 
 @interface SCDataService ()
@@ -41,14 +44,12 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     NSMutableDictionary *supportedStoreImpls;
 @property(readwrite, atomic, strong) NSMutableDictionary *stores;
 @property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
-@property(readwrite, nonatomic, strong) SCDefaultStore *defaultStore;
 @end
 
 @implementation SCDataService
 
 @synthesize storeEvents = _storeEvents;
 @synthesize status;
-@synthesize defaultStore = _defaultStore;
 
 - (id)init {
   if (self = [super init]) {
@@ -60,6 +61,8 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
     [self setupDefaultStore];
+    [self setupFormsStore];
+    [self setupLocationStore];
   }
   return self;
 }
@@ -70,17 +73,40 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     @"uri" : @"spacon_default_store.db",
     @"name" : @"DEFAULT_STORE"
   }];
-  _defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
-  defaultStoreForms = [NSMutableDictionary new];
-  [_stores setObject:_defaultStore forKey:config.uniqueid];
+  defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
+  [_stores setObject:defaultStore forKey:config.uniqueid];
 }
 
-- (NSArray *)defaultStoreLayers {
-  return [self.defaultStore layerList];
+- (void)setupFormsStore {
+  SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:@{
+    @"id" : kFORMSTORE,
+    @"uri" : @"spacon_form_store.db",
+    @"name" : kFORMSTORE
+  }];
+  formStore = [[SCFormStore alloc] initWithStoreConfig:config];
+  [_stores setObject:formStore forKey:config.uniqueid];
 }
 
-- (NSDictionary *)defaultStoreForms {
-  return [NSDictionary dictionaryWithDictionary:defaultStoreForms];
+- (void)setupLocationStore {
+  SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:@{
+    @"id" : kLOCATIONSTORE,
+    @"uri" : @"spacon_location_store.db",
+    @"name" : kLOCATIONSTORE
+  }];
+  locationStore = [[SCLocationStore alloc] initWithStoreConfig:config];
+  [_stores setObject:locationStore forKey:config.uniqueid];
+}
+
+- (SCDefaultStore *)defaultStore {
+  return [_stores objectForKey:kDEFAULTSTORE];
+}
+
+- (SCFormStore *)formStore {
+  return [_stores objectForKey:kFORMSTORE];
+}
+
+- (SCLocationStore *)locationStore {
+  return [_stores objectForKey:kLOCATIONSTORE];
 }
 
 - (void)addDefaultStoreImpls {
@@ -190,7 +216,11 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 - (void)registerStore:(SCDataStore *)store {
   if (!store.storeId) {
     NSCAssert(store.storeId, @"Store Id not set");
+  } else if ([self.stores objectForKey:store.storeId]) {
+    NSLog(@"STORE %@ ALREADY EXISTS", store.storeId);
+    @throw @"STORE ALREADY EXISTS";
   } else {
+
     [self.stores setObject:store forKey:store.storeId];
     if (self.status == SC_DATASTORE_RUNNING) {
       [(id<SCDataStoreLifeCycle>)store start];
@@ -201,11 +231,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 - (void)registerStoreByConfig:(SCStoreConfig *)c {
   NSCAssert(c.uniqueid, @"Store Id not set");
   [self addAndStartStore:c];
-}
-
-- (void)registerFormByConfig:(SCFormConfig *)f {
-  [defaultStoreForms setObject:f forKey:f.key];
-  [_defaultStore addLayer:f.key withDef:[f sqlTypes] andFormId:f.identifier];
 }
 
 - (void)unregisterStore:(SCDataStore *)store {
@@ -245,15 +270,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     [store setObject:kSERVICENAME forKey:@"service"];
     [store setObject:ds.storeType forKey:@"type"];
     [arr addObject:store];
-  }];
-  return [NSArray arrayWithArray:arr];
-}
-
-- (NSArray *)defaultStoreFormsDictionary {
-  NSMutableArray *arr = [[NSMutableArray alloc] init];
-  [[self defaultStoreForms] enumerateKeysAndObjectsUsingBlock:^(
-                                                       id key, SCFormConfig *f, BOOL *stop) {
-    [arr addObject:[f JSONDict]];
   }];
   return [NSArray arrayWithArray:arr];
 }

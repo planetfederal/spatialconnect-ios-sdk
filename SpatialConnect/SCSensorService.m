@@ -17,20 +17,22 @@
 * under the License.
 ******************************************************************************/
 
-
-#import "SpatialConnect.h"
+#import "JSONKit.h"
+#import "SCPoint.h"
 #import "SCSensorService.h"
+#import "Scmessage.pbobjc.h"
+#import "SpatialConnect.h"
 
 @interface SCSensorService ()
 
-@property (nonatomic) CLLocationDistance distance;
-@property (nonatomic) CLLocationAccuracy accuracy;
-@property (nonatomic) BOOL isTracking;
-@property (nonatomic) RACSignal *lastKnown;
+@property(nonatomic) CLLocationDistance distance;
+@property(nonatomic) CLLocationAccuracy accuracy;
+@property(nonatomic) BOOL isTracking;
+@property(nonatomic) RACSignal *lastKnown;
 
--(void)startLocationManager;
--(void)stopLocationManager;
--(BOOL)shoudlEnableGPS;
+- (void)startLocationManager;
+- (void)stopLocationManager;
+- (BOOL)shoudlEnableGPS;
 
 @end
 
@@ -38,67 +40,80 @@
 
 #define GPS_ENABLED @"service.sensor.gps.enabled"
 
-@synthesize distance,accuracy;
+@synthesize distance, accuracy;
 @synthesize lastKnown = _lastKnown;
 
--(instancetype)init {
-    self = [super init];
-    if (!self) return nil;
-    self.distance = kCLDistanceFilterNone;
-    self.accuracy = kCLLocationAccuracyBest;
-    self.isTracking = NO;
-    return self;
+- (instancetype)init {
+  self = [super init];
+  if (!self)
+    return nil;
+  self.distance = kCLDistanceFilterNone;
+  self.accuracy = kCLLocationAccuracyBest;
+  self.isTracking = NO;
+  return self;
 }
 
--(void)start {
-    [super start];
-    if (!locationManager) {
-        locationManager = [CLLocationManager new];
-        locationManager.delegate = self;
+- (void)start {
+  [super start];
+  if (!locationManager) {
+    locationManager = [CLLocationManager new];
+    locationManager.delegate = self;
+  }
+
+  if ([CLLocationManager locationServicesEnabled]) {
+    if ([CLLocationManager authorizationStatus] ==
+        kCLAuthorizationStatusNotDetermined) {
+      [locationManager requestAlwaysAuthorization];
     }
-    
-    if ([CLLocationManager locationServicesEnabled]) {
-        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
-            [locationManager requestAlwaysAuthorization];
-        }
-        
-        if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied
-            && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusRestricted) {
-            [self startLocationManager];
-        }
-    } else {
-        NSLog(@"Please Enable Location Services");
+
+    if ([CLLocationManager authorizationStatus] !=
+            kCLAuthorizationStatusDenied &&
+        [CLLocationManager authorizationStatus] !=
+            kCLAuthorizationStatusRestricted) {
+      [self startLocationManager];
     }
-    
-    [self setupSignals];
+  } else {
+    NSLog(@"Please Enable Location Services");
+  }
+
+  [self setupSignals];
 }
 
--(void)setupSignals {
-    self.lastKnown = [[self rac_signalForSelector:@selector(locationManager:didUpdateLocations:) fromProtocol:@protocol(CLLocationManagerDelegate)] map:^id(RACTuple *tuple) {
-            return [(NSArray*)tuple.second lastObject];
-    }];
+- (void)setupSignals {
+  self.lastKnown = [
+      [self rac_signalForSelector:@selector(locationManager:didUpdateLocations:)
+                     fromProtocol:@protocol(CLLocationManagerDelegate)]
+      map:^SCPoint *(RACTuple *tuple) {
+        CLLocation *loc = [(NSArray *)tuple.second lastObject];
+        CLLocationDistance alt = loc.altitude;
+        float lat = loc.coordinate.latitude;
+        float lon = loc.coordinate.longitude;
+        SCPoint *p = [[SCPoint alloc]
+            initWithCoordinateArray:@[ @(lon), @(lat), @(alt) ]];
+        return p;
+      }];
 }
 
--(void)stop {
-    [super stop];
-    if (locationManager) {
-        [self stopLocationManager];
-        locationManager = nil;
-        locationManager.delegate = nil;
-    }
-}
-
--(void)resume {
-    [super resume];
-    [self shoudlEnableGPS];
-}
-
--(void)pause {
-    [super pause];
+- (void)stop {
+  [super stop];
+  if (locationManager) {
     [self stopLocationManager];
+    locationManager = nil;
+    locationManager.delegate = nil;
+  }
 }
 
--(void)enableGPS {
+- (void)resume {
+  [super resume];
+  [self shoudlEnableGPS];
+}
+
+- (void)pause {
+  [super pause];
+  [self stopLocationManager];
+}
+
+- (void)enableGPS {
   if (self.status != SC_SERVICE_RUNNING) {
     [self start];
   }
@@ -106,46 +121,53 @@
   SCKVPStore *kvp = sc.kvpService.kvpStore;
   [kvp putValue:@(YES) forKey:GPS_ENABLED];
   [self startLocationManager];
+
+  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
+    return [sc.dataService.locationStore create:p];
+  }] subscribeNext:^(id x) {
+    NSLog(@"Location sent to Location Store");
+  }];
 }
 
--(void)disableGPS {
+- (void)disableGPS {
   [self stopLocationManager];
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCKVPStore *kvp = sc.kvpService.kvpStore;
   [kvp putValue:@(NO) forKey:GPS_ENABLED];
 }
 
--(BOOL)shoudlEnableGPS {
+- (BOOL)shoudlEnableGPS {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCKVPStore *kvp = sc.kvpService.kvpStore;
-  NSNumber *enabled = (NSNumber*)[kvp valueForKey:GPS_ENABLED];
-  if ([(NSNumber*)enabled isEqual:@(YES)]) {
+  NSNumber *enabled = (NSNumber *)[kvp valueForKey:GPS_ENABLED];
+  if ([(NSNumber *)enabled isEqual:@(YES)]) {
     return YES;
   } else {
     return NO;
   }
 }
 
--(void)startLocationManager {
-    locationManager.desiredAccuracy = self.accuracy;
-    locationManager.distanceFilter = self.distance;
-    if ([CLLocationManager locationServicesEnabled]) {
-        [locationManager startUpdatingLocation];
-        [locationManager startUpdatingHeading];
-        self.isTracking = YES;
-    }
+- (void)startLocationManager {
+  locationManager.desiredAccuracy = self.accuracy;
+  locationManager.distanceFilter = self.distance;
+  if ([CLLocationManager locationServicesEnabled]) {
+    [locationManager startUpdatingLocation];
+    [locationManager startUpdatingHeading];
+    self.isTracking = YES;
+  }
 }
 
--(void)stopLocationManager {
-    [locationManager stopUpdatingHeading];
-    [locationManager stopUpdatingLocation];
-    self.isTracking = NO;
+- (void)stopLocationManager {
+  [locationManager stopUpdatingHeading];
+  [locationManager stopUpdatingLocation];
+  self.isTracking = NO;
 }
 
--(void)locationAccuracy:(CLLocationAccuracy)acc withDistance:(CLLocationDistance)dist {
-    self.accuracy = accuracy;
-    self.distance = distance;
-    [self startLocationManager];
+- (void)locationAccuracy:(CLLocationAccuracy)acc
+            withDistance:(CLLocationDistance)dist {
+  self.accuracy = accuracy;
+  self.distance = distance;
+  [self startLocationManager];
 }
 
 @end
