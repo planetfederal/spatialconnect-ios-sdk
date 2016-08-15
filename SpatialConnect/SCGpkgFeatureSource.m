@@ -70,6 +70,20 @@
   }];
 }
 
+- (Boolean)isGeomCol:(NSString *)t {
+  NSArray *types = [NSArray arrayWithObjects:
+                    @"GEOMETRY",
+                    @"POINT",
+                    @"LINESTRING",
+                    @"POLYGON",
+                    @"MULTIPOINT",
+                    @"MULTILINESTRING",
+                    @"MULTIPOLYGON",
+                    @"GEOMETRYCOLLECTION", nil];
+
+  return [types containsObject: [t uppercaseString]];
+}
+
 - (void)defineTable {
 
   [self.pool inDatabase:^(FMDatabase *db) {
@@ -81,7 +95,7 @@
         self.pkColName = [rs stringForColumn:@"name"];
       }
       NSString *t = [rs stringForColumn:@"type"];
-      if ([t containsString:@"Geometry"]) {
+      if ([self isGeomCol:t]) {
         self.geomColName = [rs stringForColumn:@"name"];
         [cols setObject:@(GEOMETRY) forKey:colName];
       } else if ([t containsString:@"INTEGER"]) {
