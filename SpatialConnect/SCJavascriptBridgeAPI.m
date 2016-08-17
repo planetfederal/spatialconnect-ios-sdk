@@ -23,10 +23,22 @@
 #import "SCJavascriptBridge.h"
 #import "SCJavascriptBridgeAPI.h"
 #import "SCJavascriptCommands.h"
+#import "SCNotification.h"
 #import "SCSpatialStore.h"
 #import "SpatialConnect.h"
 
 @implementation SCJavascriptBridgeAPI
+
+- (id)init {
+  self = [super init];
+  if (self) {
+    [self setupBridge];
+  }
+  return self;
+}
+
+- (void)setupBridge {
+}
 
 - (RACSignal *)parseJSAction:(id)action {
   return [RACSignal createSignal:^RACDisposable *(
@@ -81,6 +93,9 @@
       break;
     case AUTHSERVICE_LOGIN_STATUS:
       [self loginStatus:subscriber];
+      break;
+    case NOTIFICATIONS:
+      [self listenForNotifications:subscriber];
       break;
     case NETWORKSERVICE_GET_REQUEST:
       [self getRequest:action[@"payload"] responseSubscriber:subscriber];
@@ -307,6 +322,13 @@
   SCAuthService *as = [[SpatialConnect sharedInstance] authService];
   [[as loginStatus] subscribeNext:^(NSNumber *status) {
     [subscriber sendNext:status];
+  }];
+}
+
+- (void)listenForNotifications:(id<RACSubscriber>)subscriber {
+  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+  [[bs notifications] subscribeNext:^(SCNotification *n) {
+    [subscriber sendNext:[n dictionary]];
   }];
 }
 

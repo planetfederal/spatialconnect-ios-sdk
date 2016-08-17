@@ -17,13 +17,14 @@
  * under the License.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCJavascriptBridgeAPI.h"
+#import <Foundation/Foundation.h>
 
 @interface SCRCTBridge : NSObject
 
 @property(nonatomic) SCJavascriptBridgeAPI *bridge;
 
-- (void) handler:(NSDictionary *)data responseCallback:(void(^)(NSDictionary * data))callback;
+- (void)handler:(NSDictionary *)data
+    responseCallback:(void (^)(NSDictionary *data))callback;
 
 @end
