@@ -14,7 +14,6 @@
  * limitations under the License
  */
 
-#import "Geobuf.pbobjc.h"
 #import "JSONKit.h"
 #import "SCLocationStore.h"
 #import "SCPoint+GeoJSON.h"
@@ -96,7 +95,7 @@
     }] flattenMap:^RACStream *(id value) {
       SCMessage *msg = [[SCMessage alloc] init];
       msg.action = 100;
-      msg.payload = [[pt JSONDict] JSONData];
+      msg.payload = [[pt JSONDict] JSONString];
       [sc.networkService publish:msg onTopic:@"/store/tracking"];
       return [RACSignal empty];
     }];

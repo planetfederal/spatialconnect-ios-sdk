@@ -17,6 +17,7 @@
  * under the License.
  ******************************************************************************/
 
+#import "Commands.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCJavascriptBridge.h"

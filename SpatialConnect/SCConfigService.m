@@ -110,11 +110,6 @@
 
 - (void)registerAndFetchConfig {
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-  NSURL *regUrl = [NSURL
-      URLWithString:[NSString
-                        stringWithFormat:@"%@/api/devices/register?token=%@",
-                                         self.remoteUri, [as xAccessToken]]];
 
   NSString *ident =
       [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
@@ -125,6 +120,7 @@
   };
   SCMessage *regMsg = [[SCMessage alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
+  regMsg.payload = [regDict JSONString];
   [ns publishExactlyOnce:regMsg onTopic:@"/config/register"];
   SCMessage *cMsg = [SCMessage new];
   cMsg.action = CONFIG_FULL;
@@ -142,8 +138,8 @@
     [sc.dataService.formStore registerFormByConfig:f];
   }];
   [c.dataServiceStores enumerateObjectsUsingBlock:^(
-                           SCStoreConfig *c, NSUInteger idx, BOOL *stop) {
-    [sc.dataService registerStoreByConfig:c];
+                           SCStoreConfig *scfg, NSUInteger idx, BOOL *stop) {
+    [sc.dataService registerStoreByConfig:scfg];
   }];
 }
 
