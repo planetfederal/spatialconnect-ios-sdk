@@ -84,7 +84,6 @@
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
   return [[[self.adapter createFeature:feature] materialize]
       filter:^BOOL(RACEvent *evt) {
         if (evt.eventType == RACEventTypeCompleted) {

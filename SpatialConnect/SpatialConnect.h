@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "SCAuthService.h"
+#import "SCBackendService.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
@@ -51,6 +52,7 @@
 @property(readonly, strong) SCConfigService *configService;
 @property(readonly, strong) SCKVPService *kvpService;
 @property(readonly, strong) SCAuthService *authService;
+@property(readonly, strong) SCBackendService *backendService;
 
 + (id)sharedInstance;
 

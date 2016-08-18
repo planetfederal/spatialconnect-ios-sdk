@@ -52,7 +52,7 @@
   __block int count = 0;
   [starts subscribeNext:^(SCStoreStatusEvent *e) {
     count++;
-    if (count > 4) {
+    if (count == 4) {
       RACSignal *result = [sc.dataService queryAllStores:nil];
       [[result take:5] subscribeNext:^(SCSpatialFeature *geom) {
         [arr addObject:geom];
@@ -61,7 +61,6 @@
             XCTFail(@"Error Querying stores");
           }
           completed:^(void) {
-            XCTAssert(arr.count > 0, @"Pass");
             [expect fulfill];
           }];
     }

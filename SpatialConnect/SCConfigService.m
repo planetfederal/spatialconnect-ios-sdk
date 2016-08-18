@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+#import "Commands.h"
+#import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
 #import "SCStoreConfig.h"
+#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 @interface SCConfigService ()
@@ -107,11 +110,6 @@
 
 - (void)registerAndFetchConfig {
   SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-  NSURL *regUrl = [NSURL
-      URLWithString:[NSString
-                        stringWithFormat:@"%@/api/devices/register?token=%@",
-                                         self.remoteUri, [as xAccessToken]]];
 
   NSString *ident =
       [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
@@ -120,13 +118,17 @@
     @"identifier" : ident,
     @"device_info" : @{@"os" : @"ios"}
   };
-  [ns postDictRequestBLOCKING:regUrl body:regDict];
-  NSURL *cfgUrl =
-      [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/config?token=%@",
-                                                      self.remoteUri,
-                                                      as.xAccessToken]];
-  NSDictionary *dict = [ns getRequestURLAsDictBLOCKING:cfgUrl];
-  [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
+  SCMessage *regMsg = [[SCMessage alloc] init];
+  regMsg.action = CONFIG_REGISTER_DEVICE;
+  regMsg.payload = [regDict JSONString];
+  [ns publishExactlyOnce:regMsg onTopic:@"/config/register"];
+  SCMessage *cMsg = [SCMessage new];
+  cMsg.action = CONFIG_FULL;
+  [[ns publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
+    NSString *json = m.payload;
+    NSDictionary *dict = [json objectFromJSONString];
+    [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
+  }];
 }
 
 - (void)loadConfig:(SCConfig *)c {
@@ -136,8 +138,8 @@
     [sc.dataService.formStore registerFormByConfig:f];
   }];
   [c.dataServiceStores enumerateObjectsUsingBlock:^(
-                           SCStoreConfig *c, NSUInteger idx, BOOL *stop) {
-    [sc.dataService registerStoreByConfig:c];
+                           SCStoreConfig *scfg, NSUInteger idx, BOOL *stop) {
+    [sc.dataService registerStoreByConfig:scfg];
   }];
 }
 
