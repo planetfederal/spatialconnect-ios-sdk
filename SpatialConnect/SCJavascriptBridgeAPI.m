@@ -329,8 +329,8 @@
 
 - (void)listenForNotifications:(id<RACSubscriber>)subscriber {
   SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-  [[bs notifications] subscribeNext:^(SCNotification *n) {
-    [subscriber sendNext:[n dictionary]];
+  [[bs notifications] subscribeNext:^(SCMessage *m) {
+    [subscriber sendNext:m.payload];
   }];
 }
 
