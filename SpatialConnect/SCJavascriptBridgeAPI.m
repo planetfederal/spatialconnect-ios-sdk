@@ -232,20 +232,22 @@
   }
 }
 
+
 - (void)updateFeature:(NSDictionary *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
   NSDictionary *geoJsonDict = [value objectForKey:@"feature"];
-  NSString *featureId = [geoJsonDict objectForKey:@"id"];
-  SCKeyTuple *key = [SCKeyTuple tupleFromEncodedCompositeKey:featureId];
+  NSDictionary *metadata = [geoJsonDict objectForKey:@"metadata"];
+  NSString *storeId = [metadata objectForKey:@"storeId"];
+  NSString *layerId = [metadata objectForKey:@"layerId"];
   SCDataStore *store = [[[SpatialConnect sharedInstance] dataService]
-      storeByIdentifier:key.storeId];
+      storeByIdentifier:storeId];
   if (store == nil) {
     store = [[[SpatialConnect sharedInstance] dataService] defaultStore];
   }
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     SCSpatialFeature *feat = [SCGeoJSON parseDict:geoJsonDict];
-    feat.layerId = key.layerId;
+    feat.layerId = layerId;
     [[s update:feat] subscribeError:^(NSError *error) {
       NSError *err =
           [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
