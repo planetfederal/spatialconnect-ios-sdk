@@ -14,14 +14,55 @@
  * limitations under the License
  */
 
+#import "JSONKit.h"
 #import "SCNotification.h"
+
+@interface SCNotification ()
+@property(nonatomic, readwrite, strong) NSString *to;
+@property(nonatomic, readwrite) SCNotificationLevel priority;
+@property(nonatomic, readwrite, strong) NSString *icon;
+@property(nonatomic, readwrite, strong) NSString *title;
+@property(nonatomic, readwrite, strong) NSString *body;
+@property(nonatomic, readwrite, strong) NSDictionary *payload;
+@end
 
 @implementation SCNotification
 
-@synthesize value;
+@synthesize to = _to, priority = _priority, icon = _icon, title = _title,
+            body = _body, payload = _payload;
+
+- (id)initWithMessage:(SCMessage *)m {
+  self = [super init];
+  if (self) {
+    NSDictionary *d = [m.payload objectFromJSONString];
+    self.to = d[@"to"];
+    self.priority = [self strToPriority:d[@"priority"]];
+    self.icon = d[@"notification"][@"icon"];
+    self.title = d[@"notificatoin"][@"title"];
+    self.body = d[@"notification"][@"body"];
+    self.payload = d[@"payload"];
+  }
+  return self;
+}
+
+- (SCNotificationLevel)strToPriority:(NSString *)s {
+  if ([s isEqualToString:@"info"]) {
+    return SC_NOTIFICATION_INFO;
+  } else if ([s isEqualToString:@"alert"]) {
+    return SC_NOTIFICATION_ALERT;
+  } else {
+    return SC_NOTIFICATION_BACKGROUND;
+  }
+}
 
 - (NSDictionary *)dictionary {
-  return @{ @"value" : self.value };
+  return @{
+    @"to" : self.to,
+    @"priority" : @(self.priority),
+    @"notification" :
+        @{@"body" : self.body, @"title" : self.title, @"icon" : self.icon},
+    @"payload" : self.payload
+  };
 }
 
 @end
