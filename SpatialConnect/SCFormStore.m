@@ -26,7 +26,7 @@
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
   if (self) {
-    self.name = @"DEFAULT_STORE";
+    self.name = config.name;
     self.permission = SC_DATASTORE_READWRITE;
     formIds = [NSMutableDictionary new];
     _storeType = @"default";

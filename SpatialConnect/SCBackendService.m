@@ -39,7 +39,14 @@
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCNetworkService *ns = sc.networkService;
 
+  NSString *ident =
+      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
   self.notifications = [ns listenOnTopic:@"/notify"];
+  [[self.notifications
+      merge:[ns listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
+      map:^id(id value) {
+        return value;
+      }];
 }
 
 - (void)fetchConfigAndListen {

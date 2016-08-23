@@ -16,10 +16,22 @@
 
 #import "Scmessage.pbobjc.h"
 
+typedef NS_ENUM(NSUInteger, SCNotificationLevel) {
+  SC_NOTIFICATION_INFO = 0,
+  SC_NOTIFICATION_ALERT = 1,
+  SC_NOTIFICATION_BACKGROUND = 2
+};
+
 @interface SCNotification : NSObject
 
-@property(nonatomic, readwrite) NSString *value;
+@property(nonatomic, readonly) NSString *to;
+@property(nonatomic, readonly) SCNotificationLevel priority;
+@property(nonatomic, readonly) NSString *icon;
+@property(nonatomic, readonly) NSString *title;
+@property(nonatomic, readonly) NSString *body;
+@property(nonatomic, readonly) NSDictionary *payload;
 
+- (id)initWithMessage:(SCMessage *)m;
 - (NSDictionary *)dictionary;
 
 @end

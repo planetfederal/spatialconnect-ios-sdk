@@ -73,14 +73,13 @@
   msg.correlationId = 234;
   msg.action = 456;
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-    @(-122.46537208557129),
-    @(37.684975061062296)
+    @(-122.03943729400633),
+    @(37.33525848132234)
   ]];
   msg.payload = [[p JSONDict] JSONString];
   [[sc.backendService notifications] subscribeNext:^(SCMessage *m) {
     NSLog(@"%@", m.payload);
-    SCNotification *n = [[SCNotification alloc] init];
-    n.value = m.payload;
+    SCNotification *n = [[SCNotification alloc] initWithMessage:m];
     XCTAssertNotNil(n);
     XCTAssertNotNil([n dictionary]);
     [expect fulfill];

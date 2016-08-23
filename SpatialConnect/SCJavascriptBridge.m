@@ -105,8 +105,7 @@ NSString *const SCJavascriptBridgeErrorDomain =
 
   [[self.spatialConnect.backendService notifications]
       subscribeNext:^(SCMessage *msg) {
-        SCNotification *notif = [SCNotification new];
-        notif.value = msg.payload;
+        SCNotification *notif = [[SCNotification alloc] initWithMessage:msg];
         [_bridge callHandler:@"notification" data:[notif dictionary]];
       }];
 }
