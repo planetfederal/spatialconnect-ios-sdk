@@ -24,7 +24,7 @@
 #import "SpatialConnect.h"
 
 @interface SpatialConnect ()
-
+- (void)createDeviceIdentifier;
 @end
 
 @implementation SpatialConnect
@@ -37,6 +37,7 @@
 @synthesize configService = _configService;
 @synthesize kvpService = _kvpService;
 @synthesize authService = _authService;
+@synthesize backendService = _backendService;
 
 + (id)sharedInstance {
   static SpatialConnect *sc;
@@ -50,12 +51,21 @@
 - (id)init {
   if (self = [super init]) {
     filepaths = [NSMutableArray new];
-    bus = [RACSubject new];
     _kvpService = [SCKVPService new];
+    [self createDeviceIdentifier];
     [self createConfigService];
     [self initServices];
   }
   return self;
+}
+
+- (void)createDeviceIdentifier {
+  NSString *ident =
+      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+  if (!ident) {
+    ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:ident forKey:@"UNIQUE_ID"];
+  }
 }
 
 - (void)createConfigService {
@@ -69,6 +79,7 @@
   _sensorService = [SCSensorService new];
   _rasterService = [SCRasterService new];
   _authService = [SCAuthService new];
+  _backendService = [SCBackendService new];
   [self addDefaultServices];
 }
 
@@ -82,6 +93,7 @@
   [self addService:self.sensorService];
   [self addService:self.rasterService];
   [self addService:self.authService];
+  [self addService:self.backendService];
 }
 
 #pragma mark - Service Lifecycle
@@ -121,6 +133,7 @@
   [self.sensorService start];
   [self.rasterService start];
   [self.authService start];
+  [self.backendService start];
 }
 
 - (void)stopAllServices {

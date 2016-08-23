@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-
 #import "KeychainItemWrapper.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef NS_ENUM(NSUInteger, SCAuthStatus) {
   SCAUTH_AUTHENTICATED = 1,

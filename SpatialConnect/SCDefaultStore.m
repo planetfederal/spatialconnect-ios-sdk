@@ -84,30 +84,14 @@
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[self.adapter createFeature:feature] materialize]
+  return [[[self.adapter createFeature:feature] materialize]
       filter:^BOOL(RACEvent *evt) {
         if (evt.eventType == RACEventTypeCompleted) {
           return YES;
         } else {
           return NO;
         }
-      }] flattenMap:^RACStream *(id value) {
-    NSInteger formid = [[formIds objectForKey:feature.layerId] integerValue];
-    if (sc.configService.remoteUri) {
-      NSString *urlStr =
-          [NSString stringWithFormat:@"%@/api/forms/%ld/submit?token=%@",
-                                     sc.configService.remoteUri, (long)formid,
-                                     sc.authService.xAccessToken];
-      NSURL *url = [NSURL URLWithString:urlStr];
-      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-      return
-          [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
-    } else {
-      return [RACSignal empty];
-    }
-
-  }];
+      }];
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {

@@ -17,15 +17,28 @@
  * under the License.
  ******************************************************************************/
 
+#import "Commands.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCJavascriptBridge.h"
 #import "SCJavascriptBridgeAPI.h"
 #import "SCJavascriptCommands.h"
+#import "SCNotification.h"
 #import "SCSpatialStore.h"
 #import "SpatialConnect.h"
 
 @implementation SCJavascriptBridgeAPI
+
+- (id)init {
+  self = [super init];
+  if (self) {
+    [self setupBridge];
+  }
+  return self;
+}
+
+- (void)setupBridge {
+}
 
 - (RACSignal *)parseJSAction:(id)action {
   return [RACSignal createSignal:^RACDisposable *(
@@ -81,6 +94,9 @@
     case AUTHSERVICE_LOGIN_STATUS:
       [self loginStatus:subscriber];
       break;
+    case NOTIFICATIONS:
+      [self listenForNotifications:subscriber];
+      break;
     case NETWORKSERVICE_GET_REQUEST:
       [self getRequest:action[@"payload"] responseSubscriber:subscriber];
       break;
@@ -103,8 +119,8 @@
 }
 
 - (void)formList:(id<RACSubscriber>)subscriber {
-  NSArray *arr =
-      [[[SpatialConnect sharedInstance] dataService] defaultStoreFormsDictionary];
+  NSArray *arr = [[[[SpatialConnect sharedInstance] dataService] formStore]
+      formsDictionary];
   [subscriber sendNext:@{ @"forms" : arr }];
   [subscriber sendCompleted];
 }
@@ -308,6 +324,13 @@
   SCAuthService *as = [[SpatialConnect sharedInstance] authService];
   [[as loginStatus] subscribeNext:^(NSNumber *status) {
     [subscriber sendNext:status];
+  }];
+}
+
+- (void)listenForNotifications:(id<RACSubscriber>)subscriber {
+  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+  [[bs notifications] subscribeNext:^(SCMessage *m) {
+    [subscriber sendNext:m.payload];
   }];
 }
 

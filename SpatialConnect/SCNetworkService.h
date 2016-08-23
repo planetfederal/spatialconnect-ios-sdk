@@ -18,8 +18,13 @@
 ******************************************************************************/
 
 #import "SCService.h"
+#import "Scmessage.pbobjc.h"
+#import <MQTTFramework/MQTTFramework.h>
 
-@interface SCNetworkService : SCService
+@interface SCNetworkService : SCService <MQTTSessionDelegate> {
+  MQTTSession *session;
+  RACSignal *multicast;
+}
 
 /*!
  *  @brief returns NSDictionary on signal
@@ -32,7 +37,7 @@
 
 - (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url;
 
-- (NSData*)getRequestURLAsDataBLOCKING:(NSURL *)url;
+- (NSData *)getRequestURLAsDataBLOCKING:(NSURL *)url;
 
 /*!
  *  @brief returns NSData on signal
@@ -57,5 +62,12 @@
                                            body:(NSDictionary *)dict;
 
 - (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict;
+
+- (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic;
+- (RACSignal *)listenOnTopic:(NSString *)topic;
 
 @end

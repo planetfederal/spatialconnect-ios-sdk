@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCMessage.h"
 #import <Foundation/Foundation.h>
 
 @interface SCStoreConfig : NSObject {
