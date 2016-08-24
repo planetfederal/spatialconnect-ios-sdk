@@ -57,14 +57,10 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (void)initializeAdapter:(SCStoreConfig *)config {
   NSString *filePath;
-  if (config.isMainBundle) {
-    filePath = [SCFileUtils filePathFromMainBundle:config.uri];
+  if (isUnitTesting) {
+    filePath = [SCFileUtils filePathFromNSHomeDirectory:config.uri];
   } else {
-    if (isUnitTesting) {
-      filePath = [SCFileUtils filePathFromNSHomeDirectory:config.uri];
-    } else {
-      filePath = [SCFileUtils filePathFromDocumentsDirectory:config.uri];
-    }
+    filePath = [SCFileUtils filePathFromMainBundle:config.uri];
   }
   adapter = [[GeoJSONAdapter alloc] initWithFilePath:filePath];
   adapter.defaultStyle = self.style;
@@ -106,9 +102,13 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
-  [adapter connect];
+  Boolean running = [adapter connect];
+  if (running) {
+    self.status = SC_DATASTORE_RUNNING;
+  } else {
+    self.status = SC_DATASTORE_STOPPED;
+  }
   adapter.defaultStyle = self.style;
-  self.status = SC_DATASTORE_RUNNING;
   return [RACSignal empty];
 }
 

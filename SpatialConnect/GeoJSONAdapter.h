@@ -33,7 +33,7 @@
 @property(nonatomic, strong) SCStyle *defaultStyle;
 @property(nonatomic, strong) NSString *storeId;
 
-- (void)connect;
+- (Boolean)connect;
 - (id)initWithFilePath:(NSString *)filepath;
 - (RACSignal *)query:(SCQueryFilter *)filter;
 - (RACSignal *)create:(SCSpatialFeature *)feature;

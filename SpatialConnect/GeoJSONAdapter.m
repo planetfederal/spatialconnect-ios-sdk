@@ -41,9 +41,15 @@
   return self;
 }
 
-- (void)connect {
-  self.connector =
+- (Boolean)connect {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  if ([fileManager fileExistsAtPath:geojsonFilePath]) {
+    self.connector =
       [[GeoJSONStorageConnector alloc] initWithFileName:geojsonFilePath];
+    return YES;
+  } else {
+    return NO;
+  }
 }
 
 - (void)supportedQueries {
