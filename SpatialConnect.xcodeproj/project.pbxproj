@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		542E9B931D6F4442007AB0ED /* SCGeoJSONStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */; };
 		546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 546D088F1D2462E200EBB95A /* SCRCTBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 546D08901D2462E200EBB95A /* SCRCTBridge.m */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -365,6 +366,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
 		546D088F1D2462E200EBB95A /* SCRCTBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRCTBridge.h; sourceTree = "<group>"; };
 		546D08901D2462E200EBB95A /* SCRCTBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRCTBridge.m; sourceTree = "<group>"; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
@@ -1427,6 +1429,7 @@
 			children = (
 				5649B4B51BE28079009947EF /* SCGeoJSONParserTest.m */,
 				5649B4B61BE28079009947EF /* SCGeoJSONWriterTest.m */,
+				542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */,
 			);
 			name = GeoJSON;
 			sourceTree = "<group>";
@@ -2038,6 +2041,7 @@
 				5649B4CA1BE28079009947EF /* SCGeoJSONParserTest.m in Sources */,
 				56D5AD2B1D59309A00597300 /* SCLocationTest.m in Sources */,
 				5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */,
+				542E9B931D6F4442007AB0ED /* SCGeoJSONStoreTest.m in Sources */,
 				5649B4D41BE28079009947EF /* SpatialConnectAutoConfigTest.m in Sources */,
 				56FB3F561CF8AADE00C3DA4B /* SCFormTest.m in Sources */,
 				5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */,
