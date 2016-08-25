@@ -101,15 +101,13 @@
     }];
   } else {
     NSString *filePath = nil;
+    NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
+    NSString *documentsPath = [SCFileUtils filePathFromDocumentsDirectory:self.uri];
     if (geojsonFilePath) {
       filePath = geojsonFilePath;
-    }
-    NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
       filePath = bundlePath;
-    }
-    NSString *documentsPath = [SCFileUtils filePathFromDocumentsDirectory:self.uri];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
       filePath = documentsPath;
     }
     return
