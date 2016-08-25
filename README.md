@@ -40,6 +40,14 @@ This is the filepath to the resource relative to the config file location.
 This unique identifier can be generated online [here](https://guidgenerator.com) or using any other unique identifier. Identifiers are not required by SpatialConnect to be a hash. If there is a collision between identifiers, the last loaded store will overwrite all previously loaded stores with the same identifier. 
 ```
     {
+      "remote": {
+    		"http_protocol": "http",
+    		"http_host": "192.168.1.100",
+    		"http_port": 8085,
+    		"mqtt_protocol": "tcp",
+    		"mqtt_host": "192.168.1.100",
+    		"mqtt_port": 1883
+  		},
       "stores":[
         {
             "type": "geojson",
