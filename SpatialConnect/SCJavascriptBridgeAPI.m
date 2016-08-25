@@ -138,22 +138,29 @@
 - (void)queryAllStores:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[[SpatialConnect sharedInstance] dataService]
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-    [subscriber sendNext:d];
-  }];
+        [arr addObject:d];
+      } completed:^{
+        [subscriber sendNext:arr];
+        [subscriber sendCompleted];
+      }];
 }
 
 - (void)queryStoreById:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber {
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[SpatialConnect sharedInstance] dataService]
-      queryStoreById:[value[@"storeId"] stringValue]
+      queryStoreById:value[@"storeId"]
           withFilter:nil] subscribeNext:^(SCGeometry *g) {
-    [subscriber sendNext:[g JSONDict]];
+      [arr addObject:[g JSONDict]];
+  } completed:^{
+    [subscriber sendNext:arr];
     [subscriber sendCompleted];
   }];
 }
@@ -161,21 +168,28 @@
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-    [subscriber sendNext:d];
-  }];
+        [arr addObject:d];
+      } completed:^{
+        [subscriber sendNext:arr];
+        [subscriber sendCompleted];
+   }];
 }
 
 - (void)queryGeoStoreById:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[SpatialConnect sharedInstance] dataService]
-      queryStoreById:[value[@"storeId"] stringValue]
+      queryStoreById:value[@"storeId"]
           withFilter:filter] subscribeNext:^(SCGeometry *g) {
-    [subscriber sendNext:[g JSONDict]];
+    [arr addObject:[g JSONDict]];
+  } completed:^{
+    [subscriber sendNext:arr];
     [subscriber sendCompleted];
   }];
 }
