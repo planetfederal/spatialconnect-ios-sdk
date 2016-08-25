@@ -21,6 +21,7 @@
 #import "SCGeometry.h"
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
+#import "SCStoreConfig.h"
 #import "SCStyle.h"
 #import <Foundation/Foundation.h>
 
@@ -32,9 +33,11 @@
 @property GeoJSONStorageConnector *connector;
 @property(nonatomic, strong) SCStyle *defaultStyle;
 @property(nonatomic, strong) NSString *storeId;
+@property(readonly, nonatomic, strong) NSString *uri;
 
-- (void)connect;
+- (RACSignal *)connect;
 - (id)initWithFilePath:(NSString *)filepath;
+- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
 - (RACSignal *)query:(SCQueryFilter *)filter;
 - (RACSignal *)create:(SCSpatialFeature *)feature;
 - (RACSignal *) delete:(SCSpatialFeature *)feature;

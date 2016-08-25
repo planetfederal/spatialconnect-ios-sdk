@@ -26,6 +26,8 @@ BOOL const isUnitTesting = NO;
 BOOL const isUnitTesting = YES;
 #endif
 
+NSString *const SCGeoJsonErrorDomain = @"SCGeoJsonErrorDomain";
+
 @interface GeoJSONStore ()
 - (void)initializeAdapter:(SCStoreConfig *)config;
 @end
@@ -56,17 +58,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 }
 
 - (void)initializeAdapter:(SCStoreConfig *)config {
-  NSString *filePath;
-  if (config.isMainBundle) {
-    filePath = [SCFileUtils filePathFromMainBundle:config.uri];
-  } else {
-    if (isUnitTesting) {
-      filePath = [SCFileUtils filePathFromNSHomeDirectory:config.uri];
-    } else {
-      filePath = [SCFileUtils filePathFromDocumentsDirectory:config.uri];
-    }
-  }
-  adapter = [[GeoJSONAdapter alloc] initWithFilePath:filePath];
+  adapter = [[GeoJSONAdapter alloc] initWithStoreConfig:config];
   adapter.defaultStyle = self.style;
   adapter.storeId = self.storeId;
 }
@@ -106,10 +98,19 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
-  [adapter connect];
-  adapter.defaultStyle = self.style;
-  self.status = SC_DATASTORE_RUNNING;
-  return [RACSignal empty];
+  return
+  [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [adapter.connect subscribeError:^(NSError *error) {
+      self.status = SC_DATASTORE_STOPPED;
+      [subscriber sendError:error];
+    }
+    completed:^{
+      self.status = SC_DATASTORE_RUNNING;
+      adapter.defaultStyle = self.style;
+      [subscriber sendCompleted];
+    }];
+    return nil;
+  }];
 }
 
 - (void)stop {
