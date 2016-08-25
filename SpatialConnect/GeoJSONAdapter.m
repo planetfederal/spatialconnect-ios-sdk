@@ -18,6 +18,8 @@
 ******************************************************************************/
 
 #import "GeoJSONAdapter.h"
+#import "GeoJSONStore.h"
+#import "SCFileUtils.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCGeometryCollection+GeoJSON.h"
@@ -30,26 +32,102 @@
 - (RACSignal *)writeGeometryToFile:(SCGeometry *)geom;
 @end
 
+@interface GeoJSONAdapter ()
+@property(readwrite, nonatomic, strong) NSString *uri;
+@end
+
 @implementation GeoJSONAdapter
 
-@synthesize connector, storeId;
+@synthesize connector, storeId, uri;
 
 - (id)initWithFilePath:(NSString *)filepath {
   if (self = [super init]) {
     geojsonFilePath = filepath;
+    uri = nil;
   }
   return self;
 }
 
-- (Boolean)connect {
-  NSFileManager *fileManager = [NSFileManager defaultManager];
-  if ([fileManager fileExistsAtPath:geojsonFilePath]) {
-    self.connector =
-      [[GeoJSONStorageConnector alloc] initWithFileName:geojsonFilePath];
-    return YES;
-  } else {
-    return NO;
+- (id)initWithStoreConfig:(SCStoreConfig *)cfg {
+  if (self = [super init]) {
+    storeId = cfg.uniqueid;
+    uri = cfg.uri;
+    geojsonFilePath = nil;
   }
+  return self;
+}
+
+- (NSString*)path {
+  if (geojsonFilePath) {
+    return geojsonFilePath;
+  }
+  NSString *path = nil;
+  NSString *dbName = [NSString stringWithFormat:@"%@.geojson", self.storeId];
+  BOOL saveToDocsDir = ![SCFileUtils isTesting];
+  if (saveToDocsDir) {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    path = [documentsDirectory stringByAppendingPathComponent:dbName];
+  } else {
+    path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
+  }
+  return path;
+}
+
+- (RACSignal *)connect {
+  if (self.uri != nil && [self.uri.lowercaseString containsString:@"http"]) {
+    NSString *path = [self path];
+    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    if (b) {
+      self.connector =
+      [[GeoJSONStorageConnector alloc] initWithFileName:path];
+      return [RACSignal empty];
+    }
+    NSURL *url = [[NSURL alloc] initWithString:self.uri];
+    return
+    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
+        NSLog(@"Saving GEOJSON to %@", path);
+        [data writeToFile:path atomically:YES];
+        self.connector =
+        [[GeoJSONStorageConnector alloc] initWithFileName:path];
+        [subscriber sendCompleted];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }];
+      return nil;
+    }];
+  } else {
+    NSString *filePath = nil;
+    if (geojsonFilePath) {
+      filePath = geojsonFilePath;
+    }
+    NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+      filePath = bundlePath;
+    }
+    NSString *documentsPath = [SCFileUtils filePathFromDocumentsDirectory:self.uri];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+      filePath = documentsPath;
+    }
+    return
+    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      if (filePath != nil && [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        self.connector =
+        [[GeoJSONStorageConnector alloc] initWithFileName:filePath];
+        [subscriber sendCompleted];
+      } else {
+        NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
+                                           code:SC_GEOJSON_FILENOTFOUND
+                                       userInfo:nil];
+        [subscriber sendError:err];
+      }
+      return nil;
+    }];
+  }
+  return [RACSignal empty];
 }
 
 - (void)supportedQueries {
@@ -69,6 +147,14 @@
 
 - (NSArray *)layerList {
   return @[ @"default" ];
+}
+
+- (RACSignal *)attemptFileDownload:(NSURL *)fileUrl {
+  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:fileUrl];
+  return [[NSURLConnection rac_sendAsynchronousRequest:request]
+          reduceEach:^id(NSURLResponse *response, NSData *data) {
+            return data;
+          }];
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {

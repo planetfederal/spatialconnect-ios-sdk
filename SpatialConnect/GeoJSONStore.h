@@ -25,6 +25,12 @@
 extern const NSString *kTYPE;
 extern const int *kVERSON;
 extern const NSString *kSTORE_NAME;
+extern NSString *const SCGeoJsonErrorDomain;
+
+typedef NS_ENUM(NSInteger, SCGeoJsonError) {
+  SC_GEOJSON_FILENOTFOUND = 1,
+  SC_GEOJSON_ERRORDOWNLOADING = 2
+};
 
 @interface GeoJSONStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
   GeoJSONAdapter *adapter;
