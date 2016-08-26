@@ -378,6 +378,24 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
       }];
 }
 
+- (RACSignal *)queryStoresByIds:(NSArray *)storeIds
+                   withFilter:(SCQueryFilter *)filter {
+  NSMutableArray *arr = [NSMutableArray new];
+  for (id obj in storeIds) {
+    NSString *storeId = obj;
+    id<SCSpatialStore> s = (id<SCSpatialStore>)[self.stores objectForKey:storeId];
+    SCDataStore *ds = (SCDataStore *)s;
+    BOOL conforms = [ds conformsToProtocol:@protocol(SCSpatialStore)];
+    SCDataStoreStatus d = ds.status;
+    BOOL running = d == SC_DATASTORE_RUNNING;
+    if (conforms && running) {
+      [arr addObject:ds];
+    }
+  };
+
+  return [self queryStores:arr filter:filter];
+}
+
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter {
   id<SCSpatialStore> store =

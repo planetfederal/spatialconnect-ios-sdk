@@ -60,11 +60,17 @@
     case DATASERVICE_SPATIALQUERY:
       [self queryStoreById:action[@"payload"] responseSubscriber:subscriber];
       break;
+    case DATASERVICE_SPATIALQUERYBYIDS:
+      [self queryStoresByIds:action[@"payload"] responseSubscriber:subscriber];
+      break;
     case DATASERVICE_SPATIALQUERYALL:
       [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERY:
       [self queryGeoStoreById:action[@"payload"] responseSubscriber:subscriber];
+      break;
+    case DATASERVICE_GEOSPATIALQUERYBYIDS:
+      [self queryGeoStoreByIds:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_GEOSPATIALQUERYALL:
       [self queryAllGeoStores:action[@"payload"] responseSubscriber:subscriber];
@@ -152,6 +158,20 @@
       }];
 }
 
+- (void)queryStoresByIds:(NSDictionary *)value
+        responseSubscriber:(id<RACSubscriber>)subscriber {
+  SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
+  [[[[SpatialConnect sharedInstance] dataService]
+    queryStoresByIds:value[@"storeId"]
+    withFilter:filter] subscribeNext:^(SCGeometry *g) {
+    [arr addObject:[g JSONDict]];
+  } completed:^{
+    [subscriber sendNext:arr];
+    [subscriber sendCompleted];
+  }];
+}
+
 - (void)queryStoreById:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
@@ -178,6 +198,20 @@
         [subscriber sendNext:arr];
         [subscriber sendCompleted];
    }];
+}
+
+- (void)queryGeoStoresByIds:(NSDictionary *)value
+       responseSubscriber:(id<RACSubscriber>)subscriber {
+  SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
+  [[[[SpatialConnect sharedInstance] dataService]
+    queryStoresByIds:value[@"storeId"]
+    withFilter:filter] subscribeNext:^(SCGeometry *g) {
+    [arr addObject:[g JSONDict]];
+  } completed:^{
+    [subscriber sendNext:arr];
+    [subscriber sendCompleted];
+  }];
 }
 
 - (void)queryGeoStoreById:(NSDictionary *)value
