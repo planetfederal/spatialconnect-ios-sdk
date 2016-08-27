@@ -24,13 +24,13 @@
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
+static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
+
 @interface SCConfigService ()
 - (void)setupSignals;
 @end
 
 @implementation SCConfigService
-
-@synthesize remoteUri;
 
 - (id)init {
   self = [super init];
@@ -43,10 +43,11 @@
 - (void)setupSignals {
 }
 
-- (void)start {
+- (RACSignal *)start {
   [super start];
   [self sweepDataDirectory];
   [self loadConfigs];
+  return [RACSignal empty];
 }
 
 - (void)stop {
@@ -86,48 +87,10 @@
     if (error) {
       NSLog(@"%@", error.description);
     }
-    NSString *uri;
-    if ((uri = [cfg objectForKey:@"remote"])) {
-      [cfg removeObjectForKey:@"remote"];
-      self.remoteUri = uri;
-      SpatialConnect *sc = [SpatialConnect sharedInstance];
-      SCAuthService *as = sc.authService;
-      // You have the url to the server. Wait for someone to properly
-      // authenticate before fetching the config
-      [[as loginStatus] subscribeNext:^(NSNumber *n) {
-        SCAuthStatus s = [n integerValue];
-        if (s == SCAUTH_AUTHENTICATED) {
-          [self registerAndFetchConfig];
-        }
-      }];
-    }
     if (cfg.count > 0) {
       SCConfig *s = [[SCConfig alloc] initWithDictionary:cfg];
       [self loadConfig:s];
     }
-  }];
-}
-
-- (void)registerAndFetchConfig {
-  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-
-  NSString *ident =
-      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
-
-  NSDictionary *regDict = @{
-    @"identifier" : ident,
-    @"device_info" : @{@"os" : @"ios"}
-  };
-  SCMessage *regMsg = [[SCMessage alloc] init];
-  regMsg.action = CONFIG_REGISTER_DEVICE;
-  regMsg.payload = [regDict JSONString];
-  [ns publishExactlyOnce:regMsg onTopic:@"/config/register"];
-  SCMessage *cMsg = [SCMessage new];
-  cMsg.action = CONFIG_FULL;
-  [[ns publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
-    NSString *json = m.payload;
-    NSDictionary *dict = [json objectFromJSONString];
-    [self loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
   }];
 }
 
@@ -141,6 +104,13 @@
                            SCStoreConfig *scfg, NSUInteger idx, BOOL *stop) {
     [sc.dataService registerStoreByConfig:scfg];
   }];
+  if (c.remote) {
+    [sc connectBackend:c.remote];
+  }
+}
+
++ (NSString *)serviceId {
+  return kSERVICENAME;
 }
 
 @end

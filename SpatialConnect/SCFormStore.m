@@ -15,6 +15,7 @@
  */
 
 #import "SCFormStore.h"
+#import "SCHttpUtils.h"
 #import "SCPoint+GeoJSON.h"
 #import "SpatialConnect.h"
 
@@ -22,6 +23,7 @@
 
 @synthesize storeType = _storeType;
 @synthesize storeVersion = _storeVersion;
+@synthesize hasForms = _hasForms;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -32,6 +34,7 @@
     _storeType = @"default";
     _storeVersion = @"1";
     storeForms = [NSMutableDictionary new];
+    _hasForms = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
     [self.adapter connectBlocking];
   }
   return self;
@@ -60,6 +63,7 @@
 }
 
 - (void)registerFormByConfig:(SCFormConfig *)f {
+  [_hasForms sendNext:@(YES)];
   [storeForms setObject:f forKey:f.key];
   [formIds setObject:@(f.identifier) forKey:f.key];
   [super addLayer:f.key withDef:[f sqlTypes]];
@@ -103,15 +107,14 @@
         }
       }] flattenMap:^RACStream *(id value) {
     NSInteger formid = [[formIds objectForKey:feature.layerId] integerValue];
-    if (sc.configService.remoteUri) {
+    if (sc.backendService.backendUri) {
       NSString *urlStr =
           [NSString stringWithFormat:@"%@/api/forms/%ld/submit?token=%@",
-                                     sc.configService.remoteUri, (long)formid,
+                                     sc.backendService.backendUri, (long)formid,
                                      sc.authService.xAccessToken];
       NSURL *url = [NSURL URLWithString:urlStr];
       feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-      return
-          [sc.networkService postDictRequestAsDict:url body:feature.JSONDict];
+      return [SCHttpUtils postDictRequestAsDict:url body:feature.JSONDict];
     } else {
       return [RACSignal empty];
     }

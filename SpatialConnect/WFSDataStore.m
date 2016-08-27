@@ -17,6 +17,7 @@
 #import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeometryCollection.h"
+#import "SCHttpUtils.h"
 #import "SCPoint.h"
 #import "WFSDataStore.h"
 #import "XMLDictionary.h"
@@ -55,8 +56,8 @@
   NSString *url = [NSString
       stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
                        self.baseUri, self.storeVersion];
-  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-  NSData *data = [ns getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
+  NSData *data =
+      [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary *d = [NSDictionary dictionaryWithXMLData:data];
   NSMutableArray *layers = [NSMutableArray new];
   NSArray *a = d[@"FeatureTypeList"][@"FeatureType"];
@@ -97,8 +98,7 @@
                       b.upperRight.latitude];
   }
 
-  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
-  return [[[ns getRequestURLAsDict:[NSURL URLWithString:url]]
+  return [[[SCHttpUtils getRequestURLAsDict:[NSURL URLWithString:url]]
       flattenMap:^RACStream *(NSDictionary *d) {
         SCGeometry *g = [SCGeoJSON parseDict:d];
         if ([g isKindOfClass:[SCGeometryCollection class]]) {

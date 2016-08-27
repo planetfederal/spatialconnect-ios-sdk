@@ -16,48 +16,61 @@
 
 #import "SCFormFeature.h"
 #import "SCGeopackageHelper.h"
-#import "SCNetworkService.h"
 #import "SCPoint.h"
 #import "SpatialConnectHelper.h"
 #import <XCTest/XCTest.h>
 
 @interface SCFormTest : XCTestCase
-@property SCNetworkService *net;
 @property SpatialConnect *sc;
 @end
 
 @implementation SCFormTest
 
-@synthesize net, sc;
+@synthesize sc;
 
 - (void)setUp {
   [super setUp];
   self.sc = [SpatialConnectHelper loadRemoteConfig];
-  self.net = self.sc.networkService;
 }
 
 - (void)tearDown {
   [super tearDown];
   [self.sc stopAllServices];
-}
-
-- (void)testGetForms {
-  [self.sc startAllServices];
-  NSArray *a = [self.sc.dataService.formStore formsDictionary];
-  XCTAssertNotNil(a);
+  self.sc = nil;
 }
 
 - (void)testFormToDict {
-  [self.sc startAllServices];
-  NSArray *a = [self.sc.dataService.formStore formsDictionary];
+  XCTestExpectation *expect = [self expectationWithDescription:@"Form ToDict"];
+  RACSignal *bsStarted = [self.sc serviceStarted:[SCBackendService serviceId]];
+  RACSignal *asAuthed =
+      [[self.sc.authService loginStatus] filter:^BOOL(NSNumber *n) {
+        return [n integerValue] == SCAUTH_AUTHENTICATED;
+      }];
 
-  [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
-                                  BOOL *_Nonnull stop) {
-    XCTAssertNotNil(d[@"form_key"]);
-    XCTAssertNotNil(d[@"form_label"]);
-    XCTAssertNotNil(d[@"version"]);
-    XCTAssertNotNil(d[@"fields"]);
+  [[[[bsStarted flattenMap:^RACStream *(id value) {
+    [self.sc.authService authenticate:@"admin@something.com" password:@"admin"];
+    return asAuthed;
+  }] flattenMap:^RACStream *(id value) {
+    return [[[self.sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *o) {
+      return [o boolValue];
+    }] sequence] signal];
+  }] take:1] subscribeNext:^(id x) {
+    NSArray *a = [self.sc.dataService.formStore formsDictionary];
+
+    XCTAssertNotNil(a);
+    XCTAssertGreaterThan(a.count, 0);
+    [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
+                                    BOOL *_Nonnull stop) {
+      XCTAssertNotNil(d[@"form_key"]);
+      XCTAssertNotNil(d[@"form_label"]);
+      XCTAssertNotNil(d[@"version"]);
+      XCTAssertNotNil(d[@"fields"]);
+    }];
+
+    [expect fulfill];
   }];
+  [self.sc startAllServices];
+  [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 @end

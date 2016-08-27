@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "SCServiceLifecycle.h"
+#import "SCServiceStatusEvent.h"
 
 typedef NS_ENUM(NSInteger, SCServiceStatus) {
   SC_SERVICE_STARTED,
@@ -29,8 +30,8 @@ typedef NS_ENUM(NSInteger, SCServiceStatus) {
 
 @interface SCService : NSObject <SCServiceLifecycle>
 
-@property(readonly, nonatomic) NSString *identifier;
-@property(nonatomic) NSString *name;
 @property(readonly, nonatomic) SCServiceStatus status;
+
++ (NSString *)serviceId;
 
 @end

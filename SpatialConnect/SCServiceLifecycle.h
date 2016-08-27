@@ -17,16 +17,16 @@
 * under the License.
 ******************************************************************************/
 
-
 #import <Foundation/Foundation.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 @protocol SCServiceLifecycle <NSObject>
 
-- (void)start;
+- (RACSignal *)start;
 - (void)pause;
 - (void)resume;
 - (void)stop;
 - (void)startError;
-- (NSArray*)requires;
+- (NSArray *)requires;
 
 @end

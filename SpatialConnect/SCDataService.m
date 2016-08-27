@@ -31,7 +31,7 @@
 NSString *const kDEFAULTSTORE = @"DEFAULT_STORE";
 NSString *const kFORMSTORE = @"FORM_STORE";
 NSString *const kLOCATIONSTORE = @"LOCATION_STORE";
-NSString *const kSERVICENAME = @"DATASERVICE";
+static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 @interface SCDataService ()
 - (void)startAllStores;
@@ -50,16 +50,17 @@ NSString *const kSERVICENAME = @"DATASERVICE";
 
 @synthesize storeEvents = _storeEvents;
 @synthesize status;
+@synthesize hasStores = _hasStores;
 
 - (id)init {
   if (self = [super init]) {
     self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
     _stores = [[NSMutableDictionary alloc] init];
-    self.name = kSERVICENAME;
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
+    _hasStores = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
     [self setupDefaultStore];
     [self setupFormsStore];
     [self setupLocationStore];
@@ -158,6 +159,7 @@ NSString *const kSERVICENAME = @"DATASERVICE";
                                       andStoreId:store.storeId]];
     }
         completed:^{
+          [_hasStores sendNext:@(YES)];
           [self.storeEventSubject
               sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTED
                                           andStoreId:store.storeId]];
@@ -187,9 +189,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   }
 }
 
-- (void)start {
+- (RACSignal *)start {
   [super start];
   [self startAllStores];
+  return [RACSignal empty];
 }
 
 - (void)stop {
@@ -218,7 +221,6 @@ NSString *const kSERVICENAME = @"DATASERVICE";
     NSCAssert(store.storeId, @"Store Id not set");
   } else if ([self.stores objectForKey:store.storeId]) {
     NSLog(@"STORE %@ ALREADY EXISTS", store.storeId);
-    @throw @"STORE ALREADY EXISTS";
   } else {
 
     [self.stores setObject:store forKey:store.storeId];
@@ -381,6 +383,10 @@ NSString *const kSERVICENAME = @"DATASERVICE";
   id<SCSpatialStore> store =
       (id<SCSpatialStore>)[self.stores objectForKey:storeId];
   return [store query:filter];
+}
+
++ (NSString *)serviceId {
+  return kSERVICENAME;
 }
 
 @end

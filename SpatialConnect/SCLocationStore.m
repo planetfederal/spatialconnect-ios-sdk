@@ -83,7 +83,7 @@
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   pt.layerId = @"last_known_location";
   RACSignal *c = [self.adapter createFeature:pt];
-  if (!sc.configService.remoteUri) {
+  if (!sc.backendService.backendUri) {
     return c;
   } else {
     return [[[c materialize] filter:^BOOL(RACEvent *evt) {
@@ -96,7 +96,7 @@
       SCMessage *msg = [[SCMessage alloc] init];
       msg.action = 100;
       msg.payload = [[pt JSONDict] JSONString];
-      [sc.networkService publish:msg onTopic:@"/store/tracking"];
+      [sc.backendService publish:msg onTopic:@"/store/tracking"];
       return [RACSignal empty];
     }];
   }

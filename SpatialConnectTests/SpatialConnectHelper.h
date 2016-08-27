@@ -17,6 +17,7 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCHttpUtils.h"
 #import "SpatialConnect.h"
 #import <Foundation/Foundation.h>
 

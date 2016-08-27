@@ -38,6 +38,7 @@
 - (void)tearDown {
   [super tearDown];
   [sc stopAllServices];
+  sc = nil;
 }
 
 - (void)testLocation {

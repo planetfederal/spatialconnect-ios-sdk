@@ -21,6 +21,9 @@
 
 @implementation SCServiceStatusEvent
 
+@synthesize status = _status;
+@synthesize serviceName = _serviceName;
+
 + (instancetype)fromEvent:(SCServiceStatus)s andServiceName:(NSString *)sName {
   SCServiceStatusEvent *evt =
       [[SCServiceStatusEvent alloc] initWithEvent:s andStoreName:sName];
@@ -29,13 +32,14 @@
 
 - (id)initWithEvent:(SCServiceStatus)s andStoreName:(NSString *)sName {
   if (self = [super init]) {
-    status = s;
-    serviceName = sName;
+    _status = s;
+    _serviceName = sName;
   }
   return self;
 }
 
 - (NSString *)description {
-  return [NSString stringWithFormat:@"%ld,%@", (long)status, serviceName];
+  return [NSString
+      stringWithFormat:@"%ld,%@", (long)self.status, self.serviceName];
 }
 @end

@@ -19,15 +19,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SCStoreConfig : NSObject {
-}
+@interface SCStoreConfig : NSObject
 
-@property(nonatomic, weak, readonly) NSString *type;
-@property(nonatomic, weak, readonly) NSString *version;
-@property(nonatomic, weak, readonly) NSString *uri;
-@property(nonatomic, weak, readonly) NSString *uniqueid;
-@property(readonly) BOOL isMainBundle;
-@property(nonatomic, weak, readonly) NSString *name;
+@property(nonatomic, readonly) NSString *type;
+@property(nonatomic, readonly) NSString *version;
+@property(nonatomic, readonly) NSString *uri;
+@property(nonatomic, readonly) NSString *uniqueid;
+@property(nonatomic, readonly) NSString *name;
 @property(nonatomic, readonly) NSArray *defaultLayers;
 
 - (id)initWithDictionary:(NSDictionary *)dict;

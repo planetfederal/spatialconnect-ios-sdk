@@ -23,8 +23,6 @@
 
 @interface SCService ()
 
-- (void)generateId;
-
 @property(nonatomic, strong) NSString *identifier;
 @property(nonatomic, readwrite) SCServiceStatus status;
 
@@ -40,15 +38,15 @@
   if (!self) {
     return nil;
   }
-  [self generateId];
   _status = SC_SERVICE_STOPPED;
   return self;
 }
 
 #pragma mark - Service Lifecycle
 
-- (void)start {
+- (RACSignal *)start {
   self.status = SC_SERVICE_RUNNING;
+  return [RACSignal empty];
 }
 
 - (void)stop {
@@ -67,14 +65,13 @@
   self.status = SC_SERVICE_PAUSED;
 }
 
-- (NSArray*)requires {
+- (NSArray *)requires {
   return nil;
 }
 
-#pragma mark - Private
-
-- (void)generateId {
-  _identifier = [[NSUUID UUID] UUIDString];
++ (NSString *)serviceId {
+  NSAssert(NO, @"Name must be set on the Service");
+  return nil;
 }
 
 @end

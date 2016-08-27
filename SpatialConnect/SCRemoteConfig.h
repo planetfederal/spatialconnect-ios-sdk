@@ -15,21 +15,16 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SCRemoteConfig.h"
 
-/*!
- *  @brief This is a mapping from the json config file to
- *  what the mobile architecture speak
- */
-@interface SCConfig : NSObject {
-  NSMutableArray *dataServiceStores;
-  NSMutableArray *forms;
-  SCRemoteConfig *r;
-}
+@interface SCRemoteConfig : NSObject
 
-- (id)initWithDictionary:(NSDictionary *)d;
-- (NSArray *)forms;
-- (NSArray *)dataServiceStores;
-- (SCRemoteConfig *)remote;
+@property(nonatomic, readonly) NSString *httpProtocol;
+@property(nonatomic, readonly) NSString *httpHost;
+@property(nonatomic, readonly) NSString *httpPort;
+@property(nonatomic, readonly) NSString *mqttProtocol;
+@property(nonatomic, readonly) NSString *mqttHost;
+@property(nonatomic, readonly) NSString *mqttPort;
+
+- (id)initWithDict:(NSDictionary *)d;
 
 @end

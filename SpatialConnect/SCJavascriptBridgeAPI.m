@@ -20,6 +20,8 @@
 #import "Commands.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
+#import "SCHttpUtils.h"
+#import "SCHttpUtils.h"
 #import "SCJavascriptBridge.h"
 #import "SCJavascriptBridgeAPI.h"
 #import "SCJavascriptCommands.h"
@@ -232,15 +234,14 @@
   }
 }
 
-
 - (void)updateFeature:(NSDictionary *)value
    responseSubscriber:(id<RACSubscriber>)subscriber {
   NSDictionary *geoJsonDict = [value objectForKey:@"feature"];
   NSDictionary *metadata = [geoJsonDict objectForKey:@"metadata"];
   NSString *storeId = [metadata objectForKey:@"storeId"];
   NSString *layerId = [metadata objectForKey:@"layerId"];
-  SCDataStore *store = [[[SpatialConnect sharedInstance] dataService]
-      storeByIdentifier:storeId];
+  SCDataStore *store =
+      [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:storeId];
   if (store == nil) {
     store = [[[SpatialConnect sharedInstance] dataService] defaultStore];
   }
@@ -336,9 +337,8 @@
 
 - (void)getRequest:(NSDictionary *)value
 responseSubscriber:(id<RACSubscriber>)subscriber {
-  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   NSString *url = value[@"url"];
-  [[ns getRequestURLAsDict:[NSURL URLWithString:url]]
+  [[SCHttpUtils getRequestURLAsDict:[NSURL URLWithString:url]]
       subscribeNext:^(NSDictionary *d) {
         [subscriber sendNext:d];
       }
@@ -352,10 +352,9 @@ responseSubscriber:(id<RACSubscriber>)subscriber {
 
 - (void)postRequest:(NSDictionary *)value
  responseSubscriber:(id<RACSubscriber>)subscriber {
-  SCNetworkService *ns = [[SpatialConnect sharedInstance] networkService];
   NSString *url = value[@"url"];
   NSDictionary *body = value[@"body"];
-  [[ns postDictRequestAsDict:[NSURL URLWithString:url] body:body]
+  [[SCHttpUtils postDictRequestAsDict:[NSURL URLWithString:url] body:body]
       subscribeNext:^(NSDictionary *d) {
         [subscriber sendNext:d];
       }

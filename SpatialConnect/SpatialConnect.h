@@ -26,7 +26,6 @@
 #import "SCJavascriptCommands.h"
 #import "SCKVPService.h"
 #import "SCLineString.h"
-#import "SCNetworkService.h"
 #import "SCRCTBridge.h"
 #import "SCRasterService.h"
 #import "SCRasterStore.h"
@@ -46,13 +45,14 @@
 
 @property(readonly, strong) NSMutableDictionary *services;
 @property(readonly, strong) SCDataService *dataService;
-@property(readonly, strong) SCNetworkService *networkService;
 @property(readonly, strong) SCSensorService *sensorService;
 @property(readonly, strong) SCRasterService *rasterService;
 @property(readonly, strong) SCConfigService *configService;
 @property(readonly, strong) SCKVPService *kvpService;
 @property(readonly, strong) SCAuthService *authService;
 @property(readonly, strong) SCBackendService *backendService;
+
+@property(readonly) RACMulticastConnection *serviceEvents;
 
 + (id)sharedInstance;
 
@@ -66,5 +66,8 @@
 - (void)startService:(NSString *)serviceId;
 - (void)stopService:(NSString *)serviceId;
 - (void)restartService:(NSString *)serviceId;
+- (void)connectBackend:(SCRemoteConfig *)r;
+- (NSString *)deviceIdentifier;
+- (RACSignal *)serviceStarted:(NSString *)serviceId;
 
 @end
