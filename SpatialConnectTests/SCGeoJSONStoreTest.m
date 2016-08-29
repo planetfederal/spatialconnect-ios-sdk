@@ -44,20 +44,20 @@
   NSString *fileName = [NSString stringWithFormat:@"%@.geojson", storeId];
   NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
   [[[[sc serviceStarted:[SCDataService serviceId]]
-      flattenMap:^RACStream *(id value) {
-        return [sc.dataService storeStarted:storeId];
-      }] map:^SCDataStore *(SCStoreStatusEvent *evt) {
-    SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-    return ds;
-  }] subscribeNext:^(id<SCSpatialStore> ds) {
-    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    XCTAssertTrue(b);
-    [expect fulfill];
-  }
-      error:^(NSError *error) {
-        XCTFail(@"Error getting store");
-        [expect fulfill];
-      }];
+     flattenMap:^RACStream *(id value) {
+       return [sc.dataService storeStarted:storeId];
+     }] map:^SCDataStore *(SCStoreStatusEvent *evt) {
+       SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
+       return ds;
+     }] subscribeNext:^(id<SCSpatialStore> ds) {
+       BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+       XCTAssertTrue(b);
+       [expect fulfill];
+     }
+   error:^(NSError *error) {
+     XCTFail(@"Error getting store");
+     [expect fulfill];
+   }];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
