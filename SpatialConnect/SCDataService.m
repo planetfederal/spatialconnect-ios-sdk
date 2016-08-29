@@ -343,39 +343,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter {
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        __block NSUInteger queryCompleted = 0;
-        __block NSUInteger count = stores.count;
-        if (count == 0) {
-          [subscriber sendCompleted];
-        }
-        [[[[stores rac_sequence] signal]
-            flattenMap:^RACStream *(id<SCSpatialStore> store) {
-              return [RACSignal
-                  createSignal:^RACDisposable *(id<RACSubscriber> qSub) {
-                    [[store query:filter] subscribeNext:^(SCSpatialFeature *x) {
-                      [qSub sendNext:x];
-                    }
-                        error:^(NSError *error) {
-                          [qSub sendError:error];
-                        }
-                        completed:^{
-                          queryCompleted++;
-                          if (queryCompleted == count) {
-                            [subscriber sendCompleted];
-                          }
-                        }];
-                    return nil;
-                  }];
-            }] subscribeNext:^(SCSpatialFeature *x) {
-          [subscriber sendNext:x];
-        }
-            error:^(NSError *error) {
-              [subscriber sendError:error];
-            }];
-        return nil;
-      }];
+    return [[[stores rac_sequence] signal] flattenMap:^RACStream *(id<SCSpatialStore> store) {
+      return [store query:filter];
+    }];
 }
 
 - (RACSignal *)queryStoresByIds:(NSArray *)storeIds
