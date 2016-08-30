@@ -17,15 +17,22 @@
  * under the License.
  ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCService.h"
+#import <Foundation/Foundation.h>
 
-@interface SCServiceStatusEvent : NSObject {
-  NSInteger status;
-  NSString *serviceName;
-}
+typedef NS_ENUM(NSInteger, ServiceStatusEvent) {
+  SC_SERVICE_EVT_STARTED,
+  SC_SERVICE_EVT_ERROR,
+  SC_SERVICE_EVT_STOPPED
+};
 
-+ (instancetype)fromEvent:(SCServiceStatus)s andServiceName:(NSString *)sName;
-- (id)initWithEvent:(SCServiceStatus)s andStoreName:(NSString *)sName;
+@interface SCServiceStatusEvent : NSObject
+
+@property(nonatomic, readonly) NSInteger status;
+@property(nonatomic, readonly) NSString *serviceName;
+
++ (instancetype)fromEvent:(ServiceStatusEvent)s
+           andServiceName:(NSString *)sName;
+- (id)initWithEvent:(ServiceStatusEvent)s andStoreName:(NSString *)sName;
 
 @end

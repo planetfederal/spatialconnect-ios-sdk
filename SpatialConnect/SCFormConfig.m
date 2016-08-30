@@ -17,6 +17,12 @@
 #import "SCFormConfig.h"
 #import "SCFormConfig.h"
 
+static NSString *const IDENT = @"id";
+static NSString *const FORM_KEY = @"form_key";
+static NSString *const FORM_LABEL = @"form_label";
+static NSString *const VERSION = @"version";
+static NSString *const FIELDS = @"fields";
+
 @implementation SCFormConfig
 
 @synthesize key, label, version, fields, identifier;
@@ -24,11 +30,11 @@
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.identifier = [dict[@"id"] integerValue];
-    self.key = dict[@"form_key"];
-    self.label = dict[@"form_label"];
-    self.version = [dict[@"version"] integerValue];
-    self.fields = dict[@"fields"];
+    self.identifier = [dict[IDENT] integerValue];
+    self.key = dict[FORM_KEY];
+    self.label = dict[FORM_LABEL];
+    self.version = [dict[VERSION] integerValue];
+    self.fields = dict[FIELDS];
   }
   return self;
 }
@@ -137,11 +143,11 @@
 
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
-  dict[@"form_key"] = self.key;
-  dict[@"form_label"] = self.label;
-  dict[@"version"] = @(self.version);
-  dict[@"fields"] = self.fields;
-  dict[@"id"] = @(self.identifier);
+  dict[FORM_KEY] = self.key;
+  dict[FORM_LABEL] = self.label;
+  dict[VERSION] = @(self.version);
+  dict[FIELDS] = self.fields;
+  dict[IDENT] = @(self.identifier);
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 

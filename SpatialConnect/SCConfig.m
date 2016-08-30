@@ -36,6 +36,10 @@
                                             BOOL *stop) {
       [forms addObject:[[SCFormConfig alloc] initWithDict:d]];
     }];
+    NSDictionary *rd = d[@"remote"];
+    if (rd) {
+      r = [[SCRemoteConfig alloc] initWithDict:rd];
+    }
   }
   return self;
 }
@@ -46,6 +50,10 @@
 
 - (NSArray *)dataServiceStores {
   return dataServiceStores;
+}
+
+- (SCRemoteConfig *)remote {
+  return r;
 }
 
 @end

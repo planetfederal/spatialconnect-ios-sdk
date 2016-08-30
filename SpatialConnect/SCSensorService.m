@@ -23,6 +23,8 @@
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
+static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
+
 @interface SCSensorService ()
 
 @property(nonatomic) CLLocationDistance distance;
@@ -53,7 +55,7 @@
   return self;
 }
 
-- (void)start {
+- (RACSignal *)start {
   [super start];
   if (!locationManager) {
     locationManager = [CLLocationManager new];
@@ -77,6 +79,7 @@
   }
 
   [self setupSignals];
+  return [RACSignal empty];
 }
 
 - (void)setupSignals {
@@ -168,6 +171,10 @@
   self.accuracy = accuracy;
   self.distance = distance;
   [self startLocationManager];
+}
+
++ (NSString *)serviceId {
+  return kSERVICENAME;
 }
 
 @end

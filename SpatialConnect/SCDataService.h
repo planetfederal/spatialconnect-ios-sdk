@@ -26,17 +26,6 @@
 #import "SCService.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-extern NSString *const kSERVICENAME;
-
-typedef NS_ENUM(NSUInteger, SCActionDataService) {
-  SCACTION_DATASERVICE_ADDSTORE = 0,
-  SCACTION_DATASERVICE_REMOVESTORE = 1,
-  SCACTION_DATASERVICE_UPDATESTORE = 2,
-  SCACTION_DATASERVICE_ADDFORM = 3,
-  SCACTION_DATASERVICE_UPDATEFORM = 4,
-  SCACTION_DATASERVICE_REMOVEFORM = 5
-};
-
 @interface SCDataService : SCService <SCServiceLifecycle> {
   RACSignal *addStore;
   RACSignal *updateStore;
@@ -48,6 +37,7 @@ typedef NS_ENUM(NSUInteger, SCActionDataService) {
 
 @property(readonly, nonatomic) SCServiceStatus status;
 @property(nonatomic) RACMulticastConnection *storeEvents;
+@property(readonly) RACBehaviorSubject *hasStores;
 
 - (void)registerStore:(SCDataStore *)store;
 - (void)unregisterStore:(SCDataStore *)store;

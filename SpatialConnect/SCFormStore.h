@@ -25,6 +25,8 @@
   NSMutableDictionary *storeForms;
 }
 
+@property(readonly, strong) RACBehaviorSubject *hasForms;
+
 - (void)registerFormByConfig:(SCFormConfig *)f;
 - (NSArray *)formsDictionary;
 

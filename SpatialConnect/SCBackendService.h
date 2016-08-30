@@ -14,16 +14,37 @@
  * limitations under the License
  */
 
+#import "SCRemoteConfig.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
+#import "Scmessage.pbobjc.h"
+#import <MQTTFramework/MQTTFramework.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
-@interface SCBackendService : SCService <SCServiceLifecycle> {
+@interface SCBackendService
+    : SCService <SCServiceLifecycle, MQTTSessionDelegate> {
   NSString *mqttEndpoint;
+  NSString *mqttPort;
+  NSString *mqttProtocol;
+  NSString *httpProtocol;
   NSString *httpEndpoint;
+  NSString *httpPort;
+  MQTTSession *session;
+  RACSignal *multicast;
 }
 
-@property(nonatomic, readonly, strong) RACSignal *notifications;
+@property(readonly, strong) NSString *backendUri;
+@property(readonly, strong) RACSignal *notifications;
+@property(readonly, strong) RACBehaviorSubject *configReceived;
+
+- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 - (void)fetchConfigAndListen;
+- (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic;
+- (RACSignal *)listenOnTopic:(NSString *)topic;
 
 @end

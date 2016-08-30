@@ -20,24 +20,27 @@
 #import "SCConfig.h"
 #import "SCDataService.h"
 #import "SCLoggingAssertionHandler.h"
-#import "SCNetworkService.h"
+#import "SCService.h"
+#import "SCServiceStatusEvent.h"
 #import "SpatialConnect.h"
 
 @interface SpatialConnect ()
-- (void)createDeviceIdentifier;
+@property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
 @end
 
 @implementation SpatialConnect
 
 @synthesize services = _services;
 @synthesize dataService = _dataService;
-@synthesize networkService = _networkService;
 @synthesize sensorService = _sensorService;
 @synthesize rasterService = _rasterService;
 @synthesize configService = _configService;
 @synthesize kvpService = _kvpService;
 @synthesize authService = _authService;
 @synthesize backendService = _backendService;
+@synthesize serviceEventSubject = _serviceEventSubject;
+
+@synthesize serviceEvents = _serviceEvents;
 
 + (id)sharedInstance {
   static SpatialConnect *sc;
@@ -52,20 +55,12 @@
   if (self = [super init]) {
     filepaths = [NSMutableArray new];
     _kvpService = [SCKVPService new];
-    [self createDeviceIdentifier];
     [self createConfigService];
     [self initServices];
+    self.serviceEventSubject = [RACSubject new];
+    _serviceEvents = [self.serviceEventSubject publish];
   }
   return self;
-}
-
-- (void)createDeviceIdentifier {
-  NSString *ident =
-      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
-  if (!ident) {
-    ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    [[NSUserDefaults standardUserDefaults] setObject:ident forKey:@"UNIQUE_ID"];
-  }
 }
 
 - (void)createConfigService {
@@ -75,11 +70,9 @@
 - (void)initServices {
   _services = [[NSMutableDictionary alloc] init];
   _dataService = [SCDataService new];
-  _networkService = [SCNetworkService new];
   _sensorService = [SCSensorService new];
   _rasterService = [SCRasterService new];
   _authService = [SCAuthService new];
-  _backendService = [SCBackendService new];
   [self addDefaultServices];
 }
 
@@ -89,17 +82,15 @@
   // Order matters here
   [self addService:self.dataService];
   [self addService:self.configService];
-  [self addService:self.networkService];
   [self addService:self.sensorService];
   [self addService:self.rasterService];
   [self addService:self.authService];
-  [self addService:self.backendService];
 }
 
 #pragma mark - Service Lifecycle
 
 - (void)addService:(SCService *)service {
-  [self.services setObject:service forKey:[service identifier]];
+  [self.services setObject:service forKey:[service.class serviceId]];
 }
 
 - (void)removeService:(NSString *)serviceId {
@@ -112,7 +103,34 @@
 
 - (void)startService:(NSString *)serviceId {
   SCService *service = [self.services objectForKey:serviceId];
-  [service start];
+  [[service start] subscribeError:^(NSError *error) {
+    [self.serviceEventSubject
+        sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR
+                                  andServiceName:serviceId]];
+  }
+      completed:^{
+        [self.serviceEventSubject
+            sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STARTED
+                                      andServiceName:serviceId]];
+      }];
+}
+
+- (RACSignal *)serviceStarted:(NSString *)serviceId {
+  if ([[self serviceById:serviceId] status] == SC_SERVICE_RUNNING) {
+    SCServiceStatusEvent *evt =
+        [SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STARTED
+                         andServiceName:serviceId];
+    return [RACSignal return:evt];
+  }
+  RACMulticastConnection *rmcc = self.serviceEvents;
+  [rmcc connect];
+  return [[rmcc.signal filter:^BOOL(SCServiceStatusEvent *evt) {
+    if (evt.status == SC_SERVICE_EVT_STARTED &&
+        [evt.serviceName isEqualToString:serviceId]) {
+      return YES;
+    }
+    return NO;
+  }] take:1];
 }
 
 - (void)stopService:(NSString *)serviceId {
@@ -126,14 +144,12 @@
 }
 
 - (void)startAllServices {
-  [self.kvpService start];
-  [self.dataService start];
-  [self.configService start];
-  [self.networkService start];
-  [self.sensorService start];
-  [self.rasterService start];
-  [self.authService start];
-  [self.backendService start];
+  [self startService:[self.kvpService.class serviceId]];
+  [self startService:[self.dataService.class serviceId]];
+  [self startService:[self.configService.class serviceId]];
+  [self startService:[self.sensorService.class serviceId]];
+  [self startService:[self.rasterService.class serviceId]];
+  [self startService:[self.authService.class serviceId]];
 }
 
 - (void)stopAllServices {
@@ -145,6 +161,28 @@
 - (void)restartAllServices {
   [self stopAllServices];
   [self startAllServices];
+}
+
+- (void)connectBackend:(SCRemoteConfig *)r {
+  if (!self.backendService) {
+    _backendService = [[SCBackendService alloc] initWithRemoteConfig:r];
+    [self addService:self.backendService];
+    [self startService:[SCBackendService serviceId]];
+  } else {
+    NSLog(@"SCBackendService Already Connected");
+  }
+}
+
+- (NSString *)deviceIdentifier {
+  NSString *ident = [[NSUserDefaults standardUserDefaults]
+      stringForKey:@"SPATIALCONNECT_UNIQUE_ID"];
+  if (!ident) {
+    ident = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    [[NSUserDefaults standardUserDefaults]
+        setObject:ident
+           forKey:@"SPATIALCONNECT_UNIQUE_ID"];
+  }
+  return ident;
 }
 
 @end

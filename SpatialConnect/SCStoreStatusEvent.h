@@ -20,7 +20,7 @@
 #import "SCDataStore.h"
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, SCDataStoreStatusEvent) {
+typedef NS_ENUM(NSInteger, StoreStatusEvent) {
   SC_DATASTORE_EVT_STARTFAILED,
   SC_DATASTORE_EVT_STARTED,
   SC_DATASTORE_EVT_ALLSTARTED,
@@ -29,11 +29,11 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatusEvent) {
 
 @interface SCStoreStatusEvent : NSObject
 
-@property(nonatomic, readonly) SCDataStoreStatusEvent status;
+@property(nonatomic, readonly) StoreStatusEvent status;
 @property(nonatomic, readonly) NSString *storeId;
 
-+ (instancetype)fromEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId;
-- (id)initWithEvent:(SCDataStoreStatusEvent)s andStoreId:(NSString *)sId;
++ (instancetype)fromEvent:(StoreStatusEvent)s andStoreId:(NSString *)sId;
+- (id)initWithEvent:(StoreStatusEvent)s andStoreId:(NSString *)sId;
 - (NSString *)description;
 
 @end

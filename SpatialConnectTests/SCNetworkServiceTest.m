@@ -16,24 +16,21 @@
 
 #import "SCFormFeature.h"
 #import "SCGeopackageHelper.h"
-#import "SCNetworkService.h"
 #import "SCPoint.h"
 #import "SpatialConnectHelper.h"
 #import <XCTest/XCTest.h>
 
 @interface SCNetworkServiceTest : XCTestCase
-@property SCNetworkService *net;
 @property SpatialConnect *sc;
 @end
 
 @implementation SCNetworkServiceTest
 
-@synthesize net, sc;
+@synthesize sc;
 
 - (void)setUp {
   [super setUp];
   self.sc = [SpatialConnectHelper loadRemoteConfig];
-  self.net = self.sc.networkService;
 }
 
 - (void)tearDown {
@@ -47,8 +44,8 @@
   XCTestExpectation *expect = [self expectationWithDescription:@"Ping Server"];
   [self.sc startAllServices];
   NSString *url =
-      [NSString stringWithFormat:@"%@/ping", self.sc.configService.remoteUri];
-  [[self.net getRequestURLAsData:[NSURL URLWithString:url]]
+      [NSString stringWithFormat:@"%@/ping", self.sc.backendService.backendUri];
+  [[SCHttpUtils getRequestURLAsData:[NSURL URLWithString:url]]
       subscribeNext:^(NSData *d) {
         XCTAssertNotNil(d);
         [expect fulfill];

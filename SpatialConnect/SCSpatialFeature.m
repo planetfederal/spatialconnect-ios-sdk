@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "SCSpatialFeature.h"
+#import "SpatialConnect.h"
 
 @interface SCSpatialFeature (PrivateMethods)
 @end
@@ -80,7 +81,7 @@
   [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
   dict[@"metadata"][@"created_at"] = [df stringFromDate:self.createdAt];
   dict[@"metadata"][@"client"] =
-      [[NSUserDefaults standardUserDefaults] stringForKey:@"UNIQUE_ID"];
+      [[SpatialConnect sharedInstance] deviceIdentifier];
   dict[@"metadata"][@"storeId"] = self.storeId;
   dict[@"metadata"][@"layerId"] = self.layerId;
   return [NSDictionary dictionaryWithDictionary:dict];
