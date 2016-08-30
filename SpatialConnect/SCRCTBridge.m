@@ -36,6 +36,12 @@
             @"payload": payload
         };
         callback(newAction);
+    } completed:^{
+      NSDictionary *completed = @{
+          @"type": action[@"type"],
+          @"payload": @"completed"
+      };
+      callback(completed);
     }];
 }
 

@@ -138,16 +138,14 @@
 - (void)queryAllStores:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[[SpatialConnect sharedInstance] dataService]
       queryAllStoresOfProtocol:@protocol(SCSpatialStore)
                         filter:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-        [arr addObject:d];
+        [subscriber sendNext: d];
       } completed:^{
-        [subscriber sendNext:arr];
         [subscriber sendCompleted];
       }];
 }
@@ -155,13 +153,11 @@
 - (void)queryStoresByIds:(NSDictionary *)value
         responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[SpatialConnect sharedInstance] dataService]
     queryStoresByIds:value[@"storeId"]
-    withFilter:filter] subscribeNext:^(SCGeometry *g) {
-    [arr addObject:[g JSONDict]];
+    withFilter:filter] subscribeNext:^(SCSpatialFeature *value) {
+    [subscriber sendNext:[value JSONDict]];
   } completed:^{
-    [subscriber sendNext:arr];
     [subscriber sendCompleted];
   }];
 }
@@ -169,14 +165,12 @@
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-        [arr addObject:d];
+        [subscriber sendNext:d];
       } completed:^{
-        [subscriber sendNext:arr];
         [subscriber sendCompleted];
    }];
 }
@@ -184,13 +178,13 @@
 - (void)queryGeoStoresByIds:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  NSMutableArray *arr = [[NSMutableArray alloc] init];
-  [[[[SpatialConnect sharedInstance] dataService]
+  [[[[[SpatialConnect sharedInstance] dataService]
     queryStoresByIds:value[@"storeId"]
-    withFilter:filter] subscribeNext:^(SCGeometry *g) {
-    [arr addObject:[g JSONDict]];
+    withFilter:filter] map:^NSDictionary *(SCSpatialFeature *value) {
+    return [value JSONDict];
+  }] subscribeNext:^(NSDictionary *d) {
+    [subscriber sendNext:d];
   } completed:^{
-    [subscriber sendNext:arr];
     [subscriber sendCompleted];
   }];
 }
@@ -331,7 +325,6 @@
   NSString *s = [as xAccessToken];
   if (s) {
     [subscriber sendNext:s];
-    [subscriber sendCompleted];
   }
   [subscriber sendCompleted];
 }
