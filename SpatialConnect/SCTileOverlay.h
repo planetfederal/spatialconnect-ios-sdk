@@ -17,14 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
 #import "SCRasterSource.h"
+#import <Foundation/Foundation.h>
 
 @interface SCTileOverlay : MKTileOverlay {
   SCRasterSource *rasterSource;
 }
 
-- (id)initWithRasterSource:(SCRasterSource*)rs;
+- (id)initWithRasterSource:(SCRasterSource *)rs;
 
 @end

@@ -22,6 +22,6 @@
 
 @interface SCMultiPoint (GPKG)
 
-- (id)initWithWKB:(WKBMultiPoint *)w;
+- (id)initWithWKB:(WKBMultiPoint *)w crs:(NSInteger)c;
 
 @end

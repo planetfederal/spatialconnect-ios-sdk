@@ -22,5 +22,6 @@
 
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView;
+- (SCPolygon *)coverage:(NSString *)layer;
 
 @end

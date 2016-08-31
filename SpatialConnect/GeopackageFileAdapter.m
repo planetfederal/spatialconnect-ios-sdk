@@ -24,6 +24,7 @@
 #import "SCGpkgTileSource.h"
 #import "SCKeyTuple.h"
 #import "SCPoint.h"
+#import "SCTileOverlay.h"
 
 @interface GeopackageFileAdapter ()
 - (RACSignal *)attemptFileDownload:(NSURL *)fileUrl;
@@ -62,7 +63,7 @@
   return self;
 }
 
-- (NSString*)path {
+- (NSString *)path {
   NSString *path = nil;
   NSString *dbName = [NSString stringWithFormat:@"%@.gpkg", self.storeId];
   BOOL saveToDocsDir = ![SCFileUtils isTesting];
@@ -182,7 +183,17 @@
 
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView {
-  return nil;
+  __block MKTileOverlay *overlay = nil;
+  SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
+  overlay = [[SCTileOverlay alloc] initWithRasterSource:ts];
+  overlay.canReplaceMapContent = false;
+  [mapView addOverlay:overlay];
+  return overlay;
+}
+
+- (SCPolygon *)coverage:(NSString *)layer {
+  SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
+  return [ts coveragePolygon];
 }
 
 - (RACSignal *)createFeature:(SCSpatialFeature *)feature {

@@ -14,18 +14,29 @@
  * limitations under the License
  */
 
-#import "Scmessage.pbobjc.h"
+#import "SpatialConnect.h"
+#import "SpatialConnectHelper.h"
+#import <XCTest/XCTest.h>
 
-@interface SCNotification : NSObject
+@interface SCRasterTest : XCTestCase
+@property(nonatomic) SpatialConnect *sc;
+@end
 
-@property(nonatomic, readonly) NSString *to;
-@property(nonatomic, readonly) NSString *priority;
-@property(nonatomic, readonly) NSString *icon;
-@property(nonatomic, readonly) NSString *title;
-@property(nonatomic, readonly) NSString *body;
-@property(nonatomic, readonly) NSDictionary *payload;
+@implementation SCRasterTest
 
-- (id)initWithMessage:(SCMessage *)m;
-- (NSDictionary *)dictionary;
+@synthesize sc;
+
+- (void)setUp {
+  [super setUp];
+  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
+}
+
+- (void)tearDown {
+  [super tearDown];
+  [self.sc stopAllServices];
+}
+
+- (void)testExample {
+}
 
 @end

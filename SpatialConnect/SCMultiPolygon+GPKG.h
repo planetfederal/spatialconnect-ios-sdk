@@ -22,6 +22,6 @@
 
 @interface SCMultiPolygon (GPKG)
 
-- (id)initWithWKB:(WKBMultiPolygon *)w;
+- (id)initWithWKB:(WKBMultiPolygon *)w crs:(NSInteger)c;
 
 @end

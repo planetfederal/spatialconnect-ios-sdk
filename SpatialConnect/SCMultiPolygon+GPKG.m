@@ -24,7 +24,7 @@
 
 @implementation SCMultiPolygon (GPKG)
 
-- (id)initWithWKB:(WKBMultiPolygon *)w {
+- (id)initWithWKB:(WKBMultiPolygon *)w crs:(NSInteger)c {
   NSArray *coordArray =
       [[w.getPolygons.rac_sequence map:^NSArray *(WKBPolygon *p) {
         return [[p.rings.rac_sequence map:^NSArray *(WKBLineString *l) {
@@ -34,7 +34,7 @@
         }] array];
       }] array];
 
-  self = [self initWithCoordinateArray:coordArray];
+  self = [self initWithCoordinateArray:coordArray crs:c];
   return self;
 }
 

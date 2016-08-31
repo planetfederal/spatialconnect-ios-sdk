@@ -70,9 +70,10 @@
 - (NSArray *)tileContents {
   SCGpkgContentsTable *tc =
       [[SCGpkgContentsTable alloc] initWithPool:self.pool];
+
   return
       [[tc.tiles.rac_sequence.signal map:^SCGpkgTileSource *(SCGpkgContent *c) {
-        return [[SCGpkgTileSource alloc] init];
+        return [[SCGpkgTileSource alloc] initWithPool:self.pool andContent:c];
       }] toArray];
 }
 
@@ -82,7 +83,7 @@
   return [[tc.vectors.rac_sequence.signal
       map:^SCGpkgFeatureSource *(SCGpkgContent *c) {
         return [[SCGpkgFeatureSource alloc] initWithPool:self.pool
-                                                 andName:c.tableName
+                                                 content:c
                                                isIndexed:YES];
       }] toArray];
 }
@@ -185,6 +186,13 @@
   }];
 }
 
+- (RACSignal *)query:(SCQueryFilter *)filter {
+  return [[[[self featureContents] rac_sequence] signal]
+      flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
+        return [fs queryWithFilter:filter];
+      }];
+}
+
 - (SCGpkgFeatureSource *)featureSource:(NSString *)name {
   __block SCGpkgFeatureSource *featureSource = nil;
   [[self featureContents]
@@ -198,15 +206,16 @@
   return featureSource;
 }
 
-- (RACSignal *)query:(SCQueryFilter *)filter {
-  return [[[[self featureContents] rac_sequence] signal]
-      flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
-        return [fs queryWithFilter:filter];
-      }];
-}
-
-- (RACSignal *)tileSource:(NSString *)name {
-  return nil;
+- (SCGpkgTileSource *)tileSource:(NSString *)name {
+  __block SCGpkgTileSource *tileSource = nil;
+  [[self tileContents] enumerateObjectsUsingBlock:^(
+                           SCGpkgTileSource *ts, NSUInteger idx, BOOL *stop) {
+    if ([ts.name isEqualToString:name]) {
+      tileSource = ts;
+      *stop = YES;
+    }
+  }];
+  return tileSource;
 }
 
 - (RACSignal *)kvpSource:(NSString *)name {

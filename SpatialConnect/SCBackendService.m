@@ -18,6 +18,7 @@
 #import "JSONKit.h"
 #import "SCBackendService.h"
 #import "SCConfig.h"
+#import "SCNotification.h"
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
@@ -80,8 +81,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   [[self.notifications
       merge:[self
                 listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
-      map:^id(id value) {
-        return value;
+      map:^id(SCMessage *m) {
+        return [[SCNotification alloc] initWithMessage:m];
       }];
 }
 

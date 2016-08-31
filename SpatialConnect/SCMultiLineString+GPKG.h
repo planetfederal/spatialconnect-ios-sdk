@@ -21,5 +21,5 @@
 #import <wkb_ios/WKBMultiLineString.h>
 
 @interface SCMultiLineString (GPKG)
-- (id)initWithWKB:(WKBMultiLineString *)w;
+- (id)initWithWKB:(WKBMultiLineString *)w crs:(NSInteger)c;
 @end

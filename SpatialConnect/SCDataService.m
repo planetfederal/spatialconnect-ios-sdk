@@ -204,6 +204,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   Class store =
       [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", cfg.type,
                                                            cfg.version]];
+  if (!store) {
+    @throw @"Store is not present";
+  }
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
   if (gmStore.key) {
     [self registerStore:gmStore];

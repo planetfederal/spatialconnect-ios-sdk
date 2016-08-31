@@ -22,8 +22,8 @@
 
 @implementation SCPoint (GPKG)
 
-- (id)initWithWKB:(WKBPoint *)w {
-  self = [self initWithCoordinateArray:@[ w.x, w.y ]];
+- (id)initWithWKB:(WKBPoint *)w crs:(NSInteger)c {
+  self = [self initWithCoordinateArray:@[ w.x, w.y ] crs:c];
 
   return self;
 }

@@ -27,9 +27,9 @@
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
-  NSLog(@"LocalConfigPath:%@",filePath);
+  NSLog(@"LocalConfigPath:%@", filePath);
   if (!b) {
-    NSLog(@"No config at:%@",filePath);
+    NSLog(@"No config at:%@", filePath);
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.configService addConfigFilepath:filePath];
@@ -47,13 +47,13 @@
   NSURL *URL2 = [NSURL URLWithString:@"https://s3.amazonaws.com"];
 
   [NSURLRequest
-   .class performSelector:NSSelectorFromString(
-                                               @"setAllowsAnyHTTPSCertificate:forHost:")
-   withObject:NSNull.null // Just need to pass non-nil here
-   // to appear as a BOOL YES, using
-   // the NSNull.null singleton is
-   // pretty safe
-   withObject:[URL2 host]];
+          .class performSelector:NSSelectorFromString(
+                                     @"setAllowsAnyHTTPSCertificate:forHost:")
+                      withObject:NSNull.null // Just need to pass non-nil here
+                      // to appear as a BOOL YES, using
+                      // the NSNull.null singleton is
+                      // pretty safe
+                      withObject:[URL2 host]];
 
   return sc;
 }
@@ -69,7 +69,7 @@
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"remote"
                                                        ofType:@"scfg"];
-  NSLog(@"RemoteConfigPath:%@",filePath);
+  NSLog(@"RemoteConfigPath:%@", filePath);
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
@@ -86,22 +86,24 @@
   NSURL *URL2 = [NSURL URLWithString:@"https://s3.amazonaws.com"];
 
   [NSURLRequest
-   .class performSelector:NSSelectorFromString(
-                                               @"setAllowsAnyHTTPSCertificate:forHost:")
-   withObject:NSNull.null // Just need to pass non-nil here
-   // to appear as a BOOL YES, using
-   // the NSNull.null singleton is
-   // pretty safe
-   withObject:[URL2 host]];
+          .class performSelector:NSSelectorFromString(
+                                     @"setAllowsAnyHTTPSCertificate:forHost:")
+                      withObject:NSNull.null // Just need to pass non-nil here
+                      // to appear as a BOOL YES, using
+                      // the NSNull.null singleton is
+                      // pretty safe
+                      withObject:[URL2 host]];
 
   return sc;
 }
 
-+ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc storeId:(NSString*)storeId {
-  return [[sc.dataService storeStarted:storeId] map:^SCDataStore*(SCStoreStatusEvent *evt) {
-    SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-    return ds;
-  }];
++ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc
+                         storeId:(NSString *)storeId {
+  return [[sc.dataService storeStarted:storeId]
+      map:^SCDataStore *(SCStoreStatusEvent *evt) {
+        SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
+        return ds;
+      }];
 }
 
 + (SpatialConnect *)loadRemoteConfigAndStartServices {
@@ -137,7 +139,7 @@
   }];
 }
 
-- (void)startServicesAndAuth:(SpatialConnect*)sc {
+- (void)startServicesAndAuth:(SpatialConnect *)sc {
   [sc startAllServices];
   [sc.authService authenticate:@"admin@something.com" password:@"admin"];
 }

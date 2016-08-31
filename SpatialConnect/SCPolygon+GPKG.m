@@ -24,7 +24,7 @@
 
 @implementation SCPolygon (GPKG)
 
-- (id)initWithWKB:(WKBPolygon *)w {
+- (id)initWithWKB:(WKBPolygon *)w crs:(NSInteger)c {
   NSArray *rings = w.rings;
   NSMutableArray *coordArray = [NSMutableArray new];
   [rings enumerateObjectsUsingBlock:^(WKBLineString *ring, NSUInteger idx,
@@ -34,7 +34,7 @@
           return @[ p.x, p.y ];
         }] array]];
   }];
-  self = [self initWithCoordinateArray:coordArray];
+  self = [self initWithCoordinateArray:coordArray crs:c];
   return self;
 }
 

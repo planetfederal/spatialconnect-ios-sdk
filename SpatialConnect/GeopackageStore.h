@@ -37,5 +37,6 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
 
 - (void)addLayer:(NSString *)name withDef:(NSDictionary *)def;
 - (void)removeLayer:(NSString *)name;
+- (SCPolygon *)coverage:(NSString *)layer;
 
 @end

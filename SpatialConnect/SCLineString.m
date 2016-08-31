@@ -25,16 +25,21 @@
 
 @synthesize points;
 
-- (id)initWithCoordinateArray:(NSArray *)coords {
-  if (self = [super init]) {
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)c {
+  if (self = [super initWithCoordinateArray:coords crs:c]) {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSArray *coord in coords) {
-      [arr addObject:[[SCPoint alloc] initWithCoordinateArray:coord]];
+      [arr addObject:[[SCPoint alloc] initWithCoordinateArray:coord
+                                                          crs:self.crs]];
     }
     self.points = [[NSArray alloc] initWithArray:arr];
-    self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points];
+    self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points crs:self.crs];
   }
   return self;
+}
+
+- (id)initWithCoordinateArray:(NSArray *)coords {
+  return [self initWithCoordinateArray:coords crs:4326];
 }
 
 - (SCPoint *)first {
@@ -89,16 +94,23 @@
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict =
       [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
-  NSDictionary *geometry = [NSDictionary
-      dictionaryWithObjects:@[ @"LineString", [self coordinateArray] ]
-                    forKeys:@[ @"type", @"coordinates" ]];
+  NSDictionary *geometry =
+      [NSDictionary dictionaryWithObjects:@[
+        @"LineString",
+        [self coordinateArrayAsProj:4326]
+      ]
+                                  forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];
   return dict;
 }
 
 - (NSArray *)coordinateArray {
+  return [self coordinateArrayAsProj:self.crs];
+}
+
+- (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   return [[self.points.rac_sequence map:^NSArray *(SCPoint *p) {
-    return p.coordinateArray;
+    return [p coordinateArrayAsProj:c];
   }] array];
 }
 

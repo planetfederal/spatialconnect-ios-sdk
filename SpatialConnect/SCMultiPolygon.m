@@ -28,12 +28,12 @@
 
 @synthesize polygons = _polygons;
 
-- (id)initWithCoordinateArray:(NSArray *)coords {
-  if (self = [super init]) {
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)s {
+  if (self = [super initWithCoordinateArray:coords crs:s]) {
     NSMutableArray *arr =
         [[NSMutableArray alloc] initWithCapacity:coords.count];
     for (NSArray *coord in coords) {
-      [arr addObject:[[SCPolygon alloc] initWithCoordinateArray:coord]];
+      [arr addObject:[[SCPolygon alloc] initWithCoordinateArray:coord crs:s]];
     }
     _polygons = [[NSArray alloc] initWithArray:arr];
   }
@@ -43,6 +43,10 @@
         [self.bbox addPoints:p.points];
       }];
   return self;
+}
+
+- (id)initWithCoordinateArray:(NSArray *)coords {
+  return [self initWithCoordinateArray:coords crs:4326];
 }
 
 - (GeometryType)type {
@@ -97,8 +101,12 @@
 }
 
 - (NSArray *)coordinateArray {
+  return [self coordinateArrayAsProj:self.crs];
+}
+
+- (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   return [[self.polygons.rac_sequence map:^NSArray *(SCPolygon *poly) {
-    return poly.coordinateArray;
+    return [poly coordinateArrayAsProj:c];
   }] array];
 }
 

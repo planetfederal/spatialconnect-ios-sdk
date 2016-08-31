@@ -26,6 +26,7 @@
 @property(nonatomic) double x;
 @property(nonatomic) double y;
 @property(nonatomic) double z;
+@property(nonatomic) NSInteger crs;
 
 - (double)longitude;
 - (double)latitude;

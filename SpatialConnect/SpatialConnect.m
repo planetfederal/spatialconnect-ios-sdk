@@ -33,7 +33,6 @@
 @synthesize services = _services;
 @synthesize dataService = _dataService;
 @synthesize sensorService = _sensorService;
-@synthesize rasterService = _rasterService;
 @synthesize configService = _configService;
 @synthesize kvpService = _kvpService;
 @synthesize authService = _authService;
@@ -71,7 +70,6 @@
   _services = [[NSMutableDictionary alloc] init];
   _dataService = [SCDataService new];
   _sensorService = [SCSensorService new];
-  _rasterService = [SCRasterService new];
   _authService = [SCAuthService new];
   [self addDefaultServices];
 }
@@ -83,7 +81,6 @@
   [self addService:self.dataService];
   [self addService:self.configService];
   [self addService:self.sensorService];
-  [self addService:self.rasterService];
   [self addService:self.authService];
 }
 
@@ -148,7 +145,6 @@
   [self startService:[self.dataService.class serviceId]];
   [self startService:[self.configService.class serviceId]];
   [self startService:[self.sensorService.class serviceId]];
-  [self startService:[self.rasterService.class serviceId]];
   [self startService:[self.authService.class serviceId]];
 }
 

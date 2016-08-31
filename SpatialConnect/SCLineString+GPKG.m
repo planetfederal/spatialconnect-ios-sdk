@@ -23,11 +23,11 @@
 
 @implementation SCLineString (GPKG)
 
-- (id)initWithWKB:(WKBLineString *)w {
+- (id)initWithWKB:(WKBLineString *)w crs:(NSInteger)c {
   NSArray *arr = [[w.points.rac_sequence map:^NSArray *(WKBPoint *p) {
     return @[ p.x, p.y ];
   }] array];
-  self = [self initWithCoordinateArray:arr];
+  self = [self initWithCoordinateArray:arr crs:c];
   return self;
 }
 

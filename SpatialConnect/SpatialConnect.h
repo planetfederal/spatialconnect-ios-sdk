@@ -46,7 +46,6 @@
 @property(readonly, strong) NSMutableDictionary *services;
 @property(readonly, strong) SCDataService *dataService;
 @property(readonly, strong) SCSensorService *sensorService;
-@property(readonly, strong) SCRasterService *rasterService;
 @property(readonly, strong) SCConfigService *configService;
 @property(readonly, strong) SCKVPService *kvpService;
 @property(readonly, strong) SCAuthService *authService;

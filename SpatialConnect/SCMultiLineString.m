@@ -29,12 +29,12 @@
 
 @synthesize linestrings = _linestrings;
 
-- (id)initWithCoordinateArray:(NSArray *)coords {
-  if (self = [super init]) {
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)s {
+  if (self = [super initWithCoordinateArray:coords crs:s]) {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSArray *linestring in coords) {
       SCLineString *l =
-          [[SCLineString alloc] initWithCoordinateArray:linestring];
+          [[SCLineString alloc] initWithCoordinateArray:linestring crs:s];
       [arr addObject:l];
     }
     _linestrings = [[NSArray alloc] initWithArray:arr];
@@ -45,6 +45,10 @@
     [self.bbox addPoints:l.points];
   }];
   return self;
+}
+
+- (id)initWithCoordinateArray:(NSArray *)coords {
+  return [self initWithCoordinateArray:coords crs:4326];
 }
 
 - (GeometryType)type {
@@ -90,17 +94,24 @@
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict =
       [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
-  NSDictionary *geometry = [NSDictionary
-      dictionaryWithObjects:@[ @"MultiLineString", [self coordinateArray] ]
-                    forKeys:@[ @"type", @"coordinates" ]];
+  NSDictionary *geometry =
+      [NSDictionary dictionaryWithObjects:@[
+        @"MultiLineString",
+        [self coordinateArrayAsProj:4326]
+      ]
+                                  forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 - (NSArray *)coordinateArray {
+  return [self coordinateArrayAsProj:self.crs];
+}
+
+- (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   return
       [[self.linestrings.rac_sequence map:^NSArray *(SCLineString *lineString) {
-        return lineString.coordinateArray;
+        return [lineString coordinateArrayAsProj:c];
       }] array];
 }
 

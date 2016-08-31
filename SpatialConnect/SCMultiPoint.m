@@ -25,16 +25,20 @@
 
 @synthesize points;
 
-- (id)initWithCoordinateArray:(NSArray *)coords {
-  if (self = [super init]) {
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)s {
+  if (self = [super initWithCoordinateArray:coords crs:s]) {
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSArray *coord in coords) {
-      [arr addObject:[[SCPoint alloc] initWithCoordinateArray:coord]];
+      [arr addObject:[[SCPoint alloc] initWithCoordinateArray:coord crs:s]];
     }
     self.points = [NSArray arrayWithArray:arr];
-    self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points];
+    self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points crs:self.crs];
   }
   return self;
+}
+
+- (id)initWithCoordinateArray:(NSArray *)coords {
+  return [self initWithCoordinateArray:coords crs:4326];
 }
 
 - (GeometryType)type {
@@ -80,7 +84,7 @@
   NSMutableDictionary *dict =
       [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
   NSArray *coords = [[[self.points rac_sequence] map:^NSArray *(SCPoint *p) {
-    return p.coordinateArray;
+    return [p coordinateArrayAsProj:4326];
   }] array];
   NSDictionary *geometry =
       [NSDictionary dictionaryWithObjects:@[ @"MultiPoint", coords ]

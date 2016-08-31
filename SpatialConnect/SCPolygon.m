@@ -25,10 +25,8 @@
 
 @synthesize holes;
 
-- (id)initWithCoordinateArray:(NSArray *)coords {
-  if (self = [super init]) {
-    self.points =
-        [[[SCLinearRing alloc] initWithCoordinateArray:coords[0]] points];
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)s {
+  if (self = [super initWithCoordinateArray:coords[0] crs:s]) {
     if (coords.count > 1) {
       self.holes = [[[[coords
           objectsAtIndexes:[NSIndexSet
@@ -36,12 +34,16 @@
                                                               1, coords.count -
                                                                      1)]]
           rac_sequence] map:^SCLinearRing *(NSArray *coordArray) {
-        return [[SCLinearRing alloc] initWithCoordinateArray:coordArray];
+        return [[SCLinearRing alloc] initWithCoordinateArray:coordArray crs:s];
       }] array];
     }
-    self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points];
+    self.bbox = [[SCBoundingBox alloc] initWithPoints:self.points crs:self.crs];
   }
   return self;
+}
+
+- (id)initWithCoordinateArray:(NSArray *)coords {
+  return [self initWithCoordinateArray:coords crs:4326];
 }
 
 - (GeometryType)type {
@@ -89,22 +91,23 @@
 }
 
 - (NSDictionary *)JSONDict {
-  NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
-  NSDictionary *geometry =
-      [NSDictionary dictionaryWithObjects:@[ @"Polygon", self.coordinateArray ]
-                                  forKeys:@[ @"type", @"coordinates" ]];
+  NSMutableDictionary *dict =
+      [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
+  NSDictionary *geometry = [NSDictionary
+      dictionaryWithObjects:@[ @"Polygon", [self coordinateArrayAsProj:4326] ]
+                    forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 - (NSArray *)coordinateArray {
+  return [self coordinateArrayAsProj:self.crs];
+}
+
+- (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   NSMutableArray *coords = [[NSMutableArray alloc]
       initWithObjects:[[[self.points rac_sequence] map:^NSArray *(SCPoint *p) {
-                        return @[
-                          [NSNumber numberWithDouble:p.x],
-                          [NSNumber numberWithDouble:p.y],
-                          [NSNumber numberWithDouble:p.z]
-                        ];
+                        return [p coordinateArrayAsProj:c];
                       }] array],
                       nil];
 
@@ -114,11 +117,7 @@
                                       return ring.points;
                                     }] map:^NSArray *(NSArray *p) {
               return [[p.rac_sequence map:^NSArray *(SCPoint *p) {
-                return @[
-                  [NSNumber numberWithDouble:p.x],
-                  [NSNumber numberWithDouble:p.y],
-                  [NSNumber numberWithDouble:p.z]
-                ];
+                return [p coordinateArrayAsProj:c];
               }] array];
             }] array]];
   }

@@ -22,6 +22,6 @@
 #import <wkb_ios/WKBPoint.h>
 
 @interface SCPoint (GPKG)
-- (id)initWithWKB:(WKBPoint *)w;
+- (id)initWithWKB:(WKBPoint *)w crs:(NSInteger)c;
 - (WKBPoint *)wkGeometry;
 @end

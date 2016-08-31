@@ -20,6 +20,7 @@
 #import "SCGpkgContentsTable.h"
 #import "SCGpkgExtensionsTable.h"
 #import "SCGpkgFeatureSource.h"
+#import "SCGpkgTileSource.h"
 #import <Foundation/Foundation.h>
 @interface SCGeopackage : NSObject
 
@@ -67,7 +68,7 @@
 
 - (SCGpkgFeatureSource *)featureSource:(NSString *)name;
 
-- (RACSignal *)tileSource:(NSString *)name;
+- (SCGpkgTileSource *)tileSource:(NSString *)name;
 
 - (RACSignal *)query:(SCQueryFilter *)filter;
 

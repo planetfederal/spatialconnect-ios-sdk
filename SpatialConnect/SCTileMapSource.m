@@ -17,26 +17,26 @@
 * under the License.
 ******************************************************************************/
 
-
-#import "SCTileMapSource.h"
-#import "SCPoint.h"
 #import "SCBoundingBox.h"
+#import "SCPoint.h"
+#import "SCTileMapSource.h"
 
 #define TILE_WIDTH 256.0
 #define TILE_HEIGHT 256.0
 
-@implementation SCTIleMapSource
+@implementation SCTileMapSource
 
 - (id)init {
   if (self = [super init]) {
-    SCPoint *ll = [[SCPoint alloc] initWithCoordinateArray:@[@(-180),@(-90)]];
-    SCPoint *ur = [[SCPoint alloc] initWithCoordinateArray:@[@(180),@(90)]];
-    self.coverage = [[SCBoundingBox alloc] initWithPoints:@[ll,ur]];
+    SCPoint *ll =
+        [[SCPoint alloc] initWithCoordinateArray:@[ @(-180), @(-90) ]];
+    SCPoint *ur = [[SCPoint alloc] initWithCoordinateArray:@[ @(180), @(90) ]];
+    self.coverage = [[SCBoundingBox alloc] initWithPoints:@[ ll, ur ] crs:4326];
   }
   return self;
 }
 
-- (id)initWithCoverageBBOX:(SCBoundingBox*)bbox {
+- (id)initWithCoverageBBOX:(SCBoundingBox *)bbox {
   if (self = [super init]) {
     self.coverage = bbox;
   }

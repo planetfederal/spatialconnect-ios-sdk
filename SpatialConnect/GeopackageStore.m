@@ -151,6 +151,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return @"DEFAULT";
 }
 
+- (SCPolygon *)coverage:(NSString *)layer {
+  return [self.adapter coverage:layer];
+}
+
 #pragma mark -
 #pragma mark Override Parent
 - (NSString *)key {

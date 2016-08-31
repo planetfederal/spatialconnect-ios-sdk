@@ -44,7 +44,7 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   return nil;
 }
 
-+ (SCGeometry *)fromGeometryBinary:(NSData *)bytes {
++ (SCGeometry *)fromGeometryBinary:(NSData *)bytes crs:(NSInteger)c {
   WKBByteReader *reader = [[WKBByteReader alloc] initWithData:bytes];
   BOOL empty = true;
   // Get 2 bytes as the magic number and validate
@@ -149,29 +149,29 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   WKBGeometry *wkb = geometry;
   switch (wkb.geometryType) {
   case WKB_POINT:
-    g = [[SCPoint alloc] initWithWKB:(WKBPoint *)wkb];
+    g = [[SCPoint alloc] initWithWKB:(WKBPoint *)wkb crs:c];
     break;
   case WKB_MULTIPOINT:
-    g = [[SCMultiPoint alloc] initWithWKB:(WKBMultiPoint *)wkb];
+    g = [[SCMultiPoint alloc] initWithWKB:(WKBMultiPoint *)wkb crs:c];
     break;
   case WKB_LINESTRING:
-    g = [[SCLineString alloc] initWithWKB:(WKBLineString *)wkb];
+    g = [[SCLineString alloc] initWithWKB:(WKBLineString *)wkb crs:c];
     break;
   case WKB_MULTILINESTRING:
-    g = [[SCMultiLineString alloc] initWithWKB:(WKBMultiLineString *)wkb];
+    g = [[SCMultiLineString alloc] initWithWKB:(WKBMultiLineString *)wkb crs:c];
     break;
   case WKB_POLYGON:
-    g = [[SCPolygon alloc] initWithWKB:(WKBPolygon *)wkb];
+    g = [[SCPolygon alloc] initWithWKB:(WKBPolygon *)wkb crs:c];
     break;
   case WKB_MULTIPOLYGON:
-    g = [[SCMultiPolygon alloc] initWithWKB:(WKBMultiPolygon *)wkb];
+    g = [[SCMultiPolygon alloc] initWithWKB:(WKBMultiPolygon *)wkb crs:c];
     break;
   default:
     break;
   }
 
   if (g) {
-    g.srsId = srsId;
+    g.crs = [srsId integerValue];
   }
 
   return g;
@@ -203,7 +203,7 @@ NSInteger const GPKG_GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
   [writer writeByte:flags];
   [writer setByteOrder:byteOrder];
 
-  [writer writeInt:self.srsId];
+  [writer writeInt:[NSNumber numberWithLong:self.crs]];
   [writer writeDouble:[[NSDecimalNumber alloc]
                           initWithDouble:self.bbox.lowerLeft.longitude]];
   [writer writeDouble:[[NSDecimalNumber alloc]

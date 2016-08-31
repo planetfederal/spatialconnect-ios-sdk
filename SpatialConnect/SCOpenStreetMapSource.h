@@ -21,6 +21,6 @@
 #import <Foundation/Foundation.h>
 #import "SCTileMapSource.h"
 
-@interface SCOpenStreetMapSource : SCTIleMapSource
+@interface SCOpenStreetMapSource : SCTileMapSource
 
 @end
