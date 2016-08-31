@@ -14,10 +14,22 @@
  * limitations under the License
  */
 
+#import "FMDB.h"
+#import "SCBoundingBox.h"
+#import "SCGpkgContent.h"
+#import "SCPolygon.h"
+#import "SCTileMapSource.h"
 #import <Foundation/Foundation.h>
 
-@interface SCGpkgTileSource : NSObject
+@interface SCGpkgTileSource : SCTileMapSource
 
-@property (nonatomic,retain) NSString *name;
+@property(readonly) FMDatabasePool *pool;
+@property(readonly) NSString *name;
+@property(readonly) SCBoundingBox *bbox;
+@property(readonly) NSInteger crs;
+@property(readonly) NSDictionary *matrix;
+
+- (id)initWithPool:(FMDatabasePool *)p andContent:(SCGpkgContent *)c;
+- (SCPolygon *)coveragePolygon;
 
 @end

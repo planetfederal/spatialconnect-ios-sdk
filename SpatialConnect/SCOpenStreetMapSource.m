@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
 #import "SCOpenStreetMapSource.h"
 
 @implementation SCOpenStreetMapSource
@@ -29,9 +28,13 @@
   return self;
 }
 
-- (NSURL*)URLForX:(NSUInteger)x Y:(NSUInteger)y Z:(NSUInteger)z {
-  return [NSURL URLWithString:
-          [NSString stringWithFormat:@"http://tile.openstreetmap.org/%lu/%lu/%lu.png",(unsigned long)z,(unsigned long)x,(unsigned long)y]];
+- (NSURL *)URLForPath:(MKTileOverlayPath)path tileSize:(CGSize)size {
+  return [NSURL
+      URLWithString:
+          [NSString
+              stringWithFormat:@"http://tile.openstreetmap.org/%lu/%lu/%lu.png",
+                               (unsigned long)path.z, (unsigned long)path.x,
+                               (unsigned long)path.y]];
 }
 
 @end

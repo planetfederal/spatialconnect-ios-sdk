@@ -14,15 +14,24 @@
  * limitations under the License
  */
 
-#import "SCGpkgGeometryColumn.h"
-#import "FMDatabase.h"
-#import <Foundation/Foundation.h>
+#import "SCBoundingBox+GeoJSON.h"
 
-@interface SCGpkgFeatureSourceTable : NSObject
+@implementation SCBoundingBox (GeoJSON)
 
-@property(strong, nonatomic, readonly) SCGpkgGeometryColumn *geomCol;
+- (NSString *)geoJSONString {
+  NSError *error;
+  NSData *jsonData =
+      [NSJSONSerialization dataWithJSONObject:[self JSONDict]
+                                      options:NSJSONWritingPrettyPrinted
+                                        error:&error];
 
-- (id)initWithDatabase:(FMDatabase *)database
-            geomColumn:(SCGpkgGeometryColumn *)gC;
+  if (!jsonData) {
+    NSLog(@"GeoJSON string generation: error: %@", error.localizedDescription);
+    return @"[]";
+  } else {
+    return
+        [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+  }
+}
 
 @end

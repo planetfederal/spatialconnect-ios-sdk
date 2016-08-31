@@ -19,7 +19,7 @@
 
 @interface SCNotification ()
 @property(nonatomic, readwrite, strong) NSString *to;
-@property(nonatomic, readwrite) SCNotificationLevel priority;
+@property(nonatomic, readwrite, strong) NSString *priority;
 @property(nonatomic, readwrite, strong) NSString *icon;
 @property(nonatomic, readwrite, strong) NSString *title;
 @property(nonatomic, readwrite, strong) NSString *body;
@@ -36,7 +36,7 @@
   if (self) {
     NSDictionary *d = [m.payload objectFromJSONString];
     self.to = d[@"to"];
-    self.priority = [self strToPriority:d[@"priority"]];
+    self.priority = d[@"priority"];
     self.icon = d[@"notification"][@"icon"];
     self.title = d[@"notification"][@"title"];
     self.body = d[@"notification"][@"body"];
@@ -45,20 +45,10 @@
   return self;
 }
 
-- (SCNotificationLevel)strToPriority:(NSString *)s {
-  if ([s isEqualToString:@"info"]) {
-    return SC_NOTIFICATION_INFO;
-  } else if ([s isEqualToString:@"alert"]) {
-    return SC_NOTIFICATION_ALERT;
-  } else {
-    return SC_NOTIFICATION_BACKGROUND;
-  }
-}
-
 - (NSDictionary *)dictionary {
   return @{
     @"to" : self.to,
-    @"priority" : @(self.priority),
+    @"priority" : self.priority,
     @"notification" :
         @{@"body" : self.body, @"title" : self.title, @"icon" : self.icon},
     @"payload" : self.payload

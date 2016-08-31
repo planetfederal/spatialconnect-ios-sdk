@@ -31,7 +31,7 @@
   [[SCGeopackageHelper downloadGpkgFile] subscribeNext:^(NSString *filename) {
     gpkg = [[SCGeopackage alloc] initWithFilename:filename];
     __block BOOL foundOne = NO;
-    [[gpkg contents] subscribeNext:^(id x) {
+    [[gpkg contents] subscribeNext:^(SCGpkgContent *c) {
       foundOne = YES;
     }
         completed:^{

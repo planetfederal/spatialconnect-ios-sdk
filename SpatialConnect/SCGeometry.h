@@ -36,14 +36,16 @@ typedef NS_ENUM(NSInteger, GeometryType) {
 @interface SCGeometry : SCSpatialFeature
 
 @property(nonatomic) SCBoundingBox *bbox;
-@property(nonatomic) NSNumber *srsId;
+@property(nonatomic) NSInteger crs;
 
 - (id)initWithCoordinateArray:(NSArray *)coords;
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)c;
 - (GeometryType)type;
 - (BOOL)isContained:(SCBoundingBox *)bbox;
 - (SCSimplePoint *)centroid;
 - (NSArray *)bboxArray;
 - (NSDictionary *)JSONDict;
 - (NSArray *)coordinateArray;
+- (NSArray *)coordinateArrayAsProj:(NSInteger)c;
 
 @end

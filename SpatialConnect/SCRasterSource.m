@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
 #import "SCRasterSource.h"
 
 @implementation SCRasterSource
@@ -25,9 +24,15 @@
 @synthesize coverage;
 @synthesize key;
 
-- (NSURL*)URLForX:(NSUInteger)x Y:(NSUInteger)y Z:(NSUInteger)z {
+- (NSURL *)URLForPath:(MKTileOverlayPath)path tileSize:(CGSize)size {
   NSAssert(NO, @"This is an abstract method and should be overridden");
   return nil;
+}
+
+- (void)tileForPath:(MKTileOverlayPath)path
+           tileSize:(CGSize)size
+             result:(void (^)(NSData *, NSError *))result {
+  NSAssert(NO, @"This is an abstract method and should be overridden");
 }
 
 @end

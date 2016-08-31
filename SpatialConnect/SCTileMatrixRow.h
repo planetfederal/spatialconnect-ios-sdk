@@ -14,8 +14,20 @@
  * limitations under the License
  */
 
+#import "FMDB.h"
 #import <Foundation/Foundation.h>
 
-@interface SCGpkgTileSourceTable : NSObject
+@interface SCTileMatrixRow : NSObject
+
+@property(nonatomic, readonly) NSString *tableName;
+@property(nonatomic, readonly) NSInteger zoomLevel;
+@property(nonatomic, readonly) NSInteger matrixWidth;
+@property(nonatomic, readonly) NSInteger matrixHeight;
+@property(nonatomic, readonly) NSInteger tileWidth;
+@property(nonatomic, readonly) NSInteger tileHeight;
+@property(nonatomic, readonly) NSNumber *pixelXSize;
+@property(nonatomic, readonly) NSNumber *pixelYSize;
+
+- (id)initWithResultSet:(FMResultSet *)rs;
 
 @end

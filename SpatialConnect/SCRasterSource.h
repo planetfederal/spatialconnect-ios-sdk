@@ -17,15 +17,18 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
 #import "SCBoundingBox.h"
+#import <Foundation/Foundation.h>
 
 @interface SCRasterSource : NSObject
 
 @property SCBoundingBox *coverage;
 @property NSString *key;
 
-- (NSURL*)URLForX:(NSUInteger)x Y:(NSUInteger)y Z:(NSUInteger)z;
+- (NSURL *)URLForPath:(MKTileOverlayPath)path tileSize:(CGSize)size;
+
+- (void)tileForPath:(MKTileOverlayPath)path
+           tileSize:(CGSize)size
+             result:(void (^)(NSData *, NSError *))result;
 
 @end

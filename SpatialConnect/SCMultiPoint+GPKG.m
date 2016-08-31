@@ -23,11 +23,11 @@
 
 @implementation SCMultiPoint (GPKG)
 
-- (id)initWithWKB:(WKBMultiPoint *)w {
+- (id)initWithWKB:(WKBMultiPoint *)w crs:(NSInteger)c {
   NSArray *coordArray = [[w.getPoints.rac_sequence map:^NSArray *(WKBPoint *p) {
     return @[ p.x, p.y ];
   }] array];
-  self = [super initWithCoordinateArray:coordArray];
+  self = [super initWithCoordinateArray:coordArray crs:c];
   return self;
 }
 

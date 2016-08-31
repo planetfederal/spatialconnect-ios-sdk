@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "SCGeometry.h"
+#import "SCPolygon.h"
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
@@ -27,14 +28,19 @@
 
 @property(strong, nonatomic) SCPoint *lowerLeft;
 @property(strong, nonatomic) SCPoint *upperRight;
+@property(nonatomic) NSInteger crs;
 
 + (instancetype)worldBounds;
 
 - (id)initWithCoords:(NSArray *)coords;
-- (id)initWithPoints:(NSArray *)points;
+- (id)initWithCoords:(NSArray *)coords crs:(NSInteger)c;
+- (id)initWithPoints:(NSArray *)points crs:(NSInteger)c;
 - (void)addPoint:(SCPoint *)pt;
 - (void)addPoints:(NSArray *)pts;
 - (BOOL)pointWithin:(SCPoint *)pt;
 - (BOOL)geometryWithin:(SCGeometry *)g;
+- (BOOL)bboxOverlaps:(SCBoundingBox *)obbox;
+- (NSDictionary *)JSONDict;
+- (SCPolygon *)polygon;
 
 @end

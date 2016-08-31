@@ -14,10 +14,11 @@
  * limitations under the License
  */
 
+#import "FMDB.h"
+#import "SCGpkgContent.h"
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
 #import <Foundation/Foundation.h>
-#import "FMDB.h"
 
 typedef NS_ENUM(NSInteger, SCGpkgColType) {
   NULL_COL,
@@ -35,11 +36,12 @@ typedef NS_ENUM(NSInteger, SCGpkgColType) {
 @property(strong, readonly) NSString *pkColName;
 @property(strong, readonly) NSString *geomColName;
 @property(strong, readonly) NSDictionary *colsTypes;
+@property(readonly) NSInteger crs;
 
-- (id)initWithPool:(FMDatabasePool *)p andName:(NSString *)n;
+- (id)initWithPool:(FMDatabasePool *)p content:(SCGpkgContent *)c;
 - (id)initWithPool:(FMDatabasePool *)p
-            andName:(NSString *)n
-          isIndexed:(BOOL)i;
+           content:(SCGpkgContent *)c
+         isIndexed:(BOOL)i;
 - (RACSignal *)queryWithFilter:(SCQueryFilter *)f;
 - (RACSignal *)findById:(NSString *)identifier;
 - (RACSignal *)remove:(SCKeyTuple *)f;

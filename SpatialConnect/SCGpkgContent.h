@@ -26,8 +26,8 @@
 @property(strong, readonly) NSString *desc;
 @property(strong, readonly) NSDate *lastChange;
 @property(strong, readonly) SCBoundingBox *bbox;
-@property(readonly) NSInteger srsId; // FK
 @property(strong, readonly) SCGpkgContentsTable *table;
+@property(readonly) NSInteger crs;
 
 - (id)initWithResultSet:(FMResultSet *)rs;
 

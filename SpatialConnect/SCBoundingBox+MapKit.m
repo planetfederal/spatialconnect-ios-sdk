@@ -17,22 +17,22 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCBoundingBox+MapKit.h"
 #import "SCPoint+MapKit.h"
 
 @implementation SCBoundingBox (MapKit)
 
--(MKMapRect)asMKMapRect {
-  MKMapPoint upperRight = MKMapPointForCoordinate(CLLocationCoordinate2DMake(self.upperRight.latitude, self.upperRight.longitude));
-  MKMapPoint lowerLeft = MKMapPointForCoordinate(CLLocationCoordinate2DMake(self.lowerLeft.latitude, self.lowerLeft.longitude));
+- (MKMapRect)asMKMapRect {
+  CLLocationCoordinate2D ur = CLLocationCoordinate2DMake(
+      self.upperRight.latitude, self.upperRight.longitude);
+  CLLocationCoordinate2D ll = CLLocationCoordinate2DMake(
+      self.lowerLeft.latitude, self.lowerLeft.longitude);
+  MKMapPoint upperRight = MKMapPointForCoordinate(ur);
+  MKMapPoint lowerLeft = MKMapPointForCoordinate(ll);
 
-  return MKMapRectMake(lowerLeft.x,
-                       upperRight.y,
-                       ABS(upperRight.x - lowerLeft.x),
-                       ABS(upperRight.y - lowerLeft.y));
+  return MKMapRectMake(lowerLeft.x, upperRight.y,
+                       fabs(upperRight.x - lowerLeft.x),
+                       fabs(upperRight.y - lowerLeft.y));
 }
 
 @end

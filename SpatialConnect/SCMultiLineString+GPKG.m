@@ -23,7 +23,7 @@
 
 @implementation SCMultiLineString (GPKG)
 
-- (id)initWithWKB:(WKBMultiLineString *)w {
+- (id)initWithWKB:(WKBMultiLineString *)w crs:(NSInteger)c {
   NSArray *coordArray =
       [[w.getLineStrings.rac_sequence map:^NSArray *(WKBLineString *l) {
         return [[l.points.rac_sequence map:^NSArray *(WKBPoint *p) {
@@ -31,7 +31,7 @@
         }] array];
       }] array];
 
-  self = [self initWithCoordinateArray:coordArray];
+  self = [self initWithCoordinateArray:coordArray crs:c];
   return self;
 }
 

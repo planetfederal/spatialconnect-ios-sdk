@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 #import "SCRasterSource.h"
 
-@interface SCTIleMapSource : SCRasterSource
+@interface SCTileMapSource : SCRasterSource
 
 - (id)initWithCoverageBBOX:(SCBoundingBox*)bbox;
 

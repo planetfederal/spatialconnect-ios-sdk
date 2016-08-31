@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "SCGpkgTileSourceTable.h"
+#import <SpatialConnect/SpatialConnect.h>
 
-@implementation SCGpkgTileSourceTable
+@interface SCMapkitTileGridSource : SCTileMapSource
 
 @end

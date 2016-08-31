@@ -27,7 +27,7 @@
 @property(strong, readwrite) NSString *pkColName;
 @property(strong, readwrite) NSDictionary *colsTypes;
 @property(strong, readwrite) NSString *geomColName;
-
+@property(readwrite) NSInteger crs;
 - (SCSpatialFeature *)featureFromResultSet:(FMResultSet *)rs; // Category
 - (void)defineTable;
 @end
@@ -36,18 +36,21 @@
 
 @synthesize name, pkColName, colsTypes;
 
-- (id)initWithPool:(FMDatabasePool *)p andName:(NSString *)n {
+- (id)initWithPool:(FMDatabasePool *)p content:(SCGpkgContent *)c {
   self = [super init];
   if (self) {
-    self.name = n;
+    self.name = c.tableName;
+    self.crs = c.crs;
     self.pool = p;
     [self defineTable];
   }
   return self;
 }
 
-- (id)initWithPool:(FMDatabasePool *)p andName:(NSString *)n isIndexed:(BOOL)i {
-  self = [self initWithPool:p andName:n];
+- (id)initWithPool:(FMDatabasePool *)p
+           content:(SCGpkgContent *)c
+         isIndexed:(BOOL)i {
+  self = [self initWithPool:p content:c];
   if (self) {
     if (i) {
       [self indexTable];
@@ -58,7 +61,6 @@
 
 - (void)indexTable {
   [self.pool inDatabase:^(FMDatabase *db) {
-
     NSString *sql =
         [NSString stringWithFormat:@"SELECT CreateSpatialIndex('%@','%@','%@')",
                                    self.name, self.geomColName, self.pkColName];
@@ -71,17 +73,12 @@
 }
 
 - (Boolean)isGeomCol:(NSString *)t {
-  NSArray *types = [NSArray arrayWithObjects:
-                    @"GEOMETRY",
-                    @"POINT",
-                    @"LINESTRING",
-                    @"POLYGON",
-                    @"MULTIPOINT",
-                    @"MULTILINESTRING",
-                    @"MULTIPOLYGON",
-                    @"GEOMETRYCOLLECTION", nil];
+  NSArray *types =
+      [NSArray arrayWithObjects:@"GEOMETRY", @"POINT", @"LINESTRING",
+                                @"POLYGON", @"MULTIPOINT", @"MULTILINESTRING",
+                                @"MULTIPOLYGON", @"GEOMETRYCOLLECTION", nil];
 
-  return [types containsObject: [t uppercaseString]];
+  return [types containsObject:[t uppercaseString]];
 }
 
 - (void)defineTable {
@@ -111,6 +108,7 @@
       }
     }
     self.colsTypes = [NSDictionary dictionaryWithDictionary:cols];
+
     [rs close];
   }];
 }
@@ -354,7 +352,8 @@
   SCSpatialFeature *f;
   long long ident = [rs longLongIntForColumn:self.pkColName];
   if (self.geomColName) {
-    f = [SCGeometry fromGeometryBinary:[rs dataForColumn:self.geomColName]];
+    f = [SCGeometry fromGeometryBinary:[rs dataForColumn:self.geomColName]
+                                   crs:self.crs];
   } else {
     f = [[SCSpatialFeature alloc] init];
   }

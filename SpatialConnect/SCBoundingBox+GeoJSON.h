@@ -14,18 +14,10 @@
  * limitations under the License
  */
 
-#import "Scmessage.pbobjc.h"
+#import <SpatialConnect/SpatialConnect.h>
 
-@interface SCNotification : NSObject
+@interface SCBoundingBox (GeoJSON)
 
-@property(nonatomic, readonly) NSString *to;
-@property(nonatomic, readonly) NSString *priority;
-@property(nonatomic, readonly) NSString *icon;
-@property(nonatomic, readonly) NSString *title;
-@property(nonatomic, readonly) NSString *body;
-@property(nonatomic, readonly) NSDictionary *payload;
-
-- (id)initWithMessage:(SCMessage *)m;
-- (NSDictionary *)dictionary;
+- (NSString *)geoJSONString;
 
 @end

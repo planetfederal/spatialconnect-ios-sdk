@@ -31,6 +31,7 @@ NSString *const kCTMinYColName = @"min_y";
 NSString *const kCTMaxXColName = @"max_x";
 NSString *const kCTMaxYColName = @"max_y";
 NSString *const kCTSRSIdColName = @"srs_id";
+NSString *const kCTOrgCsysIdName = @"organization_coordsys_id";
 
 @implementation SCGpkgContentsTable
 
@@ -39,7 +40,8 @@ NSString *const kCTSRSIdColName = @"srs_id";
 }
 
 - (RACSignal *)all {
-  NSString *sql = [self allQueryString];
+  NSString *sql = @"SELECT * FROM gpkg_contents g JOIN gpkg_spatial_ref_sys s "
+                  @"ON g.srs_id = s.srs_id";
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self.queue inDatabase:^(FMDatabase *db) {
@@ -56,10 +58,11 @@ NSString *const kCTSRSIdColName = @"srs_id";
       }];
 }
 
-- (RACSignal *)tiles {
-  NSString *sql = @"SELECT * FROM gpkg_contents WHERE data_type = 'tiles'";
+- (NSArray *)tiles {
+  NSString *sql = @"SELECT * FROM gpkg_contents g JOIN gpkg_spatial_ref_sys s "
+                  @"ON g.srs_id = s.srs_id WHERE data_type='tiles';";
   return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self.queue inDatabase:^(FMDatabase *db) {
           FMResultSet *resultSet = [db executeQuery:sql];
           while ([resultSet next]) {
@@ -71,11 +74,12 @@ NSString *const kCTSRSIdColName = @"srs_id";
           [subscriber sendCompleted];
         }];
         return nil;
-      }];
+      }] toArray];
 }
 
 - (NSArray *)vectors {
-  NSString *sql = @"SELECT * FROM gpkg_contents WHERE data_type = 'features'";
+  NSString *sql = @"SELECT * FROM gpkg_contents g JOIN gpkg_spatial_ref_sys s "
+                  @"ON g.srs_id = s.srs_id WHERE data_type='features';";
   return
       [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [self.queue inDatabase:^(FMDatabase *db) {

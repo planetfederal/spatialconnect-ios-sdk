@@ -19,6 +19,7 @@
 
 #import "SCBoundingBox.h"
 #import "SCPoint.h"
+#import "SCPolygon.h"
 
 @interface SCBoundingBox ()
 - (void)setBBOX:(NSArray *)points;
@@ -32,33 +33,49 @@
 + (instancetype)worldBounds {
   SCPoint *ll = [[SCPoint alloc] initWithCoordinateArray:@[ @(-180), @(-90) ]];
   SCPoint *ur = [[SCPoint alloc] initWithCoordinateArray:@[ @(180), @(90) ]];
-  return [[SCBoundingBox alloc] initWithPoints:@[ ll, ur ]];
+  return [[SCBoundingBox alloc] initWithPoints:@[ ll, ur ] crs:4326];
 }
 
-- (id)initWithCoords:(NSArray *)coords {
+/*!
+ *  @brief (ll_x,ll_y,ur_x,ur_y)
+ *
+ *  @param coords NSArray
+ *
+ *  @return SCBoundingBox
+ */
+- (id)initWithCoords:(NSArray *)coords crs:(NSInteger)c {
   self = [super init];
   if (self) {
     self.lowerLeft = [[SCPoint alloc]
         initWithCoordinateArray:
-            [coords
-                objectsAtIndexes:[NSIndexSet
-                                     indexSetWithIndexesInRange:NSMakeRange(
-                                                                    0, 2)]]];
+            [coords objectsAtIndexes:[NSIndexSet
+                                         indexSetWithIndexesInRange:NSMakeRange(
+                                                                        0, 2)]]
+                            crs:c];
     self.upperRight = [[SCPoint alloc]
         initWithCoordinateArray:
-            [coords
-                objectsAtIndexes:[NSIndexSet
-                                     indexSetWithIndexesInRange:NSMakeRange(
-                                                                    2, 2)]]];
+            [coords objectsAtIndexes:[NSIndexSet
+                                         indexSetWithIndexesInRange:NSMakeRange(
+                                                                        2, 2)]]
+                            crs:c];
   }
+  self.crs = c;
   return self;
 }
 
-- (id)initWithPoints:(NSArray *)points {
+/*!
+ *  @brief Takes two SCPoints
+ *
+ *  @param points NSArray of two SCPoints
+ *
+ *  @return SCBoundingBox
+ */
+- (id)initWithPoints:(NSArray *)points crs:(NSInteger)c {
   self = [super init];
   if (!self) {
     return nil;
   }
+  self.crs = c;
   [self setBBOX:points];
   return self;
 }
@@ -68,7 +85,8 @@
     lowerLeft = [[SCPoint alloc] initWithCoordinateArray:@[
       [NSNumber numberWithDouble:ll.x],
       [NSNumber numberWithDouble:ll.y]
-    ]];
+    ]
+                                                     crs:self.crs];
   } else {
     lowerLeft.x = ll.x;
     lowerLeft.y = ll.y;
@@ -80,7 +98,8 @@
     upperRight = [[SCPoint alloc] initWithCoordinateArray:@[
       [NSNumber numberWithDouble:ur.x],
       [NSNumber numberWithDouble:ur.y]
-    ]];
+    ]
+                                                      crs:self.crs];
   } else {
     upperRight.x = ur.x;
     upperRight.y = ur.y;
@@ -92,11 +111,13 @@
   self.lowerLeft = [[SCPoint alloc] initWithCoordinateArray:@[
     [NSNumber numberWithDouble:firstPoint.x],
     [NSNumber numberWithDouble:firstPoint.y]
-  ]];
+  ]
+                                                        crs:self.crs];
   self.upperRight = [[SCPoint alloc] initWithCoordinateArray:@[
     [NSNumber numberWithDouble:firstPoint.x],
     [NSNumber numberWithDouble:firstPoint.y]
-  ]];
+  ]
+                                                         crs:self.crs];
 
   if (points.count > 1) {
     [points
@@ -145,10 +166,8 @@
 }
 
 - (BOOL)pointWithin:(SCPoint *)pt {
-  if (pt.latitude <= self.upperRight.latitude &&
-      pt.latitude >= self.lowerLeft.latitude &&
-      pt.longitude <= self.upperRight.longitude &&
-      pt.longitude >= self.lowerLeft.longitude) {
+  if (pt.y <= self.upperRight.y && pt.y >= self.lowerLeft.y &&
+      pt.x <= self.upperRight.x && pt.x >= self.lowerLeft.x) {
     return YES;
   }
   return NO;
@@ -156,6 +175,11 @@
 
 - (BOOL)geometryWithin:(SCGeometry *)g {
   return [g isContained:self];
+}
+
+- (BOOL)bboxOverlaps:(SCBoundingBox *)obbox {
+  return ([self pointWithin:obbox.lowerLeft] &&
+          [self pointWithin:obbox.upperRight]);
 }
 
 #pragma mark - NSObject
@@ -169,8 +193,25 @@
 - (SCPoint *)centroid {
   double x = upperRight.x + lowerLeft.x;
   double y = upperRight.y + lowerLeft.y;
-  return
-      [[SCPoint alloc] initWithCoordinateArray:@[ @(x / 2.0f), @(y / 2.0f) ]];
+  return [[SCPoint alloc] initWithCoordinateArray:@[ @(x / 2.0f), @(y / 2.0f) ]
+                                              crs:self.crs];
+}
+
+- (SCPolygon *)polygon {
+  SCPolygon *p = [[SCPolygon alloc] initWithCoordinateArray:@[
+    @[
+      @[ @(upperRight.x), @(lowerLeft.y) ],
+      @[ @(upperRight.x), @(upperRight.y) ],
+      @[ @(lowerLeft.x), @(upperRight.y) ],
+      @[ @(lowerLeft.x), @(lowerLeft.y) ],
+      @[ @(upperRight.x), @(lowerLeft.y) ]
+    ]
+  ]
+                                                        crs:self.crs];
+  return p;
+}
+- (NSDictionary *)JSONDict {
+  return [[self polygon] JSONDict];
 }
 
 @end

@@ -24,11 +24,16 @@
 @implementation SCGeometry
 
 @synthesize bbox;
-@synthesize srsId;
+@synthesize crs;
 
 - (id)initWithCoordinateArray:(NSArray *)coords {
+  return [self initWithCoordinateArray:coords crs:4326];
+}
+
+- (id)initWithCoordinateArray:(NSArray *)coords crs:(NSInteger)c {
   if (self = [self init]) {
     bbox = [[SCBoundingBox alloc] init];
+    self.crs = c;
     return self;
   }
   return nil;
@@ -37,7 +42,7 @@
 - (id)init {
   self = [super init];
   if (self) {
-    srsId = [NSNumber numberWithLong:4326];
+    crs = 4326;
   }
   return self;
 }
@@ -60,10 +65,10 @@
 
 - (NSArray *)bboxArray {
   return @[
-    [NSNumber numberWithDouble:self.bbox.lowerLeft.longitude],
-    [NSNumber numberWithDouble:self.bbox.lowerLeft.latitude],
-    [NSNumber numberWithDouble:self.bbox.upperRight.longitude],
-    [NSNumber numberWithDouble:self.bbox.upperRight.latitude]
+    [NSNumber numberWithDouble:self.bbox.lowerLeft.x],
+    [NSNumber numberWithDouble:self.bbox.lowerLeft.y],
+    [NSNumber numberWithDouble:self.bbox.upperRight.x],
+    [NSNumber numberWithDouble:self.bbox.upperRight.y]
   ];
 }
 
@@ -76,13 +81,18 @@
   dict[@"type"] = @"Feature";
   dict[@"crs"] = @{
     @"type" : @"name",
-    @"properties" : @{@"name" : @"EPSG:4326"}
+    @"properties" :
+        @{@"name" : [NSString stringWithFormat:@"EPSG:%ld", (long)crs]}
   };
 
   return dict;
 }
 
 - (NSArray *)coordinateArray {
+  return nil;
+}
+
+- (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   return nil;
 }
 

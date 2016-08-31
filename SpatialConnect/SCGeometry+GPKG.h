@@ -22,7 +22,7 @@
 
 @interface SCGeometry (GPKG)
 
-+ (SCGeometry *)fromGeometryBinary:(NSData *)d;
++ (SCGeometry *)fromGeometryBinary:(NSData *)d crs:(NSInteger)c;
 - (WKBGeometry *)wkGeometry;
 - (NSData *)bytes;
 

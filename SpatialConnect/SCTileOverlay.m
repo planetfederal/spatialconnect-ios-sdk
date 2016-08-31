@@ -17,36 +17,27 @@
 * under the License.
 ******************************************************************************/
 
-
 #import "SCTileOverlay.h"
 
 @implementation SCTileOverlay
 
-- (id)initWithRasterSource:(SCRasterSource*)rs {
+- (id)initWithRasterSource:(SCRasterSource *)rs {
   if (self = [super init]) {
     rasterSource = rs;
   }
   return self;
 }
 
-- (NSURL*)URLForTilePath:(MKTileOverlayPath)path {
-  return [rasterSource URLForX:path.x Y:path.y Z:path.z];
+- (NSURL *)URLForTilePath:(MKTileOverlayPath)path {
+  return [rasterSource URLForPath:path tileSize:self.tileSize];
 }
 
-- (void)loadTileAtPath:(MKTileOverlayPath)path result:(void (^)(NSData *, NSError *))result {
-  if (!result)
-  {
+- (void)loadTileAtPath:(MKTileOverlayPath)path
+                result:(void (^)(NSData *, NSError *))result {
+  if (!result) {
     return;
   }
-  
-  NSURLRequest *request = [NSURLRequest requestWithURL:[self URLForTilePath:path]];
-  [[NSURLConnection rac_sendAsynchronousRequest:request] subscribeNext:^(RACTuple *tuple) {
-    NSData *data = tuple.second;
-    result(data,nil);
-  } error:^(NSError *error) {
-    NSLog(@"%@",[error description]);
-    result(nil,error);
-  }];
+  [rasterSource tileForPath:path tileSize:self.tileSize result:result];
 }
 
 @end
