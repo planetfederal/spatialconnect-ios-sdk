@@ -31,6 +31,12 @@ typedef NS_ENUM(NSInteger, SCJavascriptError) {
   SCJSERROR_SENSORSERVICE_GPS = 200
 };
 
+typedef NS_ENUM(NSInteger, SCBridgeStatus) {
+  SCJSSTATUS_NEXT = 0,
+  SCJSSTATUS_COMPLETED = 1,
+  SCJSSTATUS_ERROR = 2
+};
+
 #define SCJS_GEO_CONTAINS @"$geocontains"
 #define SCJS_GEO_DISJOINT @"$geodisjoint"
 #define SCJS_AND @"$and"

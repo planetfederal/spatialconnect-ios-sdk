@@ -20,11 +20,11 @@
 #import "SCJavascriptBridgeAPI.h"
 #import <Foundation/Foundation.h>
 
-@interface SCRCTBridge : NSObject
-
-@property(nonatomic) SCJavascriptBridgeAPI *bridge;
+@interface SCRCTBridge : NSObject {
+  SCJavascriptBridgeAPI *bridgeAPI;
+}
 
 - (void)handler:(NSDictionary *)data
-    responseCallback:(void (^)(NSDictionary *data))callback;
+    responseCallback:(void (^)(NSDictionary *data, NSInteger status))callback;
 
 @end
