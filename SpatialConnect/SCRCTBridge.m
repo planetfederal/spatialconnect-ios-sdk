@@ -17,25 +17,39 @@
  * under the License.
  ******************************************************************************/
 
+#import "Commands.h"
 #import "SCRCTBridge.h"
+#import "SCJavascriptCommands.h"
 #import "SCJavascriptBridgeAPI.h"
 
 @implementation SCRCTBridge
 
+
 - (id)init {
     if (self = [super init]) {
-        self.bridge = [[SCJavascriptBridgeAPI alloc] init];
+        bridgeAPI = [[SCJavascriptBridgeAPI alloc] init];
     }
     return self;
 }
     
-- (void) handler:(NSDictionary *)action responseCallback:(void(^)(NSDictionary *data))callback {
-    [[self.bridge parseJSAction:action] subscribeNext:^(NSDictionary *payload) {
+- (void) handler:(NSDictionary *)action responseCallback:(void(^)(NSDictionary *data, NSInteger status))callback {
+    [[bridgeAPI parseJSAction:action] subscribeNext:^(NSDictionary *payload) {
         NSDictionary *newAction = @{
             @"type": action[@"type"],
             @"payload": payload
         };
-        callback(newAction);
+        callback(newAction, SCJSSTATUS_NEXT);
+    } error:^(NSError *error) {
+        NSDictionary *newAction = @{
+            @"type": action[@"type"],
+            @"payload": [error localizedDescription]
+        };
+      callback(newAction, SCJSSTATUS_ERROR);
+    } completed:^{
+        NSDictionary *completed = @{
+            @"type": action[@"type"]
+        };
+        callback(completed, SCJSSTATUS_COMPLETED);
     }];
 }
 

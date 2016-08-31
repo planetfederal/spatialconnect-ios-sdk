@@ -80,8 +80,6 @@
         if (ds) {
           XCTAssertNotNil(ds.layerList, @"Layer list as array");
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-          [filter
-              addLayerIds:[ds.layerList subarrayWithRange:NSMakeRange(0, 1)]];
           SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
             @(-124.07438528127528),
             @(42.922397667217076),
@@ -112,7 +110,7 @@
         }
       }];
   [sc startAllServices];
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testWFSMultiLayerQuery {

@@ -39,7 +39,7 @@
 "store_type":"wfs",
 "version":"1.1.0",
 "name":"WFS Demo",
-"default_layer":"osm:polygon_barrier",
+"default_layers":["osm:polygon_barrier"],
 "uri":"http://demo.boundlessgeo.com/geoserver/wfs",
 "id":"0f193979-b871-47cd-b60d-e271d6504359"
 }

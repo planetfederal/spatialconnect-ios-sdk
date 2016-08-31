@@ -28,11 +28,11 @@
      responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)queryAllStores:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)queryStoreById:(NSDictionary *)value
+- (void)queryStoresByIds:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber;
-- (void)queryGeoStoreById:(NSDictionary *)value
+- (void)queryGeoStoresByIds:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber;
 - (void)createFeature:(NSDictionary *)value
    responseSubscriber:(id<RACSubscriber>)subscriber;
