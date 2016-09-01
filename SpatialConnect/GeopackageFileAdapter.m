@@ -18,6 +18,7 @@
  ******************************************************************************/
 #import "GeopackageFileAdapter.h"
 #import "GeopackageStore.h"
+#import "SCHttpUtils.h"
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 #import "SCGeopackage.h"
@@ -26,7 +27,7 @@
 #import "SCPoint.h"
 
 @interface GeopackageFileAdapter ()
-- (RACSignal *)attemptFileDownload:(NSURL *)fileUrl;
+
 @end
 
 @interface GeopackageFileAdapter ()
@@ -96,7 +97,7 @@
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
+          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
             NSLog(@"Saving GPKG to %@", path);
             [data writeToFile:path atomically:YES];
             self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
@@ -127,14 +128,6 @@
   if (self.gpkg) {
     [self.gpkg close];
   }
-}
-
-- (RACSignal *)attemptFileDownload:(NSURL *)fileUrl {
-  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:fileUrl];
-  return [[NSURLConnection rac_sendAsynchronousRequest:request]
-      reduceEach:^id(NSURLResponse *response, NSData *data) {
-        return data;
-      }];
 }
 
 - (NSString *)defaultLayerName {
