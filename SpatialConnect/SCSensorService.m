@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "JSONKit.h"
+#import "Reachability.h"
 #import "SCPoint.h"
 #import "SCSensorService.h"
 #import "Scmessage.pbobjc.h"
@@ -31,6 +32,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 @property(nonatomic) CLLocationAccuracy accuracy;
 @property(nonatomic) BOOL isTracking;
 @property(nonatomic) RACSignal *lastKnown;
+@property(nonatomic) RACBehaviorSubject *reachabilitySignal;
 
 - (void)startLocationManager;
 - (void)stopLocationManager;
@@ -44,6 +46,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 
 @synthesize distance, accuracy;
 @synthesize lastKnown = _lastKnown;
+@synthesize reachabilitySignal = _reachabilitySignal;
 
 - (instancetype)init {
   self = [super init];
@@ -95,6 +98,18 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
             initWithCoordinateArray:@[ @(lon), @(lat), @(alt) ]];
         return p;
       }];
+  
+  Reachability *reach = [Reachability reachabilityForInternetConnection];
+  [reach startNotifier];
+  self.reachabilitySignal = [RACBehaviorSubject
+                             behaviorSubjectWithDefaultValue:reach];
+  __weak typeof(self) weakSelf = self;
+  reach.reachableBlock = ^(Reachability *r) {
+    [weakSelf.reachabilitySignal sendNext:r];
+  };
+  reach.unreachableBlock = ^(Reachability *r) {
+    [weakSelf.reachabilitySignal sendNext:r];
+  };
 }
 
 - (void)stop {

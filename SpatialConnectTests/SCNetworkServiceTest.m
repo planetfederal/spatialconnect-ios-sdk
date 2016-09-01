@@ -17,6 +17,7 @@
 #import "SCFormFeature.h"
 #import "SCGeopackageHelper.h"
 #import "SCPoint.h"
+#import "Reachability.h"
 #import "SpatialConnectHelper.h"
 #import <XCTest/XCTest.h>
 
@@ -31,6 +32,7 @@
 - (void)setUp {
   [super setUp];
   self.sc = [SpatialConnectHelper loadRemoteConfig];
+  [self.sc startAllServices];
 }
 
 - (void)tearDown {
@@ -40,9 +42,19 @@
   [self.sc stopAllServices];
 }
 
+- (void)testReachability {
+  XCTestExpectation *expect = [self expectationWithDescription:@"Reachability"];
+  [[sc serviceStarted:[SCSensorService serviceId]] subscribeNext:^(id value) {
+    [self.sc.sensorService.reachabilitySignal subscribeNext:^(Reachability *r) {
+      XCTAssertNotNil(r);
+      [expect fulfill];
+    }];
+  }];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
 - (void)testGetRequest {
   XCTestExpectation *expect = [self expectationWithDescription:@"Ping Server"];
-  [self.sc startAllServices];
   NSString *url =
       [NSString stringWithFormat:@"%@/ping", self.sc.backendService.backendUri];
   [[SCHttpUtils getRequestURLAsData:[NSURL URLWithString:url]]
@@ -54,14 +66,12 @@
 }
 
 - (void)testRemoteConfig {
-  [self.sc startAllServices];
   NSArray *arr = [self.sc.dataService.defaultStore layerList];
   XCTAssertNotNil(arr);
 }
 
 - (void)testFormSubmission {
   XCTestExpectation *expect = [self expectationWithDescription:@"FormSubmit"];
-  [self.sc startAllServices];
   NSArray *arr = [self.sc.dataService.defaultStore layerList];
   XCTAssertNotNil(arr);
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(-22.3), @(56.2) ]];
