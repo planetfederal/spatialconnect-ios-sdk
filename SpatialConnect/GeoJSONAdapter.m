@@ -20,6 +20,7 @@
 #import "GeoJSONAdapter.h"
 #import "GeoJSONStore.h"
 #import "SCFileUtils.h"
+#import "SCHttpUtils.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCGeometryCollection+GeoJSON.h"
@@ -87,7 +88,7 @@
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
     return
     [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-      [[self attemptFileDownload:url] subscribeNext:^(NSData *data) {
+      [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
         NSLog(@"Saving GEOJSON to %@", path);
         [data writeToFile:path atomically:YES];
         self.connector =
@@ -145,14 +146,6 @@
 
 - (NSArray *)layerList {
   return @[ @"default" ];
-}
-
-- (RACSignal *)attemptFileDownload:(NSURL *)fileUrl {
-  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:fileUrl];
-  return [[NSURLConnection rac_sendAsynchronousRequest:request]
-          reduceEach:^id(NSURLResponse *response, NSData *data) {
-            return data;
-          }];
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
