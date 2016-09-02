@@ -38,7 +38,7 @@
     self.to = d[@"to"];
     self.priority = [self strToPriority:d[@"priority"]];
     self.icon = d[@"notification"][@"icon"];
-    self.title = d[@"notificatoin"][@"title"];
+    self.title = d[@"notification"][@"title"];
     self.body = d[@"notification"][@"body"];
     self.payload = d[@"payload"];
   }
