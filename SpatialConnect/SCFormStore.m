@@ -80,14 +80,6 @@
 
 #pragma mark -
 #pragma mark SCSpatialStore
-- (RACSignal *)query:(SCQueryFilter *)filter {
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [subscriber sendCompleted];
-        return nil;
-      }];
-}
-
 - (RACSignal *)queryById:(SCKeyTuple *)key {
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
