@@ -75,6 +75,16 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
 
 - (RACSignal *)start {
   [super start];
+  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+    subscribeNext:^(id value) {
+      NSString *password = [keychainItem objectForKey:(__bridge id)kSecValueData];
+      NSString *username = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+      if (![password isEqualToString:@""] && ![username isEqualToString:@""]) {
+        [self authenticate:username password:password];
+      } else {
+        [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
+      }
+    }];
   return [RACSignal empty];
 }
 

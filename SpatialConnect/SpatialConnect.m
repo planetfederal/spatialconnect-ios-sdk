@@ -144,12 +144,12 @@
 }
 
 - (void)startAllServices {
+  [self startService:[self.authService.class serviceId]];
   [self startService:[self.kvpService.class serviceId]];
   [self startService:[self.dataService.class serviceId]];
   [self startService:[self.configService.class serviceId]];
   [self startService:[self.sensorService.class serviceId]];
   [self startService:[self.rasterService.class serviceId]];
-  [self startService:[self.authService.class serviceId]];
 }
 
 - (void)stopAllServices {
