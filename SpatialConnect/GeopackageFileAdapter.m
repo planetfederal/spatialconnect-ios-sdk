@@ -205,7 +205,11 @@
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [self.gpkg query:filter];
+  return [[self.gpkg query:filter] map:^SCSpatialFeature *(SCSpatialFeature *f) {
+    f.storeId = self.storeId;
+    return f;
+  }];
+
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
