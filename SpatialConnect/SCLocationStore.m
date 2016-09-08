@@ -94,7 +94,7 @@
       }
     }] flattenMap:^RACStream *(id value) {
       SCMessage *msg = [[SCMessage alloc] init];
-      msg.action = 100;
+      msg.action = 0;
       msg.payload = [[pt JSONDict] JSONString];
       [sc.backendService publish:msg onTopic:@"/store/tracking"];
       return [RACSignal empty];
