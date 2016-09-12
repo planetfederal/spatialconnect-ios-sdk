@@ -141,7 +141,11 @@ double lon2x(double lon) { return deg2rad(lon) * earth_radius; }
 
 - (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   if (c == self.crs) {
-    return [self coordinateArray];
+    return @[
+      [NSNumber numberWithDouble:self.x],
+      [NSNumber numberWithDouble:self.y],
+      [NSNumber numberWithDouble:self.z]
+    ];
   } else if (c == 4326 && self.crs == 3857) {
     return @[
       [NSNumber numberWithDouble:self.longitude],
