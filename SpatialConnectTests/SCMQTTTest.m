@@ -55,11 +55,7 @@
         }];
       }] subscribeNext:^(id x) {
     SCMessage *msg = [[SCMessage alloc] init];
-    msg.correlationId = 234;
     msg.action = 456;
-    NSString *replyTo =
-        [NSString stringWithFormat:@"/device/%@-replyTo", sc.deviceIdentifier];
-    msg.replyTo = replyTo;
     [[sc.backendService publishReplyTo:msg onTopic:@"/ping"]
         subscribeNext:^(id x) {
           [expect fulfill];
@@ -73,7 +69,7 @@
   }];
 
   [sc startAllServices];
-  [self waitForExpectationsWithTimeout:2.0 handler:nil];
+  [self waitForExpectationsWithTimeout:15.0 handler:nil];
 }
 
 //- (void)testTrackingNotification {

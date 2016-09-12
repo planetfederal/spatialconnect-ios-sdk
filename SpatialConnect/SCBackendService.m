@@ -119,8 +119,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
-    [[[SpatialConnect sharedInstance] configService]
-        loadConfig:[[SCConfig alloc] initWithDictionary:dict]];
+    SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
+    [[[SpatialConnect sharedInstance] configService] loadConfig:cfg];
     [_configReceived sendNext:@(YES)];
   }];
 }
@@ -143,14 +143,14 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     NSData *d = (NSData *)[t second];
     NSError *err;
     SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
+    if (err) {
+      NSLog(@"%@", err.description);
+    }
     return msg;
   }];
 
   session.delegate = self;
   [session connectAndWaitTimeout:30];
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [session subscribeTopic:[NSString stringWithFormat:@"/device/%@-replyTo",
-                                                     sc.deviceIdentifier]];
 }
 
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic {

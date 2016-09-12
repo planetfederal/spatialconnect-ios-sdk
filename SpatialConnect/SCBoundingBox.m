@@ -36,6 +36,10 @@
   return [[SCBoundingBox alloc] initWithPoints:@[ ll, ur ] crs:4326];
 }
 
+- (id)initWithCoords:(NSArray *)coords {
+  return [self initWithCoords:coords crs:4326];
+}
+
 /*!
  *  @brief (ll_x,ll_y,ur_x,ur_y)
  *
