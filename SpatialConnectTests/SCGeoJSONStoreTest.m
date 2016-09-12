@@ -28,7 +28,6 @@
 - (void)setUp {
   [super setUp];
   self.sc = [SpatialConnectHelper loadConfig];
-  [self.sc startAllServices];
 }
 
 - (void)tearDown {
@@ -43,21 +42,20 @@
   NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
   NSString *fileName = [NSString stringWithFormat:@"%@.geojson", storeId];
   NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
-  [[[[sc serviceStarted:[SCDataService serviceId]]
-     flattenMap:^RACStream *(id value) {
-       return [sc.dataService storeStarted:storeId];
-     }] map:^SCDataStore *(SCStoreStatusEvent *evt) {
-       SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-       return ds;
-     }] subscribeNext:^(id<SCSpatialStore> ds) {
-       BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-       XCTAssertTrue(b);
-       [expect fulfill];
-     }
-   error:^(NSError *error) {
-     XCTFail(@"Error getting store");
-     [expect fulfill];
-   }];
+  [[[sc.dataService storeStarted:storeId]
+      map:^SCDataStore *(SCStoreStatusEvent *evt) {
+        SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
+        return ds;
+      }] subscribeNext:^(id<SCSpatialStore> ds) {
+    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    XCTAssertTrue(b);
+    [expect fulfill];
+  }
+      error:^(NSError *error) {
+        XCTFail(@"Error getting store");
+        [expect fulfill];
+      }];
+  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
