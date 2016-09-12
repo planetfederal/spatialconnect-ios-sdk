@@ -39,9 +39,10 @@
 @property(nonatomic) RACMulticastConnection *storeEvents;
 @property(readonly) RACBehaviorSubject *hasStores;
 
-- (void)registerStore:(SCDataStore *)store;
+- (BOOL)registerStore:(SCDataStore *)store;
 - (void)unregisterStore:(SCDataStore *)store;
-- (void)registerStoreByConfig:(SCStoreConfig *)c;
+- (BOOL)registerStoreByConfig:(SCStoreConfig *)c;
+- (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg;
 
 - (SCDefaultStore *)defaultStore;
 - (SCFormStore *)formStore;
@@ -67,6 +68,6 @@
 - (RACSignal *)queryStoreById:(NSString *)storeId
                    withFilter:(SCQueryFilter *)filter;
 - (RACSignal *)queryStoresByIds:(NSArray *)storeIds
-                   withFilter:(SCQueryFilter *)filter;
+                     withFilter:(SCQueryFilter *)filter;
 
 @end

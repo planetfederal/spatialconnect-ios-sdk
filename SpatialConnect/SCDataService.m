@@ -200,18 +200,11 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   [self stopAllStores];
 }
 
-- (void)addAndStartStore:(SCStoreConfig *)cfg {
-  Class store =
-      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", cfg.type,
-                                                           cfg.version]];
-  if (!store) {
-    @throw @"Store is not present";
+- (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg {
+  if ([self registerStoreByConfig:cfg]) {
+    id<SCDataStoreLifeCycle> store = [self.stores objectForKey:cfg.uniqueid];
+    [self startStore:store];
   }
-  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:cfg];
-  if (gmStore.key) {
-    [self registerStore:gmStore];
-  }
-  [self startStore:gmStore];
 }
 
 /**
@@ -219,23 +212,34 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
  * files. If the service is already running, it will start newly registered
  *stores.
  **/
-- (void)registerStore:(SCDataStore *)store {
+- (BOOL)registerStore:(SCDataStore *)store {
   if (!store.storeId) {
     NSCAssert(store.storeId, @"Store Id not set");
+    return NO;
   } else if ([self.stores objectForKey:store.storeId]) {
     NSLog(@"STORE %@ ALREADY EXISTS", store.storeId);
+    return NO;
   } else {
-
     [self.stores setObject:store forKey:store.storeId];
-    if (self.status == SC_DATASTORE_RUNNING) {
-      [(id<SCDataStoreLifeCycle>)store start];
-    }
+    return YES;
   }
 }
 
-- (void)registerStoreByConfig:(SCStoreConfig *)c {
+- (BOOL)registerStoreByConfig:(SCStoreConfig *)c {
   NSCAssert(c.uniqueid, @"Store Id not set");
-  [self addAndStartStore:c];
+  Class store =
+      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
+                                                           c.version]];
+  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
+  if (!store) {
+    NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
+          @"implementation.\n Here is a list of supported stores:\n%@",
+          c.type, c.version,
+          [self.supportedStoreImpls.allKeys componentsJoinedByString:@",\n"]);
+    return NO;
+  } else {
+    return [self registerStore:gmStore];
+  }
 }
 
 - (void)unregisterStore:(SCDataStore *)store {
@@ -346,17 +350,19 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter {
-    return [[[stores rac_sequence] signal] flattenMap:^RACStream *(id<SCSpatialStore> store) {
-      return [store query:filter];
-    }];
+  return [[[stores rac_sequence] signal]
+      flattenMap:^RACStream *(id<SCSpatialStore> store) {
+        return [store query:filter];
+      }];
 }
 
 - (RACSignal *)queryStoresByIds:(NSArray *)storeIds
-                   withFilter:(SCQueryFilter *)filter {
+                     withFilter:(SCQueryFilter *)filter {
   NSArray *stores = [self storesByProtocol:@protocol(SCSpatialStore)];
-  NSArray *filtered = [[[[stores rac_sequence] signal] filter:^BOOL(SCDataStore *store) {
-    return [storeIds containsObject: store.storeId];
-  }] toArray];
+  NSArray *filtered =
+      [[[[stores rac_sequence] signal] filter:^BOOL(SCDataStore *store) {
+        return [storeIds containsObject:store.storeId];
+      }] toArray];
   return [self queryStores:filtered filter:filter];
 }
 
