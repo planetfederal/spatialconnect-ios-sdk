@@ -52,6 +52,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (RACSignal *)start {
+  [super start];
   [self setupMQTT];
   [self setupSubscriptions];
   [self authListener];

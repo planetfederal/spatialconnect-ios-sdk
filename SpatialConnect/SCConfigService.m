@@ -102,7 +102,7 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   }];
   [c.dataServiceStores enumerateObjectsUsingBlock:^(
                            SCStoreConfig *scfg, NSUInteger idx, BOOL *stop) {
-    [sc.dataService registerStoreByConfig:scfg];
+    [sc.dataService registerAndStartStoreByConfig:scfg];
   }];
   if (c.remote) {
     [sc connectBackend:c.remote];

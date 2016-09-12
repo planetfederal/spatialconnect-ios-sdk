@@ -43,15 +43,17 @@
 
 - (void)testLocation {
   XCTestExpectation *expect = [self expectationWithDescription:@"Location"];
-  [sc startAllServices];
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(-32), @(32) ]];
-  SCLocationStore *lStore = sc.dataService.locationStore;
-  [p.properties setObject:@([[NSDate new] timeIntervalSince1970])
-                   forKey:@"timestamp"];
-  [p.properties setObject:@"GPS" forKey:@"accuracy"];
-  [[lStore create:p] subscribeCompleted:^{
-    [expect fulfill];
+  [[sc.dataService storeStarted:@"LOCATION_STORE"] subscribeNext:^(id x) {
+    SCLocationStore *lStore = sc.dataService.locationStore;
+    [p.properties setObject:@([[NSDate new] timeIntervalSince1970])
+                     forKey:@"timestamp"];
+    [p.properties setObject:@"GPS" forKey:@"accuracy"];
+    [[lStore create:p] subscribeCompleted:^{
+      [expect fulfill];
+    }];
   }];
+  [sc startAllServices];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
