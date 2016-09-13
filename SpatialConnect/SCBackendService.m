@@ -78,8 +78,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 - (void)setupSubscriptions {
   NSString *ident = [[SpatialConnect sharedInstance] deviceIdentifier];
-  self.notifications = [self listenOnTopic:@"/notify"];
-  [[self.notifications
+  self.notifications = [[[self listenOnTopic:@"/notify"]
       merge:[self
                 listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
       map:^id(SCMessage *m) {

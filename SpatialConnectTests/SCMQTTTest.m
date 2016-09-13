@@ -82,13 +82,12 @@
       @(37.33529260332278)
     ]];
     msg.payload = [[p JSONDict] JSONString];
-    [[sc.backendService notifications] subscribeNext:^(SCMessage *m) {
-      NSLog(@"%@", m.payload);
-      SCNotification *n = [[SCNotification alloc] initWithMessage:m];
-      XCTAssertNotNil(n);
-      XCTAssertNotNil([n dictionary]);
-      [expect fulfill];
-    }];
+    [[[sc.backendService notifications] take:1]
+        subscribeNext:^(SCNotification *n) {
+          XCTAssertNotNil(n);
+          XCTAssertNotNil([n dictionary]);
+          [expect fulfill];
+        }];
     [sc.backendService publish:msg onTopic:@"/store/tracking"];
   }];
   [sc startAllServices];
