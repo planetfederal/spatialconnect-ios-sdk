@@ -47,7 +47,7 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   NSDictionary *authDict = @{ @"email" : username, @"password" : pass };
   NSDictionary *res =
       [SCHttpUtils postDictRequestAsDictBLOCKING:url body:authDict];
-  if (res && (jsonWebToken = [res objectForKey:@"token"])) {
+  if (res && (jsonWebToken = res[@"result"][@"token"])) {
     [keychainItem setObject:pass forKey:(__bridge id)kSecValueData];
     [keychainItem setObject:username forKey:(__bridge id)kSecAttrAccount];
     [loginStatus sendNext:@(SCAUTH_AUTHENTICATED)];
@@ -75,16 +75,17 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
 
 - (RACSignal *)start {
   [super start];
-  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
-    subscribeNext:^(id value) {
-      NSString *password = [keychainItem objectForKey:(__bridge id)kSecValueData];
-      NSString *username = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
-      if (![password isEqualToString:@""] && ![username isEqualToString:@""]) {
-        [self authenticate:username password:password];
-      } else {
-        [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
-      }
-    }];
+  [[[SpatialConnect sharedInstance]
+      serviceStarted:[SCBackendService serviceId]] subscribeNext:^(id value) {
+    NSString *password = [keychainItem objectForKey:(__bridge id)kSecValueData];
+    NSString *username =
+        [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+    if (![password isEqualToString:@""] && ![username isEqualToString:@""]) {
+      [self authenticate:username password:password];
+    } else {
+      [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
+    }
+  }];
   return [RACSignal empty];
 }
 
