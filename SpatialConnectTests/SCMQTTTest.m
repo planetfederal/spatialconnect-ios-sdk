@@ -72,26 +72,26 @@
   [self waitForExpectationsWithTimeout:15.0 handler:nil];
 }
 
-//- (void)testTrackingNotification {
-//  XCTestExpectation *expect = [self expectationWithDescription:@"MQTT"];
-//  [sc.backendService start];
-//  SCMessage *msg = [[SCMessage alloc] init];
-//  msg.correlationId = 234;
-//  msg.action = 456;
-//  SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-//    @(-122.03943729400633),
-//    @(37.33525848132234)
-//  ]];
-//  msg.payload = [[p JSONDict] JSONString];
-//  [[sc.backendService notifications] subscribeNext:^(SCMessage *m) {
-//    NSLog(@"%@", m.payload);
-//    SCNotification *n = [[SCNotification alloc] initWithMessage:m];
-//    XCTAssertNotNil(n);
-//    XCTAssertNotNil([n dictionary]);
-//    [expect fulfill];
-//  }];
-//  [sc.backendService publish:msg onTopic:@"/store/tracking"];
-//  [self waitForExpectationsWithTimeout:10.0 handler:nil];
-//}
+- (void)testTrackingNotification {
+  XCTestExpectation *expect = [self expectationWithDescription:@"MQTT"];
+  [[sc serviceStarted:[SCBackendService serviceId]] subscribeNext:^(id x) {
+    SCMessage *msg = [[SCMessage alloc] init];
+    msg.correlationId = 234;
+    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
+      @(-122.0396089553833),
+      @(37.33529260332278)
+    ]];
+    msg.payload = [[p JSONDict] JSONString];
+    [[[sc.backendService notifications] take:1]
+        subscribeNext:^(SCNotification *n) {
+          XCTAssertNotNil(n);
+          XCTAssertNotNil([n dictionary]);
+          [expect fulfill];
+        }];
+    [sc.backendService publish:msg onTopic:@"/store/tracking"];
+  }];
+  [sc startAllServices];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+}
 
 @end
