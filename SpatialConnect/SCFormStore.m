@@ -14,6 +14,7 @@
  * limitations under the License
  */
 
+#import "Commands.h"
 #import "SCFormStore.h"
 #import "SCHttpUtils.h"
 #import "SCPoint+GeoJSON.h"
@@ -63,10 +64,10 @@
 }
 
 - (void)registerFormByConfig:(SCFormConfig *)f {
-  [_hasForms sendNext:@(YES)];
   [storeForms setObject:f forKey:f.key];
   [formIds setObject:@(f.identifier) forKey:f.key];
   [super addLayer:f.key withDef:[f sqlTypes]];
+  [_hasForms sendNext:@(YES)];
 }
 
 - (NSArray *)formsDictionary {
@@ -98,18 +99,17 @@
           return NO;
         }
       }] flattenMap:^RACStream *(id value) {
-    NSInteger formid = [[formIds objectForKey:feature.layerId] integerValue];
-    if (sc.backendService.backendUri) {
-      NSString *urlStr =
-          [NSString stringWithFormat:@"%@/api/forms/%ld/submit?token=%@",
-                                     sc.backendService.backendUri, (long)formid,
-                                     sc.authService.xAccessToken];
-      NSURL *url = [NSURL URLWithString:urlStr];
+    if (sc.backendService.status == SC_SERVICE_RUNNING) {
       feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-      return [SCHttpUtils postDictRequestAsDict:url body:feature.JSONDict];
-    } else {
-      return [RACSignal empty];
+      SCMessage *msg = [[SCMessage alloc] init];
+      NSDictionary *submission = @{
+        @"form_id" : [formIds objectForKey:feature.layerId],
+        @"feature" : [feature JSONDict]
+      };
+      msg.payload = submission.JSONString;
+      [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
     }
+    return [RACSignal empty];
 
   }];
 }

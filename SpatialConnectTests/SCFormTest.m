@@ -73,4 +73,34 @@
   [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
+- (void)testFormSubmission {
+  XCTestExpectation *expect = [self expectationWithDescription:@"Form Submit"];
+
+  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+      flattenMap:^RACStream *(id value) {
+        [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+        return [[sc.backendService configReceived] filter:^BOOL(NSNumber *n) {
+          return [n boolValue] == YES;
+        }];
+      }] take:1] flattenMap:^RACStream *(id value) {
+    SCSpatialFeature *f = [[SCSpatialFeature alloc] init];
+    f.layerId = @"baseball_team";
+    f.storeId = @"FORM_STORE";
+    [f.properties setObject:@"Baltimore" forKey:@"team"];
+    [f.properties setObject:[[NSDate date] description] forKey:@"why"];
+    return [self.sc.dataService.formStore create:f];
+  }] subscribeNext:^(id x) {
+    [expect fulfill];
+  }
+      error:^(NSError *error) {
+        [expect fulfill];
+      }
+      completed:^{
+        [expect fulfill];
+      }];
+
+  [self.sc startAllServices];
+  [self waitForExpectationsWithTimeout:13.0 handler:nil];
+}
+
 @end
