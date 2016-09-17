@@ -72,6 +72,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     SCAuthStatus s = [n integerValue];
     if (s == SCAUTH_AUTHENTICATED) {
       [self registerAndFetchConfig];
+      [self fetchConfigAndListen];
     }
   }];
 }
@@ -88,18 +89,24 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 - (void)fetchConfigAndListen {
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
+    NSString *json = msg.payload;
     switch (msg.action) {
-    case CONFIG_ADD_STORE:
-      NSLog(@"Add Store");
-      break;
-    case CONFIG_UPDATE_STORE:
-      NSLog(@"Update Store");
-      break;
-    case CONFIG_REMOVE_STORE:
-      NSLog(@"Remove Store");
-      break;
-    default:
-      break;
+      case CONFIG_ADD_STORE: {
+        NSDictionary *payload = [json objectFromJSONString];
+        SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:payload];
+        [[[SpatialConnect sharedInstance] dataService] registerAndStartStoreByConfig:config];
+        break;
+      }
+      case CONFIG_UPDATE_STORE:
+        NSLog(@"Update Store");
+        break;
+      case CONFIG_REMOVE_STORE: {
+        SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:json];
+        [[[SpatialConnect sharedInstance] dataService] unregisterStore:ds];
+        break;
+      }
+      default:
+        break;
     }
   }];
 }
@@ -139,15 +146,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       rac_signalForSelector:@selector(newMessage:data:onTopic:qos:retained:mid:)
                fromProtocol:@protocol(MQTTSessionDelegate)];
 
-  multicast = [[[d publish] autoconnect] map:^SCMessage *(RACTuple *t) {
-    NSData *d = (NSData *)[t second];
-    NSError *err;
-    SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
-    if (err) {
-      NSLog(@"%@", err.description);
-    }
-    return msg;
-  }];
+  multicast = [[d publish] autoconnect];
 
   session.delegate = self;
   [session connectAndWaitTimeout:30];
@@ -198,7 +197,15 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   [session subscribeTopic:msg.replyTo];
   if (session) {
     [session publishData:[msg data] onTopic:topic];
-    return [multicast filter:^BOOL(SCMessage *m) {
+    return [[multicast map:^SCMessage *(RACTuple *t) {
+      NSData *d = (NSData *)[t second];
+      NSError *err;
+      SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
+      if (err) {
+        NSLog(@"%@", err.description);
+      }
+      return msg;
+    }] filter:^BOOL(SCMessage *m) {
       if (m.correlationId == msg.correlationId) {
         return YES;
       }
@@ -210,7 +217,17 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 - (RACSignal *)listenOnTopic:(NSString *)topic {
   [session subscribeTopic:topic];
-  return multicast;
+  return [[multicast filter:^BOOL(RACTuple *t) {
+    return [[t third] isEqualToString: topic];
+  }] map:^SCMessage *(RACTuple *t) {
+    NSData *d = (NSData *)[t second];
+    NSError *err;
+    SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
+    if (err) {
+      NSLog(@"%@", err.description);
+    }
+    return msg;
+  }];
 }
 
 + (NSString *)serviceId {

@@ -177,6 +177,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (void)stopStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [((id<SCDataStoreLifeCycle>)store)stop];
+    [_hasStores sendNext:@([[self stores] count] > 0)];
     [self.storeEventSubject
         sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STOPPED
                                     andStoreId:store.storeId]];
