@@ -115,17 +115,19 @@
 }
 
 - (void)activeStoreList:(id<RACSubscriber>)subscriber {
-  NSArray *arr =
-      [[[SpatialConnect sharedInstance] dataService] activeStoreListDictionary];
-  [subscriber sendNext:@{ @"stores" : arr }];
-  [subscriber sendCompleted];
+  [[[[SpatialConnect sharedInstance] dataService] hasStores] subscribeNext:^(NSNumber *status) {
+    NSArray *arr =
+    [[[SpatialConnect sharedInstance] dataService] activeStoreListDictionary];
+    [subscriber sendNext:@{ @"stores" : arr }];
+  }];
 }
 
 - (void)formList:(id<RACSubscriber>)subscriber {
-  NSArray *arr = [[[[SpatialConnect sharedInstance] dataService] formStore]
+  [[[[[SpatialConnect sharedInstance] dataService] formStore] hasForms] subscribeNext:^(NSNumber *status) {
+    NSArray *arr = [[[[SpatialConnect sharedInstance] dataService] formStore]
       formsDictionary];
-  [subscriber sendNext:@{ @"forms" : arr }];
-  [subscriber sendCompleted];
+    [subscriber sendNext:@{ @"forms" : arr }];
+  }];
 }
 
 - (void)activeStoreById:(NSDictionary *)value
