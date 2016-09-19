@@ -55,7 +55,7 @@
       return [o boolValue];
     }] sequence] signal];
   }] take:1] subscribeNext:^(id x) {
-    NSArray *a = [self.sc.dataService.formStore formsDictionary];
+    NSArray *a = [self.sc.dataService.formStore formsDictionaryArray];
 
     XCTAssertNotNil(a);
     XCTAssertGreaterThan(a.count, 0);

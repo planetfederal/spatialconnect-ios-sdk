@@ -33,12 +33,10 @@
 
 @property(readonly, nonatomic, strong) NSString *uri;
 @property(readonly, nonatomic, strong) NSString *filepath;
-@property(readonly, nonatomic, strong) NSString *storeId;
 @property(readonly, nonatomic, strong) SCGeopackage *gpkg;
 @property(nonatomic, weak) GeopackageStore *parentStore;
 
-- (id)initWithFileName:(NSString *)dbname;
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg;
+- (id)initWithFileName:(NSString *)dbname andURI:(NSString *)u;
 - (RACSignal *)connect;
 - (void)connectBlocking;
 - (void)disconnect;
