@@ -41,6 +41,8 @@
 
 - (BOOL)registerStore:(SCDataStore *)store;
 - (void)unregisterStore:(SCDataStore *)store;
+- (void)updateStore:(SCDataStore *)store;
+- (BOOL)updateStoreByConfig:(SCStoreConfig *)c;
 - (BOOL)registerStoreByConfig:(SCStoreConfig *)c;
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg;
 

@@ -250,6 +250,34 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   [self.stores removeObjectForKey:store.storeId];
 }
 
+- (void)updateStore:(SCDataStore *)store {
+  [self stopStore:store];
+  [self.stores setObject:store forKey:store.storeId];
+  [self startStore:store];
+}
+
+- (BOOL)updateStoreByConfig:(SCStoreConfig *)c {
+  NSCAssert(c.uniqueid, @"Store Id not set");
+  Class store =
+  [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
+                             c.version]];
+  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
+  if (!store) {
+    NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
+          @"implementation.\n Here is a list of supported stores:\n%@",
+          c.type, c.version,
+          [self.supportedStoreImpls.allKeys componentsJoinedByString:@",\n"]);
+    return NO;
+  } else if (![self.stores objectForKey:gmStore.storeId]) {
+    NSLog(@"STORE %@ DOES NOT EXIST", gmStore.storeId);
+    return NO;
+  } else {
+    [self updateStore:gmStore];
+    return YES;
+  }
+  
+}
+
 - (Class)supportedStoreByKey:(NSString *)key {
   return (Class)[self.supportedStoreImpls objectForKey:key];
 }

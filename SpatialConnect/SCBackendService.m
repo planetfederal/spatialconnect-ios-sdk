@@ -97,9 +97,13 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
         [[[SpatialConnect sharedInstance] dataService] registerAndStartStoreByConfig:config];
         break;
       }
-      case CONFIG_UPDATE_STORE:
-        NSLog(@"Update Store");
+      case CONFIG_UPDATE_STORE: {
+        NSDictionary *payload = [json objectFromJSONString];
+        NSLog(@"UPDATE_STORE %@", payload);
+        SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:payload];
+        [[[SpatialConnect sharedInstance] dataService] updateStoreByConfig:config];
         break;
+      }
       case CONFIG_REMOVE_STORE: {
         SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:json];
         [[[SpatialConnect sharedInstance] dataService] unregisterStore:ds];
