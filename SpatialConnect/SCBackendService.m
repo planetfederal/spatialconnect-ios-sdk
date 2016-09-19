@@ -72,7 +72,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     SCAuthStatus s = [n integerValue];
     if (s == SCAUTH_AUTHENTICATED) {
       [self registerAndFetchConfig];
-      [self fetchConfigAndListen];
+      [self listenForUpdates];
     }
   }];
 }
@@ -87,7 +87,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       }];
 }
 
-- (void)fetchConfigAndListen {
+- (void)listenForUpdates {
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *json = msg.payload;
     switch (msg.action) {
@@ -99,7 +99,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       }
       case CONFIG_UPDATE_STORE: {
         NSDictionary *payload = [json objectFromJSONString];
-        NSLog(@"UPDATE_STORE %@", payload);
         SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:payload];
         [[[SpatialConnect sharedInstance] dataService] updateStoreByConfig:config];
         break;
@@ -198,10 +197,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   msg.correlationId = ti;
   msg.replyTo =
       [NSString stringWithFormat:@"/device/%@-replyTo", sc.deviceIdentifier];
-  [session subscribeTopic:msg.replyTo];
   if (session) {
-    [session publishData:[msg data] onTopic:topic];
-    return [[multicast map:^SCMessage *(RACTuple *t) {
+    RACSignal *s = [[multicast map:^SCMessage *(RACTuple *t) {
       NSData *d = (NSData *)[t second];
       NSError *err;
       SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
@@ -215,13 +212,15 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       }
       return NO;
     }];
+    [session subscribeTopic:msg.replyTo];
+    [session publishData:[msg data] onTopic:topic];
+    return s;
   }
   return nil;
 }
 
 - (RACSignal *)listenOnTopic:(NSString *)topic {
-  [session subscribeTopic:topic];
-  return [[multicast filter:^BOOL(RACTuple *t) {
+  RACSignal *s = [[multicast filter:^BOOL(RACTuple *t) {
     return [[t third] isEqualToString: topic];
   }] map:^SCMessage *(RACTuple *t) {
     NSData *d = (NSData *)[t second];
@@ -232,6 +231,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     }
     return msg;
   }];
+  [session subscribeTopic:topic];
+  return s;
 }
 
 + (NSString *)serviceId {
