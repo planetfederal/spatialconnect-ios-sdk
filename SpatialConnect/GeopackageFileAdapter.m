@@ -42,39 +42,27 @@
 
 @synthesize uri = _uri;
 @synthesize filepath = _filepath;
-@synthesize storeId = _storeId;
 @synthesize gpkg;
 @synthesize parentStore;
 
-- (id)initWithFileName:(NSString *)dbname {
+- (id)initWithFileName:(NSString *)dbname andURI:(NSString *)u {
   if (self = [super init]) {
-    _storeId = dbname;
-    _filepath = [NSString stringWithFormat:@"%@.db", _storeId];
-    _uri = _filepath;
-  }
-  return self;
-}
-
-- (id)initWithStoreConfig:(SCStoreConfig *)cfg {
-  if (self = [super init]) {
-    _uri = cfg.uri;
-    _storeId = cfg.uniqueid;
-    _filepath = nil;
+    _filepath = [NSString stringWithFormat:@"%@.gpkg", dbname];
+    _uri = u;
   }
   return self;
 }
 
 - (NSString *)path {
   NSString *path = nil;
-  NSString *dbName = [NSString stringWithFormat:@"%@.gpkg", self.storeId];
   BOOL saveToDocsDir = ![SCFileUtils isTesting];
   if (saveToDocsDir) {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                          NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    path = [documentsDirectory stringByAppendingPathComponent:dbName];
+    path = [documentsDirectory stringByAppendingPathComponent:self.filepath];
   } else {
-    path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
+    path = [SCFileUtils filePathFromNSHomeDirectory:self.filepath];
   }
   return path;
 }

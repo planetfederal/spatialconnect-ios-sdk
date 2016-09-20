@@ -125,7 +125,7 @@
 - (void)formList:(id<RACSubscriber>)subscriber {
   [[[[[SpatialConnect sharedInstance] dataService] formStore] hasForms] subscribeNext:^(NSNumber *status) {
     NSArray *arr = [[[[SpatialConnect sharedInstance] dataService] formStore]
-      formsDictionary];
+      formsDictionaryArray];
     [subscriber sendNext:@{ @"forms" : arr }];
   }];
 }

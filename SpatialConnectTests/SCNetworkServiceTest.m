@@ -90,7 +90,7 @@
         XCTAssert(YES);
         [expect fulfill];
       }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 @end
