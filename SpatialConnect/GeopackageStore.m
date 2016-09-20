@@ -44,7 +44,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (!self) {
     return nil;
   }
-  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.name andURI:config.uri];
+  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid andURI:config.uri];
   self.name = config.name;
   self.permission = SC_DATASTORE_READWRITE;
   _storeType = TYPE;

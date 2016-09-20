@@ -96,21 +96,21 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     case CONFIG_ADD_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
-      [[[SpatialConnect sharedInstance] dataService]
+      [sc.dataService
           registerAndStartStoreByConfig:config];
       break;
     }
     case CONFIG_UPDATE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
-      [[[SpatialConnect sharedInstance] dataService]
+      [sc.dataService
           updateStoreByConfig:config];
       break;
     }
     case CONFIG_REMOVE_STORE: {
       SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
           storeByIdentifier:payload];
-      [[[SpatialConnect sharedInstance] dataService] unregisterStore:ds];
+      [sc.dataService unregisterStore:ds];
       break;
     }
     case CONFIG_ADD_FORM: {

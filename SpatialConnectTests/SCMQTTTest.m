@@ -69,7 +69,7 @@
   }];
 
   [sc startAllServices];
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 - (void)testTrackingNotification {
@@ -91,7 +91,7 @@
     [sc.backendService publish:msg onTopic:@"/store/tracking"];
   }];
   [sc startAllServices];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 @end
