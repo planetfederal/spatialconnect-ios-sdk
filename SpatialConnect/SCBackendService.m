@@ -26,6 +26,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 @interface SCBackendService ()
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
+- (void)fetchConfigAndListen;
 @end
 
 @implementation SCBackendService
@@ -89,27 +90,50 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 - (void)listenForUpdates {
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
-    NSString *json = msg.payload;
+    NSString *payload = msg.payload;
+    SpatialConnect *sc = [SpatialConnect sharedInstance];
     switch (msg.action) {
-      case CONFIG_ADD_STORE: {
-        NSDictionary *payload = [json objectFromJSONString];
-        SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:payload];
-        [[[SpatialConnect sharedInstance] dataService] registerAndStartStoreByConfig:config];
-        break;
-      }
-      case CONFIG_UPDATE_STORE: {
-        NSDictionary *payload = [json objectFromJSONString];
-        SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:payload];
-        [[[SpatialConnect sharedInstance] dataService] updateStoreByConfig:config];
-        break;
-      }
-      case CONFIG_REMOVE_STORE: {
-        SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:json];
-        [[[SpatialConnect sharedInstance] dataService] unregisterStore:ds];
-        break;
-      }
-      default:
-        break;
+    case CONFIG_ADD_STORE: {
+      NSDictionary *json = [payload objectFromJSONString];
+      SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
+      [sc.dataService
+          registerAndStartStoreByConfig:config];
+      break;
+    }
+    case CONFIG_UPDATE_STORE: {
+      NSDictionary *json = [payload objectFromJSONString];
+      SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
+      [sc.dataService
+          updateStoreByConfig:config];
+      break;
+    }
+    case CONFIG_REMOVE_STORE: {
+      SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
+          storeByIdentifier:payload];
+      [sc.dataService unregisterStore:ds];
+      break;
+    }
+    case CONFIG_ADD_FORM: {
+      SCFormConfig *f =
+          [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
+      [sc.dataService.formStore registerFormByConfig:f];
+      break;
+    }
+    case CONFIG_UPDATE_FORM: {
+      [sc.dataService.formStore
+          updateFormByConfig:[[SCFormConfig alloc]
+                                 initWithDict:[payload objectFromJSONString]]];
+      break;
+    }
+    case CONFIG_REMOVE_FORM: {
+      [sc.dataService.formStore
+          unregisterFormByConfig:[[SCFormConfig alloc]
+                                     initWithDict:[payload
+                                                      objectFromJSONString]]];
+      break;
+    }
+    default:
+      break;
     }
   }];
 }
@@ -221,7 +245,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 - (RACSignal *)listenOnTopic:(NSString *)topic {
   RACSignal *s = [[multicast filter:^BOOL(RACTuple *t) {
-    return [[t third] isEqualToString: topic];
+    return [[t third] isEqualToString:topic];
   }] map:^SCMessage *(RACTuple *t) {
     NSData *d = (NSData *)[t second];
     NSError *err;

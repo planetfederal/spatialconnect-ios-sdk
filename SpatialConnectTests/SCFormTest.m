@@ -51,11 +51,11 @@
     [self.sc.authService authenticate:@"admin@something.com" password:@"admin"];
     return asAuthed;
   }] flattenMap:^RACStream *(id value) {
-    return [[[self.sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *o) {
+    return [self.sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *o) {
       return [o boolValue];
-    }] sequence] signal];
+    }];
   }] take:1] subscribeNext:^(id x) {
-    NSArray *a = [self.sc.dataService.formStore formsDictionary];
+    NSArray *a = [self.sc.dataService.formStore formsDictionaryArray];
 
     XCTAssertNotNil(a);
     XCTAssertGreaterThan(a.count, 0);
@@ -100,7 +100,7 @@
       }];
 
   [self.sc startAllServices];
-  [self waitForExpectationsWithTimeout:13.0 handler:nil];
+  [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 @end

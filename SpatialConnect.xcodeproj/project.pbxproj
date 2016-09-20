@@ -63,7 +63,6 @@
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		563E086F1D5BB5CD003389F7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E086D1D5BB5CD003389F7 /* Scmessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563E08701D5BB5CD003389F7 /* Scmessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 563E086E1D5BB5CD003389F7 /* Scmessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		563E08721D5BB8D6003389F7 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E08711D5BB8D6003389F7 /* Commands.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5641B1911CB43D3700334907 /* SCKVPService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B18F1CB43D3700334907 /* SCKVPService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5641B1921CB43D3700334907 /* SCKVPService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5641B1901CB43D3700334907 /* SCKVPService.m */; };
 		5641B1951CB5DFC700334907 /* SCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B1931CB5DFC700334907 /* SCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -265,16 +264,36 @@
 		56554E681D54EA03000D77E7 /* SCLocationStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 56554E641D54EA03000D77E7 /* SCLocationStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56554E691D54EA03000D77E7 /* SCFormStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 56554E651D54EA03000D77E7 /* SCFormStore.m */; };
 		56554E6A1D54EA03000D77E7 /* SCLocationStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 56554E661D54EA03000D77E7 /* SCLocationStore.m */; };
-		565CD2901D23115D00A3DB5C /* WFSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD28E1D23115D00A3DB5C /* WFSDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565CD2911D23115D00A3DB5C /* WFSDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD28F1D23115D00A3DB5C /* WFSDataStore.m */; };
-		565CD2951D2344C300A3DB5C /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565CD2961D2344C300A3DB5C /* XMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD2941D2344C300A3DB5C /* XMLDictionary.m */; };
 		565CD2991D234FB100A3DB5C /* WFSDataStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD2981D234FB100A3DB5C /* WFSDataStoreTest.m */; };
 		566617571CE139E000874119 /* SCNetworkServiceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617561CE139E000874119 /* SCNetworkServiceTest.m */; };
 		5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 566617581CE14FA200874119 /* SCDefaultStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617591CE14FA200874119 /* SCDefaultStore.m */; };
-		5667E1731D58EF490044F195 /* SpatialConnectFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 5667E1721D58EF490044F195 /* SpatialConnectFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5668B3FE1CAEFD3E00D28713 /* SCKVPTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5668B3FD1CAEFD3E00D28713 /* SCKVPTest.m */; };
+		566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; };
+		566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; };
+		566B1AF51D91B72F00A545A4 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E08711D5BB8D6003389F7 /* Commands.h */; };
+		566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; };
+		566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 5667E1721D58EF490044F195 /* SpatialConnectFramework.h */; };
+		566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD28E1D23115D00A3DB5C /* WFSDataStore.h */; };
+		566F5F751D9080B3001C6692 /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
+		566F5F791D9080B3001C6692 /* SCGeometryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B81BE28079009947EF /* SCGeometryHelper.m */; };
+		566F5F7D1D9080B3001C6692 /* SCGeopackageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */; };
+		566F5F851D9080B3001C6692 /* libProtocolBuffers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56E258051D4D1B2700CA7ED8 /* libProtocolBuffers.a */; };
+		566F5F861D9080B3001C6692 /* MQTTFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560DC1C61D47C9CB007D66A1 /* MQTTFramework.framework */; };
+		566F5F871D9080B3001C6692 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
+		566F5F881D9080B3001C6692 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
+		566F5F891D9080B3001C6692 /* wkb_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC881CF652ED00D502C3 /* wkb_ios.framework */; };
+		566F5F8A1D9080B3001C6692 /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
+		566F5F8C1D9080B3001C6692 /* feature.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4B01BE28079009947EF /* feature.json */; };
+		566F5F8D1D9080B3001C6692 /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4BF1BE28079009947EF /* simple.json */; };
+		566F5F8E1D9080B3001C6692 /* gz_2010_us_050_00_500k.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */; };
+		566F5F8F1D9080B3001C6692 /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
+		566F5F901D9080B3001C6692 /* remote.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 56ED69C51CE212FC00843C44 /* remote.scfg */; };
+		566F5F911D9080B3001C6692 /* tests.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4C31BE28079009947EF /* tests.scfg */; };
+		566F5F921D9080B3001C6692 /* all.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4AF1BE28079009947EF /* all.geojson */; };
+		566F5F9A1D908123001C6692 /* FormIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 566F5F991D908123001C6692 /* FormIntegrationTests.m */; };
 		566F6E421CE3B5680043FF0C /* SCFormConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 566F6E401CE3B5680043FF0C /* SCFormConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566F6E431CE3B5680043FF0C /* SCFormConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 566F6E411CE3B5680043FF0C /* SCFormConfig.m */; };
 		5677D6DB1C3F046E00C1E0F2 /* SCRasterStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -329,13 +348,18 @@
 		56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC881CF652ED00D502C3 /* wkb_ios.framework */; };
 		56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
 		56FB3F561CF8AADE00C3DA4B /* SCFormTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FB3F551CF8AADE00C3DA4B /* SCFormTest.m */; };
-		56FCFBCB1D6F6E16008A0B8C /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56FCFBCC1D6F6E16008A0B8C /* SCRemoteConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FCFBCA1D6F6E16008A0B8C /* SCRemoteConfig.m */; };
-		56FCFBD31D6FD6D5008A0B8C /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56FCFBD41D6FD6D5008A0B8C /* SCHttpUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FCFBD21D6FD6D5008A0B8C /* SCHttpUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		566F5F6B1D9080B3001C6692 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5649B48A1BE27C6A009947EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5649B4921BE27C6A009947EF;
+			remoteInfo = SpatialConnect;
+		};
 		5678FC7E1CF652A900D502C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5678FC771CF652A800D502C3 /* extobjc.xcodeproj */;
@@ -663,6 +687,9 @@
 		566617591CE14FA200874119 /* SCDefaultStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDefaultStore.m; sourceTree = "<group>"; };
 		5667E1721D58EF490044F195 /* SpatialConnectFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectFramework.h; sourceTree = "<group>"; };
 		5668B3FD1CAEFD3E00D28713 /* SCKVPTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKVPTest.m; sourceTree = "<group>"; };
+		566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialConnectIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SpatialConnectTests copy-Info.plist"; path = "/Users/wesr/Development/boundless/SC/spatialconnect-ios-sdk/SpatialConnectTests copy-Info.plist"; sourceTree = "<absolute>"; };
+		566F5F991D908123001C6692 /* FormIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormIntegrationTests.m; sourceTree = "<group>"; };
 		566F6E401CE3B5680043FF0C /* SCFormConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFormConfig.h; sourceTree = "<group>"; };
 		566F6E411CE3B5680043FF0C /* SCFormConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFormConfig.m; sourceTree = "<group>"; };
 		5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterStore.h; sourceTree = "<group>"; };
@@ -746,6 +773,19 @@
 				56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */,
 				56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */,
 				56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		566F5F841D9080B3001C6692 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				566F5F851D9080B3001C6692 /* libProtocolBuffers.a in Frameworks */,
+				566F5F861D9080B3001C6692 /* MQTTFramework.framework in Frameworks */,
+				566F5F871D9080B3001C6692 /* SpatialConnect.framework in Frameworks */,
+				566F5F881D9080B3001C6692 /* ReactiveCocoa.framework in Frameworks */,
+				566F5F891D9080B3001C6692 /* wkb_ios.framework in Frameworks */,
+				566F5F8A1D9080B3001C6692 /* ZipZap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1267,8 +1307,10 @@
 			children = (
 				5649B4951BE27C6A009947EF /* SpatialConnect */,
 				5649B4A11BE27C6A009947EF /* SpatialConnectTests */,
+				566F5F641D90804E001C6692 /* SpatialConnectIntegrationTests */,
 				5649B4941BE27C6A009947EF /* Products */,
 				0B5FE958508C82B8D8FF4D5C /* Frameworks */,
+				566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1277,6 +1319,7 @@
 			children = (
 				5649B4931BE27C6A009947EF /* SpatialConnect.framework */,
 				5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */,
+				566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1420,6 +1463,14 @@
 				563E08711D5BB8D6003389F7 /* Commands.h */,
 			);
 			name = Actions;
+			sourceTree = "<group>";
+		};
+		566F5F641D90804E001C6692 /* SpatialConnectIntegrationTests */ = {
+			isa = PBXGroup;
+			children = (
+				566F5F991D908123001C6692 /* FormIntegrationTests.m */,
+			);
+			name = SpatialConnectIntegrationTests;
 			sourceTree = "<group>";
 		};
 		5678FC781CF652A800D502C3 /* Products */ = {
@@ -1732,24 +1783,18 @@
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				561685F41C74E3D800FC7FA6 /* SCGpkgExtension.h in Headers */,
-				56FCFBCB1D6F6E16008A0B8C /* SCRemoteConfig.h in Headers */,
+				566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */,
 				547F3EDA1D77688700AE354E /* Reachability.h in Headers */,
-				56FCFBD31D6FD6D5008A0B8C /* SCHttpUtils.h in Headers */,
-				563E08721D5BB8D6003389F7 /* Commands.h in Headers */,
-				5667E1731D58EF490044F195 /* SpatialConnectFramework.h in Headers */,
-				565CD2901D23115D00A3DB5C /* WFSDataStore.h in Headers */,
-				565CD2951D2344C300A3DB5C /* XMLDictionary.h in Headers */,
+				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
+				566B1AF51D91B72F00A545A4 /* Commands.h in Headers */,
+				566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */,
+				566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */,
+				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */,
 				5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */,
 				5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */,
 				561686001C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.h in Headers */,
 				5649B5F71BE280D6009947EF /* SCPolygon.h in Headers */,
-				56FCFBCB1D6F6E16008A0B8C /* SCRemoteConfig.h in Headers */,
-				56FCFBD31D6FD6D5008A0B8C /* SCHttpUtils.h in Headers */,
-				563E08721D5BB8D6003389F7 /* Commands.h in Headers */,
-				5667E1731D58EF490044F195 /* SpatialConnectFramework.h in Headers */,
-				565CD2901D23115D00A3DB5C /* WFSDataStore.h in Headers */,
-				565CD2951D2344C300A3DB5C /* XMLDictionary.h in Headers */,
 				5649B5FD1BE280D6009947EF /* SCPredicate.h in Headers */,
 				5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */,
 				56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */,
@@ -1804,6 +1849,25 @@
 			productReference = 5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		566F5F691D9080B3001C6692 /* SpatialConnectIntegrationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 566F5F941D9080B3001C6692 /* Build configuration list for PBXNativeTarget "SpatialConnectIntegrationTests" */;
+			buildPhases = (
+				566F5F6C1D9080B3001C6692 /* Sources */,
+				566F5F841D9080B3001C6692 /* Frameworks */,
+				566F5F8B1D9080B3001C6692 /* Resources */,
+				566F5F931D9080B3001C6692 /* Carthage Copy Frameworks Run Script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				566F5F6A1D9080B3001C6692 /* PBXTargetDependency */,
+			);
+			name = SpatialConnectIntegrationTests;
+			productName = SpatialConnectTests;
+			productReference = 566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1811,7 +1875,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Boundless Spatial";
 				TargetAttributes = {
 					5649B4921BE27C6A009947EF = {
@@ -1819,6 +1883,10 @@
 					};
 					5649B49C1BE27C6A009947EF = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 82EPDLMXNS;
+					};
+					566F5F691D9080B3001C6692 = {
+						DevelopmentTeam = 82EPDLMXNS;
 					};
 				};
 			};
@@ -1842,6 +1910,7 @@
 			targets = (
 				5649B4921BE27C6A009947EF /* SpatialConnect */,
 				5649B49C1BE27C6A009947EF /* SpatialConnectTests */,
+				566F5F691D9080B3001C6692 /* SpatialConnectIntegrationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1901,6 +1970,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		566F5F8B1D9080B3001C6692 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				566F5F8C1D9080B3001C6692 /* feature.json in Resources */,
+				566F5F8D1D9080B3001C6692 /* simple.json in Resources */,
+				566F5F8E1D9080B3001C6692 /* gz_2010_us_050_00_500k.json in Resources */,
+				566F5F8F1D9080B3001C6692 /* gz_2010_us_500_11_20m.json in Resources */,
+				566F5F901D9080B3001C6692 /* remote.scfg in Resources */,
+				566F5F911D9080B3001C6692 /* tests.scfg in Resources */,
+				566F5F921D9080B3001C6692 /* all.geojson in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1916,6 +1999,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "";
+		};
+		566F5F931D9080B3001C6692 /* Carthage Copy Frameworks Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/libgpkgios.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ReactiveCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/wkb_ios.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ZipZap.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MQTTFramework.framework",
+			);
+			name = "Carthage Copy Frameworks Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 		56FB3F531CF888CC00C3DA4B /* Carthage Copy Frameworks Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2108,9 +2210,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		566F5F6C1D9080B3001C6692 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				566F5F9A1D908123001C6692 /* FormIntegrationTests.m in Sources */,
+				566F5F751D9080B3001C6692 /* SpatialConnectHelper.m in Sources */,
+				566F5F791D9080B3001C6692 /* SCGeometryHelper.m in Sources */,
+				566F5F7D1D9080B3001C6692 /* SCGeopackageHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		566F5F6A1D9080B3001C6692 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5649B4921BE27C6A009947EF /* SpatialConnect */;
+			targetProxy = 566F5F6B1D9080B3001C6692 /* PBXContainerItemProxy */;
+		};
 		56DC513B1BFC0594002C71B3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5649B4921BE27C6A009947EF /* SpatialConnect */;
@@ -2134,8 +2252,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2162,7 +2282,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2185,8 +2305,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2219,15 +2341,16 @@
 		5649B4A81BE27C6A009947EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2270,15 +2393,16 @@
 		5649B4A91BE27C6A009947EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2320,8 +2444,9 @@
 		5649B4AB1BE27C6A009947EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -2352,8 +2477,9 @@
 		5649B4AC1BE27C6A009947EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -2364,6 +2490,67 @@
 					"$(PROJECT_DIR)/schema",
 				);
 				INFOPLIST_FILE = SpatialConnectTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libs",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "arm64 armv7 armv7s";
+			};
+			name = Release;
+		};
+		566F5F951D9080B3001C6692 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREFIX_HEADER = SpatialConnect/SCPrefixHeader.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"TEST=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/include/**",
+					"$(PROJECT_DIR)/schema",
+				);
+				INFOPLIST_FILE = "SpatialConnectTests copy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libs",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundless.SpatialConnectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "arm64 armv7 armv7s";
+			};
+			name = Debug;
+		};
+		566F5F961D9080B3001C6692 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREFIX_HEADER = SpatialConnect/SCPrefixHeader.pch;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/include/**",
+					"$(PROJECT_DIR)/schema",
+				);
+				INFOPLIST_FILE = "SpatialConnectTests copy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2402,6 +2589,15 @@
 			buildConfigurations = (
 				5649B4AB1BE27C6A009947EF /* Debug */,
 				5649B4AC1BE27C6A009947EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		566F5F941D9080B3001C6692 /* Build configuration list for PBXNativeTarget "SpatialConnectIntegrationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				566F5F951D9080B3001C6692 /* Debug */,
+				566F5F961D9080B3001C6692 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
