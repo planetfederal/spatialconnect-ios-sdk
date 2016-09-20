@@ -127,9 +127,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     }
     case CONFIG_REMOVE_FORM: {
       [sc.dataService.formStore
-          unregisterFormByConfig:[[SCFormConfig alloc]
-                                     initWithDict:[payload
-                                                      objectFromJSONString]]];
+          unregisterFormByKey:payload];
       break;
     }
     default:
