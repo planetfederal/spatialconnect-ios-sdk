@@ -271,12 +271,12 @@
 		5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 566617581CE14FA200874119 /* SCDefaultStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617591CE14FA200874119 /* SCDefaultStore.m */; };
 		5668B3FE1CAEFD3E00D28713 /* SCKVPTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5668B3FD1CAEFD3E00D28713 /* SCKVPTest.m */; };
-		566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; };
+		566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; };
 		566B1AF51D91B72F00A545A4 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563E08711D5BB8D6003389F7 /* Commands.h */; };
 		566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; };
 		566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 5667E1721D58EF490044F195 /* SpatialConnectFramework.h */; };
-		566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD28E1D23115D00A3DB5C /* WFSDataStore.h */; };
+		566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD28E1D23115D00A3DB5C /* WFSDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566F5F751D9080B3001C6692 /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
 		566F5F791D9080B3001C6692 /* SCGeometryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B81BE28079009947EF /* SCGeometryHelper.m */; };
 		566F5F7D1D9080B3001C6692 /* SCGeopackageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */; };
@@ -304,7 +304,7 @@
 		5678FC8D1CF652ED00D502C3 /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
 		567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 567D7A031D6380FF00BDC3CC /* SCNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		567D7A061D6380FF00BDC3CC /* SCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D7A041D6380FF00BDC3CC /* SCNotification.m */; };
-		569A80CF1D822458006581F0 /* SCTileMatrixRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 569A80CD1D822458006581F0 /* SCTileMatrixRow.h */; };
+		569A80CF1D822458006581F0 /* SCTileMatrixRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 569A80CD1D822458006581F0 /* SCTileMatrixRow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		569A80D01D822458006581F0 /* SCTileMatrixRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A80CE1D822458006581F0 /* SCTileMatrixRow.m */; };
 		56A23B051D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A23B031D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56A23B061D79EFEA00AB258B /* SCBoundingBox+GeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 56A23B041D79EFEA00AB258B /* SCBoundingBox+GeoJSON.m */; };
@@ -1753,7 +1753,6 @@
 				5649B5801BE280D6009947EF /* GeoJSONStore.h in Headers */,
 				5649B5C71BE280D6009947EF /* SCJavascriptBridgeAPI.h in Headers */,
 				5649B5841BE280D6009947EF /* SCBoundingBox.h in Headers */,
-				569A80CF1D822458006581F0 /* SCTileMatrixRow.h in Headers */,
 				5649B5B01BE280D6009947EF /* SCGeoFilter.h in Headers */,
 				5649B5901BE280D6009947EF /* SCDataStore.h in Headers */,
 				5649B5FB1BE280D6009947EF /* SCPolygon+MapKit.h in Headers */,
@@ -1783,19 +1782,20 @@
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				561685F41C74E3D800FC7FA6 /* SCGpkgExtension.h in Headers */,
-				566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */,
 				547F3EDA1D77688700AE354E /* Reachability.h in Headers */,
 				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
 				566B1AF51D91B72F00A545A4 /* Commands.h in Headers */,
 				566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */,
-				566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */,
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */,
 				5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */,
 				5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */,
 				561686001C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.h in Headers */,
 				5649B5F71BE280D6009947EF /* SCPolygon.h in Headers */,
+				566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */,
 				5649B5FD1BE280D6009947EF /* SCPredicate.h in Headers */,
+				569A80CF1D822458006581F0 /* SCTileMatrixRow.h in Headers */,
+				566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */,
 				5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */,
 				56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */,
 				56A23B051D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h in Headers */,
