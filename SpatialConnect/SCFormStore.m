@@ -83,6 +83,12 @@
   [_hasForms sendNext:@(storeForms.count > 0)];
 }
 
+- (void)unregisterFormByKey:(NSString *)key {
+  [storeForms removeObjectForKey:key];
+  [formIds removeObjectForKey:key];
+  [_hasForms sendNext:@(storeForms.count > 0)];
+}
+
 - (NSArray *)formsDictionaryArray {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms

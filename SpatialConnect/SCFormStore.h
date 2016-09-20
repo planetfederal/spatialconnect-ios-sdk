@@ -30,6 +30,7 @@
 - (void)registerFormByConfig:(SCFormConfig *)f;
 - (void)updateFormByConfig:(SCFormConfig *)f;
 - (void)unregisterFormByConfig:(SCFormConfig *)f;
+- (void)unregisterFormByKey:(NSString *)k;
 - (NSArray *)formsDictionaryArray;
 
 @end
