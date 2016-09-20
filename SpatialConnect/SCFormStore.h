@@ -28,6 +28,9 @@
 @property(readonly, strong) RACBehaviorSubject *hasForms;
 
 - (void)registerFormByConfig:(SCFormConfig *)f;
-- (NSArray *)formsDictionary;
+- (void)updateFormByConfig:(SCFormConfig *)f;
+- (void)unregisterFormByConfig:(SCFormConfig *)f;
+- (void)unregisterFormByKey:(NSString *)k;
+- (NSArray *)formsDictionaryArray;
 
 @end

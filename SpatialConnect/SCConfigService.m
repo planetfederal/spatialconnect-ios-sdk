@@ -113,4 +113,25 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   return kSERVICENAME;
 }
 
+- (void)addForm:(SCFormConfig *)c {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc.dataService.formStore registerFormByConfig:c];
+}
+
+- (void)removeForm:(SCFormConfig *)c {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc.dataService.formStore unregisterFormByConfig:c];
+}
+
+- (void)addStore:(SCStoreConfig *)c {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc.dataService registerAndStartStoreByConfig:c];
+}
+
+- (void)removeStore:(SCStoreConfig *)c {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc.dataService
+      unregisterStore:[sc.dataService storeByIdentifier:c.uniqueid]];
+}
+
 @end

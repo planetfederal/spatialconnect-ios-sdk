@@ -70,7 +70,26 @@
   [_hasForms sendNext:@(YES)];
 }
 
-- (NSArray *)formsDictionary {
+- (void)updateFormByConfig:(SCFormConfig *)f {
+  [storeForms setObject:f forKey:f.key];
+  [formIds setObject:@(f.identifier) forKey:f.key];
+  [super addLayer:f.key withDef:[f sqlTypes]];
+  [_hasForms sendNext:@(YES)];
+}
+
+- (void)unregisterFormByConfig:(SCFormConfig *)f {
+  [storeForms removeObjectForKey:f.key];
+  [formIds removeObjectForKey:f.key];
+  [_hasForms sendNext:@(storeForms.count > 0)];
+}
+
+- (void)unregisterFormByKey:(NSString *)key {
+  [storeForms removeObjectForKey:key];
+  [formIds removeObjectForKey:key];
+  [_hasForms sendNext:@(storeForms.count > 0)];
+}
+
+- (NSArray *)formsDictionaryArray {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms
       enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {

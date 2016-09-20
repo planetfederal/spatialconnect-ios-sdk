@@ -15,7 +15,9 @@
  */
 
 #import "SCConfig.h"
+#import "SCFormConfig.h"
 #import "SCService.h"
+#import "SCStoreConfig.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef NS_ENUM(NSInteger, SCConfigEvent) {
@@ -32,5 +34,9 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 - (id)init;
 - (void)addConfigFilepath:(NSString *)p;
 - (void)loadConfig:(SCConfig *)c;
+- (void)addStore:(SCStoreConfig *)c;
+- (void)removeStore:(SCStoreConfig *)c;
+- (void)addForm:(SCFormConfig *)c;
+- (void)removeForm:(SCFormConfig *)c;
 
 @end

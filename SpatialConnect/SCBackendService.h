@@ -39,7 +39,6 @@
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
-- (void)fetchConfigAndListen;
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
