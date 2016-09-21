@@ -113,7 +113,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [self.adapter query:filter];
+  return [[self.adapter query:filter] map:^SCSpatialFeature *(SCSpatialFeature *f) {
+    f.storeId = self.storeId;
+    return f;
+  }];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {

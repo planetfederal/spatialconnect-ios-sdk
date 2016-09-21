@@ -17,7 +17,6 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCAdapterKeyValue.h"
 #import "SCGeopackage.h"
 #import "SCQueryFilter.h"
 #import "SCStoreConfig.h"
@@ -29,7 +28,7 @@
 #define UNITTESTING YES;
 #endif
 
-@interface GeopackageFileAdapter : NSObject <SCAdapterKeyValue>
+@interface GeopackageFileAdapter : NSObject
 
 @property(readonly, nonatomic, strong) NSString *uri;
 @property(readonly, nonatomic, strong) NSString *filepath;
