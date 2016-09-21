@@ -34,7 +34,6 @@
 @interface GeopackageFileAdapter ()
 @property(readwrite, nonatomic, strong) NSString *uri;
 @property(readwrite, nonatomic, strong) NSString *filepath;
-@property(readwrite, nonatomic, strong) NSString *storeId;
 @property(readwrite, nonatomic, strong) SCGeopackage *gpkg;
 @end
 
@@ -140,20 +139,6 @@
 }
 
 #pragma mark -
-#pragma mark SCAdapterKeyValue
-- (NSString *)filepathKey {
-  return [NSString stringWithFormat:@"%@.%@", self.storeId, @"filepath"];
-}
-
-- (void)setFilepathPreference:(NSString *)dbPath {
-  NSString *key = self.filepathKey;
-  [[NSUserDefaults standardUserDefaults] setObject:dbPath forKey:key];
-}
-
-- (NSString *)dbFilepath {
-  return [[NSUserDefaults standardUserDefaults] stringForKey:self.filepathKey];
-}
-
 - (NSArray *)layerList {
   return self.gpkg.featureContents;
 }
@@ -197,11 +182,7 @@
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [[self.gpkg query:filter] map:^SCSpatialFeature *(SCSpatialFeature *f) {
-    f.storeId = self.storeId;
-    return f;
-  }];
-
+  return [self.gpkg query:filter];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
