@@ -43,8 +43,15 @@
 
 - (void)testLocation {
   XCTestExpectation *expect = [self expectationWithDescription:@"Location"];
-  SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(-32), @(32) ]];
-  [[sc.dataService storeStarted:@"LOCATION_STORE"] subscribeNext:^(id x) {
+  SCPoint *p =
+      [[SCPoint alloc] initWithCoordinateArray:@[ @(-32), @(arc4random()) ]];
+  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+      flattenMap:^RACStream *(id value) {
+        [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+        return sc.backendService.configReceived;
+      }] filter:^BOOL(NSNumber *cr) {
+    return [cr boolValue];
+  }] take:1] subscribeNext:^(id x) {
     SCLocationStore *lStore = sc.dataService.locationStore;
     [p.properties setObject:@([[NSDate new] timeIntervalSince1970])
                      forKey:@"timestamp"];

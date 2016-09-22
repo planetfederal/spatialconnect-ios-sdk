@@ -1818,7 +1818,6 @@
 				5649B4911BE27C6A009947EF /* Resources */,
 				547F3EDE1D7773AB00AE354E /* ShellScript */,
 				547F3EDF1D7773BD00AE354E /* CopyFiles */,
-				5653F7ED1D930C5D0028B840 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1998,19 +1997,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "";
-		};
-		5653F7ED1D930C5D0028B840 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cp -r ./DerivedData/SpatialConnect/Build/Products/Debug-iphoneos/SpatialConnect.framework ./../spatialconnect-mobile/ios/Carthage/Build/iOS/";
 		};
 		566F5F931D9080B3001C6692 /* Carthage Copy Frameworks Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
