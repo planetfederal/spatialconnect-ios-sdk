@@ -87,9 +87,9 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 
 - (void)setupSignals {
   self.lastKnown = [
-      [self rac_signalForSelector:@selector(locationManager:didUpdateLocations:)
-                     fromProtocol:@protocol(CLLocationManagerDelegate)]
-      map:^SCPoint *(RACTuple *tuple) {
+      [[self rac_signalForSelector:@selector(locationManager:didUpdateLocations:)
+                      fromProtocol:@protocol(CLLocationManagerDelegate)] sample:[RACSignal interval:5.0 onScheduler:[RACScheduler currentScheduler]]]
+                              map:^SCPoint *(RACTuple *tuple) {
         CLLocation *loc = [(NSArray *)tuple.second lastObject];
         CLLocationDistance alt = loc.altitude;
         float lat = loc.coordinate.latitude;
