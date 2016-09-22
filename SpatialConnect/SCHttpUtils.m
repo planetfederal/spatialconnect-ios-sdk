@@ -43,6 +43,9 @@
   NSData *data = [NSURLConnection sendSynchronousRequest:request
                                        returningResponse:&response
                                                    error:&error];
+  if (error) {
+    return nil;
+  }
   return data;
 }
 
@@ -106,14 +109,19 @@
                                                    error:&err];
   if (err) {
     NSLog(@"%@", [err description]);
+    return nil;
   }
   return data;
 }
 
 + (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict {
+  NSDictionary *result = nil;
   NSData *data = [self postDictRequestBLOCKING:url body:dict];
-  return [[JSONDecoder decoder] objectWithData:data];
+  if (data) {
+    result = [[JSONDecoder decoder] objectWithData:data];
+  }
+  return result;
 }
 
 @end
