@@ -19,18 +19,20 @@
 #import "SCServiceLifecycle.h"
 #import "Scmessage.pbobjc.h"
 #import <MQTTFramework/MQTTFramework.h>
+#import <MQTTFramework/MQTTSessionManager.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface SCBackendService
-    : SCService <SCServiceLifecycle, MQTTSessionDelegate> {
+    : SCService <SCServiceLifecycle, MQTTSessionManagerDelegate> {
   NSString *mqttEndpoint;
   NSString *mqttPort;
   NSString *mqttProtocol;
   NSString *httpProtocol;
   NSString *httpEndpoint;
   NSString *httpPort;
-  MQTTSession *session;
+  MQTTSessionManager *sessionManager;
   RACSignal *multicast;
+  RACBehaviorSubject *connectedToBroker;
 }
 
 @property(readonly, strong) NSString *backendUri;

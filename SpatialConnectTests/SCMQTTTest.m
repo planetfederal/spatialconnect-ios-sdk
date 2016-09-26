@@ -74,7 +74,13 @@
 
 - (void)testTrackingNotification {
   XCTestExpectation *expect = [self expectationWithDescription:@"MQTT"];
-  [[sc serviceStarted:[SCBackendService serviceId]] subscribeNext:^(id x) {
+  [[[[sc serviceStarted:[SCBackendService serviceId]]
+     flattenMap:^RACStream *(id value) {
+       [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+       return [[sc.backendService configReceived] filter:^BOOL(NSNumber *n) {
+         return [n boolValue] == YES;
+       }];
+     }] take:1] subscribeNext:^(id x) {
     SCMessage *msg = [[SCMessage alloc] init];
     msg.correlationId = 234;
     SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
