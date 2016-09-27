@@ -61,9 +61,15 @@ static NSString *const FIELDS = @"fields";
     isValid = NO;
   }
   if (!self.version || self.version <= 0) {
-    NSLog(@"");
+    NSLog(@"Invalid Version number");
     isValid = NO;
   }
+
+  if (self.fields.count == 0) {
+    NSLog(@"No Fields Present");
+    isValid = NO;
+  }
+
   [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * stop) {
       NSString *fieldKey = obj[@"field_key"];
       NSString *fieldLabel = obj[@"field_label"];
