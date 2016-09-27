@@ -15,13 +15,17 @@
  */
 
 #import "SCFormConfig.h"
-#import "SCFormConfig.h"
+#import "JSONKit.h"
 
 static NSString *const IDENT = @"id";
 static NSString *const FORM_KEY = @"form_key";
 static NSString *const FORM_LABEL = @"form_label";
 static NSString *const VERSION = @"version";
 static NSString *const FIELDS = @"fields";
+
+@interface SCFormConfig()
+- (BOOL)isValid;
+@end
 
 @implementation SCFormConfig
 
@@ -35,8 +39,46 @@ static NSString *const FIELDS = @"fields";
     self.label = dict[FORM_LABEL];
     self.version = [dict[VERSION] integerValue];
     self.fields = dict[FIELDS];
+    if (![self isValid]) {
+      return nil;
+    }
   }
   return self;
+}
+
+- (BOOL)isValid {
+  __block BOOL isValid = YES;
+  if (self.identifier <= 0) {
+    NSLog(@"Identifier is invalid:%@",self.identifier);
+    isValid = NO;
+  }
+  if (!self.key || self.key.length <= 0) {
+    NSLog(@"form_key is an empty string");
+    isValid = NO;
+  }
+  if (!self.label || self.label.length <= 0) {
+    NSLog(@"form_label is an empty string");
+    isValid = NO;
+  }
+  if (!self.version || self.version <= 0) {
+    NSLog(@"");
+    isValid = NO;
+  }
+  [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * stop) {
+      NSString *fieldKey = obj[@"field_key"];
+      NSString *fieldLabel = obj[@"field_label"];
+
+    if (!fieldKey || fieldKey.length == 0) {
+      NSLog(@"field_key is invalid for form:%@",key);
+      isValid = NO;
+    }
+
+    if(!fieldLabel || fieldLabel.length == 0) {
+      NSLog(@"field_label is invalid for form:%@",key);
+      isValid = NO;
+    }
+  }];
+  return isValid;
 }
 
 - (NSInteger)strToFormType:(NSString *)s {
@@ -149,6 +191,10 @@ static NSString *const FIELDS = @"fields";
   dict[FIELDS] = self.fields;
   dict[IDENT] = @(self.identifier);
   return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSString *)description {
+  return self.JSONDict.JSONString;
 }
 
 @end

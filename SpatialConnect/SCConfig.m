@@ -34,7 +34,10 @@
     NSArray *formDicts = d[@"forms"];
     [formDicts enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
                                             BOOL *stop) {
-      [forms addObject:[[SCFormConfig alloc] initWithDict:d]];
+      SCFormConfig *f = [[SCFormConfig alloc] initWithDict:d];
+      if (f) {
+        [forms addObject:f];
+      }
     }];
     NSDictionary *rd = d[@"remote"];
     if (rd) {
