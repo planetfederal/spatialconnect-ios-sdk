@@ -45,12 +45,17 @@
 - (void)testReachability {
   XCTestExpectation *expect = [self expectationWithDescription:@"Reachability"];
   [[sc serviceStarted:[SCSensorService serviceId]] subscribeNext:^(id value) {
-    [self.sc.sensorService.reachabilitySignal subscribeNext:^(Reachability *r) {
-      XCTAssertNotNil(r);
+    [self.sc.sensorService.isConnectedViaWifi subscribeNext:^(NSNumber *n) {
+      XCTAssertNotNil(n);
+      XCTAssertTrue([n boolValue]);
+    }];
+    [self.sc.sensorService.isConnectedViaWAN subscribeNext:^(NSNumber *x) {
+      XCTAssertNotNil(x);
+      XCTAssertFalse([x boolValue]);
       [expect fulfill];
     }];
   }];
-  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+  [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 - (void)testGetRequest {
@@ -63,11 +68,6 @@
         [expect fulfill];
       }];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
-}
-
-- (void)testRemoteConfig {
-  NSArray *arr = [self.sc.dataService.defaultStore layerList];
-  XCTAssertNotNil(arr);
 }
 
 - (void)testFormSubmission {

@@ -33,12 +33,15 @@ typedef enum : NSUInteger {
   __strong CLLocationManager *locationManager;
   CLLocationDistance distance;
   CLLocationAccuracy accuracy;
+  RACBehaviorSubject *isReachableSubject;
 }
 
 @property(nonatomic, readonly) BOOL isTracking;
 @property(nonatomic, retain) NSArray *location;
 @property(nonatomic, readonly) RACSignal *lastKnown;
-@property(nonatomic, readonly) RACBehaviorSubject *reachabilitySignal;
+@property(nonatomic, readonly) RACSignal *isConnected;
+@property(nonatomic, readonly) RACSignal *isConnectedViaWifi;
+@property(nonatomic, readonly) RACSignal *isConnectedViaWAN;
 
 - (void)locationAccuracy:(CLLocationAccuracy)accuracy
             withDistance:(CLLocationDistance)distance;

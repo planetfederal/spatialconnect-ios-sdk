@@ -226,8 +226,6 @@
 		5649B5FF1BE280D6009947EF /* SCPrefixHeader.pch in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55A1BE280D6009947EF /* SCPrefixHeader.pch */; settings = {ATTRIBUTES = (Public, ); }; };
 		5649B6001BE280D6009947EF /* SCQueryFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55B1BE280D6009947EF /* SCQueryFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5649B6011BE280D6009947EF /* SCQueryFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B55C1BE280D6009947EF /* SCQueryFilter.m */; };
-		5649B6021BE280D6009947EF /* SCRasterService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55D1BE280D6009947EF /* SCRasterService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B6031BE280D6009947EF /* SCRasterService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B55E1BE280D6009947EF /* SCRasterService.m */; };
 		5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B55F1BE280D6009947EF /* SCRasterSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B5601BE280D6009947EF /* SCRasterSource.m */; };
 		5649B6061BE280D6009947EF /* SCRasterTileStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B5611BE280D6009947EF /* SCRasterTileStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -259,6 +257,22 @@
 		5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */; };
 		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
 		564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
+		5653F83F1D99A8670028B840 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F83E1D99A8670028B840 /* main.m */; };
+		5653F8421D99A8670028B840 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F8411D99A8670028B840 /* AppDelegate.m */; };
+		5653F8451D99A8670028B840 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F8441D99A8670028B840 /* ViewController.m */; };
+		5653F8481D99A8670028B840 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5653F8461D99A8670028B840 /* Main.storyboard */; };
+		5653F84A1D99A8670028B840 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5653F8491D99A8670028B840 /* Assets.xcassets */; };
+		5653F84D1D99A8670028B840 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5653F84B1D99A8670028B840 /* LaunchScreen.storyboard */; };
+		5653F8581D99A8680028B840 /* SpaconTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F8571D99A8680028B840 /* SpaconTestTests.m */; };
+		5653F8631D99A8680028B840 /* SpaconTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F8621D99A8680028B840 /* SpaconTestUITests.m */; };
+		5653F86E1D99A8BB0028B840 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
+		5653F8771D99A9AB0028B840 /* libgpkgios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8701D99A9AB0028B840 /* libgpkgios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5653F8781D99A9AB0028B840 /* MQTTFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8711D99A9AB0028B840 /* MQTTFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5653F87A1D99A9AB0028B840 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5653F87C1D99A9AB0028B840 /* wkb_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8751D99A9AB0028B840 /* wkb_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5653F87D1D99A9AB0028B840 /* ZipZap.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8761D99A9AB0028B840 /* ZipZap.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5653F87E1D99ACA30028B840 /* remote.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 56ED69C51CE212FC00843C44 /* remote.scfg */; };
+		5653F8801D99D25E0028B840 /* SpatialConnect.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		56554E671D54EA03000D77E7 /* SCFormStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 56554E631D54EA03000D77E7 /* SCFormStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56554E681D54EA03000D77E7 /* SCLocationStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 56554E641D54EA03000D77E7 /* SCLocationStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56554E691D54EA03000D77E7 /* SCFormStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 56554E651D54EA03000D77E7 /* SCFormStore.m */; };
@@ -352,6 +366,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5653F8541D99A8680028B840 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5649B48A1BE27C6A009947EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5653F83A1D99A8670028B840;
+			remoteInfo = SpaconTest;
+		};
+		5653F85F1D99A8680028B840 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5649B48A1BE27C6A009947EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5653F83A1D99A8670028B840;
+			remoteInfo = SpaconTest;
+		};
 		566F5F6B1D9080B3001C6692 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5649B48A1BE27C6A009947EF /* Project object */;
@@ -404,6 +432,22 @@
 			dstSubfolderSpec = 16;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F86F1D99A97E0028B840 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5653F8771D99A9AB0028B840 /* libgpkgios.framework in Embed Frameworks */,
+				5653F8781D99A9AB0028B840 /* MQTTFramework.framework in Embed Frameworks */,
+				5653F87A1D99A9AB0028B840 /* ReactiveCocoa.framework in Embed Frameworks */,
+				5653F87C1D99A9AB0028B840 /* wkb_ios.framework in Embed Frameworks */,
+				5653F87D1D99A9AB0028B840 /* ZipZap.framework in Embed Frameworks */,
+				5653F8801D99D25E0028B840 /* SpatialConnect.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -637,8 +681,6 @@
 		5649B55A1BE280D6009947EF /* SCPrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCPrefixHeader.pch; sourceTree = "<group>"; };
 		5649B55B1BE280D6009947EF /* SCQueryFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCQueryFilter.h; sourceTree = "<group>"; };
 		5649B55C1BE280D6009947EF /* SCQueryFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCQueryFilter.m; sourceTree = "<group>"; };
-		5649B55D1BE280D6009947EF /* SCRasterService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterService.h; sourceTree = "<group>"; };
-		5649B55E1BE280D6009947EF /* SCRasterService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRasterService.m; sourceTree = "<group>"; };
 		5649B55F1BE280D6009947EF /* SCRasterSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterSource.h; sourceTree = "<group>"; };
 		5649B5601BE280D6009947EF /* SCRasterSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRasterSource.m; sourceTree = "<group>"; };
 		5649B5611BE280D6009947EF /* SCRasterTileStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterTileStore.h; sourceTree = "<group>"; };
@@ -672,6 +714,28 @@
 		5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
 		5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_500_11_20m.json; sourceTree = "<group>"; };
+		5653F83B1D99A8670028B840 /* SpaconAppTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaconAppTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5653F83E1D99A8670028B840 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5653F8401D99A8670028B840 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5653F8411D99A8670028B840 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5653F8431D99A8670028B840 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5653F8441D99A8670028B840 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5653F8471D99A8670028B840 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5653F8491D99A8670028B840 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5653F84C1D99A8670028B840 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5653F84E1D99A8670028B840 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5653F8531D99A8680028B840 /* SpaconAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaconAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5653F8571D99A8680028B840 /* SpaconTestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpaconTestTests.m; sourceTree = "<group>"; };
+		5653F8591D99A8680028B840 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5653F85E1D99A8680028B840 /* SpaconAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaconAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5653F8621D99A8680028B840 /* SpaconTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpaconTestUITests.m; sourceTree = "<group>"; };
+		5653F8641D99A8680028B840 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5653F8701D99A9AB0028B840 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
+		5653F8711D99A9AB0028B840 /* MQTTFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTFramework.framework; path = Carthage/Build/iOS/MQTTFramework.framework; sourceTree = "<group>"; };
+		5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		5653F8751D99A9AB0028B840 /* wkb_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = wkb_ios.framework; path = Carthage/Build/iOS/wkb_ios.framework; sourceTree = "<group>"; };
+		5653F8761D99A9AB0028B840 /* ZipZap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ZipZap.framework; path = Carthage/Build/iOS/ZipZap.framework; sourceTree = "<group>"; };
+		5653F87F1D99AEB40028B840 /* SpaconAppTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpaconAppTest.entitlements; sourceTree = SOURCE_ROOT; };
 		56554E631D54EA03000D77E7 /* SCFormStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFormStore.h; sourceTree = "<group>"; };
 		56554E641D54EA03000D77E7 /* SCLocationStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCLocationStore.h; sourceTree = "<group>"; };
 		56554E651D54EA03000D77E7 /* SCFormStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFormStore.m; sourceTree = "<group>"; };
@@ -772,6 +836,28 @@
 				56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */,
 				56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */,
 				56FB3F521CF8878300C3DA4B /* ZipZap.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F8381D99A8670028B840 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5653F86E1D99A8BB0028B840 /* SpatialConnect.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F8501D99A8680028B840 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F85B1D99A8680028B840 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1257,8 +1343,6 @@
 				5649B5741BE280D6009947EF /* SCTileOverlay.m */,
 				5649B5751BE280D6009947EF /* SCTileOverlayRenderer.h */,
 				5649B5761BE280D6009947EF /* SCTileOverlayRenderer.m */,
-				5649B55D1BE280D6009947EF /* SCRasterService.h */,
-				5649B55E1BE280D6009947EF /* SCRasterService.m */,
 				5649B55F1BE280D6009947EF /* SCRasterSource.h */,
 				5649B5601BE280D6009947EF /* SCRasterSource.m */,
 				5649B54A1BE280D6009947EF /* SCOpenStreetMapSource.h */,
@@ -1304,9 +1388,17 @@
 		5649B4891BE27C6A009947EF = {
 			isa = PBXGroup;
 			children = (
+				5653F8701D99A9AB0028B840 /* libgpkgios.framework */,
+				5653F8711D99A9AB0028B840 /* MQTTFramework.framework */,
+				5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */,
+				5653F8751D99A9AB0028B840 /* wkb_ios.framework */,
+				5653F8761D99A9AB0028B840 /* ZipZap.framework */,
 				5649B4951BE27C6A009947EF /* SpatialConnect */,
 				5649B4A11BE27C6A009947EF /* SpatialConnectTests */,
 				566F5F641D90804E001C6692 /* SpatialConnectIntegrationTests */,
+				5653F83C1D99A8670028B840 /* SpaconAppTest */,
+				5653F8561D99A8680028B840 /* SpaconTestTests */,
+				5653F8611D99A8680028B840 /* SpaconTestUITests */,
 				5649B4941BE27C6A009947EF /* Products */,
 				0B5FE958508C82B8D8FF4D5C /* Frameworks */,
 				566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */,
@@ -1319,6 +1411,9 @@
 				5649B4931BE27C6A009947EF /* SpatialConnect.framework */,
 				5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */,
 				566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */,
+				5653F83B1D99A8670028B840 /* SpaconAppTest.app */,
+				5653F8531D99A8680028B840 /* SpaconAppTests.xctest */,
+				5653F85E1D99A8680028B840 /* SpaconAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1402,6 +1497,50 @@
 			);
 			name = WebViewJavascriptBridge;
 			path = Vendor/WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
+		5653F83C1D99A8670028B840 /* SpaconAppTest */ = {
+			isa = PBXGroup;
+			children = (
+				5653F87F1D99AEB40028B840 /* SpaconAppTest.entitlements */,
+				5653F8401D99A8670028B840 /* AppDelegate.h */,
+				5653F8411D99A8670028B840 /* AppDelegate.m */,
+				5653F8431D99A8670028B840 /* ViewController.h */,
+				5653F8441D99A8670028B840 /* ViewController.m */,
+				5653F8461D99A8670028B840 /* Main.storyboard */,
+				5653F8491D99A8670028B840 /* Assets.xcassets */,
+				5653F84B1D99A8670028B840 /* LaunchScreen.storyboard */,
+				5653F84E1D99A8670028B840 /* Info.plist */,
+				5653F83D1D99A8670028B840 /* Supporting Files */,
+			);
+			name = SpaconAppTest;
+			path = SpaconTest;
+			sourceTree = "<group>";
+		};
+		5653F83D1D99A8670028B840 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5653F83E1D99A8670028B840 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5653F8561D99A8680028B840 /* SpaconTestTests */ = {
+			isa = PBXGroup;
+			children = (
+				5653F8571D99A8680028B840 /* SpaconTestTests.m */,
+				5653F8591D99A8680028B840 /* Info.plist */,
+			);
+			path = SpaconTestTests;
+			sourceTree = "<group>";
+		};
+		5653F8611D99A8680028B840 /* SpaconTestUITests */ = {
+			isa = PBXGroup;
+			children = (
+				5653F8621D99A8680028B840 /* SpaconTestUITests.m */,
+				5653F8641D99A8680028B840 /* Info.plist */,
+			);
+			path = SpaconTestUITests;
 			sourceTree = "<group>";
 		};
 		56554E6F1D54EA07000D77E7 /* FormStore */ = {
@@ -1682,7 +1821,6 @@
 				5649B5A71BE280D6009947EF /* SCFilterNotBetween.h in Headers */,
 				560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */,
 				5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */,
-				5649B6021BE280D6009947EF /* SCRasterService.h in Headers */,
 				563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */,
 				56F4375A1CA0955200EA1344 /* FMDB.h in Headers */,
 				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
@@ -1847,6 +1985,60 @@
 			productReference = 5649B49D1BE27C6A009947EF /* SpatialConnectTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		5653F83A1D99A8670028B840 /* SpaconAppTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5653F8651D99A8680028B840 /* Build configuration list for PBXNativeTarget "SpaconAppTest" */;
+			buildPhases = (
+				5653F8371D99A8670028B840 /* Sources */,
+				5653F8381D99A8670028B840 /* Frameworks */,
+				5653F8391D99A8670028B840 /* Resources */,
+				5653F86F1D99A97E0028B840 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpaconAppTest;
+			productName = SpaconTest;
+			productReference = 5653F83B1D99A8670028B840 /* SpaconAppTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5653F8521D99A8680028B840 /* SpaconAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5653F8681D99A8680028B840 /* Build configuration list for PBXNativeTarget "SpaconAppTests" */;
+			buildPhases = (
+				5653F84F1D99A8680028B840 /* Sources */,
+				5653F8501D99A8680028B840 /* Frameworks */,
+				5653F8511D99A8680028B840 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5653F8551D99A8680028B840 /* PBXTargetDependency */,
+			);
+			name = SpaconAppTests;
+			productName = SpaconTestTests;
+			productReference = 5653F8531D99A8680028B840 /* SpaconAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5653F85D1D99A8680028B840 /* SpaconAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5653F86B1D99A8680028B840 /* Build configuration list for PBXNativeTarget "SpaconAppUITests" */;
+			buildPhases = (
+				5653F85A1D99A8680028B840 /* Sources */,
+				5653F85B1D99A8680028B840 /* Frameworks */,
+				5653F85C1D99A8680028B840 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5653F8601D99A8680028B840 /* PBXTargetDependency */,
+			);
+			name = SpaconAppUITests;
+			productName = SpaconTestUITests;
+			productReference = 5653F85E1D99A8680028B840 /* SpaconAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		566F5F691D9080B3001C6692 /* SpatialConnectIntegrationTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 566F5F941D9080B3001C6692 /* Build configuration list for PBXNativeTarget "SpatialConnectIntegrationTests" */;
@@ -1883,6 +2075,28 @@
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 82EPDLMXNS;
 					};
+					5653F83A1D99A8670028B840 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 82EPDLMXNS;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
+					};
+					5653F8521D99A8680028B840 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 82EPDLMXNS;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 5653F83A1D99A8670028B840;
+					};
+					5653F85D1D99A8680028B840 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 82EPDLMXNS;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 5653F83A1D99A8670028B840;
+					};
 					566F5F691D9080B3001C6692 = {
 						DevelopmentTeam = 82EPDLMXNS;
 					};
@@ -1894,6 +2108,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 5649B4891BE27C6A009947EF;
 			productRefGroup = 5649B4941BE27C6A009947EF /* Products */;
@@ -1909,6 +2124,9 @@
 				5649B4921BE27C6A009947EF /* SpatialConnect */,
 				5649B49C1BE27C6A009947EF /* SpatialConnectTests */,
 				566F5F691D9080B3001C6692 /* SpatialConnectIntegrationTests */,
+				5653F83A1D99A8670028B840 /* SpaconAppTest */,
+				5653F8521D99A8680028B840 /* SpaconAppTests */,
+				5653F85D1D99A8680028B840 /* SpaconAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1965,6 +2183,31 @@
 				56ED69C61CE212FC00843C44 /* remote.scfg in Resources */,
 				5649B4D61BE28079009947EF /* tests.scfg in Resources */,
 				5649B4C41BE28079009947EF /* all.geojson in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F8391D99A8670028B840 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5653F87E1D99ACA30028B840 /* remote.scfg in Resources */,
+				5653F84D1D99A8670028B840 /* LaunchScreen.storyboard in Resources */,
+				5653F84A1D99A8670028B840 /* Assets.xcassets in Resources */,
+				5653F8481D99A8670028B840 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F8511D99A8680028B840 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F85C1D99A8680028B840 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2062,7 +2305,6 @@
 				5645C4E11BED31F1006E4128 /* SCGeometry+GPKG.mm in Sources */,
 				5616860F1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.m in Sources */,
 				5649B61B1BE280D6009947EF /* SCTileOverlayRenderer.m in Sources */,
-				5649B6031BE280D6009947EF /* SCRasterService.m in Sources */,
 				560AFB2F1C7E2762006A060F /* SCGpkgTileSource.m in Sources */,
 				5649B5D11BE280D6009947EF /* SCLineString.m in Sources */,
 				5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */,
@@ -2208,6 +2450,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5653F8371D99A8670028B840 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5653F8451D99A8670028B840 /* ViewController.m in Sources */,
+				5653F8421D99A8670028B840 /* AppDelegate.m in Sources */,
+				5653F83F1D99A8670028B840 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F84F1D99A8680028B840 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5653F8581D99A8680028B840 /* SpaconTestTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5653F85A1D99A8680028B840 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5653F8631D99A8680028B840 /* SpaconTestUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		566F5F6C1D9080B3001C6692 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2222,6 +2490,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5653F8551D99A8680028B840 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5653F83A1D99A8670028B840 /* SpaconAppTest */;
+			targetProxy = 5653F8541D99A8680028B840 /* PBXContainerItemProxy */;
+		};
+		5653F8601D99A8680028B840 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5653F83A1D99A8670028B840 /* SpaconAppTest */;
+			targetProxy = 5653F85F1D99A8680028B840 /* PBXContainerItemProxy */;
+		};
 		566F5F6A1D9080B3001C6692 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5649B4921BE27C6A009947EF /* SpatialConnect */;
@@ -2233,6 +2511,25 @@
 			targetProxy = 56DC513A1BFC0594002C71B3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5653F8461D99A8670028B840 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5653F8471D99A8670028B840 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5653F84B1D99A8670028B840 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5653F84C1D99A8670028B840 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5649B4A51BE27C6A009947EF /* Debug */ = {
@@ -2502,6 +2799,117 @@
 			};
 			name = Release;
 		};
+		5653F8661D99A8680028B840 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = SpaconAppTest.entitlements;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
+				GCC_PREFIX_HEADER = SpatialConnect/SCPrefixHeader.pch;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/include/**";
+				INFOPLIST_FILE = SpaconTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Libs";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5653F8671D99A8680028B840 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = SpaconAppTest.entitlements;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
+				GCC_PREFIX_HEADER = SpatialConnect/SCPrefixHeader.pch;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/include/**";
+				INFOPLIST_FILE = SpaconTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Libs";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		5653F8691D99A8680028B840 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				INFOPLIST_FILE = SpaconTestTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpaconTest.app/SpaconTest";
+			};
+			name = Debug;
+		};
+		5653F86A1D99A8680028B840 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				INFOPLIST_FILE = SpaconTestTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpaconTest.app/SpaconTest";
+			};
+			name = Release;
+		};
+		5653F86C1D99A8680028B840 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				INFOPLIST_FILE = SpaconTestUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTestUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SpaconTest;
+			};
+			name = Debug;
+		};
+		5653F86D1D99A8680028B840 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = 82EPDLMXNS;
+				INFOPLIST_FILE = SpaconTestUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTestUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SpaconTest;
+			};
+			name = Release;
+		};
 		566F5F951D9080B3001C6692 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2589,6 +2997,33 @@
 			buildConfigurations = (
 				5649B4AB1BE27C6A009947EF /* Debug */,
 				5649B4AC1BE27C6A009947EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5653F8651D99A8680028B840 /* Build configuration list for PBXNativeTarget "SpaconAppTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5653F8661D99A8680028B840 /* Debug */,
+				5653F8671D99A8680028B840 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5653F8681D99A8680028B840 /* Build configuration list for PBXNativeTarget "SpaconAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5653F8691D99A8680028B840 /* Debug */,
+				5653F86A1D99A8680028B840 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5653F86B1D99A8680028B840 /* Build configuration list for PBXNativeTarget "SpaconAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5653F86C1D99A8680028B840 /* Debug */,
+				5653F86D1D99A8680028B840 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

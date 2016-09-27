@@ -27,7 +27,6 @@
 #import "SCKVPService.h"
 #import "SCLineString.h"
 #import "SCRCTBridge.h"
-#import "SCRasterService.h"
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
 #import "SCService.h"

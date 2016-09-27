@@ -32,7 +32,9 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 @property(nonatomic) CLLocationAccuracy accuracy;
 @property(nonatomic) BOOL isTracking;
 @property(nonatomic) RACSignal *lastKnown;
-@property(nonatomic) RACBehaviorSubject *reachabilitySignal;
+@property RACSignal *isConnectedViaWifi;
+@property RACSignal *isConnectedViaWAN;
+@property RACSignal *isConnected;
 
 - (void)startLocationManager;
 - (void)stopLocationManager;
@@ -46,7 +48,9 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 
 @synthesize distance, accuracy;
 @synthesize lastKnown = _lastKnown;
-@synthesize reachabilitySignal = _reachabilitySignal;
+@synthesize isConnectedViaWAN = _isConnectedViaWAN;
+@synthesize isConnectedViaWifi = _isConnectedViaWifi;
+@synthesize isConnected = _isConnected;
 
 - (instancetype)init {
   self = [super init];
@@ -100,16 +104,31 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
       }];
   
   Reachability *reach = [Reachability reachabilityForInternetConnection];
-  [reach startNotifier];
-  self.reachabilitySignal = [RACBehaviorSubject
-                             behaviorSubjectWithDefaultValue:reach];
-  __weak typeof(self) weakSelf = self;
+
   reach.reachableBlock = ^(Reachability *r) {
-    [weakSelf.reachabilitySignal sendNext:r];
+    [isReachableSubject sendNext:r];
   };
+
   reach.unreachableBlock = ^(Reachability *r) {
-    [weakSelf.reachabilitySignal sendNext:r];
+    [isReachableSubject sendNext:r];
   };
+
+  isReachableSubject = [RACBehaviorSubject
+                             behaviorSubjectWithDefaultValue:reach];
+
+  self.isConnected = [isReachableSubject map:^NSNumber*(Reachability *r) {
+    return @(r.isReachable);
+  }];
+
+  self.isConnectedViaWAN = [isReachableSubject map:^NSNumber*(Reachability *r) {
+    return @(r.isReachableViaWWAN);
+  }];
+
+  self.isConnectedViaWifi = [isReachableSubject map:^NSNumber*(Reachability *r) {
+    return @(r.isReachableViaWiFi);
+  }];
+
+  [reach startNotifier];
 }
 
 - (void)stop {
