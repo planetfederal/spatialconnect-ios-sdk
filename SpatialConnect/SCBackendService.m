@@ -120,7 +120,9 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     case CONFIG_ADD_FORM: {
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
-      [sc.dataService.formStore registerFormByConfig:f];
+      if (f) {
+        [sc.dataService.formStore registerFormByConfig:f];
+      }
       break;
     }
     case CONFIG_UPDATE_FORM: {
