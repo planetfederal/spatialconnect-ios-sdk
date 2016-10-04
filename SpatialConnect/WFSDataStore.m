@@ -24,6 +24,7 @@
 
 @interface WFSDataStore ()
 @property(readwrite) NSString *baseUri;
+@property(readwrite) NSArray *defaultLayers;
 @end
 
 @implementation WFSDataStore
@@ -31,7 +32,7 @@
 #define TYPE @"wfs"
 #define VERSION @"1.1.0"
 
-@synthesize baseUri, storeVersion, storeType;
+@synthesize baseUri, storeVersion, storeType, defaultLayers;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -40,6 +41,7 @@
   }
   self.baseUri = config.uri;
   self.name = config.name;
+  self.defaultLayers = config.defaultLayers;
   return self;
 }
 
