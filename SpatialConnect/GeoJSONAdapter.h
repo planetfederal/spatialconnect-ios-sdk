@@ -42,6 +42,7 @@
 - (RACSignal *)create:(SCSpatialFeature *)feature;
 - (RACSignal *) delete:(SCSpatialFeature *)feature;
 - (RACSignal *)update:(SCSpatialFeature *)feature;
-- (NSArray *)layerList;
+- (NSArray *)layers;
+- (NSArray *)layerNames;
 
 @end

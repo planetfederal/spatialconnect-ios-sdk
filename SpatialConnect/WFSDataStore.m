@@ -52,7 +52,7 @@
   return self;
 }
 
-- (NSArray *)layerList {
+- (NSArray *)layers {
   NSString *url = [NSString
       stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
                        self.baseUri, self.storeVersion];
@@ -60,12 +60,20 @@
       [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary *d = [NSDictionary dictionaryWithXMLData:data];
   NSMutableArray *layers = [NSMutableArray new];
-  NSArray *a = d[@"FeatureTypeList"][@"FeatureType"];
-  [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
-                                  BOOL *_Nonnull stop) {
-    [layers addObject:d[@"Name"]];
-  }];
+  id a = d[@"FeatureTypeList"][@"FeatureType"];
+  if ([a isKindOfClass:NSDictionary.class]) {
+      [layers addObject:a[@"Name"]];
+  } else {
+    [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
+                                    BOOL *_Nonnull stop) {
+      [layers addObject:d[@"Name"]];
+    }];
+  }
   return [NSArray arrayWithArray:layers];
+}
+
+- (NSArray *)layerNames {
+  return self.layers;
 }
 
 - (NSString *)storeType {

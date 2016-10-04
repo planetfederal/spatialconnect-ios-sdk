@@ -144,8 +144,12 @@
   return self.name;
 }
 
-- (NSArray *)layerList {
+- (NSArray *)layers {
   return @[ @"default" ];
+}
+
+- (NSArray *)layerNames {
+  return self.layers;
 }
 
 - (RACSignal *)query:(SCQueryFilter *)filter {
@@ -191,7 +195,7 @@
         }
         return YES;
       }] map:^SCGeometry *(SCGeometry *g) {
-        g.layerId = self.layerList[0];
+        g.layerId = self.layers[0];
         g.storeId = self.storeId;
         return g;
       }];

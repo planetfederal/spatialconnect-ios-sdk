@@ -139,7 +139,7 @@
 }
 
 #pragma mark -
-- (NSArray *)layerList {
+- (NSArray *)layers {
   return self.gpkg.featureContents;
 }
 
