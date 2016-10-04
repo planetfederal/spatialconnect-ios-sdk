@@ -1,30 +1,18 @@
 language: objective-c
 xcode_project: SpatialConnect.xcodeproj
-xcode_scheme: SpatialConnect
+xcode_scheme: SpaconAppTest
 
 osx_image: xcode8
 notifications:
   email:
     - spatialconnect@boundlessgeo.com
 
-script:
-  xctool
-  -project SpatialConnect.xcodeproj
-  -scheme SpatialConnect
-  -sdk iphonesimulator
-  -destination 'platform=iOS Simulator,name=iPhone 6 Plus'
-  build
-  ONLY_ACTIVE_ARCH=NO
-  CODE_SIGN_IDENTITY=""
-  CODE_SIGNING_REQUIRED=NO
+before_script:
+  - carthage bootstrap
 
 before_install:
   - brew update
   - brew outdated carthage || brew upgrade carthage
 
-before_script:
-  - carthage bootstrap
-
-before_deploy:
-  - carthage build --no-skip-current
-  - carthage archive SpatialConnect
+script:
+  - xcodebuild -project SpatialConnect.xcodeproj -scheme SpaconAppTest test -destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0' -quiet

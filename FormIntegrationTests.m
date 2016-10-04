@@ -51,6 +51,7 @@
           return [n boolValue] == YES;
         }];
       }] take:1] subscribeNext:^(id x){
+        [expect fulfill];
   }];
 
   [sc startAllServices];
