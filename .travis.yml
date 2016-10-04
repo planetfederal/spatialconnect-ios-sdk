@@ -2,7 +2,7 @@ language: objective-c
 xcode_project: SpatialConnect.xcodeproj
 xcode_scheme: SpatialConnect
 
-osx_image: xcode7.3
+osx_image: xcode8
 notifications:
   email:
     - spatialconnect@boundlessgeo.com
@@ -21,7 +21,6 @@ script:
 before_install:
   - brew update
   - brew outdated carthage || brew upgrade carthage
-  - brew uninstall --force xctool && travis_wait 30 brew install --HEAD xctool
 
 before_script:
   - carthage bootstrap
