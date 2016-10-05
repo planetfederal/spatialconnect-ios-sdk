@@ -3,6 +3,7 @@
 #define SpatialConnect_Commands_h
 
 typedef NS_ENUM(NSInteger, SCCommand) {
+	NO_ACTION = 0,
 	START_ALL_SERVICES = 1,
 	DATASERVICE_ACTIVESTORESLIST = 100,
 	DATASERVICE_ACTIVESTOREBYID = 101,

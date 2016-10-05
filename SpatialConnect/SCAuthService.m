@@ -26,7 +26,7 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   if (self = [super init]) {
     keychainItem =
         [[KeychainItemWrapper alloc] initWithIdentifier:@"SpatialConnect"
-                                            accessGroup:nil];
+                                            accessGroup:@"com.boundlessgeo.spatialconnect"];
     loginStatus = [RACBehaviorSubject
         behaviorSubjectWithDefaultValue:@(SCAUTH_NOT_AUTHENTICATED)];
   }
