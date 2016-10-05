@@ -87,8 +87,6 @@ double metersForTile(double tile, int zoom) {
   int tilesPerSide = pow(2, path.z);
   double tileSizeMeters = (2 * MERCATOR_OFFSET) / tilesPerSide;
   double tileMinX = (-1 * MERCATOR_OFFSET) + (path.x * tileSizeMeters);
-  double tileMaxX = (-1 * MERCATOR_OFFSET) + ((path.x + 1) * tileSizeMeters);
-  double tileMinY = MERCATOR_OFFSET - ((path.y + 1) * tileSizeMeters);
   double tileMaxY = MERCATOR_OFFSET - (path.y * tileSizeMeters);
 
   double metersPerPixelX = tileSizeMeters / size.width;

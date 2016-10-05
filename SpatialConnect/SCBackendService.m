@@ -26,7 +26,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 @interface SCBackendService ()
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
-- (void)fetchConfigAndListen;
 - (void)subscribeToTopic:(NSString*)topic;
 - (void)connect;
 @end
@@ -156,7 +155,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   cMsg.action = CONFIG_FULL;
   [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
     NSString *json = m.payload;
-    NSInteger i = m.action;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
     [[[SpatialConnect sharedInstance] configService] loadConfig:cfg];
@@ -192,7 +190,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
                     fromProtocol:@protocol(MQTTSessionManagerDelegate)];
 
     multicast = [[d publish] autoconnect];
-    sessionManager.delegate = self;
+    sessionManager.delegate = (id<MQTTSessionManagerDelegate>)self;
 
     [[[connectedToBroker filter:^BOOL(NSNumber *v) {
       return v.boolValue;
