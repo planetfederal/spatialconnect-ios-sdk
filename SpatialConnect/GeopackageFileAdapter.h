@@ -47,8 +47,8 @@
 - (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
 - (void)addLayer:(NSString *)name typeDefs:(NSDictionary *)t;
 - (void)removeLayer:(NSString *)name;
-- (NSArray *)layers;
-- (NSArray *)rasterList;
+- (NSArray *)vectorLayers;
+- (NSArray *)rasterLayers;
 - (NSString *)defaultLayerName;
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView;

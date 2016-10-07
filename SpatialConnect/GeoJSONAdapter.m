@@ -148,10 +148,6 @@
   return @[ @"default" ];
 }
 
-- (NSArray *)layerNames {
-  return self.layers;
-}
-
 - (RACSignal *)query:(SCQueryFilter *)filter {
   return [
       [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {

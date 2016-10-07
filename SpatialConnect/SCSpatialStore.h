@@ -73,15 +73,15 @@
 /**
  *  List of layers in the store
  *
- *  @return NSArray of layer references
+ *  @return NSArray of strings
  */
 - (NSArray *)layers;
 
 /**
- *  List of layers in the store
+ *  List of vector layers in the store
  *
  *  @return NSArray of strings
  */
-- (NSArray *)layerNames;
+- (NSArray *)vectorLayers;
 
 @end

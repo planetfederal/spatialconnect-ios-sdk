@@ -55,16 +55,20 @@
 }
 
 - (NSArray *)layers {
+  return self.vectorLayers;
+}
+
+- (NSArray *)vectorLayers {
   NSString *url = [NSString
-      stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
-                       self.baseUri, self.storeVersion];
+                   stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
+                   self.baseUri, self.storeVersion];
   NSData *data =
-      [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
+  [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary *d = [NSDictionary dictionaryWithXMLData:data];
   NSMutableArray *layers = [NSMutableArray new];
   id a = d[@"FeatureTypeList"][@"FeatureType"];
   if ([a isKindOfClass:NSDictionary.class]) {
-      [layers addObject:a[@"Name"]];
+    [layers addObject:a[@"Name"]];
   } else {
     [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
                                     BOOL *_Nonnull stop) {
@@ -72,10 +76,6 @@
     }];
   }
   return [NSArray arrayWithArray:layers];
-}
-
-- (NSArray *)layerNames {
-  return self.layers;
 }
 
 - (NSString *)storeType {

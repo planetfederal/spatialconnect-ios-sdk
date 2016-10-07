@@ -72,11 +72,11 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 }
 
 - (NSArray *)layers {
-  return [(GeoJSONAdapter *)adapter layers];
+  return self.vectorLayers;
 }
 
-- (NSArray *)layerNames {
-  return self.layers;
+- (NSArray *)vectorLayers {
+  return [(GeoJSONAdapter *)adapter layers];
 }
 
 #pragma mark -

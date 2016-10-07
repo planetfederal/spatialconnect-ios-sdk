@@ -139,11 +139,11 @@
 }
 
 #pragma mark -
-- (NSArray *)layers {
+- (NSArray *)vectorLayers {
   return self.gpkg.featureContents;
 }
 
-- (NSArray *)rasterList {
+- (NSArray *)rasterLayers {
   return self.gpkg.tileContents;
 }
 

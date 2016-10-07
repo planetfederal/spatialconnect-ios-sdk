@@ -143,18 +143,21 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (NSArray *)layers {
-  return self.adapter.layers;
+  return [self.vectorLayers arrayByAddingObjectsFromArray:self.rasterLayers];
 }
 
-- (NSArray *)layerNames {
-  return [[[[self.layers rac_sequence] signal]
-    map:^NSString *(SCGpkgFeatureSource *f) {
-      return f.name;
-    }] toArray];
+- (NSArray *)vectorLayers {
+  return [[[[self.adapter.vectorLayers rac_sequence] signal]
+   map:^NSString *(SCGpkgFeatureSource *f) {
+     return f.name;
+   }] toArray];
 }
 
-- (NSArray *)rasterList {
-  return self.adapter.rasterList;
+- (NSArray *)rasterLayers {
+  return [[[[self.adapter.rasterLayers rac_sequence] signal]
+   map:^NSString *(SCGpkgFeatureSource *f) {
+     return f.name;
+   }] toArray];
 }
 
 - (NSString *)defaultLayer {
