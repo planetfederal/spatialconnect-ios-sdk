@@ -34,8 +34,6 @@
 
 - (void)tearDown {
   [super tearDown];
-  [self.sc stopAllServices];
-
 }
 
 - (void)testFloat {
@@ -45,7 +43,8 @@
 }
 
 - (void)testData {
-  NSData *fileData = [NSData dataWithContentsOfFile:@"simple.json"];
+  NSString *fp = [SpatialConnectHelper filePathFromSelfBundle:@"simple.json"];
+  NSData *fileData = [NSData dataWithContentsOfFile:fp];
   [self.kvp putValue:fileData forKey:@"datatest"];
   NSData *obj = (NSData*)[self.kvp valueForKey:@"datatest"];
   NSString *str = [[NSString alloc] initWithBytes:[fileData bytes] length:fileData.length encoding:NSUTF8StringEncoding];

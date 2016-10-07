@@ -22,8 +22,8 @@
 
 @implementation SCGeopackageHelper
 
-NSString *storeId = @"f6dcc750-1349-46b9-a324-0223764d46d1";
-NSString *rasterStoreId = @"ba293796-5026-46f7-a2ff-e5dec85heh6b";
+NSString *storeId = @"77b40504-283a-4c49-b889-baf623658d67";
+NSString *rasterStoreId = @"fb0ca596-5a53-4aa6-a0eb-15f4bc992e30";
 
 + (RACSignal *)loadGPKGDataStore:(SpatialConnect *)sc {
   return [[sc.dataService storeStarted:storeId]

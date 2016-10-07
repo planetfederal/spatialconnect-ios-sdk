@@ -352,10 +352,21 @@
   SCSpatialFeature *f;
   long long ident = [rs longLongIntForColumn:self.pkColName];
   if (self.geomColName) {
-    f = [SCGeometry fromGeometryBinary:[rs dataForColumn:self.geomColName]
-                                   crs:self.crs];
+    @try {
+      NSData *bytes = [rs dataForColumn:self.geomColName];
+      if (bytes) {
+        f = [SCGeometry fromGeometryBinary:bytes
+                                       crs:self.crs];
+      }
+    } @catch (NSException *exception) {
+      NSLog(@"Error Parsing Geometry binary");
+    } @finally {
+      if (!f) {
+        f = [SCSpatialFeature new];
+      }
+    }
   } else {
-    f = [[SCSpatialFeature alloc] init];
+    f = [SCSpatialFeature new];
   }
   f.identifier = [NSString stringWithFormat:@"%lld", ident];
   NSMutableDictionary *dict = [[rs resultDictionary] mutableCopy];

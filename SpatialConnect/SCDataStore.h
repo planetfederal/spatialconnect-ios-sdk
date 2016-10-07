@@ -52,6 +52,8 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 - (id)initWithStoreConfig:(SCStoreConfig *)config withStyle:(SCStyle *)style;
 
 - (NSDictionary *)dictionary;
+- (NSArray *)layers;
+
 + (NSString *)versionKey;
 
 @end

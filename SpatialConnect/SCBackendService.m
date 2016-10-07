@@ -61,7 +61,9 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)stop {
-  [sessionManager disconnect];
+  if (sessionManager) {
+    [sessionManager disconnect];
+  }
 }
 
 - (void)authListener {

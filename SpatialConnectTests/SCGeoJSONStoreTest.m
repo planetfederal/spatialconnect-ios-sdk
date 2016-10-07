@@ -32,21 +32,21 @@
 
 - (void)tearDown {
   [super tearDown];
-  [self.sc stopAllServices];
-  self.sc = nil;
 }
 
 // download geojson file and check if file exists
 - (void)testGeoJSONDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Delete"];
-  NSString *storeId = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
+  NSString *storeId = @"08e4c309-46b8-4ad5-ba2b-190ab52c8efc";
   NSString *fileName = [NSString stringWithFormat:@"%@.geojson", storeId];
-  NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
-  [[[sc.dataService storeStarted:storeId]
-      map:^SCDataStore *(SCStoreStatusEvent *evt) {
-        SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-        return ds;
-      }] subscribeNext:^(id<SCSpatialStore> ds) {
+  NSString *path = [SCFileUtils filePathFromDocumentsDirectory:fileName];
+  [[[[[[sc serviceStarted:[SCBackendService serviceId]] flattenMap:^RACStream *(id value) {
+    return sc.backendService.configReceived;
+  }] filter:^BOOL(NSNumber *v) {
+    return v.boolValue;
+  }] take:1] flattenMap:^RACStream *(id value) {
+    return [sc.dataService storeStarted:storeId];
+  }] subscribeNext:^(id<SCSpatialStore> ds) {
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
     XCTAssertTrue(b);
     [expect fulfill];
@@ -55,7 +55,6 @@
         XCTFail(@"Error getting store");
         [expect fulfill];
       }];
-  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 

@@ -10,9 +10,6 @@ notifications:
 before_script:
   - carthage bootstrap
 
-before_install:
-  - brew update
-  - brew outdated carthage || brew upgrade carthage
-
 script:
-  - xcodebuild -project SpatialConnect.xcodeproj -scheme SpaconAppTest test -destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0' -quiet
+  - xcodebuild clean build -project SpatialConnect.xcodeproj -scheme SpatialConnect -destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0' -quiet
+  - xcodebuild test -project SpatialConnect.xcodeproj -scheme SpaconAppTest -destination 'platform=iOS Simulator,name=iPhone 6,OS=10.0'

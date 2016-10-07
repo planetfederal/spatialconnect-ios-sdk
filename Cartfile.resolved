@@ -1,0 +1,6 @@
+github "tetriscode/MQTT-Client-Framework" "df7f1f703ae6ef1dddd4f5bff82e89e2d22b10db"
+github "tetriscode/Proj4-iOS" "4.9.2"
+github "ReactiveCocoa/ReactiveCocoa" "v2.5"
+github "boundlessgeo/geopackage-wkb-ios" "489692d586db77dcf0805cd2dc43404805afadd6"
+github "tetriscode/libgpkgios" "f443a9a942b4fca015d0bc235488bfb9975303ed"
+github "pixelglow/zipzap" "8.0.6"

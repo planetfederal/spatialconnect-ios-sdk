@@ -37,12 +37,11 @@
 
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
+  self.sc = [SpatialConnect sharedInstance];
 }
 
 - (void)tearDown {
   [super tearDown];
-  [self.sc stopAllServices];
 }
 
 - (void)testGpkgFeatureDelete {
@@ -76,8 +75,7 @@
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(SCDataStore *ds) {
         if (ds) {
-          XCTAssertNotNil(ds.layerList, @"Layer list as array");
-          XCTAssertNoThrow([sc stopAllServices]);
+          XCTAssertNotNil(ds.layers, @"Layer list as array");
         } else {
           XCTAssert(NO, @"Store is nil");
         }
@@ -88,8 +86,7 @@
         [expect fulfill];
       }];
 
-  [sc startAllServices];
-  [self waitForExpectationsWithTimeout:12.0 handler:nil];
+  [self waitForExpectationsWithTimeout:120.0 handler:nil];
 }
 
 - (void)testGpkgFeatureQuery {
@@ -109,8 +106,7 @@
             }];
       }];
 
-  [self.sc startAllServices];
-  [self waitForExpectationsWithTimeout:1000.0 handler:nil];
+  [self waitForExpectationsWithTimeout:15.0 handler:nil];
 }
 
 - (void)testGpkgFeatureCreate {
@@ -119,7 +115,7 @@
       flattenMap:^RACStream *(GeopackageStore *ds) {
         SCPoint *p =
             [[SCPoint alloc] initWithCoordinateArray:@[ @(32.3), @(43.1) ]];
-        NSArray *list = ds.layerList;
+        NSArray *list = ds.layers;
         p.layerId = list[0];
         return [ds create:p];
       }] subscribeError:^(NSError *error) {
@@ -131,7 +127,6 @@
         XCTAssert(YES, @"Point created");
         [expect fulfill];
       }];
-  [self.sc startAllServices];
   [self waitForExpectationsWithTimeout:150.0 handler:nil];
 }
 
@@ -160,7 +155,6 @@
         }];
   }];
 
-  [sc startAllServices];
   [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
