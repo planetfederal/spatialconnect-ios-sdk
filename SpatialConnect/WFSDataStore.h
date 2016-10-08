@@ -19,5 +19,6 @@
 @interface WFSDataStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle>
 
 @property (readonly) NSString *baseUri;
+@property (readonly) NSArray *defaultLayers;
 
 @end

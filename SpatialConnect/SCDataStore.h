@@ -40,13 +40,11 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 @interface SCDataStore : NSObject
 
 @property(readonly) NSString *storeId;
-@property(readonly, nonatomic) NSArray *layerList;
 @property(nonatomic) NSString *name;
 @property(nonatomic, strong) SCStyle *style;
 @property(readonly) NSString *storeVersion;
 @property(readonly) NSString *storeType;
 @property(readonly) NSString *key;
-@property(readonly) NSArray *defaultLayers;
 @property SCDataStoreStatus status;
 @property SCDataStorePermission permission;
 

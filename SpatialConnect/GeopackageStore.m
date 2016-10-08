@@ -142,12 +142,22 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [self.adapter deleteFeature:tuple];
 }
 
-- (NSArray *)layerList {
-  return self.adapter.layerList;
+- (NSArray *)layers {
+  return [self.vectorLayers arrayByAddingObjectsFromArray:self.rasterLayers];
 }
 
-- (NSArray *)rasterList {
-  return self.adapter.rasterList;
+- (NSArray *)vectorLayers {
+  return [[[[self.adapter.vectorLayers rac_sequence] signal]
+   map:^NSString *(SCGpkgFeatureSource *f) {
+     return f.name;
+   }] toArray];
+}
+
+- (NSArray *)rasterLayers {
+  return [[[[self.adapter.rasterLayers rac_sequence] signal]
+   map:^NSString *(SCGpkgFeatureSource *f) {
+     return f.name;
+   }] toArray];
 }
 
 - (NSString *)defaultLayer {

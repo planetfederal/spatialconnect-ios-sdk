@@ -71,6 +71,14 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   return kVERSION;
 }
 
+- (NSArray *)layers {
+  return self.vectorLayers;
+}
+
+- (NSArray *)vectorLayers {
+  return [(GeoJSONAdapter *)adapter layers];
+}
+
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {

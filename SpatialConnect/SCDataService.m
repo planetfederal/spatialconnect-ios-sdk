@@ -307,6 +307,16 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [store setObject:ds.name forKey:@"name"];
     [store setObject:kSERVICENAME forKey:@"service"];
     [store setObject:ds.storeType forKey:@"type"];
+    [store setObject:[NSNumber numberWithInteger:ds.status] forKey:@"status"];
+    if( [ds conformsToProtocol:@protocol(SCSpatialStore)]) {
+      id<SCSpatialStore> ss = (id<SCSpatialStore>)ds;
+      [store setObject:ss.layers forKey:@"layers"];
+      [store setObject:ss.vectorLayers forKey:@"vectorLayers"];
+    }
+    if( [ds conformsToProtocol:@protocol(SCRasterStore)]) {
+      id<SCRasterStore> ss = (id<SCRasterStore>)ds;
+      [store setObject:ss.rasterLayers forKey:@"rasterLayers"];
+    }
     [arr addObject:store];
   }];
   return [NSArray arrayWithArray:arr];
