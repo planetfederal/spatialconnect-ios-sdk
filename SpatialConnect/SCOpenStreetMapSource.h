@@ -17,9 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
 #import "SCTileMapSource.h"
+#import <Foundation/Foundation.h>
 
 @interface SCOpenStreetMapSource : SCTileMapSource
 

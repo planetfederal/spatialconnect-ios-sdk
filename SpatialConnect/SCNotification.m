@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "JSONKit.h"
 #import "SCNotification.h"
+#import "JSONKit.h"
 
 @interface SCNotification ()
 @property(nonatomic, readwrite, strong) NSString *to;

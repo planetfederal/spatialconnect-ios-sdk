@@ -17,10 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCBoundingBox.h"
 
 @interface SCBoundingBox (MapKit)

@@ -17,11 +17,11 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCFileUtils.h"
+#import "SCGeoJSON.h"
+#import "SCGeometryCollection.h"
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "SCGeometryCollection.h"
-#import "SCGeoJSON.h"
-#import "SCFileUtils.h"
 
 @interface SCGeoJSONParserTest : XCTestCase
 - (NSString *)filePathFromSelfBundle:(NSString *)fileName;
@@ -43,10 +43,11 @@
   if (strs.count == 2) {
     filePrefix = strs.firstObject;
   } else {
-    filePrefix =
-        [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
-                                                NSMakeRange(0, strs.count - 2)]]
-            componentsJoinedByString:@"."];
+    filePrefix = [[strs
+        objectsAtIndexes:[NSIndexSet
+                             indexSetWithIndexesInRange:NSMakeRange(
+                                                            0, strs.count - 2)]]
+        componentsJoinedByString:@"."];
   }
   NSString *extension = [strs lastObject];
   NSString *filePath =

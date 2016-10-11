@@ -49,12 +49,14 @@
     RACSignal *result = [sc.dataService queryAllStores:nil];
     [result subscribeNext:^(SCSpatialFeature *geom) {
       [arr addObject:geom];
-    } error:^(NSError *error) {
-      XCTFail(@"Error Querying stores");
-    } completed:^(void) {
-      XCTAssert(arr.count > 0, @"Pass");
-      [expect fulfill];
-    }];
+    }
+        error:^(NSError *error) {
+          XCTFail(@"Error Querying stores");
+        }
+        completed:^(void) {
+          XCTAssert(arr.count > 0, @"Pass");
+          [expect fulfill];
+        }];
   }];
   [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }

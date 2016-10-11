@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "Commands.h"
 #import "SCFormStore.h"
+#import "Commands.h"
 #import "SCHttpUtils.h"
 #import "SCPoint+GeoJSON.h"
 #import "SpatialConnect.h"
@@ -114,18 +114,17 @@
       filter:^BOOL(RACEvent *evt) {
         return evt.eventType == RACEventTypeCompleted;
       }] flattenMap:^RACStream *(id value) {
-        if (sc.backendService.status == SC_SERVICE_RUNNING) {
-          feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-          SCMessage *msg = [[SCMessage alloc] init];
-          NSString *formId = [formIds objectForKey:feature.layerId];
-          NSDictionary *submission = @{
-                                       @"form_id" : formId,
-                                       @"feature" : feature.JSONDict
-                                       };
-          msg.payload = submission.JSONString;
-          [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
-        }
-        return [RACSignal empty];
+    if (sc.backendService.status == SC_SERVICE_RUNNING) {
+      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
+      SCMessage *msg = [[SCMessage alloc] init];
+      NSString *formId = [formIds objectForKey:feature.layerId];
+      NSDictionary *submission =
+          @{ @"form_id" : formId,
+             @"feature" : feature.JSONDict };
+      msg.payload = submission.JSONString;
+      [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
+    }
+    return [RACSignal empty];
   }];
 }
 

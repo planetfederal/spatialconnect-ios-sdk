@@ -25,6 +25,6 @@
 @property(strong, nonatomic, readonly) NSString *desc;
 @property(strong, nonatomic, readonly) NSString *mimeType;
 
-- (id)initWithResultSet:(FMResultSet*)rs;
+- (id)initWithResultSet:(FMResultSet *)rs;
 
 @end

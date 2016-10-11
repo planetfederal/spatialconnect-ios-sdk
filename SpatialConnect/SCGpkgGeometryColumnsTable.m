@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "SCGpkgGeometryColumn.h"
 #import "SCGpkgGeometryColumnsTable.h"
+#import "SCGpkgGeometryColumn.h"
 
 NSString *const kGCTableName = @"gpkg_geometry_columns";
 NSString *const kGCTableNameColName = @"table_name";

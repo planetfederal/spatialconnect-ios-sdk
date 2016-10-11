@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCLinearRing.h"
+#import "SCBoundingBox.h"
 #import "SCPoint.h"
 
 @implementation SCLinearRing
@@ -92,8 +92,7 @@
 
   NSDictionary *geometry =
       [NSDictionary dictionaryWithObjects:@[
-        @"LineString",
-        [self coordinateArrayAsProj:4326]
+        @"LineString", [self coordinateArrayAsProj:4326]
       ]
                                   forKeys:@[ @"type", @"coordinates" ]];
   dict[@"geometry"] = geometry;

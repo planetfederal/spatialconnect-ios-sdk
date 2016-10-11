@@ -101,10 +101,9 @@
     dict[@"id"] = self.identifier;
   }
   dict[@"properties"] = self.properties ? self.properties : [NSNull null];
-  dict[@"crs"] = @{
-    @"type" : @"name",
-    @"properties" : @{@"name" : @"EPSG:4326"}
-  };
+  dict[@"crs"] =
+      @{ @"type" : @"name",
+         @"properties" : @{@"name" : @"EPSG:4326"} };
   return dict;
 }
 

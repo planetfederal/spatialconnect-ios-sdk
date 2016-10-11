@@ -94,8 +94,8 @@ static bool logging = false;
 }
 
 - (void)callHandler:(NSString *)handlerName
-               data:(id)data
-   responseCallback:(WVJBResponseCallback)responseCallback {
+                data:(id)data
+    responseCallback:(WVJBResponseCallback)responseCallback {
   [self _sendData:data
       responseCallback:responseCallback
            handlerName:handlerName];
@@ -129,8 +129,8 @@ static bool logging = false;
 }
 
 - (void)_sendData:(id)data
- responseCallback:(WVJBResponseCallback)responseCallback
-      handlerName:(NSString *)handlerName {
+    responseCallback:(WVJBResponseCallback)responseCallback
+         handlerName:(NSString *)handlerName {
   NSMutableDictionary *message = [NSMutableDictionary dictionary];
 
   if (data) {
@@ -224,10 +224,9 @@ static bool logging = false;
             responseData = [NSNull null];
           }
 
-          WVJBMessage *msg = @{
-            @"responseId" : callbackId,
-            @"responseData" : responseData
-          };
+          WVJBMessage *msg =
+              @{ @"responseId" : callbackId,
+                 @"responseData" : responseData };
           [self _queueMessage:msg];
         };
       } else {
@@ -255,8 +254,9 @@ static bool logging = false;
 
 - (NSString *)_serializeMessage:(id)message {
   return [[NSString alloc]
-      initWithData:
-          [NSJSONSerialization dataWithJSONObject:message options:0 error:nil]
+      initWithData:[NSJSONSerialization dataWithJSONObject:message
+                                                   options:0
+                                                     error:nil]
           encoding:NSUTF8StringEncoding];
 }
 

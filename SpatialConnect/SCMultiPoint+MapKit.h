@@ -17,16 +17,15 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <MapKit/MapKit.h>
-#import <MapKit/MKShape.h>
 #import <MapKit/MKGeometry.h>
+#import <MapKit/MKShape.h>
 #import <MapKit/MKTypes.h>
+#import <MapKit/MapKit.h>
 
 #import "SCMultiPoint.h"
 
 @interface SCMultiPoint (MapKit)
 
-- (NSArray*)shape;
+- (NSArray *)shape;
 
 @end

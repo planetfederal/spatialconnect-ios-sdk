@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCJavascriptBridge.h"
 #import "Commands.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
-#import "SCJavascriptBridge.h"
 #import "SCJavascriptBridgeAPI.h"
 #import "SCJavascriptCommands.h"
 #import "SCNotification.h"
@@ -70,10 +70,9 @@ NSString *const SCJavascriptBridgeErrorDomain =
                      subscribeNext:^(NSDictionary *payload) {
                        NSLog(@"Response");
                        NSLog(@"%@", payload);
-                       NSDictionary *newAction = @{
-                         @"type" : action[@"type"],
-                         @"payload" : payload
-                       };
+                       NSDictionary *newAction =
+                           @{ @"type" : action[@"type"],
+                              @"payload" : payload };
                        [_bridge callHandler:action[@"type"] data:newAction];
                      }];
                }];

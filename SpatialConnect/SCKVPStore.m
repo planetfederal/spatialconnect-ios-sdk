@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   return self;
 }
 
-- (NSError*)open {
+- (NSError *)open {
   return [self openDatabase];
 }
 
@@ -57,15 +57,17 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   }
 }
 
-- (NSError*)openDatabase {
+- (NSError *)openDatabase {
   [database open];
-  NSString *createTable = @"CREATE TABLE IF NOT EXISTS kvp ( _id INTEGER NOT NULL PRIMARY KEY "
-  @"AUTOINCREMENT, key STRING UNIQUE NOT NULL, value "
-  @"BLOB NOT NULL, value_type INT NOT NULL);";
-  NSString *createIndex = @"CREATE UNIQUE INDEX IF NOT EXISTS kIdx ON kvp(key);";
+  NSString *createTable =
+      @"CREATE TABLE IF NOT EXISTS kvp ( _id INTEGER NOT NULL PRIMARY KEY "
+      @"AUTOINCREMENT, key STRING UNIQUE NOT NULL, value "
+      @"BLOB NOT NULL, value_type INT NOT NULL);";
+  NSString *createIndex =
+      @"CREATE UNIQUE INDEX IF NOT EXISTS kIdx ON kvp(key);";
   int res = [database
-             executeStatements:[NSString stringWithFormat:@"%@%@", createTable,
-                                createIndex]];
+      executeStatements:[NSString stringWithFormat:@"%@%@", createTable,
+                                                   createIndex]];
   if (res == SQLITE_OK) {
     return nil;
   } else {
@@ -79,8 +81,11 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   }
 }
 
-- (void)putValue:(NSObject*)value forKey:(NSString*)key {
-  NSString *sql = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ (key,value,value_type) VALUES (?,?,?)",tableName];
+- (void)putValue:(NSObject *)value forKey:(NSString *)key {
+  NSString *sql = [NSString
+      stringWithFormat:
+          @"INSERT OR REPLACE INTO %@ (key,value,value_type) VALUES (?,?,?)",
+          tableName];
   NSError *error;
   NSInteger type;
 
@@ -90,23 +95,27 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
     data = [NSKeyedArchiver archivedDataWithRootObject:value];
   } else if ([value isKindOfClass:[NSData class]]) {
     type = SCKVP_BLOB;
-    data = (NSData*)value;
+    data = (NSData *)value;
   } else if ([value isKindOfClass:[NSString class]]) {
     type = SCKVP_TEXT;
     data = [NSKeyedArchiver archivedDataWithRootObject:value];
   }
 
-  BOOL success = [database executeUpdate:sql withArgumentsInArray:@[key,data,@(type)]];
+  BOOL success =
+      [database executeUpdate:sql withArgumentsInArray:@[ key, data, @(type) ]];
   if (!success) {
     error = database.lastError;
-    NSLog(@"%@",error.description);
+    NSLog(@"%@", error.description);
   }
 }
 
-- (void)putDictionary:(NSDictionary*)dict {
-  NSString *sql = [NSString stringWithFormat:@"INSERT INTO %@ (key,value,value_type) VALUES (?,?,?)",tableName];
+- (void)putDictionary:(NSDictionary *)dict {
+  NSString *sql = [NSString
+      stringWithFormat:@"INSERT INTO %@ (key,value,value_type) VALUES (?,?,?)",
+                       tableName];
   [database beginTransaction];
-  [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *value, BOOL *stop) {
+  [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *value,
+                                            BOOL *stop) {
     NSInteger type;
     if ([value isKindOfClass:[NSNumber class]]) {
       type = SCKVP_REAL;
@@ -115,7 +124,8 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
     } else if ([value isKindOfClass:[NSString class]]) {
       type = SCKVP_TEXT;
     }
-    BOOL success = [database executeUpdate:sql withArgumentsInArray:@[key,value,@(type)]];
+    BOOL success = [database executeUpdate:sql
+                      withArgumentsInArray:@[ key, value, @(type) ]];
     if (success) {
       *stop = YES;
       [database rollback];
@@ -124,32 +134,38 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   [database commit];
 }
 
-- (NSObject*)valueForKey:(NSString*)key {
-  NSString *sql = [NSString stringWithFormat:@"SELECT value,value_type FROM %@ WHERE key = ?",tableName];
-  FMResultSet *rs = [database executeQuery:sql withArgumentsInArray:@[key]];
+- (NSObject *)valueForKey:(NSString *)key {
+  NSString *sql = [NSString
+      stringWithFormat:@"SELECT value,value_type FROM %@ WHERE key = ?",
+                       tableName];
+  FMResultSet *rs = [database executeQuery:sql withArgumentsInArray:@[ key ]];
   NSObject *obj = nil;
   if ([rs next]) {
     NSInteger t = [rs intForColumn:@"value_type"];
     switch (t) {
-      case SCKVP_BLOB:
-        obj = [rs dataForColumn:@"value"];
-        break;
-      case SCKVP_REAL:
-        obj = [NSKeyedUnarchiver unarchiveObjectWithData:[rs dataForColumn:@"value"]];
-        break;
-      case SCKVP_TEXT:
-        obj = [NSKeyedUnarchiver unarchiveObjectWithData:[rs dataForColumn:@"value"]];
-      default:
-        break;
+    case SCKVP_BLOB:
+      obj = [rs dataForColumn:@"value"];
+      break;
+    case SCKVP_REAL:
+      obj = [NSKeyedUnarchiver
+          unarchiveObjectWithData:[rs dataForColumn:@"value"]];
+      break;
+    case SCKVP_TEXT:
+      obj = [NSKeyedUnarchiver
+          unarchiveObjectWithData:[rs dataForColumn:@"value"]];
+    default:
+      break;
     }
   }
   [rs close];
   return obj;
 }
 
-- (NSDictionary*)valuesForKeyPrefix:(NSString*)prefixKey {
-  NSString *sql = [NSString stringWithFormat:@"SELECT key,value FROM %@ WHERE key LIKE ?",tableName];
-  FMResultSet *rs = [database executeQuery:sql withArgumentsInArray:@[prefixKey]];
+- (NSDictionary *)valuesForKeyPrefix:(NSString *)prefixKey {
+  NSString *sql = [NSString
+      stringWithFormat:@"SELECT key,value FROM %@ WHERE key LIKE ?", tableName];
+  FMResultSet *rs =
+      [database executeQuery:sql withArgumentsInArray:@[ prefixKey ]];
   NSDictionary *dict = [NSDictionary new];
   while ([rs next]) {
     NSObject *value = [rs objectForColumnName:@"value"];

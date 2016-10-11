@@ -6,8 +6,8 @@
 //  Copyright 2005 Flying Meat Inc.. All rights reserved.
 //
 
-#import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "FMDatabase.h"
 #import "TargetConditionals.h"
 
 @interface FMDatabase (PrivateStuff)

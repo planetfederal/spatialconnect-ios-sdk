@@ -20,12 +20,12 @@
 #ifndef SCGeopackageGeometryExtensions_h
 #define SCGeopackageGeometryExtensions_h
 
-#import "SCPoint+GPKG.h"
-#import "SCMultiPoint+GPKG.h"
-#import "SCPolygon+GPKG.h"
-#import "SCMultiPolygon+GPKG.h"
+#import "SCGeometry+GPKG.h"
 #import "SCLineString+GPKG.h"
 #import "SCMultiLineString+GPKG.h"
-#import "SCGeometry+GPKG.h"
+#import "SCMultiPoint+GPKG.h"
+#import "SCMultiPolygon+GPKG.h"
+#import "SCPoint+GPKG.h"
+#import "SCPolygon+GPKG.h"
 
 #endif /* SCGeopackageGeometryExtensions_h */

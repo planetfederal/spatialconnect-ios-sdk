@@ -72,16 +72,13 @@
   __block BOOL hasFeatures = NO;
   [[[sc.dataService storeStarted:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
       flattenMap:^RACStream *(SCStoreStatusEvent *evt) {
-        SCDataStore *ds = [sc.dataService storeByIdentifier:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"];
+        SCDataStore *ds = [sc.dataService
+            storeByIdentifier:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"];
         if (ds) {
           XCTAssertNotNil(ds.layers, @"Layer list as array");
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-          SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
-            @(-178.0),
-            @(-87.0),
-            @(178.0),
-            @(87.0)
-          ]];
+          SCBoundingBox *bbox = [[SCBoundingBox alloc]
+              initWithCoords:@[ @(-178.0), @(-87.0), @(178.0), @(87.0) ]];
           SCGeoFilterContains *gfc =
               [[SCGeoFilterContains alloc] initWithBBOX:bbox];
           SCPredicate *predicate = [[SCPredicate alloc] initWithFilter:gfc];
@@ -117,13 +114,10 @@
         if (ds) {
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
           NSArray *ll = ds.layers;
-          [filter
-              addLayerIds:[ll subarrayWithRange:NSMakeRange(0, 3)]];
+          [filter addLayerIds:[ll subarrayWithRange:NSMakeRange(0, 3)]];
           SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
-            @(-100.07438528127528),
-            @(20.922397667217076),
-            @(-60.76484934151024),
-            @(58.79784328722645)
+            @(-100.07438528127528), @(20.922397667217076),
+            @(-60.76484934151024), @(58.79784328722645)
           ]];
           SCGeoFilterContains *gfc =
               [[SCGeoFilterContains alloc] initWithBBOX:bbox];

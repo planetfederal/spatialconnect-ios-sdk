@@ -17,10 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCLineString.h"
 
 @interface SCLinearRing : SCLineString

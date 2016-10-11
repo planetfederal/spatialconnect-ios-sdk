@@ -17,14 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCMultiLinestring.h"
 
 @interface SCMultiLineString (MapKit)
 
-- (NSArray*)shape;
+- (NSArray *)shape;
 
 @end

@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import <Foundation/Foundation.h>
 #import "FMResultSet.h"
+#import <Foundation/Foundation.h>
 
 @interface SCGpkgSpatialRefSys : NSObject
 

@@ -17,12 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
-#import "SCLineString.h"
 #import "SCGeometry+MapKit.h"
+#import "SCLineString.h"
 
 @import MapKit;
 

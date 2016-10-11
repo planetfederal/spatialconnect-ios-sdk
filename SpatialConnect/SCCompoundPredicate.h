@@ -17,15 +17,14 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
 #import "SCPredicate.h"
+#import <Foundation/Foundation.h>
 
 @interface SCCompoundPredicate : SCPredicate {
   NSMutableArray *compoundPredicates;
 }
 
-- (void)addPredicate:(SCPredicate*)predicate;
-- (void)addPredicates:(NSArray*)predicates;
+- (void)addPredicate:(SCPredicate *)predicate;
+- (void)addPredicates:(NSArray *)predicates;
 
 @end

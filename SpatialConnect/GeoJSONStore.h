@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCSpatialStore.h"
-#import "SCDataStore.h"
 #import "GeoJSONAdapter.h"
+#import "SCDataStore.h"
+#import "SCSpatialStore.h"
+#import <Foundation/Foundation.h>
 
 extern const NSString *kTYPE;
 extern const int *kVERSON;

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+#import "SCConfigService.h"
 #import "Commands.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
-#import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
@@ -45,7 +45,7 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 
 - (RACSignal *)start {
   [super start];
-//  [self sweepDataDirectory];
+  //  [self sweepDataDirectory];
   [self loadConfigs];
   return [RACSignal empty];
 }

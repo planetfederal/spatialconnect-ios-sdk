@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCMultiPolygon.h"
+#import "SCBoundingBox.h"
 #import "SCPolygon.h"
 
 @interface SCMultiPolygon ()

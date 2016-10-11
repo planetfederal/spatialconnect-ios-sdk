@@ -17,14 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometryCollection.h"
 
 @interface SCGeometryCollection (MapKit)
 
-- (NSArray*)shape;
+- (NSArray *)shape;
 
 @end

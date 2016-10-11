@@ -14,10 +14,10 @@
  * limitations under the License
  */
 
+#import "SCGpkgFeatureSource.h"
 #import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeometry+GPKG.h"
-#import "SCGpkgFeatureSource.h"
 #import "SCPoint+GPKG.h"
 #import "sqlite3.h"
 
@@ -355,8 +355,7 @@
     @try {
       NSData *bytes = [rs dataForColumn:self.geomColName];
       if (bytes) {
-        f = [SCGeometry fromGeometryBinary:bytes
-                                       crs:self.crs];
+        f = [SCGeometry fromGeometryBinary:bytes crs:self.crs];
       }
     } @catch (NSException *exception) {
       NSLog(@"Error Parsing Geometry binary");

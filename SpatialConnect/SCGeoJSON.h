@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCGeometry.h"
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, GeoJSONType) {
   GEOJSON_POINT,

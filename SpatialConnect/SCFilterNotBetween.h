@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCFilterProtocol.h"
 #import "SCFilter.h"
 #import "SCFilterBetween.h"
+#import "SCFilterProtocol.h"
+#import <Foundation/Foundation.h>
 
 @interface SCFilterNotBetween : SCFilterBetween <SCFilterProtocol>
 

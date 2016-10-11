@@ -20,13 +20,13 @@
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCGeometryCollection+GeoJSON.h"
+#import "SCKeyTuple.h"
 #import "SCLineString+GeoJSON.h"
 #import "SCMultiLineString+GeoJSON.h"
 #import "SCMultiPoint+GeoJSON.h"
 #import "SCMultiPolygon+GeoJSON.h"
 #import "SCPoint+GeoJSON.h"
 #import "SCPolygon+GeoJSON.h"
-#import "SCKeyTuple.h"
 
 @interface SCGeoJSON ()
 
@@ -167,7 +167,7 @@
     geom = [[SCMultiPolygon alloc] initWithCoordinateArray:geoJson.coordinates];
     break;
   default:
-      geom = (SCGeometry*)[[SCSpatialFeature alloc] init];
+    geom = (SCGeometry *)[[SCSpatialFeature alloc] init];
     break;
   }
   if (geoJson.identifier) {

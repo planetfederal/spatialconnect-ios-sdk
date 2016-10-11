@@ -17,13 +17,9 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
 
 @interface SCGeometryHelper : SCGeometry
-+ (NSMutableArray*)generateNRandomPoints:(NSUInteger)number;
-+ (NSMutableArray*)generateRandomNumberOfPoints;
++ (NSMutableArray *)generateNRandomPoints:(NSUInteger)number;
++ (NSMutableArray *)generateRandomNumberOfPoints;
 @end

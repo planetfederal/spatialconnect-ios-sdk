@@ -17,9 +17,9 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCGpkgSpatialRefSys.h"
 #import "SCGpkgSpatialRefSysTable.h"
 #import "FMDatabase.h"
+#import "SCGpkgSpatialRefSys.h"
 
 NSString *const kSRSTableName = @"gpkg_spatial_ref_sys";
 

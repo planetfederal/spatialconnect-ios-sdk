@@ -24,7 +24,8 @@
 @synthesize status = _status;
 @synthesize serviceName = _serviceName;
 
-+ (instancetype)fromEvent:(ServiceStatusEvent)s andServiceName:(NSString *)sName {
++ (instancetype)fromEvent:(ServiceStatusEvent)s
+           andServiceName:(NSString *)sName {
   SCServiceStatusEvent *evt =
       [[SCServiceStatusEvent alloc] initWithEvent:s andStoreName:sName];
   return evt;

@@ -17,8 +17,8 @@
  * under the License.
  ******************************************************************************/
 
-#import "SCJavascriptBridge.h"
 #import "SCLocalWebApp.h"
+#import "SCJavascriptBridge.h"
 #import "SCWebAppZipLoader.h"
 
 @interface SCLocalWebApp ()
