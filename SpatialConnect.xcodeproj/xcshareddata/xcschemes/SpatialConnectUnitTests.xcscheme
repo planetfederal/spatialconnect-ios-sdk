@@ -17,8 +17,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5649B49C1BE27C6A009947EF"
-               BuildableName = "SpatialConnectTests.xctest"
-               BlueprintName = "SpatialConnectTests"
+               BuildableName = "SpatialConnectUnitTests.xctest"
+               BlueprintName = "SpatialConnectUnitTests"
                ReferencedContainer = "container:SpatialConnect.xcodeproj">
             </BuildableReference>
          </TestableReference>

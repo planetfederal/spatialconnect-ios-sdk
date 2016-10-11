@@ -36,7 +36,7 @@
 
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnectHelper loadConfig];
+  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
 }
 
 - (void)tearDown {
@@ -47,9 +47,7 @@
   XCTestExpectation *expect =
       [self expectationWithDescription:@"GetCapabilities"];
 
-  [[SpatialConnectHelper
-      loadWFSGDataStore:self.sc
-                storeId:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
+  [[SpatialConnectHelper loadWFSGDataStore:self.sc]
       subscribeNext:^(SCDataStore *ds) {
         if (ds) {
           NSArray *list = ds.layers;
@@ -70,10 +68,8 @@
 - (void)testWFSLayerQuery {
   XCTestExpectation *expect = [self expectationWithDescription:@"GetFeature"];
   __block BOOL hasFeatures = NO;
-  [[[sc.dataService storeStarted:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
-      flattenMap:^RACStream *(SCStoreStatusEvent *evt) {
-        SCDataStore *ds = [sc.dataService
-            storeByIdentifier:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"];
+  [[[SpatialConnectHelper loadWFSGDataStore:self.sc]
+      flattenMap:^RACStream *(SCDataStore *ds) {
         if (ds) {
           XCTAssertNotNil(ds.layers, @"Layer list as array");
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
@@ -107,9 +103,7 @@
 - (void)testWFSMultiLayerQuery {
   XCTestExpectation *expect = [self expectationWithDescription:@"GetFeature"];
   __block BOOL hasFeatures = NO;
-  [[[SpatialConnectHelper
-      loadWFSGDataStore:self.sc
-                storeId:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
+  [[[SpatialConnectHelper loadWFSGDataStore:self.sc]
       flattenMap:^RACStream *(SCDataStore *ds) {
         if (ds) {
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
