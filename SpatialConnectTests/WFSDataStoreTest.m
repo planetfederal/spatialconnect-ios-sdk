@@ -41,6 +41,7 @@
 
 - (void)tearDown {
   [super tearDown];
+  [self.sc stopAllServices];
 }
 
 - (void)testWFSLayerList {

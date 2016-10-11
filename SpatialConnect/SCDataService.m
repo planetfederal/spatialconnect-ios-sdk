@@ -56,7 +56,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   if (self = [super init]) {
     self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
-    _stores = [[NSMutableDictionary alloc] init];
+    _stores = [NSMutableDictionary new];
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
@@ -199,6 +199,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (void)stop {
   [super stop];
   [self stopAllStores];
+  self.stores = [NSMutableDictionary new];
+  self.storesStarted = NO;
+  [_hasStores sendNext:@(NO)];
 }
 
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg {
