@@ -50,8 +50,8 @@
         return [[sc.backendService configReceived] filter:^BOOL(NSNumber *n) {
           return [n boolValue] == YES;
         }];
-      }] take:1] subscribeNext:^(id x){
-        [expect fulfill];
+      }] take:1] subscribeNext:^(id x) {
+    [expect fulfill];
   }];
 
   [self waitForExpectationsWithTimeout:15.0 handler:nil];
