@@ -24,11 +24,11 @@
 @interface SpatialConnectHelper : NSObject
 
 + (SpatialConnect *)loadConfigAndStartServices;
-+ (SpatialConnect *)loadConfig;
++ (SpatialConnect *)loadLocalConfig;
 + (SpatialConnect *)loadRemoteConfigAndStartServices;
 + (SpatialConnect *)loadRemoteConfig;
-+ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc
-                         storeId:(NSString *)storeId;
++ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc;
++ (RACSignal *)loadGeojsonDataStore:(SpatialConnect *)sc;
 + (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 
 @end

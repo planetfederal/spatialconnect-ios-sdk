@@ -27,31 +27,26 @@
 
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnectHelper loadConfig];
+  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
 }
 
 - (void)tearDown {
   [super tearDown];
+  [self.sc stopAllServices];
 }
 
 // download geojson file and check if file exists
 - (void)testGeoJSONDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Delete"];
-  NSString *storeId = @"08e4c309-46b8-4ad5-ba2b-190ab52c8efc";
-  NSString *fileName = [NSString stringWithFormat:@"%@.geojson", storeId];
-  NSString *path = [SCFileUtils filePathFromDocumentsDirectory:fileName];
-  [[[[[[sc serviceStarted:[SCBackendService serviceId]]
-      flattenMap:^RACStream *(id value) {
-        return sc.backendService.configReceived;
-      }] filter:^BOOL(NSNumber *v) {
-    return v.boolValue;
-  }] take:1] flattenMap:^RACStream *(id value) {
-    return [sc.dataService storeStarted:storeId];
-  }] subscribeNext:^(id<SCSpatialStore> ds) {
-    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    XCTAssertTrue(b);
-    [expect fulfill];
-  }
+  NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
+  NSString *fileName = [NSString stringWithFormat:@"%@.geojson", geojsonStore];
+  NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
+  [[SpatialConnectHelper loadGeojsonDataStore:self.sc]
+      subscribeNext:^(id<SCSpatialStore> ds) {
+        BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        XCTAssertTrue(b);
+        [expect fulfill];
+      }
       error:^(NSError *error) {
         XCTFail(@"Error getting store");
         [expect fulfill];

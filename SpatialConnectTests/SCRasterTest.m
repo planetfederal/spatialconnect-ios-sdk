@@ -34,15 +34,15 @@
 
 - (void)tearDown {
   [super tearDown];
+  [self.sc stopAllServices];
 }
 
 - (void)testRasterTableInfo {
-  NSString *localRasterStoreId = @"fb0ca596-5a53-4aa6-a0eb-15f4bc992e30";
   XCTestExpectation *expect = [self expectationWithDescription:@"Table Info"];
   [[SCGeopackageHelper loadGPKGRasterStore:self.sc]
       subscribeNext:^(SCDataStore *ds) {
         id<SCRasterStore> rs = (id<SCRasterStore>)[[self.sc dataService]
-            storeByIdentifier:localRasterStoreId];
+            storeByIdentifier:ds.storeId];
         XCTAssertNotNil(rs);
         [expect fulfill];
       }];

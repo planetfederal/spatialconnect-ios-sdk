@@ -37,11 +37,12 @@
 
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnect sharedInstance];
+  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
 }
 
 - (void)tearDown {
   [super tearDown];
+  [self.sc stopAllServices];
 }
 
 - (void)testGpkgFeatureDelete {
@@ -66,7 +67,7 @@
         [expect fulfill];
       }];
 
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testGpkgDownload {
@@ -86,7 +87,7 @@
         [expect fulfill];
       }];
 
-  [self waitForExpectationsWithTimeout:120.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testGpkgFeatureQuery {
@@ -106,7 +107,7 @@
             }];
       }];
 
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testGpkgFeatureCreate {
@@ -127,7 +128,7 @@
         XCTAssert(YES, @"Point created");
         [expect fulfill];
       }];
-  [self waitForExpectationsWithTimeout:150.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testGpkgFeatureUpdate {
@@ -155,7 +156,7 @@
         }];
   }];
 
-  [self waitForExpectationsWithTimeout:12.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 @end

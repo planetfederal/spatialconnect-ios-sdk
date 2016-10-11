@@ -33,15 +33,16 @@
 
 - (void)setUp {
   [super setUp];
-  sc = [SpatialConnectHelper loadConfig];
+  sc = [SpatialConnectHelper loadConfigAndStartServices];
 }
 
 - (void)tearDown {
   [super tearDown];
+  [sc stopAllServices];
 }
 
 - (void)testQueryAllStores {
-  XCTestExpectation *expect = [self expectationWithDescription:@"AutoConf"];
+  XCTestExpectation *expect = [self expectationWithDescription:@"QueryAll"];
   NSMutableArray *arr = [NSMutableArray new];
   [[[sc.dataService.hasStores filter:^BOOL(NSNumber *n) {
     return n.boolValue;
