@@ -23,7 +23,7 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface SCBackendService
-    : SCService <SCServiceLifecycle, MQTTSessionManagerDelegate> {
+    : SCService <SCServiceLifecycle> {
   NSString *mqttEndpoint;
   NSString *mqttPort;
   NSString *mqttProtocol;

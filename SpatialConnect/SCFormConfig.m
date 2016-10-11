@@ -49,7 +49,7 @@ static NSString *const FIELDS = @"fields";
 - (BOOL)isValid {
   __block BOOL isValid = YES;
   if (self.identifier <= 0) {
-    NSLog(@"Identifier is invalid:%@",self.identifier);
+    NSLog(@"Identifier is invalid:%ld",(long)self.identifier);
     isValid = NO;
   }
   if (!self.key || self.key.length <= 0) {

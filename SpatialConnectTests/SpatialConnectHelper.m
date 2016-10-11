@@ -60,7 +60,6 @@
 
 + (SpatialConnect *)loadConfigAndStartServices {
   SpatialConnect *sc = [SpatialConnectHelper loadConfig];
-  [sc startAllServices];
   return sc;
 }
 
@@ -70,7 +69,7 @@
       [[NSBundle bundleForClass:[self class]] pathForResource:@"remote"
                                                        ofType:@"scfg"];
   NSLog(@"RemoteConfigPath:%@", filePath);
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SpatialConnect *sc = [[SpatialConnect alloc] init];
   [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
 
@@ -108,7 +107,6 @@
 
 + (SpatialConnect *)loadRemoteConfigAndStartServices {
   SpatialConnect *sc = [SpatialConnectHelper loadRemoteConfig];
-  [sc startAllServices];
   return sc;
 }
 
@@ -139,8 +137,25 @@
   }];
 }
 
++ (NSString *)filePathFromSelfBundle:(NSString *)fileName {
+  NSArray *strs = [fileName componentsSeparatedByString:@"."];
+  NSString *filePrefix;
+  if (strs.count == 2) {
+    filePrefix = strs.firstObject;
+  } else {
+    filePrefix =
+    [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
+                             NSMakeRange(0, strs.count - 2)]]
+     componentsJoinedByString:@"."];
+  }
+  NSString *extension = [strs lastObject];
+  NSString *filePath =
+  [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
+                                                   ofType:extension];
+  return filePath;
+}
+
 - (void)startServicesAndAuth:(SpatialConnect *)sc {
-  [sc startAllServices];
   [sc.authService authenticate:@"admin@something.com" password:@"admin"];
 }
 

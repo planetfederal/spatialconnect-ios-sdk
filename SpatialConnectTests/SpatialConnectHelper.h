@@ -29,6 +29,6 @@
 + (SpatialConnect *)loadRemoteConfig;
 + (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc
                          storeId:(NSString *)storeId;
-+ (void)startServicesAndAuth:(SpatialConnect *)sc;
++ (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 
 @end

@@ -80,6 +80,11 @@
   };
 }
 
+- (NSArray *)layers {
+  NSAssert(NO, @"This is an abstract method and should be overriden.");
+  return nil;
+}
+
 #pragma mark -
 #pragma mark Class Methods
 

@@ -98,7 +98,6 @@
                        self.baseUri, self.storeVersion,
                        [layers componentsJoinedByString:@","],
                        (long)filter.limit];
-
   SCPredicate *p = [[filter geometryFilters] firstObject];
   if ([p.filter isKindOfClass:[SCGeoFilterContains class]]) {
     SCGeoFilterContains *fc = (SCGeoFilterContains *)p.filter;

@@ -24,13 +24,13 @@
 @synthesize status = _status;
 @synthesize serviceName = _serviceName;
 
-+ (instancetype)fromEvent:(SCServiceStatus)s andServiceName:(NSString *)sName {
++ (instancetype)fromEvent:(ServiceStatusEvent)s andServiceName:(NSString *)sName {
   SCServiceStatusEvent *evt =
       [[SCServiceStatusEvent alloc] initWithEvent:s andStoreName:sName];
   return evt;
 }
 
-- (id)initWithEvent:(SCServiceStatus)s andStoreName:(NSString *)sName {
+- (id)initWithEvent:(ServiceStatusEvent)s andStoreName:(NSString *)sName {
   if (self = [super init]) {
     _status = s;
     _serviceName = sName;

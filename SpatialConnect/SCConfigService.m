@@ -45,7 +45,7 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 
 - (RACSignal *)start {
   [super start];
-  [self sweepDataDirectory];
+//  [self sweepDataDirectory];
   [self loadConfigs];
   return [RACSignal empty];
 }

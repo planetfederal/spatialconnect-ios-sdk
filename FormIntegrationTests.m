@@ -34,7 +34,7 @@
 
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnectHelper loadRemoteConfigAndStartServices];
+  self.sc = [SpatialConnect sharedInstance];
 }
 
 - (void)tearDown {
@@ -54,7 +54,6 @@
         [expect fulfill];
   }];
 
-  [sc startAllServices];
   [self waitForExpectationsWithTimeout:15.0 handler:nil];
 }
 

@@ -41,7 +41,6 @@
 
 - (void)tearDown {
   [super tearDown];
-  [self.sc stopAllServices];
 }
 
 - (void)testWFSLayerList {
@@ -50,12 +49,11 @@
 
   [[SpatialConnectHelper
       loadWFSGDataStore:self.sc
-                storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
+                storeId:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
       subscribeNext:^(SCDataStore *ds) {
         if (ds) {
-          NSArray *list = ds.layerList;
+          NSArray *list = ds.layers;
           XCTAssertNotNil(list, @"Layer list as array");
-          XCTAssertNoThrow([sc stopAllServices]);
         } else {
           XCTAssert(NO, @"Store is nil");
         }
@@ -66,25 +64,23 @@
         [expect fulfill];
       }];
 
-  [sc startAllServices];
   [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
 - (void)testWFSLayerQuery {
   XCTestExpectation *expect = [self expectationWithDescription:@"GetFeature"];
   __block BOOL hasFeatures = NO;
-  [[[SpatialConnectHelper
-      loadWFSGDataStore:self.sc
-                storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
-      flattenMap:^RACStream *(SCDataStore *ds) {
+  [[[sc.dataService storeStarted:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
+      flattenMap:^RACStream *(SCStoreStatusEvent *evt) {
+        SCDataStore *ds = [sc.dataService storeByIdentifier:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"];
         if (ds) {
-          XCTAssertNotNil(ds.layerList, @"Layer list as array");
+          XCTAssertNotNil(ds.layers, @"Layer list as array");
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
           SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
-            @(-124.07438528127528),
-            @(42.922397667217076),
-            @(-64.76484934151024),
-            @(58.79784328722645)
+            @(-178.0),
+            @(-87.0),
+            @(178.0),
+            @(87.0)
           ]];
           SCGeoFilterContains *gfc =
               [[SCGeoFilterContains alloc] initWithBBOX:bbox];
@@ -104,12 +100,10 @@
         XCTFail(@"%@", [error description]);
       }
       completed:^{
-        XCTAssertNoThrow([sc stopAllServices]);
         if (hasFeatures) {
           [expect fulfill];
         }
       }];
-  [sc startAllServices];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
@@ -118,16 +112,17 @@
   __block BOOL hasFeatures = NO;
   [[[SpatialConnectHelper
       loadWFSGDataStore:self.sc
-                storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
+                storeId:@"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a"]
       flattenMap:^RACStream *(SCDataStore *ds) {
         if (ds) {
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
+          NSArray *ll = ds.layers;
           [filter
-              addLayerIds:[ds.layerList subarrayWithRange:NSMakeRange(3, 3)]];
+              addLayerIds:[ll subarrayWithRange:NSMakeRange(0, 3)]];
           SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
-            @(-124.07438528127528),
-            @(42.922397667217076),
-            @(-64.76484934151024),
+            @(-100.07438528127528),
+            @(20.922397667217076),
+            @(-60.76484934151024),
             @(58.79784328722645)
           ]];
           SCGeoFilterContains *gfc =
@@ -141,20 +136,18 @@
         }
         [expect fulfill];
       }] subscribeNext:^(SCSpatialFeature *f) {
-    XCTAssertNotNil(f, @"Feature should be alloced");
+    XCTAssertNotNil(f, @"Feature should be alloc'ed");
     hasFeatures = YES;
   }
       error:^(NSError *error) {
         XCTFail(@"%@", [error description]);
       }
       completed:^{
-        XCTAssertNoThrow([sc stopAllServices]);
         if (hasFeatures) {
           [expect fulfill];
         }
       }];
-  [sc startAllServices];
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self waitForExpectationsWithTimeout:20.0 handler:nil];
 }
 
 @end
