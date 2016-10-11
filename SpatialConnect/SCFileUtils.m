@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "JSONKit.h"
 #import "SCFileUtils.h"
+#import "JSONKit.h"
 @implementation SCFileUtils
 
 /**

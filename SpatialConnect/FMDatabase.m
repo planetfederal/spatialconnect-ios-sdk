@@ -9,10 +9,10 @@
                  orDictionary:(NSDictionary *)dictionaryArgs
                      orVAList:(va_list)args;
 - (BOOL)executeUpdate:(NSString *)sql
-                error:(NSError **)outErr
- withArgumentsInArray:(NSArray *)arrayArgs
-         orDictionary:(NSDictionary *)dictionaryArgs
-             orVAList:(va_list)args;
+                   error:(NSError **)outErr
+    withArgumentsInArray:(NSArray *)arrayArgs
+            orDictionary:(NSDictionary *)dictionaryArgs
+                orVAList:(va_list)args;
 
 @end
 
@@ -970,10 +970,10 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 #pragma mark Execute updates
 
 - (BOOL)executeUpdate:(NSString *)sql
-                error:(NSError **)outErr
- withArgumentsInArray:(NSArray *)arrayArgs
-         orDictionary:(NSDictionary *)dictionaryArgs
-             orVAList:(va_list)args {
+                   error:(NSError **)outErr
+    withArgumentsInArray:(NSArray *)arrayArgs
+            orDictionary:(NSDictionary *)dictionaryArgs
+                orVAList:(va_list)args {
 
   if (![self databaseExists]) {
     return NO;
@@ -1216,7 +1216,7 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 }
 
 - (BOOL)executeUpdate:(NSString *)sql
- withArgumentsInArray:(NSArray *)arguments {
+    withArgumentsInArray:(NSArray *)arguments {
   return [self executeUpdate:sql
                        error:nil
         withArgumentsInArray:arguments
@@ -1316,7 +1316,7 @@ int FMDBExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
 }
 
 - (BOOL)executeUpdate:(NSString *)sql
- withErrorAndBindings:(NSError **)outErr, ... {
+    withErrorAndBindings:(NSError **)outErr, ... {
 
   va_list args;
   va_start(args, outErr);

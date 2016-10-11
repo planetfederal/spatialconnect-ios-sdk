@@ -40,9 +40,10 @@
   NSString *storeId = @"08e4c309-46b8-4ad5-ba2b-190ab52c8efc";
   NSString *fileName = [NSString stringWithFormat:@"%@.geojson", storeId];
   NSString *path = [SCFileUtils filePathFromDocumentsDirectory:fileName];
-  [[[[[[sc serviceStarted:[SCBackendService serviceId]] flattenMap:^RACStream *(id value) {
-    return sc.backendService.configReceived;
-  }] filter:^BOOL(NSNumber *v) {
+  [[[[[[sc serviceStarted:[SCBackendService serviceId]]
+      flattenMap:^RACStream *(id value) {
+        return sc.backendService.configReceived;
+      }] filter:^BOOL(NSNumber *v) {
     return v.boolValue;
   }] take:1] flattenMap:^RACStream *(id value) {
     return [sc.dataService storeStarted:storeId];

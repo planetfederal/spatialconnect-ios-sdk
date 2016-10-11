@@ -17,10 +17,9 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
-#import "SCFilterProtocol.h"
 #import "SCFilter.h"
+#import "SCFilterProtocol.h"
+#import <Foundation/Foundation.h>
 
 @interface SCFilterNotLike : SCFilter <SCFilterProtocol>
 

@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCGeometry.h"
+#import "SCBoundingBox.h"
 #import "SCPoint.h"
 
 @implementation SCGeometry

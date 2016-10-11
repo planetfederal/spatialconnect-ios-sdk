@@ -17,14 +17,14 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCGeometry.h"
+#import <Foundation/Foundation.h>
 
 @interface SCGeometryCollection : SCGeometry
 
-@property (nonatomic) NSMutableArray *geometries;
+@property(nonatomic) NSMutableArray *geometries;
 
-- (id)initWithGeometriesArray:(NSArray*)geometries;
-- (void)applyStyle:(SCStyle*)style;
+- (id)initWithGeometriesArray:(NSArray *)geometries;
+- (void)applyStyle:(SCStyle *)style;
 
 @end

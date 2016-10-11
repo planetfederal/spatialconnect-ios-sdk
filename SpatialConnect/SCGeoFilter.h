@@ -17,20 +17,20 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "SCGeometry.h"
 #import "SCFilter.h"
 #import "SCFilterProtocol.h"
+#import "SCGeometry.h"
+#import <Foundation/Foundation.h>
 
 @interface SCGeoFilter : NSObject {
   SCGeometry *geometry;
   NSString *keyPath;
 }
 
-@property (nonatomic) SCBoundingBox *bbox;
+@property(nonatomic) SCBoundingBox *bbox;
 
 - (id)initWithGeometry:(SCGeometry *)g andKeyPath:(NSString *)keypath;
 - (id)initWithGeometry:(SCGeometry *)g;
-- (id)initWithBBOX:(SCBoundingBox*)b;
+- (id)initWithBBOX:(SCBoundingBox *)b;
 
 @end

@@ -96,8 +96,7 @@
       [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
   NSDictionary *geometry =
       [NSDictionary dictionaryWithObjects:@[
-        @"MultiLineString",
-        [self coordinateArrayAsProj:4326]
+        @"MultiLineString", [self coordinateArrayAsProj:4326]
       ]
                                   forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];

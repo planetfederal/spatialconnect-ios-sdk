@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
@@ -38,13 +35,13 @@
 - (void)setUp {
   [super setUp];
   srand((int)time(0));
-  latrand = (drand48() - 0.5)*90;
-  lonrand = (drand48() - 0.5)*180;
+  latrand = (drand48() - 0.5) * 90;
+  lonrand = (drand48() - 0.5) * 180;
   altrand = (drand48() - 0.5) * 1000;
-  pointCoord = [NSArray arrayWithObjects:
-                [NSNumber numberWithDouble:lonrand],
-                [NSNumber numberWithDouble:latrand],
-                [NSNumber numberWithDouble:altrand], nil];
+  pointCoord =
+      [NSArray arrayWithObjects:[NSNumber numberWithDouble:lonrand],
+                                [NSNumber numberWithDouble:latrand],
+                                [NSNumber numberWithDouble:altrand], nil];
 }
 
 - (void)tearDown {
@@ -57,6 +54,5 @@
   XCTAssert(point.longitude == lonrand, @"Longitude");
   XCTAssert(point.altitude == altrand, @"Altitude");
 }
-
 
 @end

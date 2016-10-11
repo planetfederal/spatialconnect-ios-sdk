@@ -17,8 +17,8 @@
  * under the License.
  ******************************************************************************/
 
-#import <XCTest/XCTest.h>
 #import "SCFilterBetween.h"
+#import "SCFilterEqual.h"
 #import "SCFilterGreaterThan.h"
 #import "SCFilterGreaterThanEqual.h"
 #import "SCFilterIn.h"
@@ -31,7 +31,7 @@
 #import "SCFilterNotLike.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeoFilterDisjoint.h"
-#import "SCFilterEqual.h"
+#import <XCTest/XCTest.h>
 
 @interface FilterTests : XCTestCase
 

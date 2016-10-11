@@ -23,7 +23,7 @@ static NSString *const FORM_LABEL = @"form_label";
 static NSString *const VERSION = @"version";
 static NSString *const FIELDS = @"fields";
 
-@interface SCFormConfig()
+@interface SCFormConfig ()
 - (BOOL)isValid;
 @end
 
@@ -49,7 +49,7 @@ static NSString *const FIELDS = @"fields";
 - (BOOL)isValid {
   __block BOOL isValid = YES;
   if (self.identifier <= 0) {
-    NSLog(@"Identifier is invalid:%ld",(long)self.identifier);
+    NSLog(@"Identifier is invalid:%ld", (long)self.identifier);
     isValid = NO;
   }
   if (!self.key || self.key.length <= 0) {
@@ -70,17 +70,18 @@ static NSString *const FIELDS = @"fields";
     isValid = NO;
   }
 
-  [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * stop) {
-      NSString *fieldKey = obj[@"field_key"];
-      NSString *fieldLabel = obj[@"field_label"];
+  [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx,
+                                            BOOL *stop) {
+    NSString *fieldKey = obj[@"field_key"];
+    NSString *fieldLabel = obj[@"field_label"];
 
     if (!fieldKey || fieldKey.length == 0) {
-      NSLog(@"field_key is invalid for form:%@",key);
+      NSLog(@"field_key is invalid for form:%@", key);
       isValid = NO;
     }
 
-    if(!fieldLabel || fieldLabel.length == 0) {
-      NSLog(@"field_label is invalid for form:%@",key);
+    if (!fieldLabel || fieldLabel.length == 0) {
+      NSLog(@"field_label is invalid for form:%@", key);
       isValid = NO;
     }
   }];

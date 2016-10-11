@@ -22,8 +22,8 @@
 
 #import "SCGeometryHelper.h"
 #import "SCMultiPolygon.h"
-#import "SCPolygon.h"
 #import "SCPoint.h"
+#import "SCPolygon.h"
 
 @interface SCMultiPolygonTest : XCTestCase {
   NSArray *polys;

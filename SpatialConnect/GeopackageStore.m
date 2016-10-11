@@ -44,7 +44,8 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (!self) {
     return nil;
   }
-  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid andURI:config.uri];
+  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid
+                                                      andURI:config.uri];
   self.name = config.name;
   self.permission = SC_DATASTORE_READWRITE;
   _storeType = TYPE;
@@ -113,10 +114,11 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [[self.adapter query:filter] map:^SCSpatialFeature *(SCSpatialFeature *f) {
-    f.storeId = self.storeId;
-    return f;
-  }];
+  return [[self.adapter query:filter]
+      map:^SCSpatialFeature *(SCSpatialFeature *f) {
+        f.storeId = self.storeId;
+        return f;
+      }];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
@@ -148,16 +150,16 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (NSArray *)vectorLayers {
   return [[[[self.adapter.vectorLayers rac_sequence] signal]
-   map:^NSString *(SCGpkgFeatureSource *f) {
-     return f.name;
-   }] toArray];
+      map:^NSString *(SCGpkgFeatureSource *f) {
+        return f.name;
+      }] toArray];
 }
 
 - (NSArray *)rasterLayers {
   return [[[[self.adapter.rasterLayers rac_sequence] signal]
-   map:^NSString *(SCGpkgFeatureSource *f) {
-     return f.name;
-   }] toArray];
+      map:^NSString *(SCGpkgFeatureSource *f) {
+        return f.name;
+      }] toArray];
 }
 
 - (NSString *)defaultLayer {

@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCGeoFilter.h"
 #import "SCQueryFilter.h"
+#import "SCGeoFilter.h"
 
 @interface SCQueryFilter ()
 @property(readwrite) NSMutableArray *predicates;

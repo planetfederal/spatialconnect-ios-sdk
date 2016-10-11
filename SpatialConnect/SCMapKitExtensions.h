@@ -17,22 +17,18 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #ifndef GeoMobile_SCMapKitExtensions_h
 #define GeoMobile_SCMapKitExtensions_h
 
-#import "SCPoint+MapKit.h"
-#import "SCMultiPoint+MapKit.h"
-#import "SCPolygon+MapKit.h"
-#import "SCMultiPolygon+MapKit.h"
-#import "SCLinearRing+MapKit.h"
-#import "SCLineString+MapKit.h"
-#import "SCMultiLineString+MapKit.h"
+#import "SCBoundingBox+MapKit.h"
 #import "SCGeometry+MapKit.h"
 #import "SCGeometryCollection+MapKit.h"
-#import "SCBoundingBox+MapKit.h"
+#import "SCLineString+MapKit.h"
+#import "SCLinearRing+MapKit.h"
+#import "SCMultiLineString+MapKit.h"
+#import "SCMultiPoint+MapKit.h"
+#import "SCMultiPolygon+MapKit.h"
+#import "SCPoint+MapKit.h"
+#import "SCPolygon+MapKit.h"
 
 #endif

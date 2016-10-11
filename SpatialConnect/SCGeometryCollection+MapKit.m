@@ -17,24 +17,24 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-#import "SCGeometryCollection+MapKit.h"
 #import "SCGeometry+MapKit.h"
+#import "SCGeometryCollection+MapKit.h"
 
 @implementation SCGeometryCollection (MapKit)
 
-- (NSArray*)shape {
-  NSMutableArray *retArr = [[NSMutableArray alloc] initWithCapacity:self.geometries.count];
-  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry* geom,NSUInteger idx, BOOL *stop) {
+- (NSArray *)shape {
+  NSMutableArray *retArr =
+      [[NSMutableArray alloc] initWithCapacity:self.geometries.count];
+  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom,
+                                                NSUInteger idx, BOOL *stop) {
     [retArr addObject:[geom shape]];
   }];
   return retArr;
 }
 
 - (void)addToMap:(MKMapView *)mapview {
-  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry* geom,NSUInteger idx, BOOL *stop) {
+  [self.geometries enumerateObjectsUsingBlock:^(SCGeometry *geom,
+                                                NSUInteger idx, BOOL *stop) {
     [geom addToMap:mapview];
   }];
 }

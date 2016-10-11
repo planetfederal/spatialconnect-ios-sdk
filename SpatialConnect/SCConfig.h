@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import <Foundation/Foundation.h>
 #import "SCRemoteConfig.h"
+#import <Foundation/Foundation.h>
 
 /*!
  *  @brief This is a mapping from the json config file to

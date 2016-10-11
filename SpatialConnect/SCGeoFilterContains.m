@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
+#import "SCBoundingBox.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCMultiPolygon.h"

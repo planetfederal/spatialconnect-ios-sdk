@@ -16,8 +16,8 @@
 * specific language governing permissions and limitations
 * under the License.
 ******************************************************************************/
-#import "SCDataService.h"
 #import "SCStoreConfig.h"
+#import "SCDataService.h"
 
 static NSString *const STORE_TYPE = @"store_type";
 static NSString *const VERSION = @"version";

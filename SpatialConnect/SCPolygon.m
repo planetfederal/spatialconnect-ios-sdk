@@ -17,9 +17,9 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCPolygon.h"
 #import "SCBoundingBox.h"
 #import "SCPoint.h"
-#import "SCPolygon.h"
 
 @implementation SCPolygon
 

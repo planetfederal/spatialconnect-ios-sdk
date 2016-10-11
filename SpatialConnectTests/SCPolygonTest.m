@@ -17,15 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
 #import "SCGeometryHelper.h"
-#import "SCPolygon.h"
 #import "SCPoint.h"
+#import "SCPolygon.h"
 
 @interface SCPolygonTest : XCTestCase {
   NSArray *testPoly;
@@ -38,7 +35,8 @@
 - (void)setUp {
   [super setUp];
   NSMutableArray *pts = [SCGeometryHelper generateRandomNumberOfPoints];
-  testPoly = [[NSMutableArray alloc] initWithObjects:[pts copy], [NSArray array],nil];
+  testPoly =
+      [[NSMutableArray alloc] initWithObjects:[pts copy], [NSArray array], nil];
 }
 
 - (void)tearDown {
@@ -48,15 +46,14 @@
 - (void)testPolygonWithNoHoles {
   SCPolygon *mPoly = [[SCPolygon alloc] initWithCoordinateArray:testPoly];
   NSArray *testPolyOuter = testPoly[0];
-  XCTAssertEqual(mPoly.points.count-1,testPolyOuter.count, @"Size");
-  for (int i=0; i < testPolyOuter.count; i++) {
+  XCTAssertEqual(mPoly.points.count - 1, testPolyOuter.count, @"Size");
+  for (int i = 0; i < testPolyOuter.count; i++) {
     SCPoint *p = mPoly.points[i];
     NSArray *pT = testPolyOuter[i];
-    XCTAssertEqual(p.longitude, [pT[0] doubleValue],@"Longitude");
-    XCTAssertEqual(p.latitude, [pT[1] doubleValue],@"Latitude");
-    XCTAssertEqual(p.altitude, [pT[2] doubleValue],@"Altitude");
+    XCTAssertEqual(p.longitude, [pT[0] doubleValue], @"Longitude");
+    XCTAssertEqual(p.latitude, [pT[1] doubleValue], @"Latitude");
+    XCTAssertEqual(p.altitude, [pT[2] doubleValue], @"Altitude");
   }
 }
-
 
 @end

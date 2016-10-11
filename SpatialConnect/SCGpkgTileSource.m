@@ -14,9 +14,9 @@
  * limitations under the License
  */
 
+#import "SCGpkgTileSource.h"
 #import "SCBoundingBox+GeoJSON.h"
 #import "SCBoundingBox.h"
-#import "SCGpkgTileSource.h"
 #import "SCPoint.h"
 #import "SCTileMatrixRow.h"
 #import <float.h>

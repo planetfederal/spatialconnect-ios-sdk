@@ -20,9 +20,9 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
+#import "SCGeometryHelper.h"
 #import "SCMultiPoint.h"
 #import "SCPoint.h"
-#import "SCGeometryHelper.h"
 
 @interface SCMultiPointTest : XCTestCase {
   NSArray *points;

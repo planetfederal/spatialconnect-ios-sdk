@@ -18,11 +18,11 @@
  ******************************************************************************/
 #import "GeopackageFileAdapter.h"
 #import "GeopackageStore.h"
-#import "SCHttpUtils.h"
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 #import "SCGeopackage.h"
 #import "SCGpkgTileSource.h"
+#import "SCHttpUtils.h"
 #import "SCKeyTuple.h"
 #import "SCPoint.h"
 #import "SCTileOverlay.h"

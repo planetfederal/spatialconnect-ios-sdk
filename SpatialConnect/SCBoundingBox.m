@@ -87,8 +87,7 @@
 - (void)setLowerLeft:(SCPoint *)ll {
   if (!lowerLeft) {
     lowerLeft = [[SCPoint alloc] initWithCoordinateArray:@[
-      [NSNumber numberWithDouble:ll.x],
-      [NSNumber numberWithDouble:ll.y]
+      [NSNumber numberWithDouble:ll.x], [NSNumber numberWithDouble:ll.y]
     ]
                                                      crs:self.crs];
   } else {
@@ -100,8 +99,7 @@
 - (void)setUpperRight:(SCPoint *)ur {
   if (!upperRight) {
     upperRight = [[SCPoint alloc] initWithCoordinateArray:@[
-      [NSNumber numberWithDouble:ur.x],
-      [NSNumber numberWithDouble:ur.y]
+      [NSNumber numberWithDouble:ur.x], [NSNumber numberWithDouble:ur.y]
     ]
                                                       crs:self.crs];
   } else {
@@ -202,15 +200,13 @@
 }
 
 - (SCPolygon *)polygon {
-  SCPolygon *p = [[SCPolygon alloc] initWithCoordinateArray:@[
-    @[
-      @[ @(upperRight.x), @(lowerLeft.y) ],
-      @[ @(upperRight.x), @(upperRight.y) ],
-      @[ @(lowerLeft.x), @(upperRight.y) ],
-      @[ @(lowerLeft.x), @(lowerLeft.y) ],
-      @[ @(upperRight.x), @(lowerLeft.y) ]
-    ]
-  ]
+  SCPolygon *p = [[SCPolygon alloc] initWithCoordinateArray:@[ @[
+                                      @[ @(upperRight.x), @(lowerLeft.y) ],
+                                      @[ @(upperRight.x), @(upperRight.y) ],
+                                      @[ @(lowerLeft.x), @(upperRight.y) ],
+                                      @[ @(lowerLeft.x), @(lowerLeft.y) ],
+                                      @[ @(upperRight.x), @(lowerLeft.y) ]
+                                    ] ]
                                                         crs:self.crs];
   return p;
 }

@@ -17,15 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCLinearRing.h"
 #import <MapKit/MapKit.h>
 
 @interface SCLinearRing (MapKit) <MKOverlay>
 
-- (MKPolygon*)shape;
+- (MKPolygon *)shape;
 
 @end

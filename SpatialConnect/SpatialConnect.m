@@ -17,12 +17,12 @@
 * under the License.
 ******************************************************************************/
 
+#import "SpatialConnect.h"
 #import "SCConfig.h"
 #import "SCDataService.h"
 #import "SCLoggingAssertionHandler.h"
 #import "SCService.h"
 #import "SCServiceStatusEvent.h"
-#import "SpatialConnect.h"
 
 @interface SpatialConnect ()
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;

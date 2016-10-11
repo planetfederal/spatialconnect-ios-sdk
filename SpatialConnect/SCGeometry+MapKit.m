@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCGeometry+MapKit.h"
 
 @implementation SCGeometry (MapKit)
@@ -28,7 +25,7 @@
   return [self shape];
 }
 
-- (void)addToMap:(MKMapView*)mapview {
+- (void)addToMap:(MKMapView *)mapview {
   NSAssert(NO, @"This is an abstract method and should be overridden");
 }
 

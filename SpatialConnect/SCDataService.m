@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCDataService.h"
 #import "GeoJSONStore.h"
 #import "GeopackageStore.h"
 #import "SCConfigService.h"
-#import "SCDataService.h"
 #import "SCGeometry.h"
 #import "SCServiceStatusEvent.h"
 #import "SCSpatialStore.h"
@@ -259,8 +259,8 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (BOOL)updateStoreByConfig:(SCStoreConfig *)c {
   NSCAssert(c.uniqueid, @"Store Id not set");
   Class store =
-  [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
-                             c.version]];
+      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
+                                                           c.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
   if (!store) {
     NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
@@ -275,7 +275,6 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [self updateStore:gmStore];
     return YES;
   }
-  
 }
 
 - (Class)supportedStoreByKey:(NSString *)key {
@@ -309,11 +308,11 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [store setObject:ds.storeType forKey:@"type"];
     [store setObject:[NSNumber numberWithInteger:ds.status] forKey:@"status"];
     [store setObject:ds.layers forKey:@"layers"];
-    if( [ds conformsToProtocol:@protocol(SCSpatialStore)]) {
+    if ([ds conformsToProtocol:@protocol(SCSpatialStore)]) {
       id<SCSpatialStore> ss = (id<SCSpatialStore>)ds;
       [store setObject:ss.vectorLayers forKey:@"vectorLayers"];
     }
-    if( [ds conformsToProtocol:@protocol(SCRasterStore)]) {
+    if ([ds conformsToProtocol:@protocol(SCRasterStore)]) {
       id<SCRasterStore> ss = (id<SCRasterStore>)ds;
       [store setObject:ss.rasterLayers forKey:@"rasterLayers"];
     }

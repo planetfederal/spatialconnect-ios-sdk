@@ -17,14 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCMultiPolygon.h"
 
 @interface SCMultiPolygon (MapKit)
 
-- (NSArray*)shape;
+- (NSArray *)shape;
 
 @end

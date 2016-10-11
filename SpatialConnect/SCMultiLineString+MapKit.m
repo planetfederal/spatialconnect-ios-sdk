@@ -17,25 +17,25 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-#import "SCMultiLineString+MapKit.h"
-#import "SCLineString+MapKit.h"
 #import "SCGeometry+MapKit.h"
+#import "SCLineString+MapKit.h"
+#import "SCMultiLineString+MapKit.h"
 
 @implementation SCMultiLineString (MapKit)
 
-- (NSArray*)shape {
-  NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:self.linestrings.count];
-  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *l, NSUInteger idx, BOOL *stop) {
+- (NSArray *)shape {
+  NSMutableArray *arr =
+      [[NSMutableArray alloc] initWithCapacity:self.linestrings.count];
+  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *l,
+                                                 NSUInteger idx, BOOL *stop) {
     [arr addObject:l];
   }];
   return [NSArray arrayWithArray:arr];
 }
 
 - (void)addToMap:(MKMapView *)mapview {
-  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString* geom,NSUInteger idx, BOOL *stop) {
+  [self.linestrings enumerateObjectsUsingBlock:^(SCLineString *geom,
+                                                 NSUInteger idx, BOOL *stop) {
     geom.style = self.style;
     [mapview addOverlay:geom];
   }];

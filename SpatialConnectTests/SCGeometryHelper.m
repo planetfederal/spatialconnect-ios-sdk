@@ -17,40 +17,42 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCGeometryHelper.h"
 
 @implementation SCGeometryHelper
 
-+ (NSMutableArray*)generateNRandomPoints:(NSUInteger)numPoints {
++ (NSMutableArray *)generateNRandomPoints:(NSUInteger)numPoints {
   NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:numPoints];
   for (int i = 0; i < numPoints; i++) {
-    [points addObject:[NSArray arrayWithObjects:[SCGeometryHelper generateRandomLongitude],[SCGeometryHelper generateRandomLatitude],[SCGeometryHelper generateRandomAltitude],nil]];
+    [points
+        addObject:[NSArray arrayWithObjects:
+                               [SCGeometryHelper generateRandomLongitude],
+                               [SCGeometryHelper generateRandomLatitude],
+                               [SCGeometryHelper generateRandomAltitude], nil]];
   }
   return points;
 }
 
-+ (NSMutableArray*)generateRandomNumberOfPoints {
-  return [SCGeometryHelper generateNRandomPoints:[SCGeometryHelper generateRandomInteger]];
++ (NSMutableArray *)generateRandomNumberOfPoints {
+  return [SCGeometryHelper
+      generateNRandomPoints:[SCGeometryHelper generateRandomInteger]];
 }
 
 + (NSUInteger)generateRandomInteger {
   srand((int)time(0));
-  NSUInteger numPoints = arc4random_uniform(100)+3;
+  NSUInteger numPoints = arc4random_uniform(100) + 3;
   return numPoints;
 }
 
-+ (NSNumber*)generateRandomLongitude {
-  return [NSNumber numberWithDouble:(drand48() - 0.5)*180];
++ (NSNumber *)generateRandomLongitude {
+  return [NSNumber numberWithDouble:(drand48() - 0.5) * 180];
 }
 
-+ (NSNumber*)generateRandomLatitude {
-  return [NSNumber numberWithDouble:(drand48() - 0.5)*90];
++ (NSNumber *)generateRandomLatitude {
+  return [NSNumber numberWithDouble:(drand48() - 0.5) * 90];
 }
 
-+ (NSNumber*)generateRandomAltitude {
++ (NSNumber *)generateRandomAltitude {
   return [NSNumber numberWithDouble:(drand48() - 0.5) * 1000];
 }
 

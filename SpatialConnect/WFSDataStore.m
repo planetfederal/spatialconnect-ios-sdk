@@ -14,12 +14,12 @@
  * limitations under the License
  */
 
+#import "WFSDataStore.h"
 #import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeometryCollection.h"
 #import "SCHttpUtils.h"
 #import "SCPoint.h"
-#import "WFSDataStore.h"
 #import "XMLDictionary.h"
 
 @interface WFSDataStore ()
@@ -60,10 +60,10 @@
 
 - (NSArray *)vectorLayers {
   NSString *url = [NSString
-                   stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
-                   self.baseUri, self.storeVersion];
+      stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
+                       self.baseUri, self.storeVersion];
   NSData *data =
-  [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
+      [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary *d = [NSDictionary dictionaryWithXMLData:data];
   NSMutableArray *layers = [NSMutableArray new];
   id a = d[@"FeatureTypeList"][@"FeatureType"];

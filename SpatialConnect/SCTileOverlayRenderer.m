@@ -17,16 +17,16 @@
 * under the License.
 ******************************************************************************/
 
-
 #import "SCTileOverlayRenderer.h"
 #import "SCTileOverlay.h"
 
 @implementation SCTileOverlayRenderer
 
-- (void)drawMapRect:(MKMapRect)mapRect zoomScale:(MKZoomScale)zoomScale inContext:(CGContextRef)context {
-  
-  [super drawMapRect:mapRect zoomScale:zoomScale inContext:context];
+- (void)drawMapRect:(MKMapRect)mapRect
+          zoomScale:(MKZoomScale)zoomScale
+          inContext:(CGContextRef)context {
 
+  [super drawMapRect:mapRect zoomScale:zoomScale inContext:context];
 }
 
 @end

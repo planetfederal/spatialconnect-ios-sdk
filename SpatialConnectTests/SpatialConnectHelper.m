@@ -143,15 +143,16 @@
   if (strs.count == 2) {
     filePrefix = strs.firstObject;
   } else {
-    filePrefix =
-    [[strs objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:
-                             NSMakeRange(0, strs.count - 2)]]
-     componentsJoinedByString:@"."];
+    filePrefix = [[strs
+        objectsAtIndexes:[NSIndexSet
+                             indexSetWithIndexesInRange:NSMakeRange(
+                                                            0, strs.count - 2)]]
+        componentsJoinedByString:@"."];
   }
   NSString *extension = [strs lastObject];
   NSString *filePath =
-  [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
-                                                   ofType:extension];
+      [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
+                                                       ofType:extension];
   return filePath;
 }
 
