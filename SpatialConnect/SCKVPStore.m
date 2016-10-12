@@ -22,7 +22,8 @@ const NSString *tableName = @"kvp";
 typedef NS_ENUM(NSUInteger, KVPValueType) {
   SCKVP_TEXT,
   SCKVP_BLOB,
-  SCKVP_REAL
+  SCKVP_REAL,
+  SCKVP_DICT
 };
 
 @implementation SCKVPStore
@@ -82,11 +83,20 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
 }
 
 - (void)putValue:(NSObject *)value forKey:(NSString *)key {
+  NSError *err = nil;
+  [self upsertRow:value forKey:key error:err];
+  if (err) {
+    NSLog(@"%@", err.description);
+  }
+}
+
+- (void)upsertRow:(NSObject *)value
+           forKey:(NSString *)key
+            error:(NSError *)err {
   NSString *sql = [NSString
       stringWithFormat:
           @"INSERT OR REPLACE INTO %@ (key,value,value_type) VALUES (?,?,?)",
           tableName];
-  NSError *error;
   NSInteger type;
 
   NSData *data;
@@ -100,40 +110,95 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
     type = SCKVP_TEXT;
     data = [NSKeyedArchiver archivedDataWithRootObject:value];
   }
-
   BOOL success =
       [database executeUpdate:sql withArgumentsInArray:@[ key, data, @(type) ]];
   if (!success) {
-    error = database.lastError;
-    NSLog(@"%@", error.description);
+    err = database.lastError;
+    NSLog(@"%@", err.description);
   }
 }
 
-- (void)putDictionary:(NSDictionary *)dict {
-  NSString *sql = [NSString
-      stringWithFormat:@"INSERT INTO %@ (key,value,value_type) VALUES (?,?,?)",
-                       tableName];
+- (void)putDictionary:(NSDictionary *)dict forKey:(NSString *)key {
   [database beginTransaction];
-  [dict enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSObject *value,
-                                            BOOL *stop) {
-    NSInteger type;
-    if ([value isKindOfClass:[NSNumber class]]) {
-      type = SCKVP_REAL;
-    } else if ([value isKindOfClass:[NSData class]]) {
-      type = SCKVP_BLOB;
-    } else if ([value isKindOfClass:[NSString class]]) {
-      type = SCKVP_TEXT;
-    }
-    BOOL success = [database executeUpdate:sql
-                      withArgumentsInArray:@[ key, value, @(type) ]];
-    if (success) {
-      *stop = YES;
-      [database rollback];
-    }
-  }];
-  [database commit];
+  BOOL success = [self recurPutDictionary:dict forKey:key];
+  if (success) {
+    [database commit];
+  } else {
+    [database rollback];
+  }
 }
 
+- (BOOL)recurPutDictionary:dict forKey:(NSString *)key {
+  __block BOOL success = YES;
+  [dict enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSObject *value,
+                                            BOOL *stop) {
+    NSString *compositeKey = [NSString stringWithFormat:@"%@.%@", key, k];
+    if ([value isKindOfClass:[NSDictionary class]]) {
+      if (![self recurPutDictionary:(NSDictionary *)value
+                             forKey:compositeKey]) {
+        *stop = YES;
+        success = NO;
+      };
+    } else {
+      NSError *err = nil;
+      [self upsertRow:value forKey:compositeKey error:err];
+      if (err) {
+        *stop = YES;
+        success = NO;
+      }
+    }
+  }];
+  return success;
+}
+
+- (NSDictionary *)dictionaryForKey:(NSString *)k {
+  NSString *sql = [NSString
+      stringWithFormat:
+          @"SELECT key,value,value_type FROM %@ WHERE key LIKE '%@.%%'",
+          tableName, k];
+  FMResultSet *rs = [database executeQuery:sql];
+  NSMutableDictionary *returnDictionary = [NSMutableDictionary new];
+  while ([rs next]) {
+    NSString *key = [rs stringForColumn:@"key"];
+    NSString *prefix = [NSString stringWithFormat:@"%@.", k];
+    NSString *suffix = [key copy];
+    if ([key hasPrefix:prefix]) {
+      suffix = [key substringFromIndex:[prefix length]];
+    }
+    NSObject *obj = [self rowValueToObject:rs];
+    [self pushKeyPath:[suffix componentsSeparatedByString:@"."]
+                value:obj
+         inDictionary:returnDictionary];
+  }
+  return [NSDictionary dictionaryWithDictionary:returnDictionary];
+}
+
+- (void)pushKeyPath:(NSArray *)keys
+              value:(NSObject *)v
+       inDictionary:(NSMutableDictionary *)d {
+  if (keys.count == 1) {
+    [d setObject:v forKey:keys.firstObject];
+    return;
+  } else {
+    NSObject *obj = [d objectForKey:keys.firstObject];
+    if (!obj) {
+      NSMutableDictionary *newDict = [NSMutableDictionary new];
+      [self pushKeyPath:[keys subarrayWithRange:NSMakeRange(1, keys.count - 1)]
+                  value:v
+           inDictionary:newDict];
+      [d setObject:newDict forKey:keys.firstObject];
+    } else {
+      NSMutableDictionary *dict = [d objectForKey:keys.firstObject];
+      [self pushKeyPath:[keys subarrayWithRange:NSMakeRange(1, keys.count - 1)]
+                  value:v
+           inDictionary:dict];
+    }
+  }
+}
+
+/**
+ * Returns the NSObject in the value column
+ **/
 - (NSObject *)valueForKey:(NSString *)key {
   NSString *sql = [NSString
       stringWithFormat:@"SELECT value,value_type FROM %@ WHERE key = ?",
@@ -141,39 +206,53 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   FMResultSet *rs = [database executeQuery:sql withArgumentsInArray:@[ key ]];
   NSObject *obj = nil;
   if ([rs next]) {
-    NSInteger t = [rs intForColumn:@"value_type"];
-    switch (t) {
-    case SCKVP_BLOB:
-      obj = [rs dataForColumn:@"value"];
-      break;
-    case SCKVP_REAL:
-      obj = [NSKeyedUnarchiver
-          unarchiveObjectWithData:[rs dataForColumn:@"value"]];
-      break;
-    case SCKVP_TEXT:
-      obj = [NSKeyedUnarchiver
-          unarchiveObjectWithData:[rs dataForColumn:@"value"]];
-    default:
-      break;
-    }
+    obj = [self rowValueToObject:rs];
   }
   [rs close];
   return obj;
 }
 
+- (NSObject *)rowValueToObject:(FMResultSet *)rs {
+  NSInteger type = [rs intForColumn:@"value_type"];
+  NSObject *obj = nil;
+  switch (type) {
+  case SCKVP_BLOB:
+    obj = [rs dataForColumn:@"value"];
+    break;
+  case SCKVP_REAL:
+    obj =
+        [NSKeyedUnarchiver unarchiveObjectWithData:[rs dataForColumn:@"value"]];
+    break;
+  case SCKVP_TEXT:
+    obj =
+        [NSKeyedUnarchiver unarchiveObjectWithData:[rs dataForColumn:@"value"]];
+  default:
+    break;
+  }
+  return obj;
+}
+
+/**
+ * Returns a dictionary of keys as the key column value and values as the value
+ *column
+ * @{
+ *   @"foo.bar" : NSObject
+ * };
+ **/
 - (NSDictionary *)valuesForKeyPrefix:(NSString *)prefixKey {
   NSString *sql = [NSString
-      stringWithFormat:@"SELECT key,value FROM %@ WHERE key LIKE ?", tableName];
-  FMResultSet *rs =
-      [database executeQuery:sql withArgumentsInArray:@[ prefixKey ]];
-  NSDictionary *dict = [NSDictionary new];
+      stringWithFormat:
+          @"SELECT key,value,value_type FROM %@ WHERE key LIKE '%@.%%'",
+          tableName, prefixKey];
+  FMResultSet *rs = [database executeQuery:sql];
+  NSMutableDictionary *dict = [NSMutableDictionary new];
   while ([rs next]) {
-    NSObject *value = [rs objectForColumnName:@"value"];
+    NSObject *obj = [self rowValueToObject:rs];
     NSString *key = [rs stringForColumn:@"key"];
-    [dict setValue:value forKey:key];
+    [dict setValue:obj forKey:key];
   }
   [rs close];
-  return dict;
+  return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 @end

@@ -25,8 +25,9 @@
 - (NSError *)open;
 - (void)close;
 - (void)putValue:(id)value forKey:(NSString *)key;
-- (void)putDictionary:(NSDictionary *)dict;
+- (void)putDictionary:(NSDictionary *)d forKey:(NSString *)key;
 - (NSObject *)valueForKey:(NSString *)key;
+- (NSDictionary *)dictionaryForKey:(NSString *)key;
 - (NSDictionary *)valuesForKeyPrefix:(NSString *)prefixKey;
 
 @end
