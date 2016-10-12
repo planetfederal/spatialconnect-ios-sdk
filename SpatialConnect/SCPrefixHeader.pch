@@ -25,5 +25,6 @@
 #import <UIKit/UIKit.h>
 #import <ZipZap/ZipZap.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 #endif
