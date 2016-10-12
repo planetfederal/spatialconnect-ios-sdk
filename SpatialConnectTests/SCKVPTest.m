@@ -45,11 +45,15 @@
 }
 
 - (void)testDictionary {
+  NSString *gjDataPath =
+      [SpatialConnectHelper filePathFromSelfBundle:@"feature.json"];
+  NSData *gjData = [NSData dataWithContentsOfFile:gjDataPath];
   NSDictionary *dict = @{
     @"one" : @(1),
     @"two" : @{@"check" : @"it"},
     @"three" : @"foo2",
-    @"four" : @{@"five" : @"fiverrr"}
+    @"four" : @{@"five" : @"fiverrr"},
+    @"five" : gjData
   };
   [self.kvp putDictionary:dict forKey:@"dictTest"];
   NSDictionary *d = [self.kvp dictionaryForKey:@"dictTest"];
@@ -59,6 +63,8 @@
   XCTAssert([@"it" isEqualToString:d[@"two"][@"check"]]);
   XCTAssert([@"foo2" isEqualToString:d[@"three"]]);
   XCTAssert([@"fiverrr" isEqualToString:d[@"four"][@"five"]]);
+  NSData *data = d[@"five"];
+  XCTAssert([data isEqualToData:gjData]);
 }
 
 - (void)testData {

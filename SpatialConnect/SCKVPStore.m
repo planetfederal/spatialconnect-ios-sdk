@@ -157,7 +157,7 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
           @"SELECT key,value,value_type FROM %@ WHERE key LIKE '%@.%%'",
           tableName, k];
   FMResultSet *rs = [database executeQuery:sql];
-  NSMutableDictionary *dict = [NSMutableDictionary new];
+  NSMutableDictionary *returnDictionary = [NSMutableDictionary new];
   while ([rs next]) {
     NSString *key = [rs stringForColumn:@"key"];
     NSString *prefix = [NSString stringWithFormat:@"%@.", k];
@@ -168,9 +168,9 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
     NSObject *obj = [self rowValueToObject:rs];
     [self pushKeyPath:[suffix componentsSeparatedByString:@"."]
                 value:obj
-         inDictionary:dict];
+         inDictionary:returnDictionary];
   }
-  return [NSDictionary dictionaryWithDictionary:dict];
+  return [NSDictionary dictionaryWithDictionary:returnDictionary];
 }
 
 - (void)pushKeyPath:(NSArray *)keys
