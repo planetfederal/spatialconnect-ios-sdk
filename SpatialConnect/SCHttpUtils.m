@@ -87,7 +87,7 @@
   NSError *error;
   request.HTTPBody = dict.JSONData;
   if (error) {
-    NSLog(@"%@", error.description);
+    DDLogError(@"%@", error.description);
     return [RACSignal error:error];
   }
 
@@ -108,7 +108,7 @@
                                        returningResponse:&response
                                                    error:&err];
   if (err) {
-    NSLog(@"%@", [err description]);
+    DDLogError(@"%@", [err description]);
     return nil;
   }
   return data;

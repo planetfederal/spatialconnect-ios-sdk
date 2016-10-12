@@ -59,6 +59,17 @@
 		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
+		563F42621DB060E6005022A7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		563F42631DB060E6005022A7 /* Scmessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42611DB060E6005022A7 /* Scmessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		563F42691DB0622B005022A7 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 563F42651DB0622B005022A7 /* CHANGELOG.md */; };
+		563F426A1DB0622B005022A7 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42661DB0622B005022A7 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		563F426B1DB0622B005022A7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42671DB0622B005022A7 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		563F426C1DB0622B005022A7 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 563F42681DB0622B005022A7 /* README.md */; };
+		563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F426E1DB06233005022A7 /* WebViewJavascriptBridge.h */; };
+		563F42721DB06233005022A7 /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 563F426F1DB06233005022A7 /* WebViewJavascriptBridge.js.txt */; };
+		563F42731DB06233005022A7 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42701DB06233005022A7 /* WebViewJavascriptBridge.m */; };
+		563F42841DB06318005022A7 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42831DB06318005022A7 /* Commands.h */; };
+		563F42851DB0643E005022A7 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */; };
 		5641B1911CB43D3700334907 /* SCKVPService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B18F1CB43D3700334907 /* SCKVPService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5641B1921CB43D3700334907 /* SCKVPService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5641B1901CB43D3700334907 /* SCKVPService.m */; };
 		5641B1951CB5DFC700334907 /* SCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B1931CB5DFC700334907 /* SCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -247,11 +258,6 @@
 		5649B61F1BE280D6009947EF /* SCWebAppZipLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */; };
 		5649B6201BE280D6009947EF /* SpatialConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B57B1BE280D6009947EF /* SpatialConnect.m */; };
 		5649B6221BE283EC009947EF /* SpatialConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B6211BE283EC009947EF /* SpatialConnect.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B6631BE2A00E009947EF /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B65B1BE2A00E009947EF /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B6641BE2A00E009947EF /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B65C1BE2A00E009947EF /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */; };
-		5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */; };
 		564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */ = {isa = PBXBuildFile; fileRef = 564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */; };
 		5653F83F1D99A8670028B840 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F83E1D99A8670028B840 /* main.m */; };
 		5653F8421D99A8670028B840 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5653F8411D99A8670028B840 /* AppDelegate.m */; };
@@ -305,11 +311,9 @@
 		5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
 		5678FC8C1CF652ED00D502C3 /* wkb_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC881CF652ED00D502C3 /* wkb_ios.framework */; };
 		5678FC8D1CF652ED00D502C3 /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
+		567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */; };
 		567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 567D7A031D6380FF00BDC3CC /* SCNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		567D7A061D6380FF00BDC3CC /* SCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D7A041D6380FF00BDC3CC /* SCNotification.m */; };
-		568831BD1DA434730048DA84 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 568831BC1DA434730048DA84 /* Commands.h */; };
-		568831C01DA434870048DA84 /* Scmessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 568831BE1DA434870048DA84 /* Scmessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		568831C11DA434870048DA84 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 568831BF1DA434870048DA84 /* Scmessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		569A80CF1D822458006581F0 /* SCTileMatrixRow.h in Headers */ = {isa = PBXBuildFile; fileRef = 569A80CD1D822458006581F0 /* SCTileMatrixRow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		569A80D01D822458006581F0 /* SCTileMatrixRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 569A80CE1D822458006581F0 /* SCTileMatrixRow.m */; };
 		56A23B051D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 56A23B031D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -365,40 +369,40 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		563F427B1DB06255005022A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 563F42741DB06255005022A7 /* extobjc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = "libextobjc (OS X)";
+		};
+		563F427D1DB06255005022A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 563F42741DB06255005022A7 /* extobjc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0A8B029128A4261004AACE0;
+			remoteInfo = "libextobjc (iOS)";
+		};
+		563F427F1DB06255005022A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 563F42741DB06255005022A7 /* extobjc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0A8B2DC128A495D004AACE0;
+			remoteInfo = "OS X Tests";
+		};
+		563F42811DB06255005022A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 563F42741DB06255005022A7 /* extobjc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0CFB60F128A8EEE006DC377;
+			remoteInfo = "iOS Tests";
+		};
 		5653F85F1D99A8680028B840 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5649B48A1BE27C6A009947EF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 5653F83A1D99A8670028B840;
 			remoteInfo = SpaconTest;
-		};
-		5678FC7E1CF652A900D502C3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5678FC771CF652A800D502C3 /* extobjc.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = "libextobjc (OS X)";
-		};
-		5678FC801CF652A900D502C3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5678FC771CF652A800D502C3 /* extobjc.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D0A8B029128A4261004AACE0;
-			remoteInfo = "libextobjc (iOS)";
-		};
-		5678FC821CF652A900D502C3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5678FC771CF652A800D502C3 /* extobjc.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D0A8B2DC128A495D004AACE0;
-			remoteInfo = "OS X Tests";
-		};
-		5678FC841CF652A900D502C3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5678FC771CF652A800D502C3 /* extobjc.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D0CFB60F128A8EEE006DC377;
-			remoteInfo = "iOS Tests";
 		};
 		568831BA1DA353240048DA84 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -499,6 +503,17 @@
 		563090661D0646D0001FE1B5 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
+		563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.h"; sourceTree = "<group>"; };
+		563F42611DB060E6005022A7 /* Scmessage.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Scmessage.pbobjc.m; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.m"; sourceTree = "<group>"; };
+		563F42651DB0622B005022A7 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		563F42661DB0622B005022A7 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		563F42671DB0622B005022A7 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		563F42681DB0622B005022A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		563F426E1DB06233005022A7 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
+		563F426F1DB06233005022A7 /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
+		563F42701DB06233005022A7 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		563F42741DB06255005022A7 /* extobjc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = extobjc.xcodeproj; path = Vendor/libextobjc/extobjc.xcodeproj; sourceTree = "<group>"; };
+		563F42831DB06318005022A7 /* Commands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Commands.h; path = "Vendor/spatialconnect-schema/Commands.h"; sourceTree = "<group>"; };
 		5641B18F1CB43D3700334907 /* SCKVPService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKVPService.h; sourceTree = "<group>"; };
 		5641B1901CB43D3700334907 /* SCKVPService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKVPService.m; sourceTree = "<group>"; };
 		5641B1931CB5DFC700334907 /* SCConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCConfig.h; sourceTree = "<group>"; };
@@ -693,13 +708,6 @@
 		5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWebAppZipLoader.m; sourceTree = "<group>"; };
 		5649B57B1BE280D6009947EF /* SpatialConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnect.m; sourceTree = "<group>"; };
 		5649B6211BE283EC009947EF /* SpatialConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnect.h; sourceTree = "<group>"; };
-		5649B65A1BE2A00E009947EF /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		5649B65B1BE2A00E009947EF /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		5649B65C1BE2A00E009947EF /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		5649B65D1BE2A00E009947EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
-		5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
-		5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gz_2010_us_500_11_20m.json; sourceTree = "<group>"; };
 		5653F83B1D99A8670028B840 /* SpaconAppTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaconAppTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5653F83E1D99A8670028B840 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -738,15 +746,12 @@
 		5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRasterStore.h; sourceTree = "<group>"; };
 		56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSimplePoint.h; sourceTree = "<group>"; };
 		56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSimplePoint.m; sourceTree = "<group>"; };
-		5678FC771CF652A800D502C3 /* extobjc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = extobjc.xcodeproj; path = Vendor/libextobjc/extobjc.xcodeproj; sourceTree = SOURCE_ROOT; };
 		5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		5678FC881CF652ED00D502C3 /* wkb_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = wkb_ios.framework; path = Carthage/Build/iOS/wkb_ios.framework; sourceTree = "<group>"; };
 		5678FC891CF652ED00D502C3 /* ZipZap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ZipZap.framework; path = Carthage/Build/iOS/ZipZap.framework; sourceTree = "<group>"; };
+		567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
 		567D7A031D6380FF00BDC3CC /* SCNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNotification.h; sourceTree = "<group>"; };
 		567D7A041D6380FF00BDC3CC /* SCNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNotification.m; sourceTree = "<group>"; };
-		568831BC1DA434730048DA84 /* Commands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Commands.h; path = "Vendor/spatialconnect-schema/Commands.h"; sourceTree = SOURCE_ROOT; };
-		568831BE1DA434870048DA84 /* Scmessage.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Scmessage.pbobjc.m; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.m"; sourceTree = SOURCE_ROOT; };
-		568831BF1DA434870048DA84 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.h"; sourceTree = SOURCE_ROOT; };
 		5694D2A91D7F564400E380BB /* proj4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = proj4.framework; path = Carthage/Build/iOS/proj4.framework; sourceTree = "<group>"; };
 		569A80CD1D822458006581F0 /* SCTileMatrixRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTileMatrixRow.h; sourceTree = "<group>"; };
 		569A80CE1D822458006581F0 /* SCTileMatrixRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCTileMatrixRow.m; sourceTree = "<group>"; };
@@ -796,6 +801,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */,
 				547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */,
 				56E258061D4D1B2700CA7ED8 /* libProtocolBuffers.a in Frameworks */,
 				560DC1CC1D47CFB4007D66A1 /* MQTTFramework.framework in Frameworks */,
@@ -813,6 +819,7 @@
 			files = (
 				56E258071D4E71C500CA7ED8 /* libProtocolBuffers.a in Frameworks */,
 				560DC1C71D47C9CB007D66A1 /* MQTTFramework.framework in Frameworks */,
+				563F42851DB0643E005022A7 /* CocoaLumberjack.framework in Frameworks */,
 				56DC516A1BFC2315002C71B3 /* SpatialConnect.framework in Frameworks */,
 				56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */,
 				56FB3F511CF8878300C3DA4B /* wkb_ios.framework in Frameworks */,
@@ -855,6 +862,7 @@
 		0B5FE958508C82B8D8FF4D5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */,
 				547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */,
 				5694D2A91D7F564400E380BB /* proj4.framework */,
 				56E258051D4D1B2700CA7ED8 /* libProtocolBuffers.a */,
@@ -1113,24 +1121,8 @@
 				5649B57A1BE280D6009947EF /* SCWebAppZipLoader.m */,
 				5649B5311BE280D6009947EF /* SCLocalWebApp.h */,
 				5649B5321BE280D6009947EF /* SCLocalWebApp.m */,
-				563BEC5A1BE526EF00778EDA /* Loader */,
-				563BEC591BE526E800778EDA /* Local */,
 			);
 			name = JavascriptBridge;
-			sourceTree = "<group>";
-		};
-		563BEC591BE526E800778EDA /* Local */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Local;
-			sourceTree = "<group>";
-		};
-		563BEC5A1BE526EF00778EDA /* Loader */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Loader;
 			sourceTree = "<group>";
 		};
 		563BEC5B1BE526F800778EDA /* Bridge */ = {
@@ -1344,6 +1336,40 @@
 			name = Style;
 			sourceTree = "<group>";
 		};
+		563F42641DB0622B005022A7 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				563F42651DB0622B005022A7 /* CHANGELOG.md */,
+				563F42661DB0622B005022A7 /* JSONKit.h */,
+				563F42671DB0622B005022A7 /* JSONKit.m */,
+				563F42681DB0622B005022A7 /* README.md */,
+			);
+			name = JSONKit;
+			path = Vendor/JSONKit;
+			sourceTree = "<group>";
+		};
+		563F426D1DB06233005022A7 /* WebViewJavascriptBridge */ = {
+			isa = PBXGroup;
+			children = (
+				563F426E1DB06233005022A7 /* WebViewJavascriptBridge.h */,
+				563F426F1DB06233005022A7 /* WebViewJavascriptBridge.js.txt */,
+				563F42701DB06233005022A7 /* WebViewJavascriptBridge.m */,
+			);
+			name = WebViewJavascriptBridge;
+			path = Vendor/WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
+		563F42751DB06255005022A7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				563F427C1DB06255005022A7 /* libextobjc_OSX.a */,
+				563F427E1DB06255005022A7 /* libextobjc_iOS.a */,
+				563F42801DB06255005022A7 /* Logic Tests.xctest */,
+				563F42821DB06255005022A7 /* iOS Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5645C4DD1BED31D6006E4128 /* Geopackage */ = {
 			isa = PBXGroup;
 			children = (
@@ -1405,7 +1431,6 @@
 				56E257E01D4D145F00CA7ED8 /* Protobuf */,
 				563BEC5B1BE526F800778EDA /* Bridge */,
 				56DBF9FF1D2F0C3300FFE4FF /* AuthService */,
-				5678FC771CF652A800D502C3 /* extobjc.xcodeproj */,
 				56F4374D1CA094FF00EA1344 /* Vendor */,
 				563BEC551BE500E900778EDA /* Utils */,
 				5624289B1CADCFCA0087756C /* KVP Service */,
@@ -1448,29 +1473,6 @@
 			);
 			name = SpatialConnectUnitTests;
 			path = SpatialConnectTests;
-			sourceTree = "<group>";
-		};
-		5649B6591BE2A00E009947EF /* JSONKit */ = {
-			isa = PBXGroup;
-			children = (
-				5649B65A1BE2A00E009947EF /* CHANGELOG.md */,
-				5649B65B1BE2A00E009947EF /* JSONKit.h */,
-				5649B65C1BE2A00E009947EF /* JSONKit.m */,
-				5649B65D1BE2A00E009947EF /* README.md */,
-			);
-			name = JSONKit;
-			path = Vendor/JSONKit;
-			sourceTree = "<group>";
-		};
-		5649B65E1BE2A00E009947EF /* WebViewJavascriptBridge */ = {
-			isa = PBXGroup;
-			children = (
-				5649B65F1BE2A00E009947EF /* WebViewJavascriptBridge.h */,
-				5649B6601BE2A00E009947EF /* WebViewJavascriptBridge.js.txt */,
-				5649B6611BE2A00E009947EF /* WebViewJavascriptBridge.m */,
-			);
-			name = WebViewJavascriptBridge;
-			path = Vendor/WebViewJavascriptBridge;
 			sourceTree = "<group>";
 		};
 		5653F83C1D99A8670028B840 /* SpaconAppTest */ = {
@@ -1546,7 +1548,7 @@
 		5667E16C1D58DA150044F195 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
-				568831BC1DA434730048DA84 /* Commands.h */,
+				563F42831DB06318005022A7 /* Commands.h */,
 			);
 			name = Actions;
 			sourceTree = "<group>";
@@ -1558,17 +1560,6 @@
 				56ED69C51CE212FC00843C44 /* remote.scfg */,
 			);
 			name = SpatialConnectIntegrationTests;
-			sourceTree = "<group>";
-		};
-		5678FC781CF652A800D502C3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5678FC7F1CF652A900D502C3 /* libextobjc_OSX.a */,
-				5678FC811CF652A900D502C3 /* libextobjc_iOS.a */,
-				5678FC831CF652A900D502C3 /* Logic Tests.xctest */,
-				5678FC851CF652A900D502C3 /* iOS Tests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		567B1FD31BFD5CB6003254C7 /* Events */ = {
@@ -1673,8 +1664,8 @@
 		56E257E01D4D145F00CA7ED8 /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				568831BE1DA434870048DA84 /* Scmessage.pbobjc.m */,
-				568831BF1DA434870048DA84 /* Scmessage.pbobjc.h */,
+				563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */,
+				563F42611DB060E6005022A7 /* Scmessage.pbobjc.m */,
 			);
 			name = Protobuf;
 			sourceTree = "<group>";
@@ -1682,13 +1673,14 @@
 		56F4374D1CA094FF00EA1344 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				563F42741DB06255005022A7 /* extobjc.xcodeproj */,
+				563F426D1DB06233005022A7 /* WebViewJavascriptBridge */,
+				563F42641DB0622B005022A7 /* JSONKit */,
 				547F3ED81D77688700AE354E /* Reachability.h */,
 				547F3ED91D77688700AE354E /* Reachability.m */,
 				56DBFA0A1D2F269C00FFE4FF /* KeychainItemWrapper.h */,
 				56DBFA0B1D2F269C00FFE4FF /* KeychainItemWrapper.m */,
 				565CD2921D23448200A3DB5C /* XMLDictionary */,
-				5649B65E1BE2A00E009947EF /* WebViewJavascriptBridge */,
-				5649B6591BE2A00E009947EF /* JSONKit */,
 				56F4374E1CA0950600EA1344 /* FMDB */,
 			);
 			name = Vendor;
@@ -1719,7 +1711,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				568831C11DA434870048DA84 /* Scmessage.pbobjc.h in Headers */,
+				563F42621DB060E6005022A7 /* Scmessage.pbobjc.h in Headers */,
+				563F426A1DB0622B005022A7 /* JSONKit.h in Headers */,
 				56554E681D54EA03000D77E7 /* SCLocationStore.h in Headers */,
 				56554E671D54EA03000D77E7 /* SCFormStore.h in Headers */,
 				567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */,
@@ -1727,15 +1720,14 @@
 				56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */,
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
 				5616860E1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.h in Headers */,
-				5649B6661BE2A00E009947EF /* WebViewJavascriptBridge.h in Headers */,
 				561685E81C73D00500FC7FA6 /* SCGpkgSpatialRefSysTable.h in Headers */,
 				56F4375B1CA0955200EA1344 /* FMDatabase.h in Headers */,
 				562428991CAC60740087756C /* SCConfigService.h in Headers */,
 				560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */,
 				560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */,
-				568831BD1DA434730048DA84 /* Commands.h in Headers */,
-				5649B6631BE2A00E009947EF /* JSONKit.h in Headers */,
 				5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */,
+				563F42841DB06318005022A7 /* Commands.h in Headers */,
+				563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */,
 				5649B5CC1BE280D6009947EF /* SCLinearRing+GeoJSON.h in Headers */,
 				566F6E421CE3B5680043FF0C /* SCFormConfig.h in Headers */,
 				5649B5D21BE280D6009947EF /* SCLineString+GeoJSON.h in Headers */,
@@ -2019,8 +2011,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 5678FC781CF652A800D502C3 /* Products */;
-					ProjectRef = 5678FC771CF652A800D502C3 /* extobjc.xcodeproj */;
+					ProductGroup = 563F42751DB06255005022A7 /* Products */;
+					ProjectRef = 563F42741DB06255005022A7 /* extobjc.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -2035,32 +2027,32 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5678FC7F1CF652A900D502C3 /* libextobjc_OSX.a */ = {
+		563F427C1DB06255005022A7 /* libextobjc_OSX.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libextobjc_OSX.a;
-			remoteRef = 5678FC7E1CF652A900D502C3 /* PBXContainerItemProxy */;
+			remoteRef = 563F427B1DB06255005022A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5678FC811CF652A900D502C3 /* libextobjc_iOS.a */ = {
+		563F427E1DB06255005022A7 /* libextobjc_iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libextobjc_iOS.a;
-			remoteRef = 5678FC801CF652A900D502C3 /* PBXContainerItemProxy */;
+			remoteRef = 563F427D1DB06255005022A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5678FC831CF652A900D502C3 /* Logic Tests.xctest */ = {
+		563F42801DB06255005022A7 /* Logic Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "Logic Tests.xctest";
-			remoteRef = 5678FC821CF652A900D502C3 /* PBXContainerItemProxy */;
+			remoteRef = 563F427F1DB06255005022A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5678FC851CF652A900D502C3 /* iOS Tests.xctest */ = {
+		563F42821DB06255005022A7 /* iOS Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "iOS Tests.xctest";
-			remoteRef = 5678FC841CF652A900D502C3 /* PBXContainerItemProxy */;
+			remoteRef = 563F42811DB06255005022A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -2070,7 +2062,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5649B6671BE2A00E009947EF /* WebViewJavascriptBridge.js.txt in Resources */,
+				563F42721DB06233005022A7 /* WebViewJavascriptBridge.js.txt in Resources */,
 				5649B4AE1BE28011009947EF /* Vendor in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2165,6 +2157,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/wkb_ios.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ZipZap.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MQTTFramework.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaLumberjack.framework",
 			);
 			name = "Carthage Copy Frameworks Run Script";
 			outputPaths = (
@@ -2222,6 +2215,7 @@
 				566F6E431CE3B5680043FF0C /* SCFormConfig.m in Sources */,
 				5649B5851BE280D6009947EF /* SCBoundingBox.m in Sources */,
 				5616860A1C75025100FC7FA6 /* SCGpkgDataColumn.m in Sources */,
+				563F426C1DB0622B005022A7 /* README.md in Sources */,
 				5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */,
 				560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */,
 				5649B5E21BE280D6009947EF /* SCMultiPoint.m in Sources */,
@@ -2236,12 +2230,12 @@
 				5649B5C41BE280D6009947EF /* SCGeometryCollection+MapKit.m in Sources */,
 				5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */,
 				5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */,
-				5649B6681BE2A00E009947EF /* WebViewJavascriptBridge.m in Sources */,
 				5649B5F01BE280D6009947EF /* SCOpenStreetMapSource.m in Sources */,
 				56F4375C1CA0955200EA1344 /* FMDatabase.m in Sources */,
 				56F4375E1CA0955200EA1344 /* FMResultSet.m in Sources */,
 				5649B5FA1BE280D6009947EF /* SCPolygon+GeoJSON.m in Sources */,
 				56A23B0E1D7B1BB300AB258B /* SCMapkitTileGridSource.m in Sources */,
+				563F42691DB0622B005022A7 /* CHANGELOG.md in Sources */,
 				561686011C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.m in Sources */,
 				5649B5961BE280D6009947EF /* SCFilter.m in Sources */,
 				5649B5C81BE280D6009947EF /* SCJavascriptBridgeAPI.m in Sources */,
@@ -2265,8 +2259,8 @@
 				5649B5E81BE280D6009947EF /* SCMultiPolygon.m in Sources */,
 				5649B5981BE280D6009947EF /* SCFilterBetween.m in Sources */,
 				5649B5A21BE280D6009947EF /* SCFilterLessThan.m in Sources */,
-				5649B6641BE2A00E009947EF /* JSONKit.m in Sources */,
 				5649B6201BE280D6009947EF /* SpatialConnect.m in Sources */,
+				563F42631DB060E6005022A7 /* Scmessage.pbobjc.m in Sources */,
 				5649B5A81BE280D6009947EF /* SCFilterNotBetween.m in Sources */,
 				5649B5EA1BE280D6009947EF /* SCMultiPolygon+GeoJSON.m in Sources */,
 				565CD2961D2344C300A3DB5C /* XMLDictionary.m in Sources */,
@@ -2275,6 +2269,7 @@
 				5649B5B71BE280D6009947EF /* SCGeoJSON.m in Sources */,
 				5649B5A01BE280D6009947EF /* SCFilterIn.m in Sources */,
 				567D7A061D6380FF00BDC3CC /* SCNotification.m in Sources */,
+				563F42731DB06233005022A7 /* WebViewJavascriptBridge.m in Sources */,
 				546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */,
 				5649B6101BE280D6009947EF /* SCSpatialFeature.m in Sources */,
 				5649B5A41BE280D6009947EF /* SCFilterLessThanEqual.m in Sources */,
@@ -2292,11 +2287,11 @@
 				56FCFBD41D6FD6D5008A0B8C /* SCHttpUtils.m in Sources */,
 				560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */,
 				56554E691D54EA03000D77E7 /* SCFormStore.m in Sources */,
-				568831C01DA434870048DA84 /* Scmessage.pbobjc.m in Sources */,
 				5645C4EB1BED796D006E4128 /* SCPolygon+GPKG.m in Sources */,
 				5649B5DC1BE280D6009947EF /* SCMultiLineString.m in Sources */,
 				560B10E71C77C16000BA15B8 /* SCGpkgTable.m in Sources */,
 				5641B1921CB43D3700334907 /* SCKVPService.m in Sources */,
+				563F426B1DB0622B005022A7 /* JSONKit.m in Sources */,
 				5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */,
 				5649B5BA1BE280D6009947EF /* SCGeometry.m in Sources */,
 				5649B5D51BE280D6009947EF /* SCLineString+MapKit.m in Sources */,

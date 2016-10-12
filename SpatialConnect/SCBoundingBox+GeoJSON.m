@@ -26,7 +26,7 @@
                                         error:&error];
 
   if (!jsonData) {
-    NSLog(@"GeoJSON string generation: error: %@", error.localizedDescription);
+    DDLogError(@"GeoJSON string generation: error: %@", error.localizedDescription);
     return @"[]";
   } else {
     return

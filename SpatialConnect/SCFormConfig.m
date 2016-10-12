@@ -49,24 +49,24 @@ static NSString *const FIELDS = @"fields";
 - (BOOL)isValid {
   __block BOOL isValid = YES;
   if (self.identifier <= 0) {
-    NSLog(@"Identifier is invalid:%ld", (long)self.identifier);
+    DDLogError(@"Identifier is invalid:%ld", (long)self.identifier);
     isValid = NO;
   }
   if (!self.key || self.key.length <= 0) {
-    NSLog(@"form_key is an empty string");
+    DDLogError(@"form_key is an empty string");
     isValid = NO;
   }
   if (!self.label || self.label.length <= 0) {
-    NSLog(@"form_label is an empty string");
+    DDLogError(@"form_label is an empty string");
     isValid = NO;
   }
   if (!self.version || self.version <= 0) {
-    NSLog(@"Invalid Version number");
+    DDLogError(@"Invalid Version number");
     isValid = NO;
   }
 
   if (self.fields.count == 0) {
-    NSLog(@"No Fields Present");
+    DDLogError(@"No Fields Present");
     isValid = NO;
   }
 
@@ -76,7 +76,7 @@ static NSString *const FIELDS = @"fields";
     NSString *fieldLabel = obj[@"field_label"];
 
     if (!fieldKey || fieldKey.length == 0) {
-      NSLog(@"field_key is invalid for form:%@", key);
+      DDLogError(@"field_key is invalid for form:%@", key);
       isValid = NO;
     }
 

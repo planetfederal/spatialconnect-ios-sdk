@@ -66,8 +66,7 @@
                                    self.name, self.geomColName, self.pkColName];
     int res = [db executeStatements:sql];
     if (res != SQLITE_OK) {
-      NSError *err = [db lastError];
-      NSLog(@"%@", err.description);
+      DDLogError(@"%@", db.lastError.description);
     }
   }];
 }
@@ -190,7 +189,7 @@
                                       values:@[ @([identifier longLongValue]) ]
                                        error:&err];
           if (err) {
-            NSLog(@"%@", err.description);
+            DDLogError(@"%@", err.description);
           }
 
           dispatch_async(
@@ -242,7 +241,6 @@
       [vals addObject:g.bytes];
     }
     __block NSMutableString *set = nil;
-    __block int count = 0;
     [f.properties enumerateKeysAndObjectsUsingBlock:^(
                       NSString *key, NSObject *obj, BOOL *stop) {
       if (![obj isKindOfClass:[NSNull class]]) {
@@ -253,10 +251,6 @@
         }
         [set appendString:[NSString stringWithFormat:@"%@ = ?", key]];
         [vals addObject:obj];
-        count++;
-        if (count == [vals count]) {
-          NSLog(@"Yo");
-        }
       }
     }];
 
@@ -329,7 +323,7 @@
       NSError *err;
       BOOL success = [db executeUpdate:sql values:vals error:&err];
       if (err) {
-        NSLog(@"%@", err.description);
+        DDLogError(@"%@", err.description);
         [subscriber sendError:err];
       }
       if (success) {
@@ -358,7 +352,7 @@
         f = [SCGeometry fromGeometryBinary:bytes crs:self.crs];
       }
     } @catch (NSException *exception) {
-      NSLog(@"Error Parsing Geometry binary");
+      DDLogError(@"Error Parsing Geometry binary");
     } @finally {
       if (!f) {
         f = [SCSpatialFeature new];

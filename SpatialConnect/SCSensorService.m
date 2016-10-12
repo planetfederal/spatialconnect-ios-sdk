@@ -82,7 +82,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
       [self startLocationManager];
     }
   } else {
-    NSLog(@"Please Enable Location Services");
+    DDLogInfo(@"Please Enable Location Services");
   }
 
   [self setupSignals];
@@ -166,7 +166,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
     return [sc.dataService.locationStore create:p];
   }] subscribeNext:^(id x) {
-    NSLog(@"Location sent to Location Store");
+    DDLogVerbose(@"Location sent to Location Store");
   }];
 }
 

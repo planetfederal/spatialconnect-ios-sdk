@@ -165,7 +165,7 @@
     [self addService:self.backendService];
     [self startService:[SCBackendService serviceId]];
   } else {
-    NSLog(@"SCBackendService Already Connected");
+    DDLogWarn(@"SCBackendService Already Connected");
   }
 }
 

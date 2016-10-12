@@ -85,7 +85,7 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
     NSMutableDictionary *cfg = [NSMutableDictionary
         dictionaryWithDictionary:[SCFileUtils jsonFileToDict:fp error:&error]];
     if (error) {
-      NSLog(@"%@", error.description);
+      DDLogError(@"%@", error.description);
     }
     if (cfg.count > 0) {
       SCConfig *s = [[SCConfig alloc] initWithDictionary:cfg];

@@ -28,9 +28,6 @@
 - (void)tileForPath:(MKTileOverlayPath)path
            tileSize:(CGSize)size
              result:(void (^)(NSData *, NSError *))result {
-  NSLog(@"MKGS:Tile:%lu,%lu,%lu", (unsigned long)path.x, (unsigned long)path.y,
-        (unsigned long)path.z);
-
   CGSize sz = CGSizeMake(256, 256);
   CGRect rect = CGRectMake(0, 0, sz.width, sz.height);
 
