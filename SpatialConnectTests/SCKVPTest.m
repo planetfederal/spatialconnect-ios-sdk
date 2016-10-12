@@ -44,6 +44,23 @@
   XCTAssertEqual(obj.floatValue, 67.3f);
 }
 
+- (void)testDictionary {
+  NSDictionary *dict = @{
+    @"one" : @(1),
+    @"two" : @{@"check" : @"it"},
+    @"three" : @"foo2",
+    @"four" : @{@"five" : @"fiverrr"}
+  };
+  [self.kvp putDictionary:dict forKey:@"dictTest"];
+  NSDictionary *d = [self.kvp dictionaryForKey:@"dictTest"];
+  XCTAssertNotNil(d);
+  NSLog(@"%@", d.description);
+  XCTAssertEqual(1, [d[@"one"] intValue]);
+  XCTAssert([@"it" isEqualToString:d[@"two"][@"check"]]);
+  XCTAssert([@"foo2" isEqualToString:d[@"three"]]);
+  XCTAssert([@"fiverrr" isEqualToString:d[@"four"][@"five"]]);
+}
+
 - (void)testData {
   NSString *fp = [SpatialConnectHelper filePathFromSelfBundle:@"simple.json"];
   NSData *fileData = [NSData dataWithContentsOfFile:fp];
