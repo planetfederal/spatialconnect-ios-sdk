@@ -30,7 +30,7 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
-  DDLogVerbose(@"LocalConfigPath:",filePath);
+  DDLogVerbose(@"LocalConfigPath:", filePath);
   if (!b) {
     DDLogError(@"No config at:%@", filePath);
   }

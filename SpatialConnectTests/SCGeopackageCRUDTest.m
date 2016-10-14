@@ -100,7 +100,7 @@
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(GeopackageStore *ds) {
         [[ds query:filter] subscribeError:^(NSError *error) {
-          DDLogError(@"%@",error.description);
+          DDLogError(@"%@", error.description);
         }
             completed:^{
               [expect fulfill];

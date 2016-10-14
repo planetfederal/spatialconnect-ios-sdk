@@ -26,7 +26,8 @@
                                         error:&error];
 
   if (!jsonData) {
-    DDLogError(@"GeoJSON string generation: error: %@", error.localizedDescription);
+    DDLogError(@"GeoJSON string generation: error: %@",
+               error.localizedDescription);
     return @"[]";
   } else {
     return
