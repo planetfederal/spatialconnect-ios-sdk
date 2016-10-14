@@ -58,6 +58,7 @@
     [self initServices];
     self.serviceEventSubject = [RACSubject new];
     _serviceEvents = [self.serviceEventSubject publish];
+    [self setupLogger];
   }
   return self;
 }
@@ -72,6 +73,15 @@
   _sensorService = [SCSensorService new];
   _authService = [SCAuthService new];
   [self addDefaultServices];
+}
+
+- (void)setupLogger {
+  [DDLog addLogger:[DDTTYLogger sharedInstance]];
+  [DDLog addLogger:[DDASLLogger sharedInstance]];
+  DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
+  fileLogger.rollingFrequency = 60 * 60 * 24;
+  fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+  [DDLog addLogger:fileLogger];
 }
 
 - (void)addDefaultServices {
