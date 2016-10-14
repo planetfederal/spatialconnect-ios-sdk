@@ -30,9 +30,9 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
-  NSLog(@"LocalConfigPath:%@", filePath);
+  DDLogVerbose(@"LocalConfigPath:", filePath);
   if (!b) {
-    NSLog(@"No config at:%@", filePath);
+    DDLogError(@"No config at:%@", filePath);
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.configService addConfigFilepath:filePath];
@@ -72,7 +72,7 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"remote"
                                                        ofType:@"scfg"];
-  NSLog(@"RemoteConfigPath:%@", filePath);
+  DDLogInfo(@"RemoteConfigPath:%@", filePath);
   SpatialConnect *sc = [[SpatialConnect alloc] init];
   [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
@@ -139,7 +139,7 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
       [fm copyItemAtPath:item toPath:to error:&error];
       if (error) {
         if (error.code != 516) {
-          NSLog(@"Error: %@", error.description);
+          DDLogError(@"Error: %@", error.description);
         }
       }
     }

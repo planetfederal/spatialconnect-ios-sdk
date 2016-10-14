@@ -68,8 +68,8 @@ NSString *const SCJavascriptBridgeErrorDomain =
                handler:^(id action, WVJBResponseCallback responseCallback) {
                  [[self.jsbridge parseJSAction:action]
                      subscribeNext:^(NSDictionary *payload) {
-                       NSLog(@"Response");
-                       NSLog(@"%@", payload);
+                       DDLogVerbose(@"Response");
+                       DDLogVerbose(@"%@", payload);
                        NSDictionary *newAction =
                            @{ @"type" : action[@"type"],
                               @"payload" : payload };

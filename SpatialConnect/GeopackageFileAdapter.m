@@ -86,7 +86,7 @@
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-            NSLog(@"Saving GPKG to %@", path);
+            DDLogInfo(@"Saving GPKG to %@", path);
             [data writeToFile:path atomically:YES];
             self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
             [subscriber sendCompleted];

@@ -79,13 +79,13 @@ NSString *rasterStoreId = @"ba293796-5026-46f7-a2ff-e5dec85heh6b";
                 return data;
               }];
           [s subscribeNext:^(NSData *data) {
-            NSLog(@"Saving GPKG to %@", path);
+            DDLogInfo(@"Saving GPKG to %@", path);
             [data writeToFile:path atomically:YES];
             [subscriber sendNext:path];
             [subscriber sendCompleted];
           }
               error:^(NSError *error) {
-                NSLog(@"%@", error.description);
+                DDLogError(@"%@", error.description);
                 [subscriber sendError:error];
               }];
         }

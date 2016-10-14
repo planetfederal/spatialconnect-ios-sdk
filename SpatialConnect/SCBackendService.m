@@ -228,23 +228,23 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   switch (sessionManager.state) {
   case MQTTSessionManagerStateClosed:
     [connectedToBroker sendNext:@(NO)];
-    NSLog(@"MQTT Closed");
+    DDLogInfo(@"MQTT Closed");
     break;
   case MQTTSessionManagerStateClosing:
-    NSLog(@"MQTT Closing");
+    DDLogInfo(@"MQTT Closing");
     break;
   case MQTTSessionManagerStateConnected:
     [connectedToBroker sendNext:@(YES)];
-    NSLog(@"MQTT Connected");
+    DDLogInfo(@"MQTT Connected");
     break;
   case MQTTSessionManagerStateConnecting:
     break;
   case MQTTSessionManagerStateError:
-    NSLog(@"Error MQTT COnnection");
-    NSLog(@"Error:%@", err.description);
+    DDLogError(@"Error MQTT COnnection");
+    DDLogError(@"Error:%@", err.description);
     break;
   case MQTTSessionManagerStateStarting:
-    NSLog(@"Starting MQTT Connection");
+    DDLogInfo(@"Starting MQTT Connection");
     break;
   default:
     break;
@@ -299,7 +299,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       NSError *err;
       SCMessage *m = [[SCMessage alloc] initWithData:d error:&err];
       if (err) {
-        NSLog(@"%@", err.description);
+        DDLogError(@"%@", err.description);
       }
       return m;
     }] filter:^BOOL(SCMessage *m) {
@@ -330,7 +330,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     NSError *err;
     SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
     if (err) {
-      NSLog(@"%@", err.description);
+      DDLogError(@"%@", err.description);
     }
     return msg;
   }];

@@ -166,11 +166,12 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
         }];
 
   } else {
-    NSLog(@"%@",
-          [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
-                                     @"was not started. Make sure the store "
-                                     @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key, store.storeId]);
+    DDLogWarn(
+        @"%@",
+        [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
+                                   @"was not started. Make sure the store "
+                                   @"conforms to the SCDataStoreLifeCycle",
+                                   store.name, store.key, store.storeId]);
   }
 }
 
@@ -182,11 +183,12 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
         sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STOPPED
                                     andStoreId:store.storeId]];
   } else {
-    NSLog(@"%@",
-          [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
-                                     @"was not stopped. Make sure the store "
-                                     @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key, store.storeId]);
+    DDLogWarn(
+        @"%@",
+        [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
+                                   @"was not stopped. Make sure the store "
+                                   @"conforms to the SCDataStoreLifeCycle",
+                                   store.name, store.key, store.storeId]);
   }
 }
 
@@ -221,7 +223,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     NSCAssert(store.storeId, @"Store Id not set");
     return NO;
   } else if ([self.stores objectForKey:store.storeId]) {
-    NSLog(@"STORE %@ ALREADY EXISTS", store.storeId);
+    DDLogWarn(@"STORE %@ ALREADY EXISTS", store.storeId);
     return NO;
   } else {
     [self.stores setObject:store forKey:store.storeId];
@@ -236,10 +238,10 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
                                                            c.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
   if (!store) {
-    NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
-          @"implementation.\n Here is a list of supported stores:\n%@",
-          c.type, c.version,
-          [self.supportedStoreImpls.allKeys componentsJoinedByString:@",\n"]);
+    DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
+              @"implementation.\n Here is a list of supported stores:\n%@",
+              c.type, c.version, [self.supportedStoreImpls.allKeys
+                                     componentsJoinedByString:@",\n"]);
     return NO;
   } else {
     return [self registerStore:gmStore];
@@ -266,13 +268,13 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
                                                            c.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
   if (!store) {
-    NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
-          @"implementation.\n Here is a list of supported stores:\n%@",
-          c.type, c.version,
-          [self.supportedStoreImpls.allKeys componentsJoinedByString:@",\n"]);
+    DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
+              @"implementation.\n Here is a list of supported stores:\n%@",
+              c.type, c.version, [self.supportedStoreImpls.allKeys
+                                     componentsJoinedByString:@",\n"]);
     return NO;
   } else if (![self.stores objectForKey:gmStore.storeId]) {
-    NSLog(@"STORE %@ DOES NOT EXIST", gmStore.storeId);
+    DDLogWarn(@"STORE %@ DOES NOT EXIST", gmStore.storeId);
     return NO;
   } else {
     [self updateStore:gmStore];

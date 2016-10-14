@@ -38,7 +38,7 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   SCBackendService *bs = sc.backendService;
   NSString *serverUrl = bs.backendUri;
   if (!serverUrl) {
-    NSLog(@"There is no remote server uri set");
+    DDLogError(@"There is no remote server uri set");
     return;
   }
   NSURL *url =

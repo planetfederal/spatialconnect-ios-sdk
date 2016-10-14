@@ -88,7 +88,7 @@
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-            NSLog(@"Saving GEOJSON to %@", path);
+            DDLogInfo(@"Saving GEOJSON to %@", path);
             [data writeToFile:path atomically:YES];
             self.connector =
                 [[GeoJSONStorageConnector alloc] initWithFileName:path];
@@ -296,7 +296,7 @@
                  atomically:YES
                    encoding:NSUTF8StringEncoding
                       error:&writeError];
-        NSLog(@"%@", writeError.localizedFailureReason);
+        DDLogError(@"%@", writeError.localizedFailureReason);
         if (writeError) {
           [subscriber sendError:writeError];
         } else {

@@ -58,7 +58,7 @@
   }];
   [self waitForExpectationsWithTimeout:10.0
                                handler:^(NSError *err) {
-                                 NSLog(@"Error:%@", err.description);
+                                 DDLogError(@"Error:%@", err.description);
                                }];
 }
 
@@ -88,7 +88,7 @@
   }];
   [self waitForExpectationsWithTimeout:10.0
                                handler:^(NSError *err) {
-                                 NSLog(@"Error:%@", err.description);
+                                 DDLogError(@"Error:%@", err.description);
                                }];
 }
 
@@ -200,7 +200,7 @@
       [expect fulfill];
     }
         error:^(NSError *error) {
-          NSLog(@"%@", error.description);
+          DDLogError(@"%@", error.description);
           [expect fulfill];
         }
         completed:^{

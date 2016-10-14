@@ -100,7 +100,7 @@
   [[SCGeopackageHelper loadGPKGDataStore:self.sc]
       subscribeNext:^(GeopackageStore *ds) {
         [[ds query:filter] subscribeError:^(NSError *error) {
-          NSLog(@"Error");
+          DDLogError(@"%@", error.description);
         }
             completed:^{
               [expect fulfill];
@@ -120,7 +120,7 @@
         p.layerId = list[0];
         return [ds create:p];
       }] subscribeError:^(NSError *error) {
-    NSLog(@"%@", error.description);
+    DDLogError(@"%@", error.description);
     XCTAssert(NO, @"Error creating point");
     [expect fulfill];
   }

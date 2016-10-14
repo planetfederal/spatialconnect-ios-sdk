@@ -86,7 +86,7 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
   NSError *err = nil;
   [self upsertRow:value forKey:key error:err];
   if (err) {
-    NSLog(@"%@", err.description);
+    DDLogError(@"%@", err.description);
   }
 }
 
@@ -114,7 +114,7 @@ typedef NS_ENUM(NSUInteger, KVPValueType) {
       [database executeUpdate:sql withArgumentsInArray:@[ key, data, @(type) ]];
   if (!success) {
     err = database.lastError;
-    NSLog(@"%@", err.description);
+    DDLogError(@"%@", err.description);
   }
 }
 

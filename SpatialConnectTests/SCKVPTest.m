@@ -58,7 +58,6 @@
   [self.kvp putDictionary:dict forKey:@"dictTest"];
   NSDictionary *d = [self.kvp dictionaryForKey:@"dictTest"];
   XCTAssertNotNil(d);
-  NSLog(@"%@", d.description);
   XCTAssertEqual(1, [d[@"one"] intValue]);
   XCTAssert([@"it" isEqualToString:d[@"two"][@"check"]]);
   XCTAssert([@"foo2" isEqualToString:d[@"three"]]);

@@ -1,3 +1,4 @@
+github "tetriscode/CocoaLumberjack" "82cdbd0f2ac0bf037d80cad7b8a3c3873214e64b"
 github "tetriscode/MQTT-Client-Framework" "df7f1f703ae6ef1dddd4f5bff82e89e2d22b10db"
 github "tetriscode/Proj4-iOS" "4.9.2"
 github "ReactiveCocoa/ReactiveCocoa" "v2.5"

@@ -107,7 +107,6 @@
       [self postRequest:action[@"payload"] responseSubscriber:subscriber];
       break;
     default:
-      NSLog(@"break");
       break;
     }
     return nil;
@@ -233,12 +232,12 @@
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     NSError *err;
     if (err) {
-      NSLog(@"%@", err.description);
+      DDLogError(@"%@", err.description);
     }
     SCSpatialFeature *feat = [SCGeoJSON parseDict:geoJsonDict];
     feat.layerId = layerId;
     [[s create:feat] subscribeError:^(NSError *error) {
-      NSLog(@"Error creating Feature");
+      DDLogError(@"Error creating Feature");
     }
         completed:^{
           [subscriber sendNext:[feat JSONDict]];

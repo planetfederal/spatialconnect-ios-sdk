@@ -44,8 +44,9 @@
     NSDictionary *dictContent =
         [[JSONDecoder decoder] objectWithData:data error:err];
     if (!dictContent) {
-      NSLog(@"Check that your JSON is not malformed for file:%@", filepath);
-      NSLog(@"%@", [*err description]);
+      DDLogError(@"Check that your JSON is not malformed for file:%@",
+                 filepath);
+      DDLogError(@"%@", [*err description]);
       return nil;
     }
     if (dictContent) {
