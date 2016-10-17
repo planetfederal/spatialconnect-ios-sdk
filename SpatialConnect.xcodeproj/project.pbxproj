@@ -2540,10 +2540,7 @@
 					"COCOAPODS=1",
 					"LIBGPKG_VERSION=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/include/**",
-					"$(PROJECT_DIR)/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/include/**";
 				INFOPLIST_FILE = SpatialConnect/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2592,10 +2589,7 @@
 					"COCOAPODS=1",
 					"LIBGPKG_VERSION=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/include/**",
-					"$(PROJECT_DIR)/include/**",
-				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/include/**";
 				INFOPLIST_FILE = SpatialConnect/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
