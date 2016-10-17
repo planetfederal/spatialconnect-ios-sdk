@@ -57,6 +57,9 @@
 		5624289E1CADCFEF0087756C /* SCKVPStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5624289C1CADCFEF0087756C /* SCKVPStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5624289F1CADCFEF0087756C /* SCKVPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5624289D1CADCFEF0087756C /* SCKVPStore.m */; };
 		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
+		563683CB1DB560AA001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
+		563683D01DB5615B001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
+		563683D11DB56165001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		563F42621DB060E6005022A7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -503,6 +506,7 @@
 		5624289C1CADCFEF0087756C /* SCKVPStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKVPStore.h; sourceTree = "<group>"; };
 		5624289D1CADCFEF0087756C /* SCKVPStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKVPStore.m; sourceTree = "<group>"; };
 		563090661D0646D0001FE1B5 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
+		563683CA1DB560AA001F636B /* ca.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ca.crt; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
 		563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.h"; sourceTree = "<group>"; };
@@ -1397,6 +1401,7 @@
 		5649B4891BE27C6A009947EF = {
 			isa = PBXGroup;
 			children = (
+				563683CA1DB560AA001F636B /* ca.crt */,
 				5653F8701D99A9AB0028B840 /* libgpkgios.framework */,
 				5653F8711D99A9AB0028B840 /* MQTTFramework.framework */,
 				5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */,
@@ -2066,6 +2071,7 @@
 			files = (
 				563F42721DB06233005022A7 /* WebViewJavascriptBridge.js.txt in Resources */,
 				5649B4AE1BE28011009947EF /* Vendor in Resources */,
+				563683CB1DB560AA001F636B /* ca.crt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2089,6 +2095,7 @@
 				5653F87E1D99ACA30028B840 /* remote.scfg in Resources */,
 				5653F84D1D99A8670028B840 /* LaunchScreen.storyboard in Resources */,
 				5653F84A1D99A8670028B840 /* Assets.xcassets in Resources */,
+				563683D01DB5615B001F636B /* ca.crt in Resources */,
 				5653F8481D99A8670028B840 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2109,6 +2116,7 @@
 				566F5F8E1D9080B3001C6692 /* gz_2010_us_050_00_500k.json in Resources */,
 				566F5F8F1D9080B3001C6692 /* gz_2010_us_500_11_20m.json in Resources */,
 				566F5F901D9080B3001C6692 /* remote.scfg in Resources */,
+				563683D11DB56165001F636B /* ca.crt in Resources */,
 				566F5F921D9080B3001C6692 /* all.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

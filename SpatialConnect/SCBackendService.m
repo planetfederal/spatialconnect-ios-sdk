@@ -167,7 +167,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   if (!sessionManager) {
 
     NSString *ident = [[SpatialConnect sharedInstance] deviceIdentifier];
-
+    NSString *token =
+        [[[SpatialConnect sharedInstance] authService] xAccessToken];
     sessionManager = [[MQTTSessionManager alloc] init];
     [sessionManager addObserver:self
                      forKeyPath:@"state"
@@ -175,20 +176,34 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
                                 NSKeyValueObservingOptionNew
                         context:nil];
 
+    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy
+        defaultPolicy];
+    policy.allowInvalidCertificates = true;
+    policy.validatesCertificateChain = false;
+    policy.validatesDomainName = false;
+
+    NSString *crtPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"crt"];
+    NSData *crt = [NSData dataWithContentsOfFile:crtPath];
+    NSMutableArray *certs = [NSMutableArray new];
+    [certs addObject:crt];
+    policy.pinnedCertificates = certs;
     [sessionManager
              connectTo:mqttEndpoint
-                  port:[mqttPort integerValue]
-                   tls:NO
+                  port:mqttPort.integerValue
+                   tls:true
              keepalive:60
-                 clean:false
-                  auth:false
-                  user:nil
-                  pass:nil
+                 clean:true
+                  auth:true
+                  user:token
+                  pass:@"anypass"
+                  will:true
              willTopic:[NSString stringWithFormat:@"/device/%@-will", ident]
-                  will:[@"offline" dataUsingEncoding:NSUTF8StringEncoding]
+               willMsg:[@"offline" dataUsingEncoding:NSUTF8StringEncoding]
                willQos:MQTTQosLevelExactlyOnce
         willRetainFlag:NO
-          withClientId:ident];
+          withClientId:ident
+        securityPolicy:policy
+          certificates:certs];
 
     RACSignal *d =
         [self rac_signalForSelector:@selector(handleMessage:onTopic:retained:)
