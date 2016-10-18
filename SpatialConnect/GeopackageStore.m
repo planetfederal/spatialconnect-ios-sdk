@@ -162,10 +162,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
       }] toArray];
 }
 
-- (NSString *)defaultLayer {
-  return @"DEFAULT";
-}
-
 - (SCPolygon *)coverage:(NSString *)layer {
   return [self.adapter coverage:layer];
 }

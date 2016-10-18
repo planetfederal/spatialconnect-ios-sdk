@@ -63,14 +63,6 @@
 - (RACSignal *) delete:(SCKeyTuple *)key;
 
 /**
- *  Default layers for searching when no layers
- *  are present in SCQueryFilter
- *
- *  @return string representing layer name
- */
-- (NSArray *)defaultLayers;
-
-/**
  *  List of vector layers in the store
  *
  *  @return NSArray of strings
