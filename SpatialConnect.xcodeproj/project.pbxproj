@@ -57,6 +57,9 @@
 		5624289E1CADCFEF0087756C /* SCKVPStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5624289C1CADCFEF0087756C /* SCKVPStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5624289F1CADCFEF0087756C /* SCKVPStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5624289D1CADCFEF0087756C /* SCKVPStore.m */; };
 		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
+		563683CB1DB560AA001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
+		563683D01DB5615B001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
+		563683D11DB56165001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
 		563F42621DB060E6005022A7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -268,7 +271,6 @@
 		5653F84D1D99A8670028B840 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5653F84B1D99A8670028B840 /* LaunchScreen.storyboard */; };
 		5653F86E1D99A8BB0028B840 /* SpatialConnect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5649B4931BE27C6A009947EF /* SpatialConnect.framework */; };
 		5653F8771D99A9AB0028B840 /* libgpkgios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8701D99A9AB0028B840 /* libgpkgios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5653F8781D99A9AB0028B840 /* MQTTFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8711D99A9AB0028B840 /* MQTTFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5653F87A1D99A9AB0028B840 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5653F87C1D99A9AB0028B840 /* wkb_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8751D99A9AB0028B840 /* wkb_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5653F87D1D99A9AB0028B840 /* ZipZap.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5653F8761D99A9AB0028B840 /* ZipZap.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -360,6 +362,9 @@
 		56F6720D1DA572820032E6A6 /* all.geojson in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4AF1BE28079009947EF /* all.geojson */; };
 		56F6720E1DA572820032E6A6 /* feature.json in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B01BE28079009947EF /* feature.json */; };
 		56F6720F1DA572820032E6A6 /* gz_2010_us_050_00_500k.json in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */; };
+		56FB37201DB69E3100B0C87C /* ca.der in Resources */ = {isa = PBXBuildFile; fileRef = 56FB371F1DB69E3100B0C87C /* ca.der */; };
+		56FB37221DB69F6600B0C87C /* MQTTFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 56FB37211DB69F6600B0C87C /* MQTTFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		56FB37231DB6A00600B0C87C /* ca.der in Resources */ = {isa = PBXBuildFile; fileRef = 56FB371F1DB69E3100B0C87C /* ca.der */; };
 		56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56FB3EBA1CF6A2BD00C3DA4B /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */; };
 		56FB3F501CF8878300C3DA4B /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
@@ -438,11 +443,11 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5653F8771D99A9AB0028B840 /* libgpkgios.framework in Embed Frameworks */,
-				5653F8781D99A9AB0028B840 /* MQTTFramework.framework in Embed Frameworks */,
 				5653F87A1D99A9AB0028B840 /* ReactiveCocoa.framework in Embed Frameworks */,
 				5653F87C1D99A9AB0028B840 /* wkb_ios.framework in Embed Frameworks */,
 				5653F87D1D99A9AB0028B840 /* ZipZap.framework in Embed Frameworks */,
 				563F42941DB120C4005022A7 /* CocoaLumberjack.framework in Embed Frameworks */,
+				56FB37221DB69F6600B0C87C /* MQTTFramework.framework in Embed Frameworks */,
 				5653F8801D99D25E0028B840 /* SpatialConnect.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -503,6 +508,7 @@
 		5624289C1CADCFEF0087756C /* SCKVPStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKVPStore.h; sourceTree = "<group>"; };
 		5624289D1CADCFEF0087756C /* SCKVPStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKVPStore.m; sourceTree = "<group>"; };
 		563090661D0646D0001FE1B5 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
+		563683CA1DB560AA001F636B /* ca.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ca.crt; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
 		563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.h"; sourceTree = "<group>"; };
@@ -723,7 +729,6 @@
 		5653F84E1D99A8670028B840 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5653F85E1D99A8680028B840 /* SpaconAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaconAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5653F8701D99A9AB0028B840 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
-		5653F8711D99A9AB0028B840 /* MQTTFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTFramework.framework; path = Carthage/Build/iOS/MQTTFramework.framework; sourceTree = "<group>"; };
 		5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		5653F8751D99A9AB0028B840 /* wkb_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = wkb_ios.framework; path = Carthage/Build/iOS/wkb_ios.framework; sourceTree = "<group>"; };
 		5653F8761D99A9AB0028B840 /* ZipZap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ZipZap.framework; path = Carthage/Build/iOS/ZipZap.framework; sourceTree = "<group>"; };
@@ -790,6 +795,8 @@
 		56F437551CA0955200EA1344 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 		56F437581CA0955200EA1344 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
 		56F437591CA0955200EA1344 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		56FB371F1DB69E3100B0C87C /* ca.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = ca.der; sourceTree = "<group>"; };
+		56FB37211DB69F6600B0C87C /* MQTTFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTFramework.framework; path = Carthage/Build/iOS/MQTTFramework.framework; sourceTree = "<group>"; };
 		56FB3EB71CF6A2BD00C3DA4B /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		56FB3EB81CF6A2BD00C3DA4B /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRemoteConfig.h; sourceTree = "<group>"; };
@@ -805,8 +812,8 @@
 			files = (
 				567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */,
 				547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */,
-				56E258061D4D1B2700CA7ED8 /* libProtocolBuffers.a in Frameworks */,
 				560DC1CC1D47CFB4007D66A1 /* MQTTFramework.framework in Frameworks */,
+				56E258061D4D1B2700CA7ED8 /* libProtocolBuffers.a in Frameworks */,
 				56DBFA091D2F25F900FFE4FF /* Security.framework in Frameworks */,
 				5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */,
 				563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */,
@@ -1397,8 +1404,10 @@
 		5649B4891BE27C6A009947EF = {
 			isa = PBXGroup;
 			children = (
+				56FB37211DB69F6600B0C87C /* MQTTFramework.framework */,
+				56FB371F1DB69E3100B0C87C /* ca.der */,
+				563683CA1DB560AA001F636B /* ca.crt */,
 				5653F8701D99A9AB0028B840 /* libgpkgios.framework */,
-				5653F8711D99A9AB0028B840 /* MQTTFramework.framework */,
 				5653F8731D99A9AB0028B840 /* ReactiveCocoa.framework */,
 				5653F8751D99A9AB0028B840 /* wkb_ios.framework */,
 				5653F8761D99A9AB0028B840 /* ZipZap.framework */,
@@ -2066,6 +2075,7 @@
 			files = (
 				563F42721DB06233005022A7 /* WebViewJavascriptBridge.js.txt in Resources */,
 				5649B4AE1BE28011009947EF /* Vendor in Resources */,
+				563683CB1DB560AA001F636B /* ca.crt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2088,7 +2098,9 @@
 			files = (
 				5653F87E1D99ACA30028B840 /* remote.scfg in Resources */,
 				5653F84D1D99A8670028B840 /* LaunchScreen.storyboard in Resources */,
+				56FB37231DB6A00600B0C87C /* ca.der in Resources */,
 				5653F84A1D99A8670028B840 /* Assets.xcassets in Resources */,
+				563683D01DB5615B001F636B /* ca.crt in Resources */,
 				5653F8481D99A8670028B840 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2109,6 +2121,8 @@
 				566F5F8E1D9080B3001C6692 /* gz_2010_us_050_00_500k.json in Resources */,
 				566F5F8F1D9080B3001C6692 /* gz_2010_us_500_11_20m.json in Resources */,
 				566F5F901D9080B3001C6692 /* remote.scfg in Resources */,
+				56FB37201DB69E3100B0C87C /* ca.der in Resources */,
+				563683D11DB56165001F636B /* ca.crt in Resources */,
 				566F5F921D9080B3001C6692 /* all.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2682,7 +2696,7 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/include/**",
 				);
 				INFOPLIST_FILE = SpaconTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Libs";
 				ONLY_ACTIVE_ARCH = YES;
@@ -2707,7 +2721,7 @@
 					"$(PROJECT_DIR)/Carthage/Checkouts/libgpkgios/libs/boost/include/**",
 				);
 				INFOPLIST_FILE = SpaconTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/Libs";
 				PRODUCT_BUNDLE_IDENTIFIER = com.boundlessgeo.SpaconTest;

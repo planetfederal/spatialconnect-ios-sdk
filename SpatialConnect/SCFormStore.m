@@ -32,7 +32,7 @@
     self.name = config.name;
     self.permission = SC_DATASTORE_READWRITE;
     formIds = [NSMutableDictionary new];
-    _storeType = @"default";
+    _storeType = @"gpkg";
     _storeVersion = @"1";
     storeForms = [NSMutableDictionary new];
     _hasForms = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];

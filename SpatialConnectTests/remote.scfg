@@ -3,8 +3,8 @@
 "http_protocol": "http",
 "http_host": "efc-dev.boundlessgeo.com",
 "http_port": 8085,
-"mqtt_protocol": "tcp",
+"mqtt_protocol": "tls",
 "mqtt_host": "efc-dev.boundlessgeo.com",
-"mqtt_port": 1883
+"mqtt_port": 8883
 }
 }
