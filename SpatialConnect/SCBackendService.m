@@ -178,19 +178,14 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy
         defaultPolicy];
-    policy.allowInvalidCertificates = true;
-    policy.validatesCertificateChain = false;
-    policy.validatesDomainName = false;
+    policy.allowInvalidCertificates = NO;
+    policy.validatesCertificateChain = NO;
+    policy.validatesDomainName = NO;
 
-    NSString *crtPath = [[NSBundle mainBundle] pathForResource:@"ca" ofType:@"crt"];
-    NSData *crt = [NSData dataWithContentsOfFile:crtPath];
-    NSMutableArray *certs = [NSMutableArray new];
-    [certs addObject:crt];
-    policy.pinnedCertificates = certs;
     [sessionManager
              connectTo:mqttEndpoint
                   port:mqttPort.integerValue
-                   tls:true
+                   tls:[mqttProtocol isEqualToString:@"tls"]
              keepalive:60
                  clean:true
                   auth:true
@@ -203,7 +198,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
         willRetainFlag:NO
           withClientId:ident
         securityPolicy:policy
-          certificates:certs];
+          certificates:nil];
 
     RACSignal *d =
         [self rac_signalForSelector:@selector(handleMessage:onTopic:retained:)
