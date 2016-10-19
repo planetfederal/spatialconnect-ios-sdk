@@ -68,7 +68,7 @@
 		563F426A1DB0622B005022A7 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42661DB0622B005022A7 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563F426B1DB0622B005022A7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42671DB0622B005022A7 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		563F426C1DB0622B005022A7 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 563F42681DB0622B005022A7 /* README.md */; };
-		563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F426E1DB06233005022A7 /* WebViewJavascriptBridge.h */; };
+		563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F426E1DB06233005022A7 /* WebViewJavascriptBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563F42721DB06233005022A7 /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 563F426F1DB06233005022A7 /* WebViewJavascriptBridge.js.txt */; };
 		563F42731DB06233005022A7 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42701DB06233005022A7 /* WebViewJavascriptBridge.m */; };
 		563F42841DB06318005022A7 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42831DB06318005022A7 /* Commands.h */; };
