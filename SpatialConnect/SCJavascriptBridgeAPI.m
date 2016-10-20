@@ -106,6 +106,9 @@
     case NETWORKSERVICE_POST_REQUEST:
       [self postRequest:action[@"payload"] responseSubscriber:subscriber];
       break;
+    case BACKENDSERVICE_HTTP_URI:
+      [self getBackendUri:subscriber];
+      break;
     default:
       break;
     }
@@ -380,6 +383,12 @@
       completed:^{
         [subscriber sendCompleted];
       }];
+}
+
+- (void)getBackendUri:(id<RACSubscriber>)subscriber {
+  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+  [subscriber sendNext:@{ @"backendUri" : [bs.backendUri stringByAppendingString:@"/api/"] }];
+  [subscriber sendCompleted];
 }
 
 @end
