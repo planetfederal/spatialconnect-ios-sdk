@@ -159,8 +159,8 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
     [self start];
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCKVPStore *kvp = sc.kvpService.kvpStore;
-  [kvp putValue:@(YES) forKey:GPS_ENABLED];
+  SCCache *c = sc.cache;
+  [c setValue:@(YES) forKey:GPS_ENABLED];
   [self startLocationManager];
 
   [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
@@ -173,14 +173,14 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 - (void)disableGPS {
   [self stopLocationManager];
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCKVPStore *kvp = sc.kvpService.kvpStore;
-  [kvp putValue:@(NO) forKey:GPS_ENABLED];
+  SCCache *c = sc.cache;
+  [c setValue:@(NO) forKey:GPS_ENABLED];
 }
 
 - (BOOL)shoudlEnableGPS {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCKVPStore *kvp = sc.kvpService.kvpStore;
-  NSNumber *enabled = (NSNumber *)[kvp valueForKey:GPS_ENABLED];
+  SCCache *p = sc.cache;
+  NSNumber *enabled = (NSNumber *)[p valueForKey:GPS_ENABLED];
   if ([(NSNumber *)enabled isEqual:@(YES)]) {
     return YES;
   } else {

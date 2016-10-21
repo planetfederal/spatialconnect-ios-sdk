@@ -93,7 +93,7 @@
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms
       enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
-        [arr addObject:[f JSONDict]];
+        [arr addObject:[f dictionary]];
       }];
   return [NSArray arrayWithArray:arr];
 }

@@ -17,6 +17,7 @@
 * under the License.
 ******************************************************************************/
 #import "SCStoreConfig.h"
+#import "JSONKit.h"
 #import "SCDataService.h"
 
 static NSString *const STORE_TYPE = @"store_type";
@@ -46,6 +47,21 @@ static NSString *const DEFAULT_LAYERS = @"default_layers";
     _name = dict[NAME];
   }
   return self;
+}
+
+- (NSDictionary *)dictionary {
+  return @{
+    STORE_TYPE : _type,
+    VERSION : _version,
+    IDENT : _uniqueid,
+    URI : _uri,
+    DEFAULT_LAYERS : _defaultLayers ? _defaultLayers : @[],
+    NAME : _name
+  };
+}
+
+- (NSString *)description {
+  return self.dictionary.JSONString;
 }
 
 @end

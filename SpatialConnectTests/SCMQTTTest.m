@@ -193,7 +193,7 @@
   f.geometry = p;
   [f.properties setObject:@"Baltimore Orioles" forKey:@"favorite"];
   [f.properties setObject:@"Why Not?" forKey:@"why"];
-  [[[sc.backendService.configReceived filter:^BOOL(NSNumber *v) {
+  [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
     return [v boolValue];
   }] take:1] subscribeNext:^(id x) {
     [[sc.dataService.formStore create:f] subscribeNext:^(id x) {

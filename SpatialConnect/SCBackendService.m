@@ -67,24 +67,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)authListener {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCAuthService *as = sc.authService;
-  // You have the url to the server. Wait for someone to properly
-  // authenticate before fetching the config
-  [[[[as loginStatus] filter:^BOOL(NSNumber *n) {
-    SCAuthStatus s = [n integerValue];
-    return s == SCAUTH_AUTHENTICATED;
-  }] take:1] subscribeNext:^(NSNumber *n) {
-    [self connect];
-    [[[connectedToBroker filter:^BOOL(NSNumber *n) {
-      return n.boolValue;
-    }] take:1] subscribeNext:^(id x) {
-      [self registerAndFetchConfig];
-    }];
-  }];
-}
-
 - (void)setupSubscriptions {
 
   NSString *ident = [[SpatialConnect sharedInstance] deviceIdentifier];
@@ -98,22 +80,27 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
     SpatialConnect *sc = [SpatialConnect sharedInstance];
+    SCConfigService *cs = sc.configService;
+    SCConfig *cachedConfig = cs.cachedConfig;
     switch (msg.action) {
     case CONFIG_ADD_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
+      [cachedConfig addStore:config];
       [sc.dataService registerAndStartStoreByConfig:config];
       break;
     }
     case CONFIG_UPDATE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
+      [cachedConfig updateStore:config];
       [sc.dataService updateStoreByConfig:config];
       break;
     }
     case CONFIG_REMOVE_STORE: {
       SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
           storeByIdentifier:payload];
+      [cachedConfig removeStore:payload];
       [sc.dataService unregisterStore:ds];
       break;
     }
@@ -121,23 +108,29 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
+        [cachedConfig addForm:f];
         [sc.dataService.formStore registerFormByConfig:f];
       }
       break;
     }
     case CONFIG_UPDATE_FORM: {
-      [sc.dataService.formStore
-          updateFormByConfig:[[SCFormConfig alloc]
-                                 initWithDict:[payload objectFromJSONString]]];
+      SCFormConfig *f =
+          [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
+      if (f) {
+        [cachedConfig updateForm:f];
+        [sc.dataService.formStore updateFormByConfig:f];
+      }
       break;
     }
     case CONFIG_REMOVE_FORM: {
+      [cachedConfig removeForm:payload];
       [sc.dataService.formStore unregisterFormByKey:payload];
       break;
     }
     default:
       break;
     }
+    [cs setCachedConfig:cachedConfig];
   }];
 }
 
@@ -157,7 +150,9 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
-    [[[SpatialConnect sharedInstance] configService] loadConfig:cfg];
+    SpatialConnect *sc = [SpatialConnect sharedInstance];
+    [sc.configService loadConfig:cfg];
+    [sc.configService setCachedConfig:cfg];
     [_configReceived sendNext:@(YES)];
   }];
 }
@@ -176,8 +171,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
                                 NSKeyValueObservingOptionNew
                         context:nil];
 
-    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy
-        defaultPolicy];
+    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
     policy.allowInvalidCertificates = NO;
     policy.validatesCertificateChain = NO;
     policy.validatesDomainName = NO;
@@ -214,19 +208,73 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     }];
 
   } else {
-    [sessionManager connectToLast];
+    RACSignal *notConnected =
+        [[connectedToBroker take:1] filter:^BOOL(NSNumber *value) {
+          return !value.boolValue;
+        }];
+    [notConnected subscribeNext:^(id x) {
+      [sessionManager connectToLast];
+    }];
   }
 }
 
 - (void)listenForNetworkConnection {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [[[[sc serviceStarted:SCSensorService.serviceId]
+  /*
+   * Check for connectivity.
+   * If not connected
+   *    load the cached config.
+   * else if connected
+   *    wait for authentication
+   */
+  [[[sc serviceStarted:SCSensorService.serviceId]
       flattenMap:^RACStream *(id value) {
         return sc.sensorService.isConnected;
-      }] filter:^BOOL(NSNumber *x) {
-    return x.boolValue;
-  }] subscribeNext:^(id x) {
-    [self authListener];
+      }] subscribeNext:^(NSNumber *x) {
+    BOOL connected = x.boolValue;
+    if (connected) {
+      [self authListener];
+    } else {
+      [self loadCachedConfig];
+    }
+  }];
+}
+
+- (void)loadCachedConfig {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCConfig *config = [sc.configService cachedConfig];
+  if (config) {
+    [[[SpatialConnect sharedInstance] configService] loadConfig:config];
+    [_configReceived sendNext:@(YES)];
+  }
+}
+
+- (void)authListener {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCAuthService *as = sc.authService;
+  // You have the url to the server. Wait for someone to properly
+  // authenticate before fetching the config
+  RACSignal *authed = [[[as loginStatus] filter:^BOOL(NSNumber *n) {
+    SCAuthStatus s = [n integerValue];
+    return s == SCAUTH_AUTHENTICATED;
+  }] take:1];
+
+  RACSignal *failedAuth = [[[as loginStatus] filter:^BOOL(NSNumber *n) {
+    SCAuthStatus s = [n integerValue];
+    return s == SCAUTH_AUTHENTICATION_FAILED;
+  }] take:1];
+
+  [authed subscribeNext:^(NSNumber *n) {
+    [self connect];
+    [[[connectedToBroker filter:^BOOL(NSNumber *n) {
+      return n.boolValue;
+    }] take:1] subscribeNext:^(id x) {
+      [self registerAndFetchConfig];
+    }];
+  }];
+
+  [failedAuth subscribeNext:^(id x) {
+    [self loadCachedConfig];
   }];
 }
 

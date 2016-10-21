@@ -100,8 +100,8 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
                                         BOOL *stop) {
     [sc.dataService.formStore registerFormByConfig:f];
   }];
-  [c.dataServiceStores enumerateObjectsUsingBlock:^(
-                           SCStoreConfig *scfg, NSUInteger idx, BOOL *stop) {
+  [c.stores enumerateObjectsUsingBlock:^(SCStoreConfig *scfg, NSUInteger idx,
+                                         BOOL *stop) {
     [sc.dataService registerAndStartStoreByConfig:scfg];
   }];
   if (c.remote) {
@@ -132,6 +132,19 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.dataService
       unregisterStore:[sc.dataService storeByIdentifier:c.uniqueid]];
+}
+
+- (void)setCachedConfig:(SCConfig *)cfg {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc.cache setValue:cfg.dictionary
+              forKey:@"spatialconnect.config.remote.cached"];
+}
+
+- (SCConfig *)cachedConfig {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  NSDictionary *d = (NSDictionary *)[sc.cache
+      valueForKey:@"spatialconnect.config.remote.cached"];
+  return [[SCConfig alloc] initWithDictionary:d];
 }
 
 @end

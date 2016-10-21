@@ -14,11 +14,12 @@
  * limitations under the License
  */
 
-#import "SCKVPStore.h"
-#import "SCService.h"
+#import "SCConfig.h"
+#import <Foundation/Foundation.h>
 
-@interface SCKVPService : SCService
+@interface SCCache : NSObject
 
-@property(readonly) SCKVPStore *kvpStore;
+- (void)setValue:(NSObject *)obj forKey:(NSString *)key;
+- (NSObject *)valueForKey:(NSString *)key;
 
 @end

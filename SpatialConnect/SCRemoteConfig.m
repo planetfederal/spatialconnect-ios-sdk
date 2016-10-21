@@ -45,4 +45,15 @@ static NSString *const MQTT_PORT = @"mqtt_port";
   return self;
 }
 
+- (NSDictionary *)dictionary {
+  return @{
+    HTTP_PROTOCOL : _httpProtocol,
+    HTTP_HOST : _httpHost,
+    HTTP_PORT : _httpPort,
+    MQTT_PROTOCOL : _mqttProtocol,
+    MQTT_HOST : _mqttHost,
+    MQTT_PORT : _mqttPort
+  };
+}
+
 @end

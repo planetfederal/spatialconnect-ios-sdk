@@ -19,6 +19,7 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef NS_ENUM(NSUInteger, SCAuthStatus) {
+  SCAUTH_AUTHENTICATION_FAILED = 2,
   SCAUTH_AUTHENTICATED = 1,
   SCAUTH_NOT_AUTHENTICATED = 0
 };

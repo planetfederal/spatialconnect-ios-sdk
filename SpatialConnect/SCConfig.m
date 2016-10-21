@@ -23,12 +23,11 @@
 - (id)initWithDictionary:(NSDictionary *)d {
   self = [super init];
   if (self) {
-    dataServiceStores = [NSMutableArray new];
+    stores = [NSMutableArray new];
     NSArray *storeDicts = d[@"stores"];
     [storeDicts enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
                                              BOOL *stop) {
-      [dataServiceStores
-          addObject:[[SCStoreConfig alloc] initWithDictionary:d]];
+      [stores addObject:[[SCStoreConfig alloc] initWithDictionary:d]];
     }];
     forms = [NSMutableArray new];
     NSArray *formDicts = d[@"forms"];
@@ -47,16 +46,86 @@
   return self;
 }
 
-- (NSArray *)forms {
-  return forms;
+- (NSDictionary *)dictionary {
+  NSMutableDictionary *dict = [NSMutableDictionary new];
+  NSArray *fs =
+      [[forms.rac_sequence.signal map:^NSDictionary *(SCFormConfig *fc) {
+        return fc.dictionary;
+      }] toArray];
+  if (fs) {
+    dict[@"forms"] = fs;
+  }
+  NSArray *ss =
+      [[stores.rac_sequence.signal map:^NSDictionary *(SCStoreConfig *sc) {
+        return sc.dictionary;
+      }] toArray];
+  if (ss) {
+    dict[@"stores"] = ss;
+  }
+  if (r) {
+    dict[@"remote"] = r.dictionary;
+  }
+  return [NSDictionary dictionaryWithDictionary:dict];
 }
 
-- (NSArray *)dataServiceStores {
-  return dataServiceStores;
+- (NSArray *)forms {
+  return [NSArray arrayWithArray:forms];
+}
+
+- (NSArray *)stores {
+  return [NSArray arrayWithArray:stores];
 }
 
 - (SCRemoteConfig *)remote {
   return r;
+}
+
+- (void)addForm:(SCFormConfig *)fc {
+  [forms addObject:fc];
+}
+
+- (void)updateForm:(SCFormConfig *)fc {
+  [forms enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx,
+                                      BOOL *stop) {
+    if (c.identifier == fc.identifier) {
+      [forms setObject:fc atIndexedSubscript:idx];
+      *stop = YES;
+    }
+  }];
+}
+
+- (void)removeForm:(NSString *)key {
+  [forms enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx,
+                                      BOOL *stop) {
+    if (c.key == key) {
+      [forms removeObjectAtIndex:idx];
+      *stop = YES;
+    }
+  }];
+}
+
+- (void)addStore:(SCStoreConfig *)sc {
+  [stores addObject:sc];
+}
+
+- (void)updateStore:(SCStoreConfig *)sc {
+  [stores enumerateObjectsUsingBlock:^(SCStoreConfig *c, NSUInteger idx,
+                                       BOOL *_Nonnull stop) {
+    if ([c.uniqueid isEqualToString:sc.uniqueid]) {
+      [stores setObject:sc atIndexedSubscript:idx];
+      *stop = YES;
+    }
+  }];
+}
+
+- (void)removeStore:(NSString *)uniqueid {
+  [stores enumerateObjectsUsingBlock:^(SCStoreConfig *c, NSUInteger idx,
+                                       BOOL *_Nonnull stop) {
+    if ([c.uniqueid isEqualToString:uniqueid]) {
+      [stores removeObjectAtIndex:idx];
+      *stop = YES;
+    }
+  }];
 }
 
 @end
