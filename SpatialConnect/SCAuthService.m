@@ -53,7 +53,7 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
     [loginStatus sendNext:@(SCAUTH_AUTHENTICATED)];
   } else {
     [self logout];
-    [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
+    [loginStatus sendNext:@(SCAUTH_AUTHENTICATION_FAILED)];
   }
 }
 

@@ -14,20 +14,16 @@
  * limitations under the License
  */
 
-#import "FMDatabase.h"
-#import "FMDatabaseAdditions.h"
-#import <Foundation/Foundation.h>
+#import "SCCache.h"
 
-@interface SCKVPStore : NSObject {
-  FMDatabase *database;
+@implementation SCCache
+
+- (void)setValue:(NSObject *)obj forKey:(NSString *)key {
+  [[NSUserDefaults standardUserDefaults] setObject:obj forKey:key];
 }
 
-- (NSError *)open;
-- (void)close;
-- (void)putValue:(id)value forKey:(NSString *)key;
-- (void)putDictionary:(NSDictionary *)d forKey:(NSString *)key;
-- (NSObject *)valueForKey:(NSString *)key;
-- (NSDictionary *)dictionaryForKey:(NSString *)key;
-- (NSDictionary *)valuesForKeyPrefix:(NSString *)prefixKey;
+- (NSObject *)valueForKey:(NSString *)key {
+  return [[NSUserDefaults standardUserDefaults] objectForKey:key];
+}
 
 @end

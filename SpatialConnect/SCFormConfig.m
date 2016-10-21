@@ -190,18 +190,18 @@ static NSString *const FIELDS = @"fields";
   return [NSDictionary dictionaryWithDictionary:t];
 }
 
-- (NSDictionary *)JSONDict {
-  NSMutableDictionary *dict = [NSMutableDictionary new];
-  dict[FORM_KEY] = self.key;
-  dict[FORM_LABEL] = self.label;
-  dict[VERSION] = @(self.version);
-  dict[FIELDS] = self.fields;
-  dict[IDENT] = @(self.identifier);
-  return [NSDictionary dictionaryWithDictionary:dict];
+- (NSDictionary *)dictionary {
+  return @{
+    FORM_KEY : self.key,
+    FORM_LABEL : self.label,
+    VERSION : @(self.version),
+    FIELDS : self.fields,
+    IDENT : @(self.identifier)
+  };
 }
 
 - (NSString *)description {
-  return self.JSONDict.JSONString;
+  return self.dictionary.JSONString;
 }
 
 @end
