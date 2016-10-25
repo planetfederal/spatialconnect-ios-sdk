@@ -57,6 +57,9 @@
     case DATASERVICE_ACTIVESTOREBYID:
       [self activeStoreById:action[@"payload"] responseSubscriber:subscriber];
       break;
+    case DATASERVICE_STORELIST:
+      [self storeList:subscriber];
+      break;
     case DATASERVICE_SPATIALQUERY:
       [self queryStoresByIds:action[@"payload"] responseSubscriber:subscriber];
       break;
@@ -113,6 +116,22 @@
       break;
     }
     return nil;
+  }];
+}
+
+- (void)storeList:(id<RACSubscriber>)subscriber {
+  NSArray *arr =
+      [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
+  [subscriber sendNext:@{ @"stores" : arr }];
+  RACMulticastConnection *rmcc =
+      [[[SpatialConnect sharedInstance] dataService] storeEvents];
+  [rmcc connect];
+  [rmcc.signal subscribeNext:^(SCStoreStatusEvent *evt) {
+    NSLog(@"storeStatusEvent");
+    NSArray *arr =
+        [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
+
+    [subscriber sendNext:@{ @"stores" : arr }];
   }];
 }
 
@@ -387,7 +406,9 @@
 
 - (void)getBackendUri:(id<RACSubscriber>)subscriber {
   SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-  [subscriber sendNext:@{ @"backendUri" : [bs.backendUri stringByAppendingString:@"/api/"] }];
+  [subscriber sendNext:@{
+    @"backendUri" : [bs.backendUri stringByAppendingString:@"/api/"]
+  }];
   [subscriber sendCompleted];
 }
 

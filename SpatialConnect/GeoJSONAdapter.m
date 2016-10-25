@@ -39,7 +39,7 @@
 
 @implementation GeoJSONAdapter
 
-@synthesize connector, storeId, uri;
+@synthesize connector, storeId, uri, parentStore;
 
 - (id)initWithFilePath:(NSString *)filepath {
   if (self = [super init]) {
@@ -85,17 +85,24 @@
       return [RACSignal empty];
     }
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
+    self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
+    __block NSMutableData *data = nil;
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-            DDLogInfo(@"Saving GEOJSON to %@", path);
-            [data writeToFile:path atomically:YES];
-            self.connector =
-                [[GeoJSONStorageConnector alloc] initWithFileName:path];
-            [subscriber sendCompleted];
+          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(RACTuple *t) {
+            [data appendData:t.first];
+            self.parentStore.downloadProgress = t.second;
           }
               error:^(NSError *error) {
+                self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
                 [subscriber sendError:error];
+              }
+              completed:^{
+                DDLogInfo(@"Saving GEOJSON to %@", path);
+                [data writeToFile:path atomically:YES];
+                self.connector =
+                    [[GeoJSONStorageConnector alloc] initWithFileName:path];
+                [subscriber sendCompleted];
               }];
           return nil;
         }];

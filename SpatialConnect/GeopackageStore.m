@@ -50,6 +50,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   self.permission = SC_DATASTORE_READWRITE;
   _storeType = TYPE;
   _storeVersion = VERSION;
+
   return self;
 }
 
@@ -75,6 +76,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
           [subscriber sendError:error];
         }
             completed:^{
+              self.downloadProgress = @(1.0f);
               self.status = SC_DATASTORE_RUNNING;
               [subscriber sendCompleted];
             }];

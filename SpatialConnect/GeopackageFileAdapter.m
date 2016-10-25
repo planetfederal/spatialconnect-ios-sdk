@@ -83,16 +83,22 @@
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
     self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
+    __block NSMutableData *data = nil;
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-            DDLogInfo(@"Saving GPKG to %@", path);
-            [data writeToFile:path atomically:YES];
-            self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-            [subscriber sendCompleted];
+          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(RACTuple *t) {
+            [data appendData:t.first];
+            self.parentStore.downloadProgress = t.second;
           }
               error:^(NSError *error) {
+                self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
                 [subscriber sendError:error];
+              }
+              completed:^{
+                DDLogInfo(@"Saving GPKG to %@", path);
+                [data writeToFile:path atomically:YES];
+                self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+                [subscriber sendCompleted];
               }];
           return nil;
         }];

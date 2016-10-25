@@ -25,6 +25,8 @@
 #import "SCStyle.h"
 #import <Foundation/Foundation.h>
 
+@class GeoJSONStore;
+
 @interface GeoJSONAdapter : NSObject {
   NSBundle *geojsonBundle;
   NSString *geojsonFilePath;
@@ -34,6 +36,7 @@
 @property(nonatomic, strong) SCStyle *defaultStyle;
 @property(nonatomic, strong) NSString *storeId;
 @property(readonly, nonatomic, strong) NSString *uri;
+@property(nonatomic, weak) GeoJSONStore *parentStore;
 
 - (RACSignal *)connect;
 - (id)initWithFilePath:(NSString *)filepath;

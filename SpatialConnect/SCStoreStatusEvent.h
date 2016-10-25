@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, StoreStatusEvent) {
   SC_DATASTORE_EVT_STARTED,
   SC_DATASTORE_EVT_ALLSTARTED,
   SC_DATASTORE_EVT_STOPPED,
+  SC_DATASTORE_EVT_STATUSCHANGE
 };
 
 @interface SCStoreStatusEvent : NSObject

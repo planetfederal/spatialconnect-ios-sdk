@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "SCDataStore.h"
+#import "SCHttpUtils.h"
 
 @interface SCDataStore ()
 @property(readwrite, nonatomic, strong) NSString *storeId;
@@ -32,6 +33,9 @@
 @synthesize status, permission;
 @synthesize storeVersion = _storeVersion;
 @synthesize storeType = _storeType;
+@synthesize status$ = _status$;
+@synthesize downloadProgress = _downloadProgress;
+@synthesize downloadProgress$ = _downloadProgress$;
 
 - (id)init {
   self = [super init];
@@ -40,6 +44,9 @@
   }
   permission = SC_DATASTORE_READONLY;
   _storeId = [[NSUUID UUID] UUIDString];
+  _status$ = RACObserve(self, status);
+  _downloadProgress = @(0.0f);
+  _downloadProgress$ = RACObserve(self, downloadProgress);
   return self;
 }
 
