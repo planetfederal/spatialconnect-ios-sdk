@@ -19,24 +19,22 @@
 @implementation SCHttpUtils
 
 + (RACSignal *)getRequestURLAsDict:(NSURL *)url {
-  // TODO FIX
-  __block NSMutableData *data = nil;
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(RACTuple *t) {
-          [data appendData:t.first];
-        }
-            error:^(NSError *error) {
-              [subscriber sendError:error];
-            }
-            completed:^{
+        [[[SCHttpUtils getRequestURLAsData:url] takeLast:1]
+            subscribeNext:^(RACTuple *t) {
               NSError *err;
               NSDictionary *dict =
-                  [[JSONDecoder decoder] objectWithData:data error:&err];
+                  [[JSONDecoder decoder] objectWithData:t.first error:&err];
               if (err) {
                 [subscriber sendError:err];
               }
               [subscriber sendNext:dict];
+            }
+            error:^(NSError *error) {
+              [subscriber sendError:error];
+            }
+            completed:^{
               [subscriber sendCompleted];
             }];
         return nil;
@@ -91,16 +89,10 @@
                                                       didReceiveData:)
                                    fromProtocol:protocol]
                           subscribeNext:^(RACTuple *arguments) {
-
                             [data appendData:arguments.second];
                             NSNumber *progress = [NSNumber
                                 numberWithFloat:(float)[data length] /
                                                 [expectedLength floatValue]];
-                            //                                    NSDictionary
-                            //                                    *d = @{
-                            //                                                        @"progress": progress,
-                            //                                                        @"data": data
-                            //                                                        };
                             [subscriber sendNext:RACTuplePack(data, progress)];
                           }]];
 
@@ -118,7 +110,7 @@
                                                     connectionDidFinishLoading:)
                                    fromProtocol:protocol]
                           subscribeNext:^(id x) {
-                            //[subscriber sendNext:data];
+                            [subscriber sendNext:RACTuplePack(data, @(1.0f))];
                             [subscriber sendCompleted];
                           }]];
 
@@ -199,38 +191,5 @@
   }
   return result;
 }
-
-//- (void)download:(NSURL *)url {
-//
-//}
-//
-//
-//+ (void) connection:(NSURLConnection *)connection
-// didReceiveResponse:(NSURLResponse *)response {
-//  [receivedData setLength:0];
-//  _expectedBytes = [NSNumber numberWithFloat:[response
-//  expectedContentLength]];
-//}
-//
-//+ (void) connection:(NSURLConnection *)connection didReceiveData:(NSData
-//*)data {
-//  [_receivedData appendData:data];
-//  float progress = [_receivedData length] /[_expectedBytes floatValue];
-//  NSLog(@"dloadprogress %f", progress);
-//}
-//
-//+ (void) connection:(NSURLConnection *)connection didFailWithError:(NSError
-//*)error {
-//
-//}
-//
-//+ (NSCachedURLResponse *) connection:(NSURLConnection *)connection
-// willCacheResponse:    (NSCachedURLResponse *)cachedResponse {
-//  return nil;
-//}
-//
-//+ (void) connectionDidFinishLoading:(NSURLConnection *)connection {
-//
-//}
 
 @end

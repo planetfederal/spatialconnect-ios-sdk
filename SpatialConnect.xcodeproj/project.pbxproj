@@ -279,7 +279,7 @@
 		565CD2911D23115D00A3DB5C /* WFSDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD28F1D23115D00A3DB5C /* WFSDataStore.m */; };
 		565CD2961D2344C300A3DB5C /* XMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD2941D2344C300A3DB5C /* XMLDictionary.m */; };
 		565CD2991D234FB100A3DB5C /* WFSDataStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD2981D234FB100A3DB5C /* WFSDataStoreTest.m */; };
-		565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 565E9ECC1DB7C49F00AEAB60 /* SCCache.h */; };
+		565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 565E9ECC1DB7C49F00AEAB60 /* SCCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565E9ECF1DB7C49F00AEAB60 /* SCCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 565E9ECD1DB7C49F00AEAB60 /* SCCache.m */; };
 		5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 566617581CE14FA200874119 /* SCDefaultStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617591CE14FA200874119 /* SCDefaultStore.m */; };
@@ -1741,7 +1741,6 @@
 				560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */,
 				5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */,
 				5649B5BD1BE280D6009947EF /* SCGeometry+MapKit.h in Headers */,
-				565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */,
 				5645C4EA1BED796D006E4128 /* SCPolygon+GPKG.h in Headers */,
 				5649B6141BE280D6009947EF /* SCStyle.h in Headers */,
 				5649B61A1BE280D6009947EF /* SCTileOverlayRenderer.h in Headers */,
@@ -1840,6 +1839,7 @@
 				56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */,
 				56A23B051D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h in Headers */,
 				56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */,
+				565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */,
 				563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */,
 				546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */,
 				56A23B0D1D7B1BB300AB258B /* SCMapkitTileGridSource.h in Headers */,

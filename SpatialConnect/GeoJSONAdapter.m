@@ -86,22 +86,23 @@
     }
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
     self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
-    __block NSMutableData *data = nil;
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(RACTuple *t) {
-            [data appendData:t.first];
+          RACSignal *dload = [SCHttpUtils getRequestURLAsData:url];
+          [dload subscribeNext:^(RACTuple *t) {
             self.parentStore.downloadProgress = t.second;
           }
               error:^(NSError *error) {
                 self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
                 [subscriber sendError:error];
-              }
+              }];
+          [[dload takeLast:1] subscribeNext:^(RACTuple *t) {
+            DDLogInfo(@"Saving GEOJSON to %@", path);
+            [t.first writeToFile:path atomically:YES];
+            self.connector =
+                [[GeoJSONStorageConnector alloc] initWithFileName:path];
+          }
               completed:^{
-                DDLogInfo(@"Saving GEOJSON to %@", path);
-                [data writeToFile:path atomically:YES];
-                self.connector =
-                    [[GeoJSONStorageConnector alloc] initWithFileName:path];
                 [subscriber sendCompleted];
               }];
           return nil;

@@ -160,12 +160,11 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     }];
     RACSignal *timer =
         [RACSignal interval:2 onScheduler:[RACScheduler mainThreadScheduler]];
-    [[[[[store downloadProgress$] sample:timer] distinctUntilChanged]
-        deliverOn:[RACScheduler mainThreadScheduler]]
+    [[[[store downloadProgress$] sample:timer] distinctUntilChanged]
         subscribeNext:^(NSNumber *progress) {
           [self.storeEventSubject
               sendNext:[SCStoreStatusEvent
-                            fromEvent:SC_DATASTORE_EVT_STATUSCHANGE
+                            fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS
                            andStoreId:store.storeId]];
         }];
 
@@ -269,6 +268,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [self stopStore:store];
   }
   [self.stores removeObjectForKey:store.storeId];
+  [self.storeEventSubject
+      sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_REMOVED
+                                  andStoreId:store.storeId]];
 }
 
 - (void)updateStore:(SCDataStore *)store {
