@@ -43,6 +43,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 @property(readwrite, nonatomic, strong)
     NSMutableDictionary *supportedStoreImpls;
 @property(readwrite, atomic, strong) NSMutableDictionary *stores;
+@property(readwrite, atomic, strong) NSMutableDictionary *storeObservers;
+@property(readwrite, atomic, strong) NSMutableDictionary *downloadObservers;
+@property(readonly) RACSignal *timer;
 @property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
 @end
 
@@ -57,6 +60,10 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
     _stores = [NSMutableDictionary new];
+    _storeObservers = [NSMutableDictionary new];
+    _downloadObservers = [NSMutableDictionary new];
+    _timer =
+        [RACSignal interval:2 onScheduler:[RACScheduler mainThreadScheduler]];
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
@@ -153,27 +160,28 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-    [[store status$] subscribeNext:^(NSNumber *status) {
+    if (store.status == SC_DATASTORE_RUNNING) {
+      return;
+    }
+
+    [[[((id<SCDataStoreLifeCycle>)store)start]
+        sample:self.timer] subscribeNext:^(SCStoreStatusEvent *x) {
+      NSLog(@"store_event: statuschange %@ %ld", store.name,
+            (long)store.status);
       [self.storeEventSubject
           sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STATUSCHANGE
                                       andStoreId:store.storeId]];
-    }];
-    RACSignal *timer =
-        [RACSignal interval:2 onScheduler:[RACScheduler mainThreadScheduler]];
-    [[[[store downloadProgress$] sample:timer] distinctUntilChanged]
-        subscribeNext:^(NSNumber *progress) {
+    }
+        error:^(NSError *error) {
+          NSLog(@"store_event: error %@ %ld", store.name, (long)store.status);
           [self.storeEventSubject
               sendNext:[SCStoreStatusEvent
-                            fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS
+                            fromEvent:SC_DATASTORE_EVT_STARTFAILED
                            andStoreId:store.storeId]];
-        }];
-
-    [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
-      [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTFAILED
-                                      andStoreId:store.storeId]];
-    }
+        }
         completed:^{
+          NSLog(@"store_event: complete %@ %ld", store.name,
+                (long)store.status);
           [_hasStores sendNext:@(YES)];
           [self.storeEventSubject
               sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTED

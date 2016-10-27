@@ -18,6 +18,7 @@
  ******************************************************************************/
 
 #import "GeopackageStore.h"
+#import "SCStoreStatusEvent.h"
 
 NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
@@ -68,13 +69,24 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (RACSignal *)start {
   self.adapter.parentStore = self;
-  self.status = SC_DATASTORE_STARTED;
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self.adapter.connect subscribeError:^(NSError *error) {
-          self.status = SC_DATASTORE_STOPPED;
-          [subscriber sendError:error];
+        self.status = SC_DATASTORE_STARTED;
+        [subscriber
+            sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTED
+                                        andStoreId:self.storeId]];
+        [self.adapter.connect subscribeNext:^(id x) {
+          [subscriber sendNext:[SCStoreStatusEvent
+                                    fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS
+                                   andStoreId:self.storeId]];
         }
+            error:^(NSError *error) {
+              self.status = SC_DATASTORE_STOPPED;
+              [subscriber sendNext:[SCStoreStatusEvent
+                                        fromEvent:SC_DATASTORE_EVT_STARTFAILED
+                                       andStoreId:self.storeId]];
+              [subscriber sendError:error];
+            }
             completed:^{
               self.downloadProgress = @(1.0f);
               self.status = SC_DATASTORE_RUNNING;

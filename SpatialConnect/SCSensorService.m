@@ -191,11 +191,13 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 - (void)startLocationManager {
   locationManager.desiredAccuracy = self.accuracy;
   locationManager.distanceFilter = self.distance;
+  // dispatch_async(dispatch_get_main_queue(), ^{
   if ([CLLocationManager locationServicesEnabled]) {
     [locationManager startUpdatingLocation];
     [locationManager startUpdatingHeading];
     self.isTracking = YES;
   }
+  //});
 }
 
 - (void)stopLocationManager {

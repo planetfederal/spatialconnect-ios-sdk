@@ -91,6 +91,7 @@
           RACSignal *dload = [SCHttpUtils getRequestURLAsData:url];
           [dload subscribeNext:^(RACTuple *t) {
             self.parentStore.downloadProgress = t.second;
+            [subscriber sendNext:t.second];
           }
               error:^(NSError *error) {
                 self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
