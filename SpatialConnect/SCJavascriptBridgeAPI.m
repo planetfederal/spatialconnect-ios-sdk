@@ -51,6 +51,9 @@
     }
     NSInteger actionType = [action[@"type"] integerValue];
     switch (actionType) {
+    case START_ALL_SERVICES:
+      [self startAllServices];
+      break;
     case DATASERVICE_ACTIVESTORESLIST:
       [self activeStoreList:subscriber];
       break;
@@ -117,6 +120,10 @@
     }
     return nil;
   }];
+}
+
+- (void)startAllServices {
+  [[SpatialConnect sharedInstance] startAllServices];
 }
 
 - (void)storeList:(id<RACSubscriber>)subscriber {
@@ -360,17 +367,23 @@
 }
 
 - (void)loginStatus:(id<RACSubscriber>)subscriber {
-  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-  [[as loginStatus] subscribeNext:^(NSNumber *status) {
-    [subscriber sendNext:status];
-  }];
+  [[[SpatialConnect sharedInstance] serviceStarted:[SCAuthService serviceId]]
+      subscribeNext:^(id value) {
+        SCAuthService *as = [[SpatialConnect sharedInstance] authService];
+        [[as loginStatus] subscribeNext:^(NSNumber *status) {
+          [subscriber sendNext:status];
+        }];
+      }];
 }
 
 - (void)listenForNotifications:(id<RACSubscriber>)subscriber {
-  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-  [[bs notifications] subscribeNext:^(SCNotification *n) {
-    [subscriber sendNext:[n dictionary]];
-  }];
+  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+      subscribeNext:^(id value) {
+        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+        [[bs notifications] subscribeNext:^(SCNotification *n) {
+          [subscriber sendNext:[n dictionary]];
+        }];
+      }];
 }
 
 - (void)getRequest:(NSDictionary *)value
@@ -405,10 +418,14 @@
 }
 
 - (void)getBackendUri:(id<RACSubscriber>)subscriber {
-  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-  [subscriber sendNext:@{
-    @"backendUri" : [bs.backendUri stringByAppendingString:@"/api/"]
-  }];
+  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+      subscribeNext:^(id value) {
+        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+        [subscriber sendNext:@{
+          @"backendUri" : [bs.backendUri stringByAppendingString:@"/api/"]
+        }];
+      }];
+
   [subscriber sendCompleted];
 }
 
