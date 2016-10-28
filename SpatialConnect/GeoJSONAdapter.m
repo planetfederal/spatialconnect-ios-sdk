@@ -81,6 +81,7 @@
     NSString *path = [self path];
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
     if (b) {
+      self.parentStore.status = SC_DATASTORE_RUNNING;
       self.connector = [[GeoJSONStorageConnector alloc] initWithFileName:path];
       return [RACSignal empty];
     }
@@ -129,6 +130,7 @@
             NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
                                                code:SC_GEOJSON_FILENOTFOUND
                                            userInfo:nil];
+            self.parentStore.status = SC_DATASTORE_STOPPED;
             [subscriber sendError:err];
           }
           return nil;

@@ -134,7 +134,6 @@
       [[[SpatialConnect sharedInstance] dataService] storeEvents];
   [rmcc connect];
   [rmcc.signal subscribeNext:^(SCStoreStatusEvent *evt) {
-    NSLog(@"storeStatusEvent");
     NSArray *arr =
         [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
 
@@ -377,11 +376,15 @@
 }
 
 - (void)listenForNotifications:(id<RACSubscriber>)subscriber {
+  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
   [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
-        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-        [[bs notifications] subscribeNext:^(SCNotification *n) {
-          [subscriber sendNext:[n dictionary]];
+        [[[[bs configReceived] filter:^BOOL(NSNumber *received) {
+          return received.boolValue;
+        }] take:1] subscribeNext:^(id x) {
+          [[bs notifications] subscribeNext:^(SCNotification *n) {
+            [subscriber sendNext:[n dictionary]];
+          }];
         }];
       }];
 }
