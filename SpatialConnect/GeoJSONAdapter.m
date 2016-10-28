@@ -86,28 +86,24 @@
     }
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
     self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
-    return
-        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          RACSignal *dload = [SCHttpUtils getRequestURLAsData:url];
-          [dload subscribeNext:^(RACTuple *t) {
-            self.parentStore.downloadProgress = t.second;
-            [subscriber sendNext:t.second];
-          }
-              error:^(NSError *error) {
-                self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
-                [subscriber sendError:error];
-              }];
-          [[dload takeLast:1] subscribeNext:^(RACTuple *t) {
-            DDLogInfo(@"Saving GEOJSON to %@", path);
-            [t.first writeToFile:path atomically:YES];
-            self.connector =
-                [[GeoJSONStorageConnector alloc] initWithFileName:path];
-          }
-              completed:^{
-                [subscriber sendCompleted];
-              }];
-          return nil;
+    RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+    __block NSMutableData *data = nil;
+    [dload$ subscribeNext:^(RACTuple *t) {
+      data = t.first;
+      self.parentStore.downloadProgress = t.second;
+    }
+        error:^(NSError *error) {
+          self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
+        }
+        completed:^{
+          DDLogInfo(@"Saving GEOJSON to %@", path);
+          [data writeToFile:path atomically:YES];
+          self.connector =
+              [[GeoJSONStorageConnector alloc] initWithFileName:path];
+          self.parentStore.downloadProgress = @(1.0f);
+          self.parentStore.status = SC_DATASTORE_RUNNING;
         }];
+    return dload$;
   } else {
     NSString *filePath = nil;
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
@@ -127,6 +123,7 @@
               [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
             self.connector =
                 [[GeoJSONStorageConnector alloc] initWithFileName:filePath];
+            self.parentStore.status = SC_DATASTORE_RUNNING;
             [subscriber sendCompleted];
           } else {
             NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain

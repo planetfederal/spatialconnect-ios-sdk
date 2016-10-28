@@ -19,7 +19,6 @@
 
 #import "GeoJSONStore.h"
 #import "SCFileUtils.h"
-#import "SCStoreStatusEvent.h"
 
 #ifndef TEST
 BOOL const isUnitTesting = NO;
@@ -107,31 +106,8 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (RACSignal *)start {
   adapter.parentStore = self;
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        self.status = SC_DATASTORE_STARTED;
-        [subscriber
-            sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTED
-                                        andStoreId:self.storeId]];
-        [adapter.connect subscribeNext:^(id x) {
-          [subscriber sendNext:[SCStoreStatusEvent
-                                    fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS
-                                   andStoreId:self.storeId]];
-        }
-            error:^(NSError *error) {
-              self.status = SC_DATASTORE_STOPPED;
-              [subscriber sendNext:[SCStoreStatusEvent
-                                        fromEvent:SC_DATASTORE_EVT_STARTFAILED
-                                       andStoreId:self.storeId]];
-              [subscriber sendError:error];
-            }
-            completed:^{
-              self.status = SC_DATASTORE_RUNNING;
-              adapter.defaultStyle = self.style;
-              [subscriber sendCompleted];
-            }];
-        return nil;
-      }];
+  self.status = SC_DATASTORE_STARTED;
+  return adapter.connect;
 }
 
 - (void)stop {

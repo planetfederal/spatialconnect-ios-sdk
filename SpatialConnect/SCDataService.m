@@ -161,7 +161,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     }
 
     [[[((id<SCDataStoreLifeCycle>)store)start] sample:self.timer]
-        subscribeNext:^(SCStoreStatusEvent *x) {
+        subscribeNext:^(id x) {
           [self.storeEventSubject
               sendNext:[SCStoreStatusEvent
                             fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS

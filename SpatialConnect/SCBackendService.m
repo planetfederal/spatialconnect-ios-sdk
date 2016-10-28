@@ -215,9 +215,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
           return !value.boolValue;
         }];
     [notConnected subscribeNext:^(id x) {
-      // dispatch_async(dispatch_get_main_queue(), ^{
       [sessionManager connectToLast];
-      //});
     }];
   }
 }
