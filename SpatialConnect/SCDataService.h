@@ -53,9 +53,11 @@
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 - (Class)supportedStoreByKey:(NSString *)key;
 - (NSArray *)storeList;
+- (NSArray *)storeListDictionary;
 - (NSArray *)activeStoreList;
 - (NSArray *)activeStoreListDictionary;
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;
+- (NSDictionary *)storeAsDictionary:(SCDataStore *)ds;
 - (NSArray *)storesByProtocol:(Protocol *)protocol;
 - (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
 - (NSArray *)storesRaster;

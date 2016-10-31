@@ -19,15 +19,26 @@
 @implementation SCHttpUtils
 
 + (RACSignal *)getRequestURLAsDict:(NSURL *)url {
-  return [[SCHttpUtils
-      getRequestURLAsData:url] flattenMap:^RACSignal *(NSData *d) {
-    NSError *err;
-    NSDictionary *dict = [[JSONDecoder decoder] objectWithData:d error:&err];
-    if (err) {
-      return [RACSignal error:err];
-    }
-    return [RACSignal return:dict];
-  }];
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[[SCHttpUtils getRequestURLAsData:url] takeLast:1]
+            subscribeNext:^(RACTuple *t) {
+              NSError *err;
+              NSDictionary *dict =
+                  [[JSONDecoder decoder] objectWithData:t.first error:&err];
+              if (err) {
+                [subscriber sendError:err];
+              }
+              [subscriber sendNext:dict];
+            }
+            error:^(NSError *error) {
+              [subscriber sendError:error];
+            }
+            completed:^{
+              [subscriber sendCompleted];
+            }];
+        return nil;
+      }];
 }
 
 + (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url {
@@ -50,11 +61,68 @@
 }
 
 + (RACSignal *)getRequestURLAsData:(NSURL *)url {
-  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-  return [[NSURLConnection rac_sendAsynchronousRequest:request]
-      reduceEach:^id(NSURLResponse *response, NSData *data) {
-        return data;
-      }];
+  return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    NSObject<NSURLConnectionDataDelegate> *dataDelegate =
+        (NSObject<NSURLConnectionDataDelegate> *)[[NSObject alloc] init];
+    __block NSMutableData *data = nil;
+    __block NSNumber *expectedLength = nil;
+    Protocol *protocol = @protocol(NSURLConnectionDataDelegate);
+
+    RACCompoundDisposable *disposable =
+        [RACCompoundDisposable compoundDisposable];
+    [disposable
+        addDisposable:[[dataDelegate
+                          rac_signalForSelector:@selector(connection:
+                                                    didReceiveResponse:)
+                                   fromProtocol:protocol]
+                          subscribeNext:^(RACTuple *arguments) {
+                            expectedLength = [NSNumber
+                                numberWithFloat:[arguments.second
+                                                        expectedContentLength]];
+                            data = [NSMutableData data];
+                          }]];
+
+    [disposable
+        addDisposable:[[dataDelegate
+                          rac_signalForSelector:@selector(connection:
+                                                      didReceiveData:)
+                                   fromProtocol:protocol]
+                          subscribeNext:^(RACTuple *arguments) {
+                            [data appendData:arguments.second];
+                            NSNumber *progress = [NSNumber
+                                numberWithFloat:(float)[data length] /
+                                                [expectedLength floatValue]];
+                            [subscriber sendNext:RACTuplePack(data, progress)];
+                          }]];
+
+    [disposable addDisposable:[[dataDelegate
+                                  rac_signalForSelector:@selector(connection:
+                                                            didFailWithError:)
+                                           fromProtocol:protocol]
+                                  subscribeNext:^(RACTuple *arguments) {
+                                    [subscriber sendError:arguments.second];
+                                  }]];
+
+    [disposable
+        addDisposable:[[dataDelegate
+                          rac_signalForSelector:@selector(
+                                                    connectionDidFinishLoading:)
+                                   fromProtocol:protocol]
+                          subscribeNext:^(id x) {
+                            [subscriber sendNext:RACTuplePack(data, @(1.0f))];
+                            [subscriber sendCompleted];
+                          }]];
+
+    NSURLConnection *connection =
+        [[NSURLConnection alloc] initWithRequest:request delegate:dataDelegate];
+    [disposable addDisposable:[RACDisposable disposableWithBlock:^{
+                  [connection cancel];
+                }]];
+    [connection start];
+
+    return disposable;
+  }];
 }
 
 + (RACSignal *)postRequestAsDict:(NSURL *)url body:(NSData *)data {

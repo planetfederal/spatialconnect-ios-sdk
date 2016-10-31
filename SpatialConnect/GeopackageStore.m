@@ -50,6 +50,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   self.permission = SC_DATASTORE_READWRITE;
   _storeType = TYPE;
   _storeVersion = VERSION;
+
   return self;
 }
 
@@ -68,18 +69,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 - (RACSignal *)start {
   self.adapter.parentStore = self;
   self.status = SC_DATASTORE_STARTED;
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self.adapter.connect subscribeError:^(NSError *error) {
-          self.status = SC_DATASTORE_STOPPED;
-          [subscriber sendError:error];
-        }
-            completed:^{
-              self.status = SC_DATASTORE_RUNNING;
-              [subscriber sendCompleted];
-            }];
-        return nil;
-      }];
+  return self.adapter.connect;
 }
 
 - (void)stop {

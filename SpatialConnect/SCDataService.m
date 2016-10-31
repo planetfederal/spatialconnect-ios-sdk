@@ -43,6 +43,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 @property(readwrite, nonatomic, strong)
     NSMutableDictionary *supportedStoreImpls;
 @property(readwrite, atomic, strong) NSMutableDictionary *stores;
+@property(readonly) RACSignal *timer;
 @property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
 @end
 
@@ -57,6 +58,8 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
     _stores = [NSMutableDictionary new];
+    _timer =
+        [RACSignal interval:2 onScheduler:[RACScheduler mainThreadScheduler]];
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
@@ -153,11 +156,23 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-    [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
-      [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTFAILED
-                                      andStoreId:store.storeId]];
+    if (store.status == SC_DATASTORE_RUNNING) {
+      return;
     }
+
+    [[[((id<SCDataStoreLifeCycle>)store)start] sample:self.timer]
+        subscribeNext:^(id x) {
+          [self.storeEventSubject
+              sendNext:[SCStoreStatusEvent
+                            fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS
+                           andStoreId:store.storeId]];
+        }
+        error:^(NSError *error) {
+          [self.storeEventSubject
+              sendNext:[SCStoreStatusEvent
+                            fromEvent:SC_DATASTORE_EVT_STARTFAILED
+                           andStoreId:store.storeId]];
+        }
         completed:^{
           [_hasStores sendNext:@(YES)];
           [self.storeEventSubject
@@ -253,6 +268,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [self stopStore:store];
   }
   [self.stores removeObjectForKey:store.storeId];
+  [self.storeEventSubject
+      sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_REMOVED
+                                  andStoreId:store.storeId]];
 }
 
 - (void)updateStore:(SCDataStore *)store {
@@ -293,6 +311,15 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   return self.stores.allValues;
 }
 
+- (NSArray *)storeListDictionary {
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
+  [[self storeList] enumerateObjectsUsingBlock:^(SCDataStore *ds,
+                                                 NSUInteger idx, BOOL *stop) {
+    [arr addObject:[self storeAsDictionary:ds]];
+  }];
+  return [NSArray arrayWithArray:arr];
+}
+
 - (NSArray *)activeStoreList {
   return [[self.stores.allValues.rac_sequence filter:^BOOL(SCDataStore *value) {
     if (value.status == SC_DATASTORE_RUNNING) {
@@ -306,22 +333,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[self activeStoreList] enumerateObjectsUsingBlock:^(
                               SCDataStore *ds, NSUInteger idx, BOOL *stop) {
-    NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
-    [store setObject:ds.storeId forKey:@"storeId"];
-    [store setObject:ds.name forKey:@"name"];
-    [store setObject:kSERVICENAME forKey:@"service"];
-    [store setObject:ds.storeType forKey:@"type"];
-    [store setObject:[NSNumber numberWithInteger:ds.status] forKey:@"status"];
-    [store setObject:ds.layers forKey:@"layers"];
-    if ([ds conformsToProtocol:@protocol(SCSpatialStore)]) {
-      id<SCSpatialStore> ss = (id<SCSpatialStore>)ds;
-      [store setObject:ss.vectorLayers forKey:@"vectorLayers"];
-    }
-    if ([ds conformsToProtocol:@protocol(SCRasterStore)]) {
-      id<SCRasterStore> ss = (id<SCRasterStore>)ds;
-      [store setObject:ss.rasterLayers forKey:@"rasterLayers"];
-    }
-    [arr addObject:store];
+    [arr addObject:[self storeAsDictionary:ds]];
   }];
   return [NSArray arrayWithArray:arr];
 }
@@ -349,6 +361,29 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   }];
 
   return [NSArray arrayWithArray:arr];
+}
+
+- (NSDictionary *)storeAsDictionary:(SCDataStore *)ds {
+  NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
+  [store setObject:ds.storeId forKey:@"storeId"];
+  [store setObject:ds.name forKey:@"name"];
+  [store setObject:kSERVICENAME forKey:@"service"];
+  [store setObject:ds.storeType forKey:@"type"];
+  [store setObject:[NSNumber numberWithInteger:ds.status] forKey:@"status"];
+  [store setObject:ds.downloadProgress forKey:@"downloadProgress"];
+  if ([ds conformsToProtocol:@protocol(SCSpatialStore)]) {
+    id<SCSpatialStore> ss = (id<SCSpatialStore>)ds;
+    if (ss.vectorLayers != nil) {
+      [store setObject:ss.vectorLayers forKey:@"vectorLayers"];
+    }
+  }
+  if ([ds conformsToProtocol:@protocol(SCRasterStore)]) {
+    id<SCRasterStore> rs = (id<SCRasterStore>)ds;
+    if (rs.rasterLayers != nil) {
+      [store setObject:rs.rasterLayers forKey:@"rasterLayers"];
+    }
+  }
+  return store;
 }
 
 - (NSArray *)storesByProtocol:(Protocol *)protocol {

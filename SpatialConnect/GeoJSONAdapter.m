@@ -39,7 +39,7 @@
 
 @implementation GeoJSONAdapter
 
-@synthesize connector, storeId, uri;
+@synthesize connector, storeId, uri, parentStore;
 
 - (id)initWithFilePath:(NSString *)filepath {
   if (self = [super init]) {
@@ -81,24 +81,30 @@
     NSString *path = [self path];
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
     if (b) {
+      self.parentStore.status = SC_DATASTORE_RUNNING;
       self.connector = [[GeoJSONStorageConnector alloc] initWithFileName:path];
       return [RACSignal empty];
     }
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
-    return
-        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-            DDLogInfo(@"Saving GEOJSON to %@", path);
-            [data writeToFile:path atomically:YES];
-            self.connector =
-                [[GeoJSONStorageConnector alloc] initWithFileName:path];
-            [subscriber sendCompleted];
-          }
-              error:^(NSError *error) {
-                [subscriber sendError:error];
-              }];
-          return nil;
+    self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
+    RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+    __block NSMutableData *data = nil;
+    [dload$ subscribeNext:^(RACTuple *t) {
+      data = t.first;
+      self.parentStore.downloadProgress = t.second;
+    }
+        error:^(NSError *error) {
+          self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
+        }
+        completed:^{
+          DDLogInfo(@"Saving GEOJSON to %@", path);
+          [data writeToFile:path atomically:YES];
+          self.connector =
+              [[GeoJSONStorageConnector alloc] initWithFileName:path];
+          self.parentStore.downloadProgress = @(1.0f);
+          self.parentStore.status = SC_DATASTORE_RUNNING;
         }];
+    return dload$;
   } else {
     NSString *filePath = nil;
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
@@ -118,11 +124,13 @@
               [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
             self.connector =
                 [[GeoJSONStorageConnector alloc] initWithFileName:filePath];
+            self.parentStore.status = SC_DATASTORE_RUNNING;
             [subscriber sendCompleted];
           } else {
             NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
                                                code:SC_GEOJSON_FILENOTFOUND
                                            userInfo:nil];
+            self.parentStore.status = SC_DATASTORE_STOPPED;
             [subscriber sendError:err];
           }
           return nil;

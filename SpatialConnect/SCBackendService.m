@@ -176,23 +176,25 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     policy.validatesCertificateChain = NO;
     policy.validatesDomainName = NO;
 
-    [sessionManager
-             connectTo:mqttEndpoint
-                  port:mqttPort.integerValue
-                   tls:[mqttProtocol isEqualToString:@"tls"]
-             keepalive:60
-                 clean:true
-                  auth:true
-                  user:token
-                  pass:@"anypass"
-                  will:true
-             willTopic:[NSString stringWithFormat:@"/device/%@-will", ident]
-               willMsg:[@"offline" dataUsingEncoding:NSUTF8StringEncoding]
-               willQos:MQTTQosLevelExactlyOnce
-        willRetainFlag:NO
-          withClientId:ident
-        securityPolicy:policy
-          certificates:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [sessionManager
+               connectTo:mqttEndpoint
+                    port:mqttPort.integerValue
+                     tls:[mqttProtocol isEqualToString:@"tls"]
+               keepalive:60
+                   clean:true
+                    auth:true
+                    user:token
+                    pass:@"anypass"
+                    will:true
+               willTopic:[NSString stringWithFormat:@"/device/%@-will", ident]
+                 willMsg:[@"offline" dataUsingEncoding:NSUTF8StringEncoding]
+                 willQos:MQTTQosLevelExactlyOnce
+          willRetainFlag:NO
+            withClientId:ident
+          securityPolicy:policy
+            certificates:nil];
+    });
 
     RACSignal *d =
         [self rac_signalForSelector:@selector(handleMessage:onTopic:retained:)

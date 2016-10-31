@@ -29,7 +29,8 @@ typedef NS_ENUM(NSInteger, SCDataStoreStatus) {
   SC_DATASTORE_RUNNING,
   SC_DATASTORE_PAUSED,
   SC_DATASTORE_STOPPED,
-  SC_DATASTORE_DOWNLOADINGDATA
+  SC_DATASTORE_DOWNLOADINGDATA,
+  SC_DATASTORE_DOWNLOADFAIL,
 };
 
 typedef NS_ENUM(NSInteger, SCDataStorePermission) {
@@ -46,6 +47,7 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 @property(readonly) NSString *storeType;
 @property(readonly) NSString *key;
 @property SCDataStoreStatus status;
+@property NSNumber *downloadProgress;
 @property SCDataStorePermission permission;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config;

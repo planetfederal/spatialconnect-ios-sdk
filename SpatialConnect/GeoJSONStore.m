@@ -105,20 +105,9 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 #pragma mark SCDataStoreLifeCycle
 
 - (RACSignal *)start {
+  adapter.parentStore = self;
   self.status = SC_DATASTORE_STARTED;
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [adapter.connect subscribeError:^(NSError *error) {
-          self.status = SC_DATASTORE_STOPPED;
-          [subscriber sendError:error];
-        }
-            completed:^{
-              self.status = SC_DATASTORE_RUNNING;
-              adapter.defaultStyle = self.style;
-              [subscriber sendCompleted];
-            }];
-        return nil;
-      }];
+  return adapter.connect;
 }
 
 - (void)stop {
