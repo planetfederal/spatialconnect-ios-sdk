@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCLineString.h"
+#import "SCBoundingBox.h"
 #import "SCPoint.h"
 
 @implementation SCLineString
@@ -96,8 +96,7 @@
       [NSMutableDictionary dictionaryWithDictionary:[super JSONDict]];
   NSDictionary *geometry =
       [NSDictionary dictionaryWithObjects:@[
-        @"LineString",
-        [self coordinateArrayAsProj:4326]
+        @"LineString", [self coordinateArrayAsProj:4326]
       ]
                                   forKeys:@[ @"type", @"coordinates" ]];
   [dict setObject:geometry forKey:@"geometry"];

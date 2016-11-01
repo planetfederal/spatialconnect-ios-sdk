@@ -14,10 +14,10 @@
  * limitations under the License
  */
 
+#import "SCGpkgFeatureSource.h"
 #import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeometry+GPKG.h"
-#import "SCGpkgFeatureSource.h"
 #import "SCPoint+GPKG.h"
 #import "sqlite3.h"
 
@@ -66,8 +66,7 @@
                                    self.name, self.geomColName, self.pkColName];
     int res = [db executeStatements:sql];
     if (res != SQLITE_OK) {
-      NSError *err = [db lastError];
-      NSLog(@"%@", err.description);
+      DDLogError(@"%@", db.lastError.description);
     }
   }];
 }
@@ -190,7 +189,7 @@
                                       values:@[ @([identifier longLongValue]) ]
                                        error:&err];
           if (err) {
-            NSLog(@"%@", err.description);
+            DDLogError(@"%@", err.description);
           }
 
           dispatch_async(
@@ -242,7 +241,6 @@
       [vals addObject:g.bytes];
     }
     __block NSMutableString *set = nil;
-    __block int count = 0;
     [f.properties enumerateKeysAndObjectsUsingBlock:^(
                       NSString *key, NSObject *obj, BOOL *stop) {
       if (![obj isKindOfClass:[NSNull class]]) {
@@ -253,10 +251,6 @@
         }
         [set appendString:[NSString stringWithFormat:@"%@ = ?", key]];
         [vals addObject:obj];
-        count++;
-        if (count == [vals count]) {
-          NSLog(@"Yo");
-        }
       }
     }];
 
@@ -329,7 +323,7 @@
       NSError *err;
       BOOL success = [db executeUpdate:sql values:vals error:&err];
       if (err) {
-        NSLog(@"%@", err.description);
+        DDLogError(@"%@", err.description);
         [subscriber sendError:err];
       }
       if (success) {
@@ -352,10 +346,20 @@
   SCSpatialFeature *f;
   long long ident = [rs longLongIntForColumn:self.pkColName];
   if (self.geomColName) {
-    f = [SCGeometry fromGeometryBinary:[rs dataForColumn:self.geomColName]
-                                   crs:self.crs];
+    @try {
+      NSData *bytes = [rs dataForColumn:self.geomColName];
+      if (bytes) {
+        f = [SCGeometry fromGeometryBinary:bytes crs:self.crs];
+      }
+    } @catch (NSException *exception) {
+      DDLogError(@"Error Parsing Geometry binary");
+    } @finally {
+      if (!f) {
+        f = [SCSpatialFeature new];
+      }
+    }
   } else {
-    f = [[SCSpatialFeature alloc] init];
+    f = [SCSpatialFeature new];
   }
   f.identifier = [NSString stringWithFormat:@"%lld", ident];
   NSMutableDictionary *dict = [[rs resultDictionary] mutableCopy];

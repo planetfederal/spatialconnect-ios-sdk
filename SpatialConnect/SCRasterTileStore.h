@@ -17,13 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
 #import <Foundation/Foundation.h>
 
 @protocol SCRasterTileStore <NSObject>
 
 @required
-
-
 
 @end

@@ -21,5 +21,5 @@
 #import <MapKit/MapKit.h>
 
 @interface SCPolygon (MapKit) <MKOverlay>
-- (MKPolygon*)shape;
+- (MKPolygon *)shape;
 @end

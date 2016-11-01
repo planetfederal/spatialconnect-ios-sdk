@@ -17,9 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCStyle.h"
 
 @implementation SCStyle
@@ -30,8 +27,7 @@
 @synthesize fillColor = _fillColor;
 @synthesize fillOpacity = _fillOpacity;
 
-
-- (UIColor*) strokeColor {
+- (UIColor *)strokeColor {
   if (!_strokeColor) {
     return [UIColor blackColor];
   }
@@ -45,13 +41,12 @@
   return _strokeWidth;
 }
 
--(float)strokeOpacity {
+- (float)strokeOpacity {
   if (!_strokeOpacity) {
     return 0.5;
   }
   return _strokeOpacity;
 }
-
 
 - (float)fillOpacity {
   if (!_fillOpacity) {
@@ -60,7 +55,7 @@
   return _fillOpacity;
 }
 
-- (UIColor*)fillColor {
+- (UIColor *)fillColor {
   if (!_fillColor) {
     return [UIColor blackColor];
   }
@@ -68,19 +63,29 @@
 }
 
 - (void)addMissing:(SCStyle *)style {
-  if (!_strokeColor) self.strokeColor = style.strokeColor;
-  if (!_strokeWidth) self.strokeWidth = style.strokeWidth;
-  if (!_strokeOpacity) self.strokeOpacity = style.strokeOpacity;
-  if (!_fillOpacity) self.fillOpacity = style.fillOpacity;
-  if (!_fillColor) self.fillColor = style.fillColor;
+  if (!_strokeColor)
+    self.strokeColor = style.strokeColor;
+  if (!_strokeWidth)
+    self.strokeWidth = style.strokeWidth;
+  if (!_strokeOpacity)
+    self.strokeOpacity = style.strokeOpacity;
+  if (!_fillOpacity)
+    self.fillOpacity = style.fillOpacity;
+  if (!_fillColor)
+    self.fillColor = style.fillColor;
 }
 
 - (void)overwriteWith:(SCStyle *)style {
-  if (style.strokeColor) self.strokeColor = style.strokeColor;
-  if (style.strokeWidth) self.strokeWidth = style.strokeWidth;
-  if (style.strokeOpacity) self.strokeOpacity = style.strokeOpacity;
-  if (style.fillOpacity) self.fillOpacity = style.fillOpacity;
-  if (style.fillColor) self.fillColor = style.fillColor;
+  if (style.strokeColor)
+    self.strokeColor = style.strokeColor;
+  if (style.strokeWidth)
+    self.strokeWidth = style.strokeWidth;
+  if (style.strokeOpacity)
+    self.strokeOpacity = style.strokeOpacity;
+  if (style.fillOpacity)
+    self.fillOpacity = style.fillOpacity;
+  if (style.fillColor)
+    self.fillColor = style.fillColor;
 }
 
 @end

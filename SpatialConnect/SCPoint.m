@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCPoint.h"
+#import "SCBoundingBox.h"
 
 #include <math.h>
 #define deg2rad(d) (((d)*M_PI) / 180)
@@ -142,8 +142,7 @@ double lon2x(double lon) { return deg2rad(lon) * earth_radius; }
 - (NSArray *)coordinateArrayAsProj:(NSInteger)c {
   if (c == self.crs) {
     return @[
-      [NSNumber numberWithDouble:self.x],
-      [NSNumber numberWithDouble:self.y],
+      [NSNumber numberWithDouble:self.x], [NSNumber numberWithDouble:self.y],
       [NSNumber numberWithDouble:self.z]
     ];
   } else if (c == 4326 && self.crs == 3857) {

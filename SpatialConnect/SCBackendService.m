@@ -14,9 +14,9 @@
  * limitations under the License
  */
 
+#import "SCBackendService.h"
 #import "Commands.h"
 #import "JSONKit.h"
-#import "SCBackendService.h"
 #import "SCConfig.h"
 #import "SCNotification.h"
 #import "Scmessage.pbobjc.h"
@@ -26,8 +26,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
 @interface SCBackendService ()
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
-- (void)fetchConfigAndListen;
-- (void)subscribeToTopic:(NSString*)topic;
+- (void)subscribeToTopic:(NSString *)topic;
 - (void)connect;
 @end
 
@@ -50,7 +49,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
         stringWithFormat:@"%@://%@:%@", httpProtocol, httpEndpoint, httpPort];
     _configReceived =
         [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
-    connectedToBroker = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
+    connectedToBroker =
+        [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
   }
   return self;
 }
@@ -62,58 +62,45 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)stop {
-  [sessionManager disconnect];
-}
-
-- (void)authListener {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCAuthService *as = sc.authService;
-  // You have the url to the server. Wait for someone to properly
-  // authenticate before fetching the config
-  [[[[as loginStatus] filter:^BOOL(NSNumber *n) {
-    SCAuthStatus s = [n integerValue];
-    return s == SCAUTH_AUTHENTICATED;
-  }] take:1] subscribeNext:^(NSNumber *n) {
-    [self connect];
-    [[[connectedToBroker filter:^BOOL(NSNumber *n) {
-      return n.boolValue;
-    }] take:1] subscribeNext:^(id x) {
-      [self registerAndFetchConfig];
-    }];
-  }];
+  if (sessionManager) {
+    [sessionManager disconnect];
+  }
 }
 
 - (void)setupSubscriptions {
 
   NSString *ident = [[SpatialConnect sharedInstance] deviceIdentifier];
   self.notifications = [[[self listenOnTopic:@"/notify"]
-                         merge:[self
-                                listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
-                        map:^id(SCMessage *m) {
-                          return [[SCNotification alloc] initWithMessage:m];
-                        }];
+      merge:[self
+                listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
+      map:^id(SCMessage *m) {
+        return [[SCNotification alloc] initWithMessage:m];
+      }];
 
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
     SpatialConnect *sc = [SpatialConnect sharedInstance];
+    SCConfigService *cs = sc.configService;
+    SCConfig *cachedConfig = cs.cachedConfig;
     switch (msg.action) {
     case CONFIG_ADD_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
-      [sc.dataService
-          registerAndStartStoreByConfig:config];
+      [cachedConfig addStore:config];
+      [sc.dataService registerAndStartStoreByConfig:config];
       break;
     }
     case CONFIG_UPDATE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
-      [sc.dataService
-          updateStoreByConfig:config];
+      [cachedConfig updateStore:config];
+      [sc.dataService updateStoreByConfig:config];
       break;
     }
     case CONFIG_REMOVE_STORE: {
       SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
           storeByIdentifier:payload];
+      [cachedConfig removeStore:payload];
       [sc.dataService unregisterStore:ds];
       break;
     }
@@ -121,24 +108,29 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
+        [cachedConfig addForm:f];
         [sc.dataService.formStore registerFormByConfig:f];
       }
       break;
     }
     case CONFIG_UPDATE_FORM: {
-      [sc.dataService.formStore
-          updateFormByConfig:[[SCFormConfig alloc]
-                                 initWithDict:[payload objectFromJSONString]]];
+      SCFormConfig *f =
+          [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
+      if (f) {
+        [cachedConfig updateForm:f];
+        [sc.dataService.formStore updateFormByConfig:f];
+      }
       break;
     }
     case CONFIG_REMOVE_FORM: {
-      [sc.dataService.formStore
-          unregisterFormByKey:payload];
+      [cachedConfig removeForm:payload];
+      [sc.dataService.formStore unregisterFormByKey:payload];
       break;
     }
     default:
       break;
     }
+    [cs setCachedConfig:cachedConfig];
   }];
 }
 
@@ -156,10 +148,11 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   cMsg.action = CONFIG_FULL;
   [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
     NSString *json = m.payload;
-    NSInteger i = m.action;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
-    [[[SpatialConnect sharedInstance] configService] loadConfig:cfg];
+    SpatialConnect *sc = [SpatialConnect sharedInstance];
+    [sc.configService loadConfig:cfg];
+    [sc.configService setCachedConfig:cfg];
     [_configReceived sendNext:@(YES)];
   }];
 }
@@ -169,30 +162,46 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   if (!sessionManager) {
 
     NSString *ident = [[SpatialConnect sharedInstance] deviceIdentifier];
-
+    NSString *token =
+        [[[SpatialConnect sharedInstance] authService] xAccessToken];
     sessionManager = [[MQTTSessionManager alloc] init];
-    [sessionManager addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
+    [sessionManager addObserver:self
+                     forKeyPath:@"state"
+                        options:NSKeyValueObservingOptionInitial |
+                                NSKeyValueObservingOptionNew
+                        context:nil];
 
-    [sessionManager connectTo:mqttEndpoint
-                  port:[mqttPort integerValue]
-                   tls:NO
-             keepalive:60
-                 clean:false
-                  auth:false
-                  user:nil
-                  pass:nil
-             willTopic:[NSString stringWithFormat:@"/device/%@-will",ident]
-                  will:[@"offline" dataUsingEncoding:NSUTF8StringEncoding]
-               willQos:MQTTQosLevelExactlyOnce
-        willRetainFlag:NO
-          withClientId:ident];
+    MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
+    policy.allowInvalidCertificates = NO;
+    policy.validatesCertificateChain = NO;
+    policy.validatesDomainName = NO;
 
-    RACSignal *d = [self
-                    rac_signalForSelector:@selector(handleMessage:onTopic:retained:)
-                    fromProtocol:@protocol(MQTTSessionManagerDelegate)];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [sessionManager
+               connectTo:mqttEndpoint
+                    port:mqttPort.integerValue
+                     tls:[mqttProtocol isEqualToString:@"tls"]
+               keepalive:60
+                   clean:true
+                    auth:true
+                    user:token
+                    pass:@"anypass"
+                    will:true
+               willTopic:[NSString stringWithFormat:@"/device/%@-will", ident]
+                 willMsg:[@"offline" dataUsingEncoding:NSUTF8StringEncoding]
+                 willQos:MQTTQosLevelExactlyOnce
+          willRetainFlag:NO
+            withClientId:ident
+          securityPolicy:policy
+            certificates:nil];
+    });
+
+    RACSignal *d =
+        [self rac_signalForSelector:@selector(handleMessage:onTopic:retained:)
+                       fromProtocol:@protocol(MQTTSessionManagerDelegate)];
 
     multicast = [[d publish] autoconnect];
-    sessionManager.delegate = self;
+    sessionManager.delegate = (id<MQTTSessionManagerDelegate>)self;
 
     [[[connectedToBroker filter:^BOOL(NSNumber *v) {
       return v.boolValue;
@@ -201,70 +210,140 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     }];
 
   } else {
-    [sessionManager connectToLast];
+    RACSignal *notConnected =
+        [[connectedToBroker take:1] filter:^BOOL(NSNumber *value) {
+          return !value.boolValue;
+        }];
+    [notConnected subscribeNext:^(id x) {
+      [sessionManager connectToLast];
+    }];
   }
 }
 
 - (void)listenForNetworkConnection {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [[[[sc serviceStarted:SCSensorService.serviceId] flattenMap:^RACStream *(id value) {
-    return sc.sensorService.isConnected;
-  }] filter:^BOOL(NSNumber *x) {
-    return x.boolValue;
-  }] subscribeNext:^(id x) {
-    [self authListener];
+  /*
+   * Check for connectivity.
+   * If not connected
+   *    load the cached config.
+   * else if connected
+   *    wait for authentication
+   */
+  [[[sc serviceStarted:SCSensorService.serviceId]
+      flattenMap:^RACStream *(id value) {
+        return sc.sensorService.isConnected;
+      }] subscribeNext:^(NSNumber *x) {
+    BOOL connected = x.boolValue;
+    if (connected) {
+      [self authListener];
+    } else {
+      [self loadCachedConfig];
+    }
   }];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+- (void)loadCachedConfig {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCConfig *config = [sc.configService cachedConfig];
+  if (config) {
+    [[[SpatialConnect sharedInstance] configService] loadConfig:config];
+    [_configReceived sendNext:@(YES)];
+  }
+}
+
+- (void)authListener {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  SCAuthService *as = sc.authService;
+  // You have the url to the server. Wait for someone to properly
+  // authenticate before fetching the config
+  RACSignal *authed = [[[as loginStatus] filter:^BOOL(NSNumber *n) {
+    SCAuthStatus s = [n integerValue];
+    return s == SCAUTH_AUTHENTICATED;
+  }] take:1];
+
+  RACSignal *failedAuth = [[[as loginStatus] filter:^BOOL(NSNumber *n) {
+    SCAuthStatus s = [n integerValue];
+    return s == SCAUTH_AUTHENTICATION_FAILED;
+  }] take:1];
+
+  [authed subscribeNext:^(NSNumber *n) {
+    [self connect];
+    [[[connectedToBroker filter:^BOOL(NSNumber *n) {
+      return n.boolValue;
+    }] take:1] subscribeNext:^(id x) {
+      [self registerAndFetchConfig];
+    }];
+  }];
+
+  [failedAuth subscribeNext:^(id x) {
+    [self loadCachedConfig];
+  }];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context {
   NSError *err = sessionManager.lastErrorCode;
   switch (sessionManager.state) {
-    case MQTTSessionManagerStateClosed:
-      [connectedToBroker sendNext:@(NO)];
-      NSLog(@"MQTT Closed");
-      break;
-    case MQTTSessionManagerStateClosing:
-      NSLog(@"MQTT Closing");
-      break;
-    case MQTTSessionManagerStateConnected:
-      [connectedToBroker sendNext:@(YES)];
-      NSLog(@"MQTT Connected");
-      break;
-    case MQTTSessionManagerStateConnecting:
-      break;
-    case MQTTSessionManagerStateError:
-      NSLog(@"Error MQTT COnnection");
-      NSLog(@"Error:%@",err.description);
-      break;
-    case MQTTSessionManagerStateStarting:
-      NSLog(@"Starting MQTT Connection");
-      break;
-    default:
-      break;
+  case MQTTSessionManagerStateClosed:
+    [connectedToBroker sendNext:@(NO)];
+    DDLogInfo(@"MQTT Closed");
+    break;
+  case MQTTSessionManagerStateClosing:
+    DDLogInfo(@"MQTT Closing");
+    break;
+  case MQTTSessionManagerStateConnected:
+    [connectedToBroker sendNext:@(YES)];
+    DDLogInfo(@"MQTT Connected");
+    break;
+  case MQTTSessionManagerStateConnecting:
+    break;
+  case MQTTSessionManagerStateError:
+    DDLogError(@"Error MQTT COnnection");
+    DDLogError(@"Error:%@", err.description);
+    break;
+  case MQTTSessionManagerStateStarting:
+    DDLogInfo(@"Starting MQTT Connection");
+    break;
+  default:
+    break;
   }
 }
 
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic {
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    [sessionManager sendData:[msg data] topic:topic qos:MQTTQosLevelExactlyOnce retain:NO];
+    [sessionManager sendData:[msg data]
+                       topic:topic
+                         qos:MQTTQosLevelExactlyOnce
+                      retain:NO];
   }
 }
 
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic {
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    [sessionManager sendData:[msg data] topic:topic qos:MQTTQosLevelAtMostOnce retain:NO];
+    [sessionManager sendData:[msg data]
+                       topic:topic
+                         qos:MQTTQosLevelAtMostOnce
+                      retain:NO];
   }
 }
 
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic {
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    [sessionManager sendData:[msg data] topic:topic qos:MQTTQosLevelAtLeastOnce retain:NO];
+    [sessionManager sendData:[msg data]
+                       topic:topic
+                         qos:MQTTQosLevelAtLeastOnce
+                      retain:NO];
   }
 }
 
 - (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic {
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    [sessionManager sendData:[msg data] topic:topic qos:MQTTQosLevelExactlyOnce retain:NO];
+    [sessionManager sendData:[msg data]
+                       topic:topic
+                         qos:MQTTQosLevelExactlyOnce
+                      retain:NO];
   }
 }
 
@@ -280,7 +359,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       NSError *err;
       SCMessage *m = [[SCMessage alloc] initWithData:d error:&err];
       if (err) {
-        NSLog(@"%@", err.description);
+        DDLogError(@"%@", err.description);
       }
       return m;
     }] filter:^BOOL(SCMessage *m) {
@@ -296,9 +375,10 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   return nil;
 }
 
-- (void)subscribeToTopic:(NSString*)topic {
-  NSMutableDictionary<NSString*,NSNumber*> *subs = [NSMutableDictionary new];
-  [subs setObject:[NSNumber numberWithInt:MQTTQosLevelExactlyOnce] forKey:topic];
+- (void)subscribeToTopic:(NSString *)topic {
+  NSMutableDictionary<NSString *, NSNumber *> *subs = [NSMutableDictionary new];
+  [subs setObject:[NSNumber numberWithInt:MQTTQosLevelExactlyOnce]
+           forKey:topic];
   sessionManager.subscriptions = subs;
 }
 
@@ -310,7 +390,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     NSError *err;
     SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
     if (err) {
-      NSLog(@"%@", err.description);
+      DDLogError(@"%@", err.description);
     }
     return msg;
   }];

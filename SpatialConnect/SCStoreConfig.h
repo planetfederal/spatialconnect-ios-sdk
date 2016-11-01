@@ -29,5 +29,6 @@
 @property(nonatomic, readonly) NSArray *defaultLayers;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
+- (NSDictionary *)dictionary;
 
 @end

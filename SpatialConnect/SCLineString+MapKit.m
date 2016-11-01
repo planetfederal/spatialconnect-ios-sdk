@@ -17,43 +17,43 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
+#import "SCBoundingBox+MapKit.h"
 #import "SCLineString+MapKit.h"
 #import "SCPoint+MapKit.h"
-#import "SCBoundingBox+MapKit.h"
 
 @implementation SCLineString (MapKit)
 
-- (MKPolyline*) shape {
-    CLLocationCoordinate2D coords[self.points.count];
-    int caIndex = 0;
-    for (SCPoint *p in self.points) {
-        coords[caIndex] = CLLocationCoordinate2DMake(p.latitude,p.longitude);
-        caIndex++;
-    }
+- (MKPolyline *)shape {
+  CLLocationCoordinate2D coords[self.points.count];
+  int caIndex = 0;
+  for (SCPoint *p in self.points) {
+    coords[caIndex] = CLLocationCoordinate2DMake(p.latitude, p.longitude);
+    caIndex++;
+  }
 
-    MKPolyline *poly = [MKPolyline polylineWithCoordinates:coords count:self.points.count];
-    return poly;
+  MKPolyline *poly =
+      [MKPolyline polylineWithCoordinates:coords count:self.points.count];
+  return poly;
 }
 
 - (CLLocationCoordinate2D)coordinate {
-    __block float x = 0;
-    __block float y = 0;
-    [self.points enumerateObjectsUsingBlock:^(SCPoint* p, NSUInteger idx, BOOL *stop) {
+  __block float x = 0;
+  __block float y = 0;
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
         x += p.x;
         y += p.y;
-    }];
-    return CLLocationCoordinate2DMake(y/self.points.count, x/self.points.count);
+      }];
+  return CLLocationCoordinate2DMake(y / self.points.count,
+                                    x / self.points.count);
 }
 
 - (MKMapRect)boundingMapRect {
-    return self.bbox.asMKMapRect;
+  return self.bbox.asMKMapRect;
 }
 
 - (void)addToMap:(MKMapView *)mapview {
-    [mapview addOverlay:self];
+  [mapview addOverlay:self];
 }
 
 @end

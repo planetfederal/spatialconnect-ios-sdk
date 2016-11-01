@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5649B49C1BE27C6A009947EF"
-               BuildableName = "SpatialConnectTests.xctest"
-               BlueprintName = "SpatialConnectTests"
+               BuildableName = "SpatialConnectUnitTests.xctest"
+               BlueprintName = "SpatialConnectUnitTests"
                ReferencedContainer = "container:SpatialConnect.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -83,6 +83,13 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "disable"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

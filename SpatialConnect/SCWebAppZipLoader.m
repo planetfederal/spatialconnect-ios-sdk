@@ -36,7 +36,7 @@
       [ZZArchive archiveWithURL:[NSURL fileURLWithPath:zipFilePath]
                           error:&error];
   if (error) {
-    NSLog(@"%@", error.debugDescription);
+    DDLogError(@"%@", error.debugDescription);
   }
   NSString *indexHTMLPath = nil;
   for (ZZArchiveEntry *entry in archive.entries) {

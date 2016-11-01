@@ -38,5 +38,6 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 - (void)removeStore:(SCStoreConfig *)c;
 - (void)addForm:(SCFormConfig *)c;
 - (void)removeForm:(SCFormConfig *)c;
-
+- (void)setCachedConfig:(SCConfig *)c;
+- (SCConfig *)cachedConfig;
 @end

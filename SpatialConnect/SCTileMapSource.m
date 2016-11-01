@@ -17,9 +17,9 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCTileMapSource.h"
 #import "SCBoundingBox.h"
 #import "SCPoint.h"
-#import "SCTileMapSource.h"
 
 #define TILE_WIDTH 256.0
 #define TILE_HEIGHT 256.0

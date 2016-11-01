@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "Commands.h"
 #import "SCFormStore.h"
+#import "Commands.h"
 #import "SCHttpUtils.h"
 #import "SCPoint+GeoJSON.h"
 #import "SpatialConnect.h"
@@ -32,7 +32,7 @@
     self.name = config.name;
     self.permission = SC_DATASTORE_READWRITE;
     formIds = [NSMutableDictionary new];
-    _storeType = @"default";
+    _storeType = @"gpkg";
     _storeVersion = @"1";
     storeForms = [NSMutableDictionary new];
     _hasForms = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
@@ -93,7 +93,7 @@
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms
       enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
-        [arr addObject:[f JSONDict]];
+        [arr addObject:[f dictionary]];
       }];
   return [NSArray arrayWithArray:arr];
 }
@@ -112,24 +112,19 @@
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   return [[[[self.adapter createFeature:feature] materialize]
       filter:^BOOL(RACEvent *evt) {
-        if (evt.eventType == RACEventTypeCompleted) {
-          return YES;
-        } else {
-          return NO;
-        }
+        return evt.eventType == RACEventTypeCompleted;
       }] flattenMap:^RACStream *(id value) {
     if (sc.backendService.status == SC_SERVICE_RUNNING) {
       feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
       SCMessage *msg = [[SCMessage alloc] init];
-      NSDictionary *submission = @{
-        @"form_id" : [formIds objectForKey:feature.layerId],
-        @"feature" : [feature JSONDict]
-      };
+      NSString *formId = [formIds objectForKey:feature.layerId];
+      NSDictionary *submission =
+          @{ @"form_id" : formId,
+             @"feature" : feature.JSONDict };
       msg.payload = submission.JSONString;
       [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
     }
     return [RACSignal empty];
-
   }];
 }
 

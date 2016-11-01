@@ -23,6 +23,6 @@
 @interface SCGeometry (MapKit)
 
 - (id)shape;
-- (void)addToMap:(MKMapView*)mapview;
+- (void)addToMap:(MKMapView *)mapview;
 
 @end

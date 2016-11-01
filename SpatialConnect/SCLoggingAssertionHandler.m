@@ -10,28 +10,29 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License
+ * See the License for the specific language governing permissions and
+ * limitations under the License
  */
 
 #import "SCLoggingAssertionHandler.h"
 
 @implementation SCLoggingAssertionHandler
 
--(void)handleFailureInMethod:(SEL)selector
-                      object:(id)object
-                        file:(NSString *)fileName
-                  lineNumber:(NSInteger)line
-                 description:(NSString *)format, ... {
-  NSLog(@"NSAssert Failure: Method %@ for object %@ in %@#%li",NSStringFromSelector(selector), object, fileName, (long)line);
-  
+- (void)handleFailureInMethod:(SEL)selector
+                       object:(id)object
+                         file:(NSString *)fileName
+                   lineNumber:(NSInteger)line
+                  description:(NSString *)format, ... {
+  NSLog(@"NSAssert Failure: Method %@ for object %@ in %@#%li",
+        NSStringFromSelector(selector), object, fileName, (long)line);
 }
 
 - (void)handleFailureInFunction:(NSString *)functionName
                            file:(NSString *)fileName
                      lineNumber:(NSInteger)line
-                    description:(NSString *)format, ...
-{
-  NSLog(@"NSCAssert Failure: Function (%@) in %@#%li", functionName, fileName, (long)line);
+                    description:(NSString *)format, ... {
+  NSLog(@"NSCAssert Failure: Function (%@) in %@#%li", functionName, fileName,
+        (long)line);
 }
 
 @end

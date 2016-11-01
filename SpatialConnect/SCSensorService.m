@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCSensorService.h"
 #import "JSONKit.h"
 #import "Reachability.h"
 #import "SCPoint.h"
-#import "SCSensorService.h"
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
@@ -82,7 +82,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
       [self startLocationManager];
     }
   } else {
-    NSLog(@"Please Enable Location Services");
+    DDLogInfo(@"Please Enable Location Services");
   }
 
   [self setupSignals];
@@ -90,10 +90,12 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 }
 
 - (void)setupSignals {
-  self.lastKnown = [
-      [[self rac_signalForSelector:@selector(locationManager:didUpdateLocations:)
-                      fromProtocol:@protocol(CLLocationManagerDelegate)] sample:[RACSignal interval:5.0 onScheduler:[RACScheduler currentScheduler]]]
-                              map:^SCPoint *(RACTuple *tuple) {
+  self.lastKnown = [[
+      [self rac_signalForSelector:@selector(locationManager:didUpdateLocations:)
+                     fromProtocol:@protocol(CLLocationManagerDelegate)]
+      sample:[RACSignal interval:5.0
+                     onScheduler:[RACScheduler currentScheduler]]]
+      map:^SCPoint *(RACTuple *tuple) {
         CLLocation *loc = [(NSArray *)tuple.second lastObject];
         CLLocationDistance alt = loc.altitude;
         float lat = loc.coordinate.latitude;
@@ -102,7 +104,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
             initWithCoordinateArray:@[ @(lon), @(lat), @(alt) ]];
         return p;
       }];
-  
+
   Reachability *reach = [Reachability reachabilityForInternetConnection];
 
   reach.reachableBlock = ^(Reachability *r) {
@@ -113,20 +115,22 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
     [isReachableSubject sendNext:r];
   };
 
-  isReachableSubject = [RACBehaviorSubject
-                             behaviorSubjectWithDefaultValue:reach];
+  isReachableSubject =
+      [RACBehaviorSubject behaviorSubjectWithDefaultValue:reach];
 
-  self.isConnected = [isReachableSubject map:^NSNumber*(Reachability *r) {
+  self.isConnected = [isReachableSubject map:^NSNumber *(Reachability *r) {
     return @(r.isReachable);
   }];
 
-  self.isConnectedViaWAN = [isReachableSubject map:^NSNumber*(Reachability *r) {
-    return @(r.isReachableViaWWAN);
-  }];
+  self.isConnectedViaWAN =
+      [isReachableSubject map:^NSNumber *(Reachability *r) {
+        return @(r.isReachableViaWWAN);
+      }];
 
-  self.isConnectedViaWifi = [isReachableSubject map:^NSNumber*(Reachability *r) {
-    return @(r.isReachableViaWiFi);
-  }];
+  self.isConnectedViaWifi =
+      [isReachableSubject map:^NSNumber *(Reachability *r) {
+        return @(r.isReachableViaWiFi);
+      }];
 
   [reach startNotifier];
 }
@@ -155,28 +159,28 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
     [self start];
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCKVPStore *kvp = sc.kvpService.kvpStore;
-  [kvp putValue:@(YES) forKey:GPS_ENABLED];
+  SCCache *c = sc.cache;
+  [c setValue:@(YES) forKey:GPS_ENABLED];
   [self startLocationManager];
 
   [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
     return [sc.dataService.locationStore create:p];
   }] subscribeNext:^(id x) {
-    NSLog(@"Location sent to Location Store");
+    DDLogVerbose(@"Location sent to Location Store");
   }];
 }
 
 - (void)disableGPS {
   [self stopLocationManager];
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCKVPStore *kvp = sc.kvpService.kvpStore;
-  [kvp putValue:@(NO) forKey:GPS_ENABLED];
+  SCCache *c = sc.cache;
+  [c setValue:@(NO) forKey:GPS_ENABLED];
 }
 
 - (BOOL)shoudlEnableGPS {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCKVPStore *kvp = sc.kvpService.kvpStore;
-  NSNumber *enabled = (NSNumber *)[kvp valueForKey:GPS_ENABLED];
+  SCCache *p = sc.cache;
+  NSNumber *enabled = (NSNumber *)[p valueForKey:GPS_ENABLED];
   if ([(NSNumber *)enabled isEqual:@(YES)]) {
     return YES;
   } else {

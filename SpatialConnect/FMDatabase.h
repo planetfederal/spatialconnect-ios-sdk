@@ -1,8 +1,8 @@
-#import <Foundation/Foundation.h>
 #import "FMDatabasePool.h"
 #import "FMResultSet.h"
-#import <libgpkgios/sqlite3.h>
+#import <Foundation/Foundation.h>
 #import <libgpkgios/gpkg.h>
+#import <libgpkgios/sqlite3.h>
 
 #if !__has_feature(objc_arc)
 #define FMDBAutorelease(__v) ([__v autorelease]);
@@ -345,7 +345,7 @@ typedef int (^FMDBExecuteStatementsCallbackBlock)(
  */
 
 - (BOOL)executeUpdate:(NSString *)sql
- withErrorAndBindings:(NSError **)outErr, ...;
+    withErrorAndBindings:(NSError **)outErr, ...;
 
 /** Execute single update statement
 

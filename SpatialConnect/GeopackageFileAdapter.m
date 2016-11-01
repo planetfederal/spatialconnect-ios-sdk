@@ -18,11 +18,11 @@
  ******************************************************************************/
 #import "GeopackageFileAdapter.h"
 #import "GeopackageStore.h"
-#import "SCHttpUtils.h"
 #import "SCFileUtils.h"
 #import "SCGeometry+GPKG.h"
 #import "SCGeopackage.h"
 #import "SCGpkgTileSource.h"
+#import "SCHttpUtils.h"
 #import "SCKeyTuple.h"
 #import "SCPoint.h"
 #import "SCTileOverlay.h"
@@ -69,6 +69,7 @@
 - (RACSignal *)connect {
   if (self.gpkg) { // The Store is already connected and may have been
                    // initialized as the default
+    self.parentStore.status = SC_DATASTORE_RUNNING;
     return [RACSignal empty];
   }
   // The Database's name on disk is its store ID. This is to guaruntee
@@ -79,23 +80,28 @@
 
   if (b) {
     self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+    self.parentStore.status = SC_DATASTORE_RUNNING;
     return [RACSignal empty];
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
     self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
-    return
-        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-            NSLog(@"Saving GPKG to %@", path);
-            [data writeToFile:path atomically:YES];
-            self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-            [subscriber sendCompleted];
-          }
-              error:^(NSError *error) {
-                [subscriber sendError:error];
-              }];
-          return nil;
+    RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+    __block NSMutableData *data = nil;
+    [dload$ subscribeNext:^(RACTuple *t) {
+      data = t.first;
+      self.parentStore.downloadProgress = t.second;
+    }
+        error:^(NSError *error) {
+          self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
+        }
+        completed:^{
+          DDLogInfo(@"Saving GPKG to %@", path);
+          [data writeToFile:path atomically:YES];
+          self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+          self.parentStore.downloadProgress = @(1.0f);
+          self.parentStore.status = SC_DATASTORE_RUNNING;
         }];
+    return dload$;
   } else if ([path containsString:@"DEFAULT_STORE"]) {
     // initialize empty geopackage
     self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
@@ -110,6 +116,7 @@
 - (void)connectBlocking {
   NSString *path = [self path];
   self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
+  self.parentStore.status = SC_DATASTORE_RUNNING;
 }
 
 - (void)disconnect {
@@ -139,11 +146,11 @@
 }
 
 #pragma mark -
-- (NSArray *)layerList {
+- (NSArray *)vectorLayers {
   return self.gpkg.featureContents;
 }
 
-- (NSArray *)rasterList {
+- (NSArray *)rasterLayers {
   return self.gpkg.tileContents;
 }
 

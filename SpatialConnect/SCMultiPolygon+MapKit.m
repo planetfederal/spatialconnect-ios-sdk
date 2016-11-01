@@ -17,27 +17,27 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #import "SCMultiPolygon+MapKit.h"
 #import "SCPolygon+MapKit.h"
 
 @implementation SCMultiPolygon (MapKit)
 
-- (NSArray*)shape {
-    NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:self.polygons.count];
-    [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *p, NSUInteger idx, BOOL *stop) {
+- (NSArray *)shape {
+  NSMutableArray *arr =
+      [[NSMutableArray alloc] initWithCapacity:self.polygons.count];
+  [self.polygons
+      enumerateObjectsUsingBlock:^(SCPolygon *p, NSUInteger idx, BOOL *stop) {
         [arr addObject:p.shape];
-    }];
-    return [NSArray arrayWithArray:arr];
+      }];
+  return [NSArray arrayWithArray:arr];
 }
 
 - (void)addToMap:(MKMapView *)mapview {
-    [self.polygons enumerateObjectsUsingBlock:^(SCPolygon* geom,NSUInteger idx, BOOL *stop) {
-      geom.style = self.style;
-      [mapview addOverlay:geom];
-    }];
+  [self.polygons enumerateObjectsUsingBlock:^(SCPolygon *geom, NSUInteger idx,
+                                              BOOL *stop) {
+    geom.style = self.style;
+    [mapview addOverlay:geom];
+  }];
 }
 
 @end

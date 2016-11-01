@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, SCFormItemType) {
 @property(nonatomic, strong) NSArray *fields;
 
 - (id)initWithDict:(NSDictionary *)d;
+- (NSDictionary *)dictionary;
 - (NSDictionary *)sqlTypes;
 - (NSDictionary *)JSONDict;
 @end

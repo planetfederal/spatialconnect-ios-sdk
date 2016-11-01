@@ -17,12 +17,12 @@
 * under the License.
 ******************************************************************************/
 
+#import "SpatialConnect.h"
 #import "SCConfig.h"
 #import "SCDataService.h"
 #import "SCLoggingAssertionHandler.h"
 #import "SCService.h"
 #import "SCServiceStatusEvent.h"
-#import "SpatialConnect.h"
 
 @interface SpatialConnect ()
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
@@ -34,10 +34,10 @@
 @synthesize dataService = _dataService;
 @synthesize sensorService = _sensorService;
 @synthesize configService = _configService;
-@synthesize kvpService = _kvpService;
 @synthesize authService = _authService;
 @synthesize backendService = _backendService;
 @synthesize serviceEventSubject = _serviceEventSubject;
+@synthesize cache = _cache;
 
 @synthesize serviceEvents = _serviceEvents;
 
@@ -53,11 +53,12 @@
 - (id)init {
   if (self = [super init]) {
     filepaths = [NSMutableArray new];
-    _kvpService = [SCKVPService new];
+    _cache = [SCCache new];
     [self createConfigService];
     [self initServices];
     self.serviceEventSubject = [RACSubject new];
     _serviceEvents = [self.serviceEventSubject publish];
+    [self setupLogger];
   }
   return self;
 }
@@ -74,8 +75,16 @@
   [self addDefaultServices];
 }
 
+- (void)setupLogger {
+  [DDLog addLogger:[DDTTYLogger sharedInstance]];
+  [DDLog addLogger:[DDASLLogger sharedInstance]];
+  DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
+  fileLogger.rollingFrequency = 60 * 60 * 24;
+  fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+  [DDLog addLogger:fileLogger];
+}
+
 - (void)addDefaultServices {
-  [self addService:self.kvpService];
   // Config services relies on the keyvalue service
   // Order matters here
   [self addService:self.dataService];
@@ -142,7 +151,6 @@
 
 - (void)startAllServices {
   [self startService:[self.authService.class serviceId]];
-  [self startService:[self.kvpService.class serviceId]];
   [self startService:[self.dataService.class serviceId]];
   [self startService:[self.configService.class serviceId]];
   [self startService:[self.sensorService.class serviceId]];
@@ -165,7 +173,7 @@
     [self addService:self.backendService];
     [self startService:[SCBackendService serviceId]];
   } else {
-    NSLog(@"SCBackendService Already Connected");
+    DDLogWarn(@"SCBackendService Already Connected");
   }
 }
 

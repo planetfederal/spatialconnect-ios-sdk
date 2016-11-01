@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "SCGpkgDataColumn.h"
 #import "SCGpkgDataColumnsTable.h"
+#import "SCGpkgDataColumn.h"
 
 NSString *const kDCTableName = @"gpkg_data_columns";
 NSString *const kDCTableNameColName = @"table_name";

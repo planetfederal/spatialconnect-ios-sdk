@@ -17,6 +17,7 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCPredicate.h"
 #import "SCBoundingBox.h"
 #import "SCFIlterEqual.h"
 #import "SCFilter.h"
@@ -35,7 +36,6 @@
 #import "SCGeoFilterDisjoint.h"
 #import "SCGeoJSON.h"
 #import "SCJavascriptCommands.h"
-#import "SCPredicate.h"
 
 @interface SCPredicate (Private)
 - (void)setComparator:(NSInteger)c;

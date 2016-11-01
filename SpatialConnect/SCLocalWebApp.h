@@ -17,6 +17,7 @@
  * under the License.
  ******************************************************************************/
 
+#import "SpatialConnect.h"
 #import <Foundation/Foundation.h>
 
 @interface SCLocalWebApp : NSObject <UIWebViewDelegate> {

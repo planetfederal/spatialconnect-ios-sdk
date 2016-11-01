@@ -22,8 +22,8 @@
 
 @interface SCQueryFilter : NSObject
 
-@property(nonatomic,readonly) NSMutableArray *predicates;
-@property(nonatomic,readonly) NSMutableArray *layerIds;
+@property(nonatomic, readonly) NSMutableArray *predicates;
+@property(nonatomic, readonly) NSMutableArray *layerIds;
 
 @property NSInteger limit;
 
@@ -35,6 +35,6 @@
 - (void)addLayerIds:(NSArray *)layerIds;
 - (NSString *)buildWhereClause;
 - (BOOL)testValue:(id)value;
-- (NSArray*)geometryFilters;
-- (NSArray*)propertyFilters;
+- (NSArray *)geometryFilters;
+- (NSArray *)propertyFilters;
 @end

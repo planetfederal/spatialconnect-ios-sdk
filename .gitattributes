@@ -1,2 +1,3 @@
 SpatialConnectTests/remote.scfg merge=ours
 *.pbxproj merge=union
+SpatialConnectTests/remote.scfg merge=ours

@@ -19,12 +19,12 @@
 
 #import "SCAuthService.h"
 #import "SCBackendService.h"
+#import "SCCache.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSON.h"
 #import "SCJavascriptCommands.h"
-#import "SCKVPService.h"
 #import "SCLineString.h"
 #import "SCRCTBridge.h"
 #import "SCRasterStore.h"
@@ -46,9 +46,9 @@
 @property(readonly, strong) SCDataService *dataService;
 @property(readonly, strong) SCSensorService *sensorService;
 @property(readonly, strong) SCConfigService *configService;
-@property(readonly, strong) SCKVPService *kvpService;
 @property(readonly, strong) SCAuthService *authService;
 @property(readonly, strong) SCBackendService *backendService;
+@property(readonly, strong) SCCache *cache;
 
 @property(readonly) RACMulticastConnection *serviceEvents;
 

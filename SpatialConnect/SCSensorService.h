@@ -17,11 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCService.h"
 #import "Reachability.h"
+#import "SCService.h"
+#import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/RACSignal.h>
-#import <CoreLocation/CoreLocation.h>
 
 typedef enum : NSUInteger {
   SC_LOCATION_HIGH = 0,

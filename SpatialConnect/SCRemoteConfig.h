@@ -26,5 +26,6 @@
 @property(nonatomic, readonly) NSString *mqttPort;
 
 - (id)initWithDict:(NSDictionary *)d;
+- (NSDictionary *)dictionary;
 
 @end

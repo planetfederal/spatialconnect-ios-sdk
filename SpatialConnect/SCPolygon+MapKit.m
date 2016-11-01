@@ -17,51 +17,55 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCPolygon+MapKit.h"
-#import "SCPoint+MapKit.h"
-#import "SCLinearRing+MapKit.h"
-#import "SCGeometry+MapKit.h"
 #import "SCBoundingBox+MapKit.h"
+#import "SCGeometry+MapKit.h"
+#import "SCLinearRing+MapKit.h"
+#import "SCPoint+MapKit.h"
+#import "SCPolygon+MapKit.h"
 
 @implementation SCPolygon (MapKit)
 
--(MKPolygon*)shape {
+- (MKPolygon *)shape {
   CLLocationCoordinate2D outerRing[self.points.count];
   CLLocationCoordinate2D *outer = outerRing;
-  [self.points enumerateObjectsUsingBlock:^(SCPoint *p,NSUInteger idx, BOOL *stop) {
-    outer[idx] = CLLocationCoordinate2DMake(p.latitude, p.longitude);
-  }];
-  
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        outer[idx] = CLLocationCoordinate2DMake(p.latitude, p.longitude);
+      }];
+
   NSMutableArray *arr = [NSMutableArray arrayWithCapacity:self.holes.count];
-  [self.holes enumerateObjectsUsingBlock:^(SCLinearRing *ring, NSUInteger idx, BOOL *stop) {
+  [self.holes enumerateObjectsUsingBlock:^(SCLinearRing *ring, NSUInteger idx,
+                                           BOOL *stop) {
     [arr addObject:[ring shape]];
   }];
-  
+
   MKPolygon *polygon = [MKPolygon polygonWithCoordinates:outerRing
                                                    count:self.points.count
                                         interiorPolygons:arr];
   return polygon;
 }
 
--(CLLocationCoordinate2D)coordinate {
+- (CLLocationCoordinate2D)coordinate {
   __block float x = 0;
   __block float y = 0;
-  [self.points enumerateObjectsUsingBlock:^(SCPoint* p, NSUInteger idx, BOOL *stop) {
-    x += p.x;
-    y += p.y;
-  }];
-  return CLLocationCoordinate2DMake(y/self.points.count, x/self.points.count);
+  [self.points
+      enumerateObjectsUsingBlock:^(SCPoint *p, NSUInteger idx, BOOL *stop) {
+        x += p.x;
+        y += p.y;
+      }];
+  return CLLocationCoordinate2DMake(y / self.points.count,
+                                    x / self.points.count);
 }
 
--(NSUInteger)pointCount {
+- (NSUInteger)pointCount {
   return self.points.count;
 }
 
--(MKMapRect)boundingMapRect {
+- (MKMapRect)boundingMapRect {
   return self.bbox.asMKMapRect;
 }
 
--(void)addToMap:(MKMapView *)mapview {
+- (void)addToMap:(MKMapView *)mapview {
   [mapview addOverlay:self];
 }
 

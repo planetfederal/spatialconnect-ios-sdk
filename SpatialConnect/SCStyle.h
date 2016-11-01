@@ -22,13 +22,13 @@
 
 @interface SCStyle : NSObject
 
-@property (nonatomic) UIColor *strokeColor;
-@property (nonatomic) int strokeWidth;
-@property (nonatomic) float strokeOpacity;
-@property (nonatomic) float fillOpacity;
-@property (nonatomic) UIColor* fillColor;
+@property(nonatomic) UIColor *strokeColor;
+@property(nonatomic) int strokeWidth;
+@property(nonatomic) float strokeOpacity;
+@property(nonatomic) float fillOpacity;
+@property(nonatomic) UIColor *fillColor;
 
-- (void)addMissing:(SCStyle*)style;
-- (void)overwriteWith:(SCStyle*)style;
+- (void)addMissing:(SCStyle *)style;
+- (void)overwriteWith:(SCStyle *)style;
 
 @end

@@ -17,10 +17,10 @@
 * under the License.
 ******************************************************************************/
 
+#import "SCDataService.h"
 #import "GeoJSONStore.h"
 #import "GeopackageStore.h"
 #import "SCConfigService.h"
-#import "SCDataService.h"
 #import "SCGeometry.h"
 #import "SCServiceStatusEvent.h"
 #import "SCSpatialStore.h"
@@ -43,6 +43,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 @property(readwrite, nonatomic, strong)
     NSMutableDictionary *supportedStoreImpls;
 @property(readwrite, atomic, strong) NSMutableDictionary *stores;
+@property(readonly) RACSignal *timer;
 @property(readwrite, nonatomic, strong) RACSubject *storeEventSubject;
 @end
 
@@ -56,7 +57,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   if (self = [super init]) {
     self.supportedStoreImpls = [[NSMutableDictionary alloc] init];
     [self addDefaultStoreImpls];
-    _stores = [[NSMutableDictionary alloc] init];
+    _stores = [NSMutableDictionary new];
+    _timer =
+        [RACSignal interval:2 onScheduler:[RACScheduler mainThreadScheduler]];
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
@@ -153,11 +156,23 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 - (void)startStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-    [[((id<SCDataStoreLifeCycle>)store)start] subscribeError:^(NSError *error) {
-      [self.storeEventSubject
-          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STARTFAILED
-                                      andStoreId:store.storeId]];
+    if (store.status == SC_DATASTORE_RUNNING) {
+      return;
     }
+
+    [[[((id<SCDataStoreLifeCycle>)store)start] sample:self.timer]
+        subscribeNext:^(id x) {
+          [self.storeEventSubject
+              sendNext:[SCStoreStatusEvent
+                            fromEvent:SC_DATASTORE_EVT_DOWNLOADPROGRESS
+                           andStoreId:store.storeId]];
+        }
+        error:^(NSError *error) {
+          [self.storeEventSubject
+              sendNext:[SCStoreStatusEvent
+                            fromEvent:SC_DATASTORE_EVT_STARTFAILED
+                           andStoreId:store.storeId]];
+        }
         completed:^{
           [_hasStores sendNext:@(YES)];
           [self.storeEventSubject
@@ -166,11 +181,12 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
         }];
 
   } else {
-    NSLog(@"%@",
-          [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
-                                     @"was not started. Make sure the store "
-                                     @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key, store.storeId]);
+    DDLogWarn(
+        @"%@",
+        [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
+                                   @"was not started. Make sure the store "
+                                   @"conforms to the SCDataStoreLifeCycle",
+                                   store.name, store.key, store.storeId]);
   }
 }
 
@@ -182,11 +198,12 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
         sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_STOPPED
                                     andStoreId:store.storeId]];
   } else {
-    NSLog(@"%@",
-          [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
-                                     @"was not stopped. Make sure the store "
-                                     @"conforms to the SCDataStoreLifeCycle",
-                                     store.name, store.key, store.storeId]);
+    DDLogWarn(
+        @"%@",
+        [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
+                                   @"was not stopped. Make sure the store "
+                                   @"conforms to the SCDataStoreLifeCycle",
+                                   store.name, store.key, store.storeId]);
   }
 }
 
@@ -199,6 +216,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (void)stop {
   [super stop];
   [self stopAllStores];
+  self.stores = [NSMutableDictionary new];
+  self.storesStarted = NO;
+  [_hasStores sendNext:@(NO)];
 }
 
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg {
@@ -218,7 +238,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     NSCAssert(store.storeId, @"Store Id not set");
     return NO;
   } else if ([self.stores objectForKey:store.storeId]) {
-    NSLog(@"STORE %@ ALREADY EXISTS", store.storeId);
+    DDLogWarn(@"STORE %@ ALREADY EXISTS", store.storeId);
     return NO;
   } else {
     [self.stores setObject:store forKey:store.storeId];
@@ -233,10 +253,10 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
                                                            c.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
   if (!store) {
-    NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
-          @"implementation.\n Here is a list of supported stores:\n%@",
-          c.type, c.version,
-          [self.supportedStoreImpls.allKeys componentsJoinedByString:@",\n"]);
+    DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
+              @"implementation.\n Here is a list of supported stores:\n%@",
+              c.type, c.version, [self.supportedStoreImpls.allKeys
+                                     componentsJoinedByString:@",\n"]);
     return NO;
   } else {
     return [self registerStore:gmStore];
@@ -248,6 +268,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [self stopStore:store];
   }
   [self.stores removeObjectForKey:store.storeId];
+  [self.storeEventSubject
+      sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_REMOVED
+                                  andStoreId:store.storeId]];
 }
 
 - (void)updateStore:(SCDataStore *)store {
@@ -259,23 +282,22 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (BOOL)updateStoreByConfig:(SCStoreConfig *)c {
   NSCAssert(c.uniqueid, @"Store Id not set");
   Class store =
-  [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
-                             c.version]];
+      [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
+                                                           c.version]];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
   if (!store) {
-    NSLog(@"The store you tried to start:%@.%@ doesn't have a support "
-          @"implementation.\n Here is a list of supported stores:\n%@",
-          c.type, c.version,
-          [self.supportedStoreImpls.allKeys componentsJoinedByString:@",\n"]);
+    DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
+              @"implementation.\n Here is a list of supported stores:\n%@",
+              c.type, c.version, [self.supportedStoreImpls.allKeys
+                                     componentsJoinedByString:@",\n"]);
     return NO;
   } else if (![self.stores objectForKey:gmStore.storeId]) {
-    NSLog(@"STORE %@ DOES NOT EXIST", gmStore.storeId);
+    DDLogWarn(@"STORE %@ DOES NOT EXIST", gmStore.storeId);
     return NO;
   } else {
     [self updateStore:gmStore];
     return YES;
   }
-  
 }
 
 - (Class)supportedStoreByKey:(NSString *)key {
@@ -287,6 +309,15 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 - (NSArray *)storeList {
   return self.stores.allValues;
+}
+
+- (NSArray *)storeListDictionary {
+  NSMutableArray *arr = [[NSMutableArray alloc] init];
+  [[self storeList] enumerateObjectsUsingBlock:^(SCDataStore *ds,
+                                                 NSUInteger idx, BOOL *stop) {
+    [arr addObject:[self storeAsDictionary:ds]];
+  }];
+  return [NSArray arrayWithArray:arr];
 }
 
 - (NSArray *)activeStoreList {
@@ -302,12 +333,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [[self activeStoreList] enumerateObjectsUsingBlock:^(
                               SCDataStore *ds, NSUInteger idx, BOOL *stop) {
-    NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
-    [store setObject:ds.storeId forKey:@"storeId"];
-    [store setObject:ds.name forKey:@"name"];
-    [store setObject:kSERVICENAME forKey:@"service"];
-    [store setObject:ds.storeType forKey:@"type"];
-    [arr addObject:store];
+    [arr addObject:[self storeAsDictionary:ds]];
   }];
   return [NSArray arrayWithArray:arr];
 }
@@ -335,6 +361,29 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   }];
 
   return [NSArray arrayWithArray:arr];
+}
+
+- (NSDictionary *)storeAsDictionary:(SCDataStore *)ds {
+  NSMutableDictionary *store = [[NSMutableDictionary alloc] init];
+  [store setObject:ds.storeId forKey:@"storeId"];
+  [store setObject:ds.name forKey:@"name"];
+  [store setObject:kSERVICENAME forKey:@"service"];
+  [store setObject:ds.storeType forKey:@"type"];
+  [store setObject:[NSNumber numberWithInteger:ds.status] forKey:@"status"];
+  [store setObject:ds.downloadProgress forKey:@"downloadProgress"];
+  if ([ds conformsToProtocol:@protocol(SCSpatialStore)]) {
+    id<SCSpatialStore> ss = (id<SCSpatialStore>)ds;
+    if (ss.vectorLayers != nil) {
+      [store setObject:ss.vectorLayers forKey:@"vectorLayers"];
+    }
+  }
+  if ([ds conformsToProtocol:@protocol(SCRasterStore)]) {
+    id<SCRasterStore> rs = (id<SCRasterStore>)ds;
+    if (rs.rasterLayers != nil) {
+      [store setObject:rs.rasterLayers forKey:@"rasterLayers"];
+    }
+  }
+  return store;
 }
 
 - (NSArray *)storesByProtocol:(Protocol *)protocol {

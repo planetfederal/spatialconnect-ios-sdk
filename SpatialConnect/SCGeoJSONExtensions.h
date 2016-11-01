@@ -17,21 +17,18 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
 #ifndef SpatialConnect_SCGeoJSONExtensions_h
 #define SpatialConnect_SCGeoJSONExtensions_h
 
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
-#import "SCPoint+GeoJSON.h"
-#import "SCMultiPoint+GeoJSON.h"
-#import "SCPolygon+GeoJSON.h"
-#import "SCMultiPolygon+GeoJSON.h"
+#import "SCGeometryCollection+GeoJSON.h"
 #import "SCLineString+GeoJSON.h"
 #import "SCLinearRing+GeoJSON.h"
 #import "SCMultiLineString+GeoJSON.h"
-#import "SCGeometryCollection+GeoJSON.h"
+#import "SCMultiPoint+GeoJSON.h"
+#import "SCMultiPolygon+GeoJSON.h"
+#import "SCPoint+GeoJSON.h"
+#import "SCPolygon+GeoJSON.h"
 
 #endif

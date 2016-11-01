@@ -2,6 +2,6 @@ github "ReactiveCocoa/ReactiveCocoa" == 2.5
 github "tetriscode/libgpkgios" "master"
 github "pixelglow/zipzap" == 8.0.6
 github "boundlessgeo/geopackage-wkb-ios" "develop"
-github "ckrey/MQTT-Client-Framework"
-github "jmesnil/MQTTKit"
+github "tetriscode/MQTT-Client-Framework" "master"
 github "tetriscode/Proj4-iOS" == 4.9.2
+github "tetriscode/CocoaLumberjack" "master"

@@ -36,7 +36,7 @@
 
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnectHelper loadConfig];
+  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
 }
 
 - (void)tearDown {
@@ -48,14 +48,11 @@
   XCTestExpectation *expect =
       [self expectationWithDescription:@"GetCapabilities"];
 
-  [[SpatialConnectHelper
-      loadWFSGDataStore:self.sc
-                storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
+  [[SpatialConnectHelper loadWFSGDataStore:self.sc]
       subscribeNext:^(SCDataStore *ds) {
         if (ds) {
-          NSArray *list = ds.layerList;
+          NSArray *list = ds.layers;
           XCTAssertNotNil(list, @"Layer list as array");
-          XCTAssertNoThrow([sc stopAllServices]);
         } else {
           XCTAssert(NO, @"Store is nil");
         }
@@ -66,26 +63,19 @@
         [expect fulfill];
       }];
 
-  [sc startAllServices];
   [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
 - (void)testWFSLayerQuery {
   XCTestExpectation *expect = [self expectationWithDescription:@"GetFeature"];
   __block BOOL hasFeatures = NO;
-  [[[SpatialConnectHelper
-      loadWFSGDataStore:self.sc
-                storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
+  [[[SpatialConnectHelper loadWFSGDataStore:self.sc]
       flattenMap:^RACStream *(SCDataStore *ds) {
         if (ds) {
-          XCTAssertNotNil(ds.layerList, @"Layer list as array");
+          XCTAssertNotNil(ds.layers, @"Layer list as array");
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-          SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
-            @(-124.07438528127528),
-            @(42.922397667217076),
-            @(-64.76484934151024),
-            @(58.79784328722645)
-          ]];
+          SCBoundingBox *bbox = [[SCBoundingBox alloc]
+              initWithCoords:@[ @(-178.0), @(-87.0), @(178.0), @(87.0) ]];
           SCGeoFilterContains *gfc =
               [[SCGeoFilterContains alloc] initWithBBOX:bbox];
           SCPredicate *predicate = [[SCPredicate alloc] initWithFilter:gfc];
@@ -104,31 +94,25 @@
         XCTFail(@"%@", [error description]);
       }
       completed:^{
-        XCTAssertNoThrow([sc stopAllServices]);
         if (hasFeatures) {
           [expect fulfill];
         }
       }];
-  [sc startAllServices];
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testWFSMultiLayerQuery {
   XCTestExpectation *expect = [self expectationWithDescription:@"GetFeature"];
   __block BOOL hasFeatures = NO;
-  [[[SpatialConnectHelper
-      loadWFSGDataStore:self.sc
-                storeId:@"0f193979-b871-47cd-b60d-e271d6504359"]
+  [[[SpatialConnectHelper loadWFSGDataStore:self.sc]
       flattenMap:^RACStream *(SCDataStore *ds) {
         if (ds) {
           SCQueryFilter *filter = [[SCQueryFilter alloc] init];
-          [filter
-              addLayerIds:[ds.layerList subarrayWithRange:NSMakeRange(3, 3)]];
+          NSArray *ll = ds.layers;
+          [filter addLayerIds:[ll subarrayWithRange:NSMakeRange(0, 3)]];
           SCBoundingBox *bbox = [[SCBoundingBox alloc] initWithCoords:@[
-            @(-124.07438528127528),
-            @(42.922397667217076),
-            @(-64.76484934151024),
-            @(58.79784328722645)
+            @(-100.07438528127528), @(20.922397667217076),
+            @(-60.76484934151024), @(58.79784328722645)
           ]];
           SCGeoFilterContains *gfc =
               [[SCGeoFilterContains alloc] initWithBBOX:bbox];
@@ -141,20 +125,18 @@
         }
         [expect fulfill];
       }] subscribeNext:^(SCSpatialFeature *f) {
-    XCTAssertNotNil(f, @"Feature should be alloced");
+    XCTAssertNotNil(f, @"Feature should be alloc'ed");
     hasFeatures = YES;
   }
       error:^(NSError *error) {
         XCTFail(@"%@", [error description]);
       }
       completed:^{
-        XCTAssertNoThrow([sc stopAllServices]);
         if (hasFeatures) {
           [expect fulfill];
         }
       }];
-  [sc startAllServices];
-  [self waitForExpectationsWithTimeout:15.0 handler:nil];
+  [self waitForExpectationsWithTimeout:20.0 handler:nil];
 }
 
 @end

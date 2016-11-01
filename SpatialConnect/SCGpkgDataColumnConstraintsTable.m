@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "SCGpkgDataColumnConstraint.h"
 #import "SCGpkgDataColumnConstraintsTable.h"
+#import "SCGpkgDataColumnConstraint.h"
 
 NSString *const kDCCTableName = @"gpkg_data_column_constraints";
 NSString *const kDCCConstraintNameColName = @"constraint_name";

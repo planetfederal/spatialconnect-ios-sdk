@@ -17,12 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
 #import "SCRasterSource.h"
+#import <Foundation/Foundation.h>
 
 @interface SCTileMapSource : SCRasterSource
 
-- (id)initWithCoverageBBOX:(SCBoundingBox*)bbox;
+- (id)initWithCoverageBBOX:(SCBoundingBox *)bbox;
 
 @end

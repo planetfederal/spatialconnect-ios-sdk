@@ -42,7 +42,7 @@
   return self;
 }
 
-- (id)initWithBBOX:(SCBoundingBox*)b {
+- (id)initWithBBOX:(SCBoundingBox *)b {
   self = [super init];
   if (!self) {
     return nil;

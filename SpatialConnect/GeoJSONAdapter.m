@@ -20,10 +20,10 @@
 #import "GeoJSONAdapter.h"
 #import "GeoJSONStore.h"
 #import "SCFileUtils.h"
-#import "SCHttpUtils.h"
 #import "SCGeoJSON.h"
 #import "SCGeometry+GeoJSON.h"
 #import "SCGeometryCollection+GeoJSON.h"
+#import "SCHttpUtils.h"
 #import "SCQueryFilter.h"
 
 #define ADAPTER_TYPE @"geojson"
@@ -39,7 +39,7 @@
 
 @implementation GeoJSONAdapter
 
-@synthesize connector, storeId, uri;
+@synthesize connector, storeId, uri, parentStore;
 
 - (id)initWithFilePath:(NSString *)filepath {
   if (self = [super init]) {
@@ -58,7 +58,7 @@
   return self;
 }
 
-- (NSString*)path {
+- (NSString *)path {
   if (geojsonFilePath) {
     return geojsonFilePath;
   }
@@ -81,50 +81,60 @@
     NSString *path = [self path];
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
     if (b) {
-      self.connector =
-      [[GeoJSONStorageConnector alloc] initWithFileName:path];
+      self.parentStore.status = SC_DATASTORE_RUNNING;
+      self.connector = [[GeoJSONStorageConnector alloc] initWithFileName:path];
       return [RACSignal empty];
     }
     NSURL *url = [[NSURL alloc] initWithString:self.uri];
-    return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-      [[SCHttpUtils getRequestURLAsData:url] subscribeNext:^(NSData *data) {
-        NSLog(@"Saving GEOJSON to %@", path);
-        [data writeToFile:path atomically:YES];
-        self.connector =
-        [[GeoJSONStorageConnector alloc] initWithFileName:path];
-        [subscriber sendCompleted];
-      }
-      error:^(NSError *error) {
-        [subscriber sendError:error];
-      }];
-      return nil;
-    }];
+    self.parentStore.status = SC_DATASTORE_DOWNLOADINGDATA;
+    RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+    __block NSMutableData *data = nil;
+    [dload$ subscribeNext:^(RACTuple *t) {
+      data = t.first;
+      self.parentStore.downloadProgress = t.second;
+    }
+        error:^(NSError *error) {
+          self.parentStore.status = SC_DATASTORE_DOWNLOADFAIL;
+        }
+        completed:^{
+          DDLogInfo(@"Saving GEOJSON to %@", path);
+          [data writeToFile:path atomically:YES];
+          self.connector =
+              [[GeoJSONStorageConnector alloc] initWithFileName:path];
+          self.parentStore.downloadProgress = @(1.0f);
+          self.parentStore.status = SC_DATASTORE_RUNNING;
+        }];
+    return dload$;
   } else {
     NSString *filePath = nil;
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
-    NSString *documentsPath = [SCFileUtils filePathFromDocumentsDirectory:self.uri];
+    NSString *documentsPath =
+        [SCFileUtils filePathFromDocumentsDirectory:self.uri];
     if (geojsonFilePath) {
       filePath = geojsonFilePath;
     } else if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
       filePath = bundlePath;
-    } else if ([[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+    } else if ([[NSFileManager defaultManager]
+                   fileExistsAtPath:documentsPath]) {
       filePath = documentsPath;
     }
     return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-      if (filePath != nil && [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        self.connector =
-        [[GeoJSONStorageConnector alloc] initWithFileName:filePath];
-        [subscriber sendCompleted];
-      } else {
-        NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
-                                           code:SC_GEOJSON_FILENOTFOUND
-                                       userInfo:nil];
-        [subscriber sendError:err];
-      }
-      return nil;
-    }];
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          if (filePath != nil &&
+              [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            self.connector =
+                [[GeoJSONStorageConnector alloc] initWithFileName:filePath];
+            self.parentStore.status = SC_DATASTORE_RUNNING;
+            [subscriber sendCompleted];
+          } else {
+            NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
+                                               code:SC_GEOJSON_FILENOTFOUND
+                                           userInfo:nil];
+            self.parentStore.status = SC_DATASTORE_STOPPED;
+            [subscriber sendError:err];
+          }
+          return nil;
+        }];
   }
   return [RACSignal empty];
 }
@@ -144,7 +154,7 @@
   return self.name;
 }
 
-- (NSArray *)layerList {
+- (NSArray *)layers {
   return @[ @"default" ];
 }
 
@@ -191,7 +201,7 @@
         }
         return YES;
       }] map:^SCGeometry *(SCGeometry *g) {
-        g.layerId = self.layerList[0];
+        g.layerId = self.layers[0];
         g.storeId = self.storeId;
         return g;
       }];
@@ -294,7 +304,7 @@
                  atomically:YES
                    encoding:NSUTF8StringEncoding
                       error:&writeError];
-        NSLog(@"%@", writeError.localizedFailureReason);
+        DDLogError(@"%@", writeError.localizedFailureReason);
         if (writeError) {
           [subscriber sendError:writeError];
         } else {

@@ -17,16 +17,12 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
 
 @class SCPoint;
 
 @interface SCMultiPoint : SCGeometry
 
-@property (nonatomic) NSArray *points;
+@property(nonatomic) NSArray *points;
 
 @end

@@ -23,7 +23,7 @@ static NSString *const FORM_LABEL = @"form_label";
 static NSString *const VERSION = @"version";
 static NSString *const FIELDS = @"fields";
 
-@interface SCFormConfig()
+@interface SCFormConfig ()
 - (BOOL)isValid;
 @end
 
@@ -49,38 +49,39 @@ static NSString *const FIELDS = @"fields";
 - (BOOL)isValid {
   __block BOOL isValid = YES;
   if (self.identifier <= 0) {
-    NSLog(@"Identifier is invalid:%@",self.identifier);
+    DDLogError(@"Identifier is invalid:%ld", (long)self.identifier);
     isValid = NO;
   }
   if (!self.key || self.key.length <= 0) {
-    NSLog(@"form_key is an empty string");
+    DDLogError(@"form_key is an empty string");
     isValid = NO;
   }
   if (!self.label || self.label.length <= 0) {
-    NSLog(@"form_label is an empty string");
+    DDLogError(@"form_label is an empty string");
     isValid = NO;
   }
   if (!self.version || self.version <= 0) {
-    NSLog(@"Invalid Version number");
+    DDLogError(@"Invalid Version number");
     isValid = NO;
   }
 
   if (self.fields.count == 0) {
-    NSLog(@"No Fields Present");
+    DDLogError(@"No Fields Present");
     isValid = NO;
   }
 
-  [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * stop) {
-      NSString *fieldKey = obj[@"field_key"];
-      NSString *fieldLabel = obj[@"field_label"];
+  [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx,
+                                            BOOL *stop) {
+    NSString *fieldKey = obj[@"field_key"];
+    NSString *fieldLabel = obj[@"field_label"];
 
     if (!fieldKey || fieldKey.length == 0) {
-      NSLog(@"field_key is invalid for form:%@",key);
+      DDLogError(@"field_key is invalid for form:%@", key);
       isValid = NO;
     }
 
-    if(!fieldLabel || fieldLabel.length == 0) {
-      NSLog(@"field_label is invalid for form:%@",key);
+    if (!fieldLabel || fieldLabel.length == 0) {
+      NSLog(@"field_label is invalid for form:%@", key);
       isValid = NO;
     }
   }];
@@ -189,18 +190,18 @@ static NSString *const FIELDS = @"fields";
   return [NSDictionary dictionaryWithDictionary:t];
 }
 
-- (NSDictionary *)JSONDict {
-  NSMutableDictionary *dict = [NSMutableDictionary new];
-  dict[FORM_KEY] = self.key;
-  dict[FORM_LABEL] = self.label;
-  dict[VERSION] = @(self.version);
-  dict[FIELDS] = self.fields;
-  dict[IDENT] = @(self.identifier);
-  return [NSDictionary dictionaryWithDictionary:dict];
+- (NSDictionary *)dictionary {
+  return @{
+    FORM_KEY : self.key,
+    FORM_LABEL : self.label,
+    VERSION : @(self.version),
+    FIELDS : self.fields,
+    IDENT : @(self.identifier)
+  };
 }
 
 - (NSString *)description {
-  return self.JSONDict.JSONString;
+  return self.dictionary.JSONString;
 }
 
 @end

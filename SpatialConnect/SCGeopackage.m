@@ -144,7 +144,7 @@
       [createSql appendString:@")"];
       BOOL success = [db executeStatements:createSql];
       if (!success) {
-        NSLog(@"Error:%@", db.lastError.description);
+        DDLogError(@"Error:%@", db.lastError.description);
         [db rollback];
         return;
       }
@@ -155,7 +155,7 @@
                                      name];
       BOOL geomAdded = [db executeStatements:addColSql];
       if (!geomAdded) {
-        NSLog(@"Error:%@", db.lastError.description);
+        DDLogError(@"Error:%@", db.lastError.description);
         [db rollback];
         return;
       }
@@ -181,7 +181,7 @@
     NSString *dropSql = [NSString stringWithFormat:@"DROP TABLE %@", name];
     BOOL success = [db executeStatements:dropSql];
     if (!success) {
-      NSLog(@"Error Dropping Table %@", name);
+      DDLogError(@"Error Dropping Table %@", name);
     }
   }];
 }

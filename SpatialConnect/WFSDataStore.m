@@ -14,16 +14,17 @@
  * limitations under the License
  */
 
+#import "WFSDataStore.h"
 #import "SCBoundingBox.h"
 #import "SCGeoFilterContains.h"
 #import "SCGeometryCollection.h"
 #import "SCHttpUtils.h"
 #import "SCPoint.h"
-#import "WFSDataStore.h"
 #import "XMLDictionary.h"
 
 @interface WFSDataStore ()
 @property(readwrite) NSString *baseUri;
+@property(readwrite) NSArray *defaultLayers;
 @end
 
 @implementation WFSDataStore
@@ -31,7 +32,7 @@
 #define TYPE @"wfs"
 #define VERSION @"1.1.0"
 
-@synthesize baseUri, storeVersion, storeType;
+@synthesize baseUri, storeVersion, storeType, defaultLayers;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -40,6 +41,7 @@
   }
   self.baseUri = config.uri;
   self.name = config.name;
+  self.defaultLayers = config.defaultLayers;
   return self;
 }
 
@@ -52,7 +54,11 @@
   return self;
 }
 
-- (NSArray *)layerList {
+- (NSArray *)layers {
+  return self.vectorLayers;
+}
+
+- (NSArray *)vectorLayers {
   NSString *url = [NSString
       stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
                        self.baseUri, self.storeVersion];
@@ -60,11 +66,15 @@
       [SCHttpUtils getRequestURLAsDataBLOCKING:[NSURL URLWithString:url]];
   NSDictionary *d = [NSDictionary dictionaryWithXMLData:data];
   NSMutableArray *layers = [NSMutableArray new];
-  NSArray *a = d[@"FeatureTypeList"][@"FeatureType"];
-  [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
-                                  BOOL *_Nonnull stop) {
-    [layers addObject:d[@"Name"]];
-  }];
+  id a = d[@"FeatureTypeList"][@"FeatureType"];
+  if ([a isKindOfClass:NSDictionary.class]) {
+    [layers addObject:a[@"Name"]];
+  } else {
+    [a enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
+                                    BOOL *_Nonnull stop) {
+      [layers addObject:d[@"Name"]];
+    }];
+  }
   return [NSArray arrayWithArray:layers];
 }
 
@@ -88,7 +98,6 @@
                        self.baseUri, self.storeVersion,
                        [layers componentsJoinedByString:@","],
                        (long)filter.limit];
-
   SCPredicate *p = [[filter geometryFilters] firstObject];
   if ([p.filter isKindOfClass:[SCGeoFilterContains class]]) {
     SCGeoFilterContains *fc = (SCGeoFilterContains *)p.filter;

@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "JSONKit.h"
 #import "SCLocationStore.h"
+#import "JSONKit.h"
 #import "SCPoint+GeoJSON.h"
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
@@ -30,7 +30,7 @@
   if (self) {
     self.name = config.name;
     self.permission = SC_DATASTORE_READWRITE;
-    _storeType = @"default";
+    _storeType = @"gpkg";
     _storeVersion = @"1";
     [self.adapter connectBlocking];
   }

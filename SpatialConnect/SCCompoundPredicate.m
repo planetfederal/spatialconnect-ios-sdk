@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
 #import "SCCompoundPredicate.h"
 
 @implementation SCCompoundPredicate
@@ -29,19 +28,19 @@
   return self;
 }
 
-- (void)addPredicate:(SCPredicate*)predicate {
+- (void)addPredicate:(SCPredicate *)predicate {
   [compoundPredicates addObject:predicate];
 }
 
-- (void)addPredicates:(NSArray*)predicates {
+- (void)addPredicates:(NSArray *)predicates {
   [compoundPredicates addObjectsFromArray:predicates];
 }
 
-- (void)removePredicate:(SCPredicate*)predicate {
+- (void)removePredicate:(SCPredicate *)predicate {
   [compoundPredicates removeObject:predicate];
 }
 
-- (void)removePredicates:(NSArray*)predicates {
+- (void)removePredicates:(NSArray *)predicates {
   [compoundPredicates removeObjectsInArray:predicates];
 }
 

@@ -17,15 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-
-
-
-
 #import "SCGeometry.h"
 #import <UIKit/UIKit.h>
 
 @interface SCLineString : SCGeometry
 
-@property (nonatomic) NSArray *points;
+@property(nonatomic) NSArray *points;
 
 @end

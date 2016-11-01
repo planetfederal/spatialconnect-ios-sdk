@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import <Foundation/Foundation.h>
 #import "SCFilterProtocol.h"
+#import <Foundation/Foundation.h>
 
 @interface SCFilterBetween : NSObject <SCFilterProtocol> {
   NSObject *upper;

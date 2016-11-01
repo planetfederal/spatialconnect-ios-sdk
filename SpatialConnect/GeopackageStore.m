@@ -44,11 +44,13 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (!self) {
     return nil;
   }
-  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid andURI:config.uri];
+  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid
+                                                      andURI:config.uri];
   self.name = config.name;
   self.permission = SC_DATASTORE_READWRITE;
   _storeType = TYPE;
   _storeVersion = VERSION;
+
   return self;
 }
 
@@ -67,18 +69,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 - (RACSignal *)start {
   self.adapter.parentStore = self;
   self.status = SC_DATASTORE_STARTED;
-  return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self.adapter.connect subscribeError:^(NSError *error) {
-          self.status = SC_DATASTORE_STOPPED;
-          [subscriber sendError:error];
-        }
-            completed:^{
-              self.status = SC_DATASTORE_RUNNING;
-              [subscriber sendCompleted];
-            }];
-        return nil;
-      }];
+  return self.adapter.connect;
 }
 
 - (void)stop {
@@ -113,10 +104,11 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [[self.adapter query:filter] map:^SCSpatialFeature *(SCSpatialFeature *f) {
-    f.storeId = self.storeId;
-    return f;
-  }];
+  return [[self.adapter query:filter]
+      map:^SCSpatialFeature *(SCSpatialFeature *f) {
+        f.storeId = self.storeId;
+        return f;
+      }];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
@@ -142,16 +134,22 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [self.adapter deleteFeature:tuple];
 }
 
-- (NSArray *)layerList {
-  return self.adapter.layerList;
+- (NSArray *)layers {
+  return [self.vectorLayers arrayByAddingObjectsFromArray:self.rasterLayers];
 }
 
-- (NSArray *)rasterList {
-  return self.adapter.rasterList;
+- (NSArray *)vectorLayers {
+  return [[[[self.adapter.vectorLayers rac_sequence] signal]
+      map:^NSString *(SCGpkgFeatureSource *f) {
+        return f.name;
+      }] toArray];
 }
 
-- (NSString *)defaultLayer {
-  return @"DEFAULT";
+- (NSArray *)rasterLayers {
+  return [[[[self.adapter.rasterLayers rac_sequence] signal]
+      map:^NSString *(SCGpkgFeatureSource *f) {
+        return f.name;
+      }] toArray];
 }
 
 - (SCPolygon *)coverage:(NSString *)layer {

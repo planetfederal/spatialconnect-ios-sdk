@@ -17,11 +17,10 @@
 * under the License.
 ******************************************************************************/
 
-
-#import <Foundation/Foundation.h>
 #import "SCFilterProtocol.h"
-#import "SCGeometry.h"
 #import "SCGeoFilter.h"
+#import "SCGeometry.h"
+#import <Foundation/Foundation.h>
 
 @interface SCGeoFilterDisjoint : SCGeoFilter <SCFilterProtocol>
 @end

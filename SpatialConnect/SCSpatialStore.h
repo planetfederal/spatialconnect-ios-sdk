@@ -25,7 +25,7 @@
 /**
  *  Returns SCSpatialFeature on the returned signal
  *
- *  @param filter
+ *  @param filter query definition
  *
  *  @return SCSpatialFeature
  */
@@ -56,25 +56,17 @@
 /**
  *  Returns RACSignal completion on successful delete
  *
- *  @param feature to be deleted
+ *  @param key feature to be deleted
  *
  *  @return RACSignal - Completion
  */
 - (RACSignal *) delete:(SCKeyTuple *)key;
 
 /**
- *  Default layers for searching when no layers
- *  are present in SCQueryFilter
- *
- *  @return string representing layer name
- */
-- (NSArray *)defaultLayers;
-
-/**
- *  List of layers in the store
+ *  List of vector layers in the store
  *
  *  @return NSArray of strings
  */
-- (NSArray *)layerList;
+- (NSArray *)vectorLayers;
 
 @end

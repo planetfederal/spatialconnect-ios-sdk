@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-
 #import "SCComparisonPredicate.h"
 
 @implementation SCComparisonPredicate

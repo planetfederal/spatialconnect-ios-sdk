@@ -17,8 +17,8 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCBoundingBox.h"
 #import "SCMultiPoint.h"
+#import "SCBoundingBox.h"
 #import "SCPoint.h"
 
 @implementation SCMultiPoint

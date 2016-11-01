@@ -33,44 +33,38 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
 
-
-typedef NS_ENUM(NSInteger, XMLDictionaryAttributesMode)
-{
-    XMLDictionaryAttributesModePrefixed = 0, //default
-    XMLDictionaryAttributesModeDictionary,
-    XMLDictionaryAttributesModeUnprefixed,
-    XMLDictionaryAttributesModeDiscard
+typedef NS_ENUM(NSInteger, XMLDictionaryAttributesMode) {
+  XMLDictionaryAttributesModePrefixed = 0, // default
+  XMLDictionaryAttributesModeDictionary,
+  XMLDictionaryAttributesModeUnprefixed,
+  XMLDictionaryAttributesModeDiscard
 };
 
-
-typedef NS_ENUM(NSInteger, XMLDictionaryNodeNameMode)
-{
-    XMLDictionaryNodeNameModeRootOnly = 0, //default
-    XMLDictionaryNodeNameModeAlways,
-    XMLDictionaryNodeNameModeNever
+typedef NS_ENUM(NSInteger, XMLDictionaryNodeNameMode) {
+  XMLDictionaryNodeNameModeRootOnly = 0, // default
+  XMLDictionaryNodeNameModeAlways,
+  XMLDictionaryNodeNameModeNever
 };
 
-
-static NSString *const XMLDictionaryAttributesKey   = @"__attributes";
-static NSString *const XMLDictionaryCommentsKey     = @"__comments";
-static NSString *const XMLDictionaryTextKey         = @"__text";
-static NSString *const XMLDictionaryNodeNameKey     = @"__name";
+static NSString *const XMLDictionaryAttributesKey = @"__attributes";
+static NSString *const XMLDictionaryCommentsKey = @"__comments";
+static NSString *const XMLDictionaryTextKey = @"__text";
+static NSString *const XMLDictionaryNodeNameKey = @"__name";
 static NSString *const XMLDictionaryAttributePrefix = @"_";
-
 
 @interface XMLDictionaryParser : NSObject <NSCopying>
 
 + (XMLDictionaryParser *)sharedInstance;
 
-@property (nonatomic, assign) BOOL collapseTextNodes; // defaults to YES
-@property (nonatomic, assign) BOOL stripEmptyNodes;   // defaults to YES
-@property (nonatomic, assign) BOOL trimWhiteSpace;    // defaults to YES
-@property (nonatomic, assign) BOOL alwaysUseArrays;   // defaults to NO
-@property (nonatomic, assign) BOOL preserveComments;  // defaults to NO
-@property (nonatomic, assign) BOOL wrapRootNode;      // defaults to NO
+@property(nonatomic, assign) BOOL collapseTextNodes; // defaults to YES
+@property(nonatomic, assign) BOOL stripEmptyNodes;   // defaults to YES
+@property(nonatomic, assign) BOOL trimWhiteSpace;    // defaults to YES
+@property(nonatomic, assign) BOOL alwaysUseArrays;   // defaults to NO
+@property(nonatomic, assign) BOOL preserveComments;  // defaults to NO
+@property(nonatomic, assign) BOOL wrapRootNode;      // defaults to NO
 
-@property (nonatomic, assign) XMLDictionaryAttributesMode attributesMode;
-@property (nonatomic, assign) XMLDictionaryNodeNameMode nodeNameMode;
+@property(nonatomic, assign) XMLDictionaryAttributesMode attributesMode;
+@property(nonatomic, assign) XMLDictionaryNodeNameMode nodeNameMode;
 
 - (NSDictionary *)dictionaryWithParser:(NSXMLParser *)parser;
 - (NSDictionary *)dictionaryWithData:(NSData *)data;
@@ -78,7 +72,6 @@ static NSString *const XMLDictionaryAttributePrefix = @"_";
 - (NSDictionary *)dictionaryWithFile:(NSString *)path;
 
 @end
-
 
 @interface NSDictionary (XMLDictionary)
 
@@ -101,12 +94,10 @@ static NSString *const XMLDictionaryAttributePrefix = @"_";
 
 @end
 
-
 @interface NSString (XMLDictionary)
 
 - (NSString *)XMLEncodedString;
 
 @end
-
 
 #pragma GCC diagnostic pop

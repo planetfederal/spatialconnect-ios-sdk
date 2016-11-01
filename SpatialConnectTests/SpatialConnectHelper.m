@@ -21,15 +21,18 @@
 
 @implementation SpatialConnectHelper
 
-+ (SpatialConnect *)loadConfig {
+NSString *wfsStore = @"0f193979-b871-47cd-b60d-e271d6504359";
+NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
+
++ (SpatialConnect *)loadLocalConfig {
   [self moveTestBundleToDocsDir];
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"tests"
                                                        ofType:@"scfg"];
   BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
-  NSLog(@"LocalConfigPath:%@", filePath);
+  DDLogVerbose(@"LocalConfigPath:", filePath);
   if (!b) {
-    NSLog(@"No config at:%@", filePath);
+    DDLogError(@"No config at:%@", filePath);
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [sc.configService addConfigFilepath:filePath];
@@ -59,7 +62,7 @@
 }
 
 + (SpatialConnect *)loadConfigAndStartServices {
-  SpatialConnect *sc = [SpatialConnectHelper loadConfig];
+  SpatialConnect *sc = [SpatialConnectHelper loadLocalConfig];
   [sc startAllServices];
   return sc;
 }
@@ -69,8 +72,8 @@
   NSString *filePath =
       [[NSBundle bundleForClass:[self class]] pathForResource:@"remote"
                                                        ofType:@"scfg"];
-  NSLog(@"RemoteConfigPath:%@", filePath);
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  DDLogInfo(@"RemoteConfigPath:%@", filePath);
+  SpatialConnect *sc = [[SpatialConnect alloc] init];
   [sc.configService addConfigFilepath:filePath];
   NSURL *URL = [NSURL URLWithString:@"https://portal.opengeospatial.org"];
 
@@ -97,18 +100,22 @@
   return sc;
 }
 
-+ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc
-                         storeId:(NSString *)storeId {
-  return [[sc.dataService storeStarted:storeId]
++ (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc {
+  return [[sc.dataService storeStarted:wfsStore]
       map:^SCDataStore *(SCStoreStatusEvent *evt) {
-        SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-        return ds;
+        return [sc.dataService storeByIdentifier:wfsStore];
+      }];
+}
+
++ (RACSignal *)loadGeojsonDataStore:(SpatialConnect *)sc {
+  return [[sc.dataService storeStarted:geojsonStore]
+      map:^SCDataStore *(SCStoreStatusEvent *evt) {
+        return [sc.dataService storeByIdentifier:geojsonStore];
       }];
 }
 
 + (SpatialConnect *)loadRemoteConfigAndStartServices {
   SpatialConnect *sc = [SpatialConnectHelper loadRemoteConfig];
-  [sc startAllServices];
   return sc;
 }
 
@@ -132,15 +139,33 @@
       [fm copyItemAtPath:item toPath:to error:&error];
       if (error) {
         if (error.code != 516) {
-          NSLog(@"Error: %@", error.description);
+          DDLogError(@"Error: %@", error.description);
         }
       }
     }
   }];
 }
 
++ (NSString *)filePathFromSelfBundle:(NSString *)fileName {
+  NSArray *strs = [fileName componentsSeparatedByString:@"."];
+  NSString *filePrefix;
+  if (strs.count == 2) {
+    filePrefix = strs.firstObject;
+  } else {
+    filePrefix = [[strs
+        objectsAtIndexes:[NSIndexSet
+                             indexSetWithIndexesInRange:NSMakeRange(
+                                                            0, strs.count - 2)]]
+        componentsJoinedByString:@"."];
+  }
+  NSString *extension = [strs lastObject];
+  NSString *filePath =
+      [[NSBundle bundleForClass:[self class]] pathForResource:filePrefix
+                                                       ofType:extension];
+  return filePath;
+}
+
 - (void)startServicesAndAuth:(SpatialConnect *)sc {
-  [sc startAllServices];
   [sc.authService authenticate:@"admin@something.com" password:@"admin"];
 }
 
