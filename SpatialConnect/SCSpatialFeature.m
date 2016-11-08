@@ -65,20 +65,36 @@
   ;
 }
 
+// convert date objects to strings for json serialization
+- (NSDictionary *)dateToString:(NSMutableDictionary *)dict {
+  NSDateFormatter *df = [NSDateFormatter new];
+  [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
+  [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+    if ([obj isKindOfClass:NSDate.class]) {
+      [dict setObject:[df stringFromDate:obj] forKey:key];
+    }
+    if ([obj isKindOfClass:NSDictionary.class]) {
+      [dict setObject:[self dateToString:obj] forKey:key];
+    }
+  }];
+  
+  return dict;
+}
+
 - (NSDictionary *)JSONDict {
   NSMutableDictionary *dict = [NSMutableDictionary new];
+  NSDateFormatter *df = [NSDateFormatter new];
+  [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
   dict[@"type"] = @"Feature";
   dict[@"id"] = self.identifier;
 
   if (self.properties) {
-    dict[@"properties"] = self.properties;
+    dict[@"properties"] = [self dateToString:self.properties];
   } else {
     dict[@"properties"] = [NSNull null];
   }
 
   dict[@"metadata"] = [NSMutableDictionary new];
-  NSDateFormatter *df = [NSDateFormatter new];
-  [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
   dict[@"metadata"][@"created_at"] = [df stringFromDate:self.createdAt];
   dict[@"metadata"][@"client"] =
       [[SpatialConnect sharedInstance] deviceIdentifier];
