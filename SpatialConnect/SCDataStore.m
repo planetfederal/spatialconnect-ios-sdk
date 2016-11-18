@@ -30,7 +30,7 @@
 
 @synthesize name;
 @synthesize key = _key;
-@synthesize status, permission;
+@synthesize status = _status, permission;
 @synthesize storeVersion = _storeVersion;
 @synthesize storeType = _storeType;
 @synthesize downloadProgress = _downloadProgress;

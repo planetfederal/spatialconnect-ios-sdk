@@ -47,6 +47,7 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 @property(readonly) NSString *storeType;
 @property(readonly) NSString *key;
 @property SCDataStoreStatus status;
+@property RACBehaviorSubject *status$;
 @property NSNumber *downloadProgress;
 @property SCDataStorePermission permission;
 

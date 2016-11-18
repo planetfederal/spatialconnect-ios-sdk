@@ -330,6 +330,8 @@
 		56CC07A61C6EE85700407D4A /* SCGpkgContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CC07A41C6EE85700407D4A /* SCGpkgContent.m */; };
 		56D5AD391D5D037800597300 /* SCBackendService.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D5AD371D5D037800597300 /* SCBackendService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56D5AD3A1D5D037800597300 /* SCBackendService.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D5AD381D5D037800597300 /* SCBackendService.m */; };
+		56DBE2541DDF57C4003C58ED /* SCRemoteDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBE2521DDF57C4003C58ED /* SCRemoteDataStore.h */; };
+		56DBE2551DDF57C4003C58ED /* SCRemoteDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DBE2531DDF57C4003C58ED /* SCRemoteDataStore.m */; };
 		56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBFA041D2F0CC600FFE4FF /* SCAuthService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DBFA071D2F0CC600FFE4FF /* SCAuthService.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DBFA051D2F0CC600FFE4FF /* SCAuthService.m */; };
 		56DBFA091D2F25F900FFE4FF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56DBFA081D2F25F900FFE4FF /* Security.framework */; };
@@ -771,6 +773,8 @@
 		56CC07A41C6EE85700407D4A /* SCGpkgContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgContent.m; sourceTree = "<group>"; };
 		56D5AD371D5D037800597300 /* SCBackendService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCBackendService.h; sourceTree = "<group>"; };
 		56D5AD381D5D037800597300 /* SCBackendService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCBackendService.m; sourceTree = "<group>"; };
+		56DBE2521DDF57C4003C58ED /* SCRemoteDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRemoteDataStore.h; sourceTree = "<group>"; };
+		56DBE2531DDF57C4003C58ED /* SCRemoteDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRemoteDataStore.m; sourceTree = "<group>"; };
 		56DBFA041D2F0CC600FFE4FF /* SCAuthService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAuthService.h; sourceTree = "<group>"; };
 		56DBFA051D2F0CC600FFE4FF /* SCAuthService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAuthService.m; sourceTree = "<group>"; };
 		56DBFA081D2F25F900FFE4FF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1261,6 +1265,7 @@
 		563BEC651BE528F400778EDA /* Stores */ = {
 			isa = PBXGroup;
 			children = (
+				56DBE25A1DDF5824003C58ED /* Default */,
 				563BEC541BE500D500778EDA /* GeoJSON */,
 				563BEC671BE5290A00778EDA /* Geopackage */,
 				56554E701D54EA0F000D77E7 /* LocationStore */,
@@ -1268,8 +1273,8 @@
 				565CD2891D23113F00A3DB5C /* WFS */,
 				5649B4EB1BE280D5009947EF /* SCDataStore.h */,
 				5649B4EC1BE280D5009947EF /* SCDataStore.m */,
-				566617581CE14FA200874119 /* SCDefaultStore.h */,
-				566617591CE14FA200874119 /* SCDefaultStore.m */,
+				56DBE2521DDF57C4003C58ED /* SCRemoteDataStore.h */,
+				56DBE2531DDF57C4003C58ED /* SCRemoteDataStore.m */,
 			);
 			name = Stores;
 			sourceTree = "<group>";
@@ -1641,6 +1646,15 @@
 			name = BackendService;
 			sourceTree = "<group>";
 		};
+		56DBE25A1DDF5824003C58ED /* Default */ = {
+			isa = PBXGroup;
+			children = (
+				566617581CE14FA200874119 /* SCDefaultStore.h */,
+				566617591CE14FA200874119 /* SCDefaultStore.m */,
+			);
+			name = Default;
+			sourceTree = "<group>";
+		};
 		56DBF9FF1D2F0C3300FFE4FF /* AuthService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1806,6 +1820,7 @@
 				56F4375D1CA0955200EA1344 /* FMResultSet.h in Headers */,
 				5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */,
 				561685EC1C73DB3300FC7FA6 /* SCGpkgSpatialRefSys.h in Headers */,
+				56DBE2541DDF57C4003C58ED /* SCRemoteDataStore.h in Headers */,
 				5649B5971BE280D6009947EF /* SCFilterBetween.h in Headers */,
 				5649B5DD1BE280D6009947EF /* SCMultiLineString+GeoJSON.h in Headers */,
 				5649B5A91BE280D6009947EF /* SCFilterNotEqual.h in Headers */,
@@ -2183,6 +2198,7 @@
 				547F3EDB1D77688700AE354E /* Reachability.m in Sources */,
 				5645C4F31BED9258006E4128 /* SCMultiLineString+GPKG.m in Sources */,
 				5645C4E11BED31F1006E4128 /* SCGeometry+GPKG.mm in Sources */,
+				56DBE2551DDF57C4003C58ED /* SCRemoteDataStore.m in Sources */,
 				5616860F1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.m in Sources */,
 				5649B61B1BE280D6009947EF /* SCTileOverlayRenderer.m in Sources */,
 				560AFB2F1C7E2762006A060F /* SCGpkgTileSource.m in Sources */,

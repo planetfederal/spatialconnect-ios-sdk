@@ -24,6 +24,9 @@
 
 - (RACSignal *)start;
 - (void)stop;
+
+@optional
+
 - (void)resume;
 - (void)pause;
 

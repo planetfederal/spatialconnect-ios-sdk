@@ -77,12 +77,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   self.status = SC_DATASTORE_STOPPED;
 }
 
-- (void)resume {
-}
-
-- (void)pause {
-}
-
 - (NSString *)defaultLayerName {
   return self.adapter.defaultLayerName;
 }
