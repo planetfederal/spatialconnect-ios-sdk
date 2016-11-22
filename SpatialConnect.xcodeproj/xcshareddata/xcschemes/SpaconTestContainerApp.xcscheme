@@ -38,6 +38,16 @@
                ReferencedContainer = "container:SpatialConnect.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "5653F85D1D99A8680028B840"
+               BuildableName = "SpaconAppUITests.xctest"
+               BlueprintName = "SpaconAppUITests"
+               ReferencedContainer = "container:SpatialConnect.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
