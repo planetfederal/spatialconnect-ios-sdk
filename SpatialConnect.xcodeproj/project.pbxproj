@@ -105,8 +105,6 @@
 		5649B4D31BE28079009947EF /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4BF1BE28079009947EF /* simple.json */; };
 		5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
 		5649B4D61BE28079009947EF /* tests.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4C31BE28079009947EF /* tests.scfg */; };
-		5649B57E1BE280D6009947EF /* GeoJSONStorageConnector.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B57F1BE280D6009947EF /* GeoJSONStorageConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */; };
 		5649B5801BE280D6009947EF /* GeoJSONStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4DB1BE280D5009947EF /* GeoJSONStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4DC1BE280D5009947EF /* GeoJSONStore.m */; };
 		5649B5841BE280D6009947EF /* SCBoundingBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4DF1BE280D5009947EF /* SCBoundingBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -555,8 +553,6 @@
 		5649B4C11BE28079009947EF /* SpatialConnectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectHelper.h; sourceTree = "<group>"; };
 		5649B4C21BE28079009947EF /* SpatialConnectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnectHelper.m; sourceTree = "<group>"; };
 		5649B4C31BE28079009947EF /* tests.scfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tests.scfg; sourceTree = "<group>"; };
-		5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONStorageConnector.h; sourceTree = "<group>"; };
-		5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONStorageConnector.m; sourceTree = "<group>"; };
 		5649B4DB1BE280D5009947EF /* GeoJSONStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONStore.h; sourceTree = "<group>"; };
 		5649B4DC1BE280D5009947EF /* GeoJSONStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONStore.m; sourceTree = "<group>"; };
 		5649B4DF1BE280D5009947EF /* SCBoundingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SCBoundingBox.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1026,8 +1022,6 @@
 		563BEC541BE500D500778EDA /* GeoJSON */ = {
 			isa = PBXGroup;
 			children = (
-				5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */,
-				5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */,
 				5649B4DB1BE280D5009947EF /* GeoJSONStore.h */,
 				5649B4DC1BE280D5009947EF /* GeoJSONStore.m */,
 			);
@@ -1726,7 +1720,6 @@
 				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
 				5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */,
 				5649B5951BE280D6009947EF /* SCFilter.h in Headers */,
-				5649B57E1BE280D6009947EF /* GeoJSONStorageConnector.h in Headers */,
 				5649B5FF1BE280D6009947EF /* SCPrefixHeader.pch in Headers */,
 				5649B5B81BE280D6009947EF /* SCGeoJSONExtensions.h in Headers */,
 				560B10E61C77C16000BA15B8 /* SCGpkgTable.h in Headers */,
@@ -2287,7 +2280,6 @@
 				56CC07961C6E90F700407D4A /* SCGeopackage.m in Sources */,
 				5649B6151BE280D6009947EF /* SCStyle.m in Sources */,
 				5649B6011BE280D6009947EF /* SCQueryFilter.m in Sources */,
-				5649B57F1BE280D6009947EF /* GeoJSONStorageConnector.m in Sources */,
 				5649B58F1BE280D6009947EF /* SCDataService.m in Sources */,
 				56FB3EBA1CF6A2BD00C3DA4B /* FMDatabaseAdditions.m in Sources */,
 			);

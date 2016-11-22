@@ -17,7 +17,6 @@
 * under the License.
 ******************************************************************************/
 
-#import "GeoJSONStorageConnector.h"
 #import "SCGeometry.h"
 #import "SCDataStore.h"
 #import "SCSpatialStore.h"
@@ -42,9 +41,9 @@ typedef NS_ENUM(NSInteger, SCGeoJsonError) {
 @interface GeoJSONStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
     NSBundle *geojsonBundle;
     NSString *geojsonFilePath;
+    NSString *filename;
 }
 
-@property GeoJSONStorageConnector *connector;
 @property(nonatomic, strong) SCStyle *defaultStyle;
 @property(nonatomic, strong) NSString *storeId;
 @property(readonly, nonatomic, strong) NSString *uri;

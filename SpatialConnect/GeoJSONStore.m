@@ -52,6 +52,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     self.storeId = config.uniqueid;
     self.uri = config.uri;
     geojsonFilePath = nil;
+    filename = nil;
   return self;
 }
 
@@ -118,6 +119,20 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     return path;
 }
 
+- (void)initWithFileName:(NSString *)fileName {
+    filename = [NSString stringWithString:fileName];
+}
+
+- (void)write:(NSString *)str error:(NSError *)error {
+    [str writeToFile:str
+          atomically:YES
+            encoding:NSUnicodeStringEncoding
+               error:&error];
+}
+
+- (NSDictionary *)read:(NSError **)error {
+    return [SCFileUtils jsonFileToDict:filename error:error];
+}
 
 #pragma mark -
 #pragma mark SCSpatialStore
@@ -125,7 +140,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     return [
             [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *readError = nil;
-        NSDictionary *dict = [self.connector read:&readError];
+        NSDictionary *dict = [self read:&readError];
         if (readError) {
             [subscriber sendError:readError];
         }
@@ -269,7 +284,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
         BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
         if (b) {
             self.status = SC_DATASTORE_RUNNING;
-            self.connector = [[GeoJSONStorageConnector alloc] initWithFileName:path];
+            [self initWithFileName:path];
             return [RACSignal empty];
         }
         NSURL *url = [[NSURL alloc] initWithString:self.uri];
@@ -286,8 +301,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
                     completed:^{
                         DDLogInfo(@"Saving GEOJSON to %@", path);
                         [data writeToFile:path atomically:YES];
-                        self.connector =
-                        [[GeoJSONStorageConnector alloc] initWithFileName:path];
+                        [self initWithFileName:path];
                         self.downloadProgress = @(1.0f);
                         self.status = SC_DATASTORE_RUNNING;
                     }];
@@ -309,8 +323,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             if (filePath != nil &&
                 [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-                self.connector =
-                [[GeoJSONStorageConnector alloc] initWithFileName:filePath];
+                [self initWithFileName:filePath];
                 self.status = SC_DATASTORE_RUNNING;
                 [subscriber sendCompleted];
             } else {
