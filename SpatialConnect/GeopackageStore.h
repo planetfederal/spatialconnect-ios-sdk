@@ -17,11 +17,14 @@
  * under the License.
  ******************************************************************************/
 
-#import "GeopackageFileAdapter.h"
 #import "SCDataStore.h"
+#import "SCGeopackage.h"
+#import "SCQueryFilter.h"
 #import "SCRasterStore.h"
 #import "SCSpatialStore.h"
+#import "SCStoreConfig.h"
 #import <Foundation/Foundation.h>
+
 
 extern NSString *const SCGeopackageErrorDomain;
 
@@ -33,10 +36,18 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
 @interface GeopackageStore
     : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle, SCRasterStore>
 
-@property(strong, readonly, nonatomic) GeopackageFileAdapter *adapter;
+@property(readonly, nonatomic, strong) NSString *uri;
+@property(readonly, nonatomic, strong) NSString *filepath;
+@property(readonly, nonatomic, strong) SCGeopackage *gpkg;
 
+- (RACSignal *)query:(SCQueryFilter *)filter;
+- (RACSignal *)queryById:(SCKeyTuple *)key;
+- (RACSignal *)createFeature:(SCSpatialFeature *)feature;
+- (RACSignal *)deleteFeature:(SCKeyTuple *)tuple;
+- (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
 - (void)addLayer:(NSString *)name withDef:(NSDictionary *)def;
 - (void)removeLayer:(NSString *)name;
 - (SCPolygon *)coverage:(NSString *)layer;
+- (void)connectBlocking;
 
 @end

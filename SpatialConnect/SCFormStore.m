@@ -36,7 +36,7 @@
     _storeVersion = @"1";
     storeForms = [NSMutableDictionary new];
     _hasForms = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
-    [self.adapter connectBlocking];
+    [super connectBlocking];
   }
   return self;
 }
@@ -110,7 +110,7 @@
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[self.adapter createFeature:feature] materialize]
+  return [[[[super createFeature:feature] materialize]
       filter:^BOOL(RACEvent *evt) {
         return evt.eventType == RACEventTypeCompleted;
       }] flattenMap:^RACStream *(id value) {

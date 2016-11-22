@@ -15,8 +15,6 @@
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
-		560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71261BE8577000CE473F /* GeopackageFileAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71271BE8577000CE473F /* GeopackageFileAdapter.m */; };
 		560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560AFB2B1C7E2750006A060F /* SCGpkgFeatureSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 560AFB291C7E2750006A060F /* SCGpkgFeatureSource.m */; };
 		560AFB2E1C7E2762006A060F /* SCGpkgTileSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB2C1C7E2762006A060F /* SCGpkgTileSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -458,8 +456,6 @@
 		547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
-		560A71261BE8577000CE473F /* GeopackageFileAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageFileAdapter.h; sourceTree = "<group>"; };
-		560A71271BE8577000CE473F /* GeopackageFileAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageFileAdapter.m; sourceTree = "<group>"; };
 		560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgFeatureSource.h; sourceTree = "<group>"; };
 		560AFB291C7E2750006A060F /* SCGpkgFeatureSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgFeatureSource.m; sourceTree = "<group>"; };
 		560AFB2C1C7E2762006A060F /* SCGpkgTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgTileSource.h; sourceTree = "<group>"; };
@@ -1267,8 +1263,6 @@
 			children = (
 				563BEC6C1BE6F42800778EDA /* GeopackageStore.h */,
 				563BEC6D1BE6F42800778EDA /* GeopackageStore.m */,
-				560A71261BE8577000CE473F /* GeopackageFileAdapter.h */,
-				560A71271BE8577000CE473F /* GeopackageFileAdapter.m */,
 			);
 			name = Geopackage;
 			sourceTree = "<group>";
@@ -1724,7 +1718,6 @@
 				5649B5B81BE280D6009947EF /* SCGeoJSONExtensions.h in Headers */,
 				560B10E61C77C16000BA15B8 /* SCGpkgTable.h in Headers */,
 				56CC079D1C6ED59000407D4A /* SCGpkgContentsTable.h in Headers */,
-				560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */,
 				5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */,
 				5649B5BD1BE280D6009947EF /* SCGeometry+MapKit.h in Headers */,
 				5645C4EA1BED796D006E4128 /* SCPolygon+GPKG.h in Headers */,
@@ -2196,7 +2189,6 @@
 				5616860A1C75025100FC7FA6 /* SCGpkgDataColumn.m in Sources */,
 				563F426C1DB0622B005022A7 /* README.md in Sources */,
 				5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */,
-				560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */,
 				5649B5E21BE280D6009947EF /* SCMultiPoint.m in Sources */,
 				569A80D01D822458006581F0 /* SCTileMatrixRow.m in Sources */,
 				5649B5FC1BE280D6009947EF /* SCPolygon+MapKit.m in Sources */,

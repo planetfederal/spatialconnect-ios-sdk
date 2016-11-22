@@ -18,11 +18,21 @@
  ******************************************************************************/
 
 #import "GeopackageStore.h"
+#import "SCFileUtils.h"
+#import "SCGeometry+GPKG.h"
+#import "SCGeopackage.h"
+#import "SCGpkgTileSource.h"
+#import "SCHttpUtils.h"
+#import "SCKeyTuple.h"
+#import "SCPoint.h"
+#import "SCTileOverlay.h"
 
 NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 @interface GeopackageStore ()
-@property(readwrite, nonatomic, strong) GeopackageFileAdapter *adapter;
+@property(readwrite, nonatomic, strong) NSString *uri;
+@property(readwrite, nonatomic, strong) NSString *filepath;
+@property(readwrite, nonatomic, strong) SCGeopackage *gpkg;
 @end
 
 @implementation GeopackageStore
@@ -30,8 +40,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #define STORE_NAME @"Geopackage"
 #define TYPE @"gpkg"
 #define VERSION @"1"
-
-@synthesize adapter = _adapter;
 
 #pragma mark -
 #pragma mark Init Methods
@@ -44,12 +52,15 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (!self) {
     return nil;
   }
-  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid
-                                                      andURI:config.uri];
+//  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid
+//                                                      andURI:config.uri];
   self.name = config.name;
   self.permission = SC_DATASTORE_READWRITE;
+    self.filepath = [NSString stringWithFormat:@"%@.gpkg", config.uniqueid];
+    self.uri = config.uri;
   _storeType = TYPE;
   _storeVersion = VERSION;
+
 
   return self;
 }
@@ -63,17 +74,82 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return self;
 }
 
+- (NSString *)path {
+    NSString *path = nil;
+    BOOL saveToDocsDir = ![SCFileUtils isTesting];
+    if (saveToDocsDir) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                             NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        path = [documentsDirectory stringByAppendingPathComponent:self.filepath];
+    } else {
+        path = [SCFileUtils filePathFromNSHomeDirectory:self.filepath];
+    }
+    return path;
+}
+
+- (void)connectBlocking {
+    NSString *path = [self path];
+    self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
+    self.status = SC_DATASTORE_RUNNING;
+}
+
 #pragma mark -
 #pragma mark SCDataStoreLifeCycle
 
 - (RACSignal *)start {
-  self.adapter.parentStore = self;
+  //self.adapter.parentStore = self;
   self.status = SC_DATASTORE_STARTED;
-  return self.adapter.connect;
+//  return self.adapter.connect;
+    
+    if (self.gpkg) { // The Store is already connected and may have been
+        // initialized as the default
+        self.status = SC_DATASTORE_RUNNING;
+        return [RACSignal empty];
+    }
+    // The Database's name on disk is its store ID. This is to guaruntee
+    // uniqueness
+    // when being stored on disk.
+    NSString *path = [self path];
+    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    
+    if (b) {
+        self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+        self.status = SC_DATASTORE_RUNNING;
+        return [RACSignal empty];
+    } else if ([self.uri.lowercaseString containsString:@"http"]) {
+        self.status = SC_DATASTORE_DOWNLOADINGDATA;
+        NSURL *url = [[NSURL alloc] initWithString:self.uri];
+        RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+        __block NSMutableData *data = nil;
+        [dload$ subscribeNext:^(RACTuple *t) {
+            data = t.first;
+            self.downloadProgress = t.second;
+        }
+                        error:^(NSError *error) {
+                            self.status = SC_DATASTORE_DOWNLOADFAIL;
+                        }
+                    completed:^{
+                        DDLogInfo(@"Saving GPKG to %@", path);
+                        [data writeToFile:path atomically:YES];
+                        self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+                        self.downloadProgress = @(1.0f);
+                        self.status = SC_DATASTORE_RUNNING;
+                    }];
+        return dload$;
+    } else if ([path containsString:@"DEFAULT_STORE"]) {
+        // initialize empty geopackage
+        self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
+        return [RACSignal empty];
+    }
+    NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
+                                       code:SC_GEOPACKAGE_FILENOTFOUND
+                                   userInfo:nil];
+    return [RACSignal error:err];
 }
 
 - (void)stop {
-  [self.adapter disconnect];
+//  [self.adapter disconnect];
   self.status = SC_DATASTORE_STOPPED;
 }
 
@@ -84,27 +160,43 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (NSString *)defaultLayerName {
-  return self.adapter.defaultLayerName;
+    SCGpkgFeatureSource *fs =
+    (SCGpkgFeatureSource *)[self.gpkg.featureContents firstObject];
+    return fs.name;
 }
 
 - (void)addLayer:(NSString *)name withDef:(NSDictionary *)def {
-  [self.adapter addLayer:name typeDefs:def];
+  [self.gpkg addFeatureSource:name withTypes:def];
 }
 
 - (void)removeLayer:(NSString *)name {
+    [self.gpkg removeFeatureSource:name];
+}
+
+- (NSString *)defaultRasterName {
+    SCGpkgTileSource *ts =
+    (SCGpkgTileSource *)[self.gpkg.tileContents firstObject];
+    return ts.name;
 }
 
 #pragma mark -
 #pragma mark SCRasterStore
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView {
-  return [self.adapter overlayFromLayer:layer mapview:mapView];
+//  return [self.adapter overlayFromLayer:layer mapview:mapView];
+    
+    __block MKTileOverlay *overlay = nil;
+    SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
+    overlay = [[SCTileOverlay alloc] initWithRasterSource:ts];
+    overlay.canReplaceMapContent = false;
+    [mapView addOverlay:overlay];
+    return overlay;
 }
 
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
-  return [[self.adapter query:filter]
+  return [[self.gpkg query:filter]
       map:^SCSpatialFeature *(SCSpatialFeature *f) {
         f.storeId = self.storeId;
         return f;
@@ -112,7 +204,8 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
-  return [self.adapter queryById:key];
+//  return [self.adapter queryById:key];
+    return [[self.gpkg featureSource:key.layerId] findById:key.featureId];
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
@@ -122,16 +215,19 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (feature.layerId == nil) {
     feature.layerId = self.defaultLayerName;
   }
-  return [self.adapter createFeature:feature];
+//  return [self.adapter createFeature:feature];
+    return [[self.gpkg featureSource:feature.layerId] create:feature];
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {
-  return [self.adapter updateFeature:feature];
+//  return [self.adapter updateFeature:feature];
+    return [[self.gpkg featureSource:feature.layerId] update:feature];
 }
 
 - (RACSignal *) delete:(SCKeyTuple *)tuple {
   NSParameterAssert(tuple);
-  return [self.adapter deleteFeature:tuple];
+//  return [self.adapter deleteFeature:tuple];
+    return [[self.gpkg featureSource:tuple.layerId] remove:tuple];
 }
 
 - (NSArray *)layers {
@@ -139,21 +235,23 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (NSArray *)vectorLayers {
-  return [[[[self.adapter.vectorLayers rac_sequence] signal]
+  return [[[[self.gpkg.featureContents rac_sequence] signal]
       map:^NSString *(SCGpkgFeatureSource *f) {
         return f.name;
       }] toArray];
 }
 
 - (NSArray *)rasterLayers {
-  return [[[[self.adapter.rasterLayers rac_sequence] signal]
+  return [[[[self.gpkg.tileContents rac_sequence] signal]
       map:^NSString *(SCGpkgFeatureSource *f) {
         return f.name;
       }] toArray];
 }
 
 - (SCPolygon *)coverage:(NSString *)layer {
-  return [self.adapter coverage:layer];
+//  return [self.adapter coverage:layer];
+    SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
+    return [ts coveragePolygon];
 }
 
 #pragma mark -
