@@ -168,7 +168,7 @@
 
   NSString *url =
       [NSString stringWithFormat:@"%@/ping", sc.backendService.backendUri];
-  [[SCHttpUtils getRequestURLAsData:[NSURL URLWithString:url]]
+  [[[SCHttpUtils getRequestURLAsData:[NSURL URLWithString:url]] take:1]
       subscribeNext:^(NSData *d) {
         XCTAssertNotNil(d);
         [expect fulfill];

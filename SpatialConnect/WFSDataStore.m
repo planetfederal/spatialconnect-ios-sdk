@@ -144,26 +144,6 @@
   return nil;
 }
 
-#pragma mark -
-#pragma mark SCDataStoreLifeCycle
-
-- (RACSignal *)start {
-  self.status = SC_DATASTORE_RUNNING;
-  return [RACSignal empty];
-}
-
-- (void)stop {
-  self.status = SC_DATASTORE_STOPPED;
-}
-
-- (void)pause {
-  self.status = SC_DATASTORE_PAUSED;
-}
-
-- (void)resume {
-  self.status = SC_DATASTORE_RUNNING;
-}
-
 + (NSString *)versionKey {
   return [NSString stringWithFormat:@"%@.%@", TYPE, VERSION];
 }
