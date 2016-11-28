@@ -40,11 +40,6 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
 @property(readonly, nonatomic, strong) NSString *filepath;
 @property(readonly, nonatomic, strong) SCGeopackage *gpkg;
 
-- (RACSignal *)query:(SCQueryFilter *)filter;
-- (RACSignal *)queryById:(SCKeyTuple *)key;
-- (RACSignal *)createFeature:(SCSpatialFeature *)feature;
-- (RACSignal *)deleteFeature:(SCKeyTuple *)tuple;
-- (RACSignal *)updateFeature:(SCSpatialFeature *)feature;
 - (void)addLayer:(NSString *)name withDef:(NSDictionary *)def;
 - (void)removeLayer:(NSString *)name;
 - (SCPolygon *)coverage:(NSString *)layer;

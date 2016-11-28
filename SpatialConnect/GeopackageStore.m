@@ -52,8 +52,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (!self) {
     return nil;
   }
-//  _adapter = [[GeopackageFileAdapter alloc] initWithFileName:config.uniqueid
-//                                                      andURI:config.uri];
   self.name = config.name;
   self.permission = SC_DATASTORE_READWRITE;
     self.filepath = [NSString stringWithFormat:@"%@.gpkg", config.uniqueid];
@@ -98,9 +96,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark SCDataStoreLifeCycle
 
 - (RACSignal *)start {
-  //self.adapter.parentStore = self;
   self.status = SC_DATASTORE_STARTED;
-//  return self.adapter.connect;
     
     if (self.gpkg) { // The Store is already connected and may have been
         // initialized as the default
@@ -149,7 +145,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (void)stop {
-//  [self.adapter disconnect];
   self.status = SC_DATASTORE_STOPPED;
 }
 
@@ -183,7 +178,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 #pragma mark SCRasterStore
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView {
-//  return [self.adapter overlayFromLayer:layer mapview:mapView];
     
     __block MKTileOverlay *overlay = nil;
     SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
@@ -204,7 +198,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
-//  return [self.adapter queryById:key];
     return [[self.gpkg featureSource:key.layerId] findById:key.featureId];
 }
 
@@ -215,18 +208,15 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (feature.layerId == nil) {
     feature.layerId = self.defaultLayerName;
   }
-//  return [self.adapter createFeature:feature];
     return [[self.gpkg featureSource:feature.layerId] create:feature];
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {
-//  return [self.adapter updateFeature:feature];
     return [[self.gpkg featureSource:feature.layerId] update:feature];
 }
 
 - (RACSignal *) delete:(SCKeyTuple *)tuple {
   NSParameterAssert(tuple);
-//  return [self.adapter deleteFeature:tuple];
     return [[self.gpkg featureSource:tuple.layerId] remove:tuple];
 }
 
@@ -249,7 +239,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (SCPolygon *)coverage:(NSString *)layer {
-//  return [self.adapter coverage:layer];
     SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
     return [ts coveragePolygon];
 }

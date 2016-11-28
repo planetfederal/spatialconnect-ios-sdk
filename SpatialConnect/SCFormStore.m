@@ -110,7 +110,7 @@
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[super createFeature:feature] materialize]
+  return [[[[super create:feature] materialize]
       filter:^BOOL(RACEvent *evt) {
         return evt.eventType == RACEventTypeCompleted;
       }] flattenMap:^RACStream *(id value) {

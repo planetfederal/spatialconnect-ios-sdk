@@ -84,7 +84,7 @@
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
-  return [[[self createFeature:feature] materialize]
+  return [[[self create:feature] materialize]
       filter:^BOOL(RACEvent *evt) {
         if (evt.eventType == RACEventTypeCompleted) {
           return YES;

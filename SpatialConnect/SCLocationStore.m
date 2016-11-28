@@ -14,6 +14,7 @@
  * limitations under the License
  */
 
+#import "GeopackageStore.h"
 #import "SCLocationStore.h"
 #import "JSONKit.h"
 #import "SCPoint+GeoJSON.h"
@@ -82,7 +83,7 @@
 - (RACSignal *)create:(SCPoint *)pt {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   pt.layerId = @"last_known_location";
-  RACSignal *c = [super createFeature:pt];
+  RACSignal *c = [super create:pt];
   if (!sc.backendService.backendUri) {
     return c;
   } else {
