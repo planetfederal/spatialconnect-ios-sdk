@@ -88,6 +88,10 @@
   return nil;
 }
 
+- (RACSignal *)download:(NSURL *)url {
+    return [SCHttpUtils getRequestURLAsData:url];
+}
+
 #pragma mark -
 #pragma mark Class Methods
 

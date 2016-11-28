@@ -116,7 +116,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     } else if ([self.uri.lowercaseString containsString:@"http"]) {
         self.status = SC_DATASTORE_DOWNLOADINGDATA;
         NSURL *url = [[NSURL alloc] initWithString:self.uri];
-        RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+        RACSignal *dload$ = [super download:url];
         __block NSMutableData *data = nil;
         [dload$ subscribeNext:^(RACTuple *t) {
             data = t.first;

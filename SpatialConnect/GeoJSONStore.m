@@ -289,7 +289,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
         }
         NSURL *url = [[NSURL alloc] initWithString:self.uri];
         self.status = SC_DATASTORE_DOWNLOADINGDATA;
-        RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+        RACSignal *dload$ = [super download:url];
         __block NSMutableData *data = nil;
         [dload$ subscribeNext:^(RACTuple *t) {
             data = t.first;
