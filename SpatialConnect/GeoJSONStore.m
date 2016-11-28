@@ -287,23 +287,11 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
             [self initWithFileName:path];
             return [RACSignal empty];
         }
-        NSURL *url = [[NSURL alloc] initWithString:self.uri];
-        self.status = SC_DATASTORE_DOWNLOADINGDATA;
-        RACSignal *dload$ = [super download:url];
-        __block NSMutableData *data = nil;
-        [dload$ subscribeNext:^(RACTuple *t) {
-            data = t.first;
-            self.downloadProgress = t.second;
-        }
-                        error:^(NSError *error) {
-                            self.status = SC_DATASTORE_DOWNLOADFAIL;
-                        }
-                    completed:^{
+
+        RACSignal *dload$ = [super download:self.uri to:path];
+        [dload$ subscribeCompleted:^{
                         DDLogInfo(@"Saving GEOJSON to %@", path);
-                        [data writeToFile:path atomically:YES];
                         [self initWithFileName:path];
-                        self.downloadProgress = @(1.0f);
-                        self.status = SC_DATASTORE_RUNNING;
                     }];
         return dload$;
     } else {

@@ -114,23 +114,11 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
         self.status = SC_DATASTORE_RUNNING;
         return [RACSignal empty];
     } else if ([self.uri.lowercaseString containsString:@"http"]) {
-        self.status = SC_DATASTORE_DOWNLOADINGDATA;
-        NSURL *url = [[NSURL alloc] initWithString:self.uri];
-        RACSignal *dload$ = [super download:url];
-        __block NSMutableData *data = nil;
-        [dload$ subscribeNext:^(RACTuple *t) {
-            data = t.first;
-            self.downloadProgress = t.second;
-        }
-                        error:^(NSError *error) {
-                            self.status = SC_DATASTORE_DOWNLOADFAIL;
-                        }
-                    completed:^{
+    
+        RACSignal *dload$ = [super download:self.uri to:path];
+        [dload$ subscribeCompleted:^{
                         DDLogInfo(@"Saving GPKG to %@", path);
-                        [data writeToFile:path atomically:YES];
                         self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-                        self.downloadProgress = @(1.0f);
-                        self.status = SC_DATASTORE_RUNNING;
                     }];
         return dload$;
     } else if ([path containsString:@"DEFAULT_STORE"]) {

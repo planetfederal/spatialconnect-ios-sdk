@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, SCDataStorePermission) {
 
 - (NSDictionary *)dictionary;
 - (NSArray *)layers;
-- (RACSignal *)download:(NSURL *)url;
+- (RACSignal *)download:(NSString *)url to:(NSString *)path;
 
 + (NSString *)versionKey;
 
