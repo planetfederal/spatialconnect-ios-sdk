@@ -25,7 +25,6 @@
 #import "SCStoreConfig.h"
 #import <Foundation/Foundation.h>
 
-
 extern NSString *const SCGeopackageErrorDomain;
 
 typedef NS_ENUM(NSInteger, SCGeopackageError) {

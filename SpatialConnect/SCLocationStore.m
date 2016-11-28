@@ -14,8 +14,8 @@
  * limitations under the License
  */
 
-#import "GeopackageStore.h"
 #import "SCLocationStore.h"
+#import "GeopackageStore.h"
 #import "JSONKit.h"
 #import "SCPoint+GeoJSON.h"
 #import "Scmessage.pbobjc.h"

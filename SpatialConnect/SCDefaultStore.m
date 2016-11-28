@@ -31,7 +31,7 @@
     formIds = [NSMutableDictionary new];
     _storeType = @"gpkg";
     _storeVersion = @"1";
-    [ super connectBlocking];
+    [super connectBlocking];
   }
   return self;
 }
@@ -84,14 +84,13 @@
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
-  return [[[self create:feature] materialize]
-      filter:^BOOL(RACEvent *evt) {
-        if (evt.eventType == RACEventTypeCompleted) {
-          return YES;
-        } else {
-          return NO;
-        }
-      }];
+  return [[[self create:feature] materialize] filter:^BOOL(RACEvent *evt) {
+    if (evt.eventType == RACEventTypeCompleted) {
+      return YES;
+    } else {
+      return NO;
+    }
+  }];
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {

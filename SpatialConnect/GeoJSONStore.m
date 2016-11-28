@@ -49,10 +49,10 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     return nil;
   }
   self.name = config.name;
-    self.storeId = config.uniqueid;
-    self.uri = config.uri;
-    geojsonFilePath = nil;
-    filename = nil;
+  self.storeId = config.uniqueid;
+  self.uri = config.uri;
+  geojsonFilePath = nil;
+  filename = nil;
   return self;
 }
 
@@ -82,10 +82,10 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 }
 
 - (RACSignal *)writeGeometryToFile:(SCGeometry *)geom {
-    return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSString *string =
-        [NSString stringWithFormat:@"%@", geom.geoJSONString];
+            [NSString stringWithFormat:@"%@", geom.geoJSONString];
         NSError *writeError = nil;
         [string writeToFile:geojsonFilePath
                  atomically:YES
@@ -93,97 +93,96 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
                       error:&writeError];
         DDLogError(@"%@", writeError.localizedFailureReason);
         if (writeError) {
-            [subscriber sendError:writeError];
+          [subscriber sendError:writeError];
         } else {
-            [subscriber sendCompleted];
+          [subscriber sendCompleted];
         }
         return nil;
-    }];
+      }];
 }
 
 - (NSString *)path {
-    if (geojsonFilePath) {
-        return geojsonFilePath;
-    }
-    NSString *path = nil;
-    NSString *dbName = [NSString stringWithFormat:@"%@.geojson", self.storeId];
-    BOOL saveToDocsDir = ![SCFileUtils isTesting];
-    if (saveToDocsDir) {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                             NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        path = [documentsDirectory stringByAppendingPathComponent:dbName];
-    } else {
-        path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
-    }
-    return path;
+  if (geojsonFilePath) {
+    return geojsonFilePath;
+  }
+  NSString *path = nil;
+  NSString *dbName = [NSString stringWithFormat:@"%@.geojson", self.storeId];
+  BOOL saveToDocsDir = ![SCFileUtils isTesting];
+  if (saveToDocsDir) {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    path = [documentsDirectory stringByAppendingPathComponent:dbName];
+  } else {
+    path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
+  }
+  return path;
 }
 
 - (void)initWithFileName:(NSString *)fileName {
-    filename = [NSString stringWithString:fileName];
+  filename = [NSString stringWithString:fileName];
 }
 
 - (void)write:(NSString *)str error:(NSError *)error {
-    [str writeToFile:str
-          atomically:YES
-            encoding:NSUnicodeStringEncoding
-               error:&error];
+  [str writeToFile:str
+        atomically:YES
+          encoding:NSUnicodeStringEncoding
+             error:&error];
 }
 
 - (NSDictionary *)read:(NSError **)error {
-    return [SCFileUtils jsonFileToDict:filename error:error];
+  return [SCFileUtils jsonFileToDict:filename error:error];
 }
 
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {
-    return [
-            [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return [
+      [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         NSError *readError = nil;
         NSDictionary *dict = [self read:&readError];
         if (readError) {
-            [subscriber sendError:readError];
+          [subscriber sendError:readError];
         }
         if (dict) {
-            SCGeometry *geom = [SCGeoJSON parseDict:dict];
-            if (geom) {
-                [subscriber sendNext:geom];
-            }
+          SCGeometry *geom = [SCGeoJSON parseDict:dict];
+          if (geom) {
+            [subscriber sendNext:geom];
+          }
         }
         [subscriber sendCompleted];
         return nil;
-    }] flattenMap:^RACStream *(SCGeometry *g) {
+      }] flattenMap:^RACStream *(SCGeometry *g) {
         return [RACSignal
-                createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                    if ([g isKindOfClass:SCGeometryCollection.class]) {
-                        SCGeometryCollection *scgc = (SCGeometryCollection *)g;
-                        for (SCGeometry *geom in scgc.geometries) {
-                            geom.layerId = @"default";
-                            geom.storeId = [NSString stringWithString:self.storeId];
-                            if (!geom.style) {
-                                [geom.style addMissing:self.defaultStyle];
-                            }
-                            [subscriber sendNext:geom];
-                        }
-                    } else {
-                        [subscriber sendNext:g];
-                    }
-                    [subscriber sendCompleted];
-                    return nil;
-                }];
-    }] filter:^BOOL(SCGeometry *value) {
+            createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+              if ([g isKindOfClass:SCGeometryCollection.class]) {
+                SCGeometryCollection *scgc = (SCGeometryCollection *)g;
+                for (SCGeometry *geom in scgc.geometries) {
+                  geom.layerId = @"default";
+                  geom.storeId = [NSString stringWithString:self.storeId];
+                  if (!geom.style) {
+                    [geom.style addMissing:self.defaultStyle];
+                  }
+                  [subscriber sendNext:geom];
+                }
+              } else {
+                [subscriber sendNext:g];
+              }
+              [subscriber sendCompleted];
+              return nil;
+            }];
+      }] filter:^BOOL(SCGeometry *value) {
         for (SCPredicate *p in filter.predicates) {
-            if (![p compare:value]) {
-                return NO;
-            }
+          if (![p compare:value]) {
+            return NO;
+          }
         }
         return YES;
-    }] map:^SCGeometry *(SCGeometry *g) {
+      }] map:^SCGeometry *(SCGeometry *g) {
         g.layerId = self.layers[0];
         g.storeId = self.storeId;
         return g;
-    }];
-
+      }];
 }
 
 - (RACSignal *)queryById:(SCKeyTuple *)key {
@@ -191,87 +190,87 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
-    return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACSignal *write =
-        [[[self query:nil] map:^SCGeometry *(SCGeometry *geom) {
-            SCGeometry *geomToWrite;
-            if ([geom isKindOfClass:SCGeometryCollection.class]) {
+            [[[self query:nil] map:^SCGeometry *(SCGeometry *geom) {
+              SCGeometry *geomToWrite;
+              if ([geom isKindOfClass:SCGeometryCollection.class]) {
                 SCGeometryCollection *geomc = (SCGeometryCollection *)geom;
                 [geomc.geometries addObject:feature];
                 geomToWrite = geomc;
-            } else {
+              } else {
                 geomToWrite = [[SCGeometryCollection alloc]
-                               initWithGeometriesArray:@[ geom, feature ]];
-            }
-            return geomToWrite;
-        }] flattenMap:^RACStream *(SCGeometry *geomToWrite) {
-            return [self writeGeometryToFile:geomToWrite];
-        }];
-        
+                    initWithGeometriesArray:@[ geom, feature ]];
+              }
+              return geomToWrite;
+            }] flattenMap:^RACStream *(SCGeometry *geomToWrite) {
+              return [self writeGeometryToFile:geomToWrite];
+            }];
+
         [write subscribeError:^(NSError *error) {
-            [subscriber sendError:error];
+          [subscriber sendError:error];
         }
-                    completed:^{
-                        [subscriber sendCompleted];
-                    }];
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
-    }];
+      }];
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {
-    return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [[[[self query:nil] map:^SCGeometry *(SCGeometry *geom) {
-            if ([geom isKindOfClass:SCGeometryCollection.class]) {
-                SCGeometryCollection *geomc = (SCGeometryCollection *)geom;
-                [geomc.geometries enumerateObjectsUsingBlock:^(
-                                                               SCGeometry *g, NSUInteger idx, BOOL *stop) {
-                    if ([feature.identifier isEqual:g.identifier]) {
-                        g = (SCGeometry *)feature;
-                        *stop = YES;
-                    }
-                }];
-            }
-            return geom;
+          if ([geom isKindOfClass:SCGeometryCollection.class]) {
+            SCGeometryCollection *geomc = (SCGeometryCollection *)geom;
+            [geomc.geometries enumerateObjectsUsingBlock:^(
+                                  SCGeometry *g, NSUInteger idx, BOOL *stop) {
+              if ([feature.identifier isEqual:g.identifier]) {
+                g = (SCGeometry *)feature;
+                *stop = YES;
+              }
+            }];
+          }
+          return geom;
         }] flattenMap:^RACStream *(SCGeometry *g) {
-            return [self writeGeometryToFile:g];
+          return [self writeGeometryToFile:g];
         }] subscribeError:^(NSError *error) {
-            [subscriber sendError:error];
+          [subscriber sendError:error];
         }
-         completed:^{
-             [subscriber sendCompleted];
-         }];
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
-    }];
+      }];
 }
 
 - (RACSignal *) delete:(SCSpatialFeature *)feature {
-    return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         RACSignal *write =
-        [[[self query:nil] map:^SCGeometry *(SCGeometry *geom) {
-            SCGeometry *geomToWrite;
-            if ([geom isKindOfClass:SCGeometryCollection.class]) {
+            [[[self query:nil] map:^SCGeometry *(SCGeometry *geom) {
+              SCGeometry *geomToWrite;
+              if ([geom isKindOfClass:SCGeometryCollection.class]) {
                 SCGeometryCollection *geomc = (SCGeometryCollection *)geom;
                 [geomc.geometries removeObject:feature];
                 geomToWrite = geomc;
-            } else {
+              } else {
                 geomToWrite = [[SCGeometry alloc] init];
-            }
-            return geomToWrite;
-        }] flattenMap:^RACStream *(SCGeometry *geomToWrite) {
-            return [self writeGeometryToFile:geomToWrite];
-        }];
-        
+              }
+              return geomToWrite;
+            }] flattenMap:^RACStream *(SCGeometry *geomToWrite) {
+              return [self writeGeometryToFile:geomToWrite];
+            }];
+
         [write subscribeError:^(NSError *error) {
-            [subscriber sendError:error];
+          [subscriber sendError:error];
         }
-                    completed:^{
-                        [subscriber sendCompleted];
-                    }];
+            completed:^{
+              [subscriber sendCompleted];
+            }];
         return nil;
-    }];
+      }];
 }
 
 #pragma mark -
@@ -279,52 +278,52 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 
 - (RACSignal *)start {
   self.status = SC_DATASTORE_STARTED;
-    if (self.uri != nil && [self.uri.lowercaseString containsString:@"http"]) {
-        NSString *path = [self path];
-        BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-        if (b) {
-            self.status = SC_DATASTORE_RUNNING;
-            [self initWithFileName:path];
-            return [RACSignal empty];
-        }
-
-        RACSignal *dload$ = [super download:self.uri to:path];
-        [dload$ subscribeCompleted:^{
-                        DDLogInfo(@"Saving GEOJSON to %@", path);
-                        [self initWithFileName:path];
-                    }];
-        return dload$;
-    } else {
-        NSString *filePath = nil;
-        NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
-        NSString *documentsPath =
-        [SCFileUtils filePathFromDocumentsDirectory:self.uri];
-        if (geojsonFilePath) {
-            filePath = geojsonFilePath;
-        } else if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
-            filePath = bundlePath;
-        } else if ([[NSFileManager defaultManager]
-                    fileExistsAtPath:documentsPath]) {
-            filePath = documentsPath;
-        }
-        return
-        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            if (filePath != nil &&
-                [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-                [self initWithFileName:filePath];
-                self.status = SC_DATASTORE_RUNNING;
-                [subscriber sendCompleted];
-            } else {
-                NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
-                                                   code:SC_GEOJSON_FILENOTFOUND
-                                               userInfo:nil];
-                self.status = SC_DATASTORE_STOPPED;
-                [subscriber sendError:err];
-            }
-            return nil;
-        }];
+  if (self.uri != nil && [self.uri.lowercaseString containsString:@"http"]) {
+    NSString *path = [self path];
+    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    if (b) {
+      self.status = SC_DATASTORE_RUNNING;
+      [self initWithFileName:path];
+      return [RACSignal empty];
     }
-    return [RACSignal empty];
+
+    RACSignal *dload$ = [super download:self.uri to:path];
+    [dload$ subscribeCompleted:^{
+      DDLogInfo(@"Saving GEOJSON to %@", path);
+      [self initWithFileName:path];
+    }];
+    return dload$;
+  } else {
+    NSString *filePath = nil;
+    NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
+    NSString *documentsPath =
+        [SCFileUtils filePathFromDocumentsDirectory:self.uri];
+    if (geojsonFilePath) {
+      filePath = geojsonFilePath;
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+      filePath = bundlePath;
+    } else if ([[NSFileManager defaultManager]
+                   fileExistsAtPath:documentsPath]) {
+      filePath = documentsPath;
+    }
+    return
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          if (filePath != nil &&
+              [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            [self initWithFileName:filePath];
+            self.status = SC_DATASTORE_RUNNING;
+            [subscriber sendCompleted];
+          } else {
+            NSError *err = [NSError errorWithDomain:SCGeoJsonErrorDomain
+                                               code:SC_GEOJSON_FILENOTFOUND
+                                           userInfo:nil];
+            self.status = SC_DATASTORE_STOPPED;
+            [subscriber sendError:err];
+          }
+          return nil;
+        }];
+  }
+  return [RACSignal empty];
 }
 
 - (void)stop {

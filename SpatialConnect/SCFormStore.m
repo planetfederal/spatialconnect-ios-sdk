@@ -110,10 +110,9 @@
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[super create:feature] materialize]
-      filter:^BOOL(RACEvent *evt) {
-        return evt.eventType == RACEventTypeCompleted;
-      }] flattenMap:^RACStream *(id value) {
+  return [[[[super create:feature] materialize] filter:^BOOL(RACEvent *evt) {
+    return evt.eventType == RACEventTypeCompleted;
+  }] flattenMap:^RACStream *(id value) {
     if (sc.backendService.status == SC_SERVICE_RUNNING) {
       feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
       SCMessage *msg = [[SCMessage alloc] init];

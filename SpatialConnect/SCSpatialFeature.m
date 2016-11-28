@@ -69,7 +69,8 @@
 - (NSDictionary *)dateToString:(NSMutableDictionary *)dict {
   NSDateFormatter *df = [NSDateFormatter new];
   [df setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
-  [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+  [dict enumerateKeysAndObjectsUsingBlock:^(id _Nonnull key, id _Nonnull obj,
+                                            BOOL *_Nonnull stop) {
     if ([obj isKindOfClass:NSDate.class]) {
       [dict setObject:[df stringFromDate:obj] forKey:key];
     }
@@ -77,7 +78,7 @@
       [dict setObject:[self dateToString:obj] forKey:key];
     }
   }];
-  
+
   return dict;
 }
 

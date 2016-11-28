@@ -89,25 +89,25 @@
 }
 
 - (RACSignal *)download:(NSString *)urll to:(NSString *)path {
-            self.status = SC_DATASTORE_DOWNLOADINGDATA;
-    NSURL *url = [[NSURL alloc] initWithString:urll];
-    RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
-    __block NSMutableData *data = nil;
-    [dload$ subscribeNext:^(RACTuple *t) {
-        data = t.first;
-        self.downloadProgress = t.second;
-    }
-                    error:^(NSError *error) {
-                        self.status = SC_DATASTORE_DOWNLOADFAIL;
-                    }
-                completed:^{
-                    DDLogInfo(@"Saving GEOJSON to %@", path);
-                    [data writeToFile:path atomically:YES];
-//                    [self initWithFileName:path];
-                    self.downloadProgress = @(1.0f);
-                    self.status = SC_DATASTORE_RUNNING;
-                }];
-    return dload$;
+  self.status = SC_DATASTORE_DOWNLOADINGDATA;
+  NSURL *url = [[NSURL alloc] initWithString:urll];
+  RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+  __block NSMutableData *data = nil;
+  [dload$ subscribeNext:^(RACTuple *t) {
+    data = t.first;
+    self.downloadProgress = t.second;
+  }
+      error:^(NSError *error) {
+        self.status = SC_DATASTORE_DOWNLOADFAIL;
+      }
+      completed:^{
+        DDLogInfo(@"Saving GEOJSON to %@", path);
+        [data writeToFile:path atomically:YES];
+        //                    [self initWithFileName:path];
+        self.downloadProgress = @(1.0f);
+        self.status = SC_DATASTORE_RUNNING;
+      }];
+  return dload$;
 }
 
 #pragma mark -

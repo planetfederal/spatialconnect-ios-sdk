@@ -17,11 +17,11 @@
 * under the License.
 ******************************************************************************/
 
-#import "SCGeometry.h"
 #import "SCDataStore.h"
-#import "SCSpatialStore.h"
+#import "SCGeometry.h"
 #import "SCQueryFilter.h"
 #import "SCSpatialFeature.h"
+#import "SCSpatialStore.h"
 #import "SCStoreConfig.h"
 #import "SCStyle.h"
 #import <Foundation/Foundation.h>
@@ -31,17 +31,15 @@ extern const int *kVERSON;
 extern const NSString *kSTORE_NAME;
 extern NSString *const SCGeoJsonErrorDomain;
 
-
 typedef NS_ENUM(NSInteger, SCGeoJsonError) {
   SC_GEOJSON_FILENOTFOUND = 1,
   SC_GEOJSON_ERRORDOWNLOADING = 2
 };
 
-
 @interface GeoJSONStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-    NSBundle *geojsonBundle;
-    NSString *geojsonFilePath;
-    NSString *filename;
+  NSBundle *geojsonBundle;
+  NSString *geojsonFilePath;
+  NSString *filename;
 }
 
 @property(nonatomic, strong) SCStyle *defaultStyle;
