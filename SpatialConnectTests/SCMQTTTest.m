@@ -56,7 +56,7 @@
   }] take:1] subscribeNext:^(id x) {
     [expect fulfill];
   }];
-  [self waitForExpectationsWithTimeout:10.0
+  [self waitForExpectationsWithTimeout:100.0
                                handler:^(NSError *err) {
                                  DDLogError(@"Error:%@", err.description);
                                }];
@@ -86,7 +86,7 @@
           [expect fulfill];
         }];
   }];
-  [self waitForExpectationsWithTimeout:10.0
+  [self waitForExpectationsWithTimeout:100.0
                                handler:^(NSError *err) {
                                  DDLogError(@"Error:%@", err.description);
                                }];

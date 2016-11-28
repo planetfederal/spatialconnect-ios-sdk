@@ -283,6 +283,8 @@
 		565E9ECF1DB7C49F00AEAB60 /* SCCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 565E9ECD1DB7C49F00AEAB60 /* SCCache.m */; };
 		5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 566617581CE14FA200874119 /* SCDefaultStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617591CE14FA200874119 /* SCDefaultStore.m */; };
+		5667B7841DE3F452003D02E6 /* JWT_iOS_Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */; };
+		5667B78A1DE3F466003D02E6 /* JWT_iOS_Framework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5667B7891DE3F466003D02E6 /* JWT_iOS_Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; };
 		566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; };
@@ -443,6 +445,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5653F8771D99A9AB0028B840 /* libgpkgios.framework in Embed Frameworks */,
+				5667B78A1DE3F466003D02E6 /* JWT_iOS_Framework.framework in Embed Frameworks */,
 				5653F87A1D99A9AB0028B840 /* ReactiveCocoa.framework in Embed Frameworks */,
 				5653F87C1D99A9AB0028B840 /* wkb_ios.framework in Embed Frameworks */,
 				5653F87D1D99A9AB0028B840 /* ZipZap.framework in Embed Frameworks */,
@@ -742,6 +745,8 @@
 		565E9ECD1DB7C49F00AEAB60 /* SCCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCCache.m; sourceTree = "<group>"; };
 		566617581CE14FA200874119 /* SCDefaultStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDefaultStore.h; sourceTree = "<group>"; };
 		566617591CE14FA200874119 /* SCDefaultStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDefaultStore.m; sourceTree = "<group>"; };
+		5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JWT_iOS_Framework.framework; path = Carthage/Build/iOS/JWT_iOS_Framework.framework; sourceTree = "<group>"; };
+		5667B7891DE3F466003D02E6 /* JWT_iOS_Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JWT_iOS_Framework.framework; path = Carthage/Build/iOS/JWT_iOS_Framework.framework; sourceTree = "<group>"; };
 		5667E1721D58EF490044F195 /* SpatialConnectFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectFramework.h; sourceTree = "<group>"; };
 		566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialConnectIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SpatialConnectTests copy-Info.plist"; path = "/Users/wesr/Development/boundless/SC/spatialconnect-ios-sdk/SpatialConnectTests copy-Info.plist"; sourceTree = "<absolute>"; };
@@ -813,6 +818,7 @@
 				567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */,
 				547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */,
 				560DC1CC1D47CFB4007D66A1 /* MQTTFramework.framework in Frameworks */,
+				5667B7841DE3F452003D02E6 /* JWT_iOS_Framework.framework in Frameworks */,
 				56E258061D4D1B2700CA7ED8 /* libProtocolBuffers.a in Frameworks */,
 				56DBFA091D2F25F900FFE4FF /* Security.framework in Frameworks */,
 				5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */,
@@ -871,6 +877,7 @@
 		0B5FE958508C82B8D8FF4D5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */,
 				567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */,
 				547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */,
 				5694D2A91D7F564400E380BB /* proj4.framework */,
@@ -1387,6 +1394,7 @@
 		5649B4891BE27C6A009947EF = {
 			isa = PBXGroup;
 			children = (
+				5667B7891DE3F466003D02E6 /* JWT_iOS_Framework.framework */,
 				56FB37211DB69F6600B0C87C /* MQTTFramework.framework */,
 				56FB371F1DB69E3100B0C87C /* ca.der */,
 				563683CA1DB560AA001F636B /* ca.crt */,

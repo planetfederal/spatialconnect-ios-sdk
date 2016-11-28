@@ -70,6 +70,11 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
 }
 
+- (NSString *)username {
+  return [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+}
+
+
 #pragma mark -
 #pragma SCServiceLifecycle
 

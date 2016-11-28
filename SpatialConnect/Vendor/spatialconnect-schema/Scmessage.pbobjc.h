@@ -24,6 +24,8 @@
 
 CF_EXTERN_C_BEGIN
 
+@class GPBTimestamp;
+
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - ScmessageRoot
@@ -46,6 +48,8 @@ typedef GPB_ENUM(SCMessage_FieldNumber) {
   SCMessage_FieldNumber_ReplyTo = 2,
   SCMessage_FieldNumber_Action = 3,
   SCMessage_FieldNumber_Payload = 4,
+  SCMessage_FieldNumber_Jwt = 5,
+  SCMessage_FieldNumber_Time = 6,
 };
 
 @interface SCMessage : GPBMessage
@@ -57,6 +61,12 @@ typedef GPB_ENUM(SCMessage_FieldNumber) {
 @property(nonatomic, readwrite) int32_t action;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *payload;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *jwt;
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBTimestamp *time;
+/// Test to see if @c time has been set.
+@property(nonatomic, readwrite) BOOL hasTime;
 
 @end
 

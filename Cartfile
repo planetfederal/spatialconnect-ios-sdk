@@ -5,3 +5,4 @@ github "boundlessgeo/geopackage-wkb-ios" "develop"
 github "tetriscode/MQTT-Client-Framework" "master"
 github "tetriscode/Proj4-iOS" == 4.9.2
 github "tetriscode/CocoaLumberjack" "master"
+github "yourkarma/JWT" == 2.2.0

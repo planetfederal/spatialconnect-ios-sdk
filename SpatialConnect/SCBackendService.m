@@ -28,6 +28,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
 - (void)subscribeToTopic:(NSString *)topic;
 - (void)connect;
+- (NSString *)jwt;
 @end
 
 @implementation SCBackendService
@@ -138,7 +139,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 
   NSDictionary *regDict = @{
     @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
-    @"device_info" : @{@"os" : @"ios"}
+    @"device_info" : @{@"os" : @"ios"},
+    @"name":[NSString stringWithFormat:@"mobile:%@",[[[SpatialConnect sharedInstance] authService] username]]
   };
   SCMessage *regMsg = [[SCMessage alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
@@ -155,6 +157,10 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     [sc.configService setCachedConfig:cfg];
     [_configReceived sendNext:@(YES)];
   }];
+}
+
+- (NSString *)jwt {
+  return [[[SpatialConnect sharedInstance] authService] xAccessToken];
 }
 
 - (void)connect {
@@ -312,6 +318,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic {
+  msg.jwt = self.jwt;
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -321,6 +328,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+  msg.jwt = self.jwt;
+  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -330,6 +339,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+  msg.jwt = self.jwt;
+  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -339,6 +350,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+  msg.jwt = self.jwt;
+  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -353,6 +366,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   msg.correlationId = ti;
   msg.replyTo =
       [NSString stringWithFormat:@"/device/%@-replyTo", sc.deviceIdentifier];
+  msg.jwt = self.jwt;
+  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     RACSignal *s = [[multicast map:^SCMessage *(RACTuple *t) {
       NSData *d = (NSData *)t.first;

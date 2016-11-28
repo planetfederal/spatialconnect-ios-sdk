@@ -357,8 +357,7 @@
 }
 
 - (void)authXAccessToken:(id<RACSubscriber>)subscriber {
-  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-  NSString *s = [as xAccessToken];
+  NSString *s = [[[SpatialConnect sharedInstance] authService] xAccessToken];
   if (s) {
     [subscriber sendNext:s];
   }
