@@ -20,12 +20,12 @@
 #import "JSONKit.h"
 #import "SCDataService.h"
 
-static NSString *const STORE_TYPE = @"storeType";
+static NSString *const STORE_TYPE = @"store_type";
 static NSString *const VERSION = @"version";
 static NSString *const IDENT = @"id";
 static NSString *const URI = @"uri";
 static NSString *const NAME = @"name";
-static NSString *const DEFAULT_LAYERS = @"defaultLayers";
+static NSString *const DEFAULT_LAYERS = @"default_layers";
 
 @implementation SCStoreConfig
 
