@@ -59,4 +59,6 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
  */
 - (RACSignal *)loginStatus;
 
+- (NSString *)username;
+
 @end

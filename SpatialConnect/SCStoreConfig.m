@@ -43,7 +43,8 @@ static NSString *const DEFAULT_LAYERS = @"default_layers";
     _version = dict[VERSION];
     _uniqueid = dict[IDENT] == nil ? [[NSUUID UUID] UUIDString] : dict[IDENT];
     _uri = dict[URI];
-    _defaultLayers = dict[DEFAULT_LAYERS];
+    NSArray *layers = dict[DEFAULT_LAYERS];
+    _defaultLayers = [layers isKindOfClass:[NSNull class]] ? [NSArray new] : dict[DEFAULT_LAYERS];
     _name = dict[NAME];
   }
   return self;

@@ -26,6 +26,7 @@
 #import <ZipZap/ZipZap.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import <JWT/JWT.h>
 
 #if DEBUG
 static const DDLogLevel ddLogLevel = DDLogLevelVerbose;

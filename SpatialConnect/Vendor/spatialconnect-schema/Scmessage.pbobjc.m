@@ -13,6 +13,12 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
+#if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
+ #import <Protobuf/Timestamp.pbobjc.h>
+#else
+ #import "google/protobuf/Timestamp.pbobjc.h"
+#endif
+
  #import "Scmessage.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
@@ -22,6 +28,18 @@
 #pragma mark - ScmessageRoot
 
 @implementation ScmessageRoot
+
++ (GPBExtensionRegistry*)extensionRegistry {
+  // This is called by +initialize so there is no need to worry
+  // about thread safety and initialization of registry.
+  static GPBExtensionRegistry* registry = nil;
+  if (!registry) {
+    GPBDebugCheckRuntimeVersion();
+    registry = [[GPBExtensionRegistry alloc] init];
+    [registry addExtensions:[GPBTimestampRoot extensionRegistry]];
+  }
+  return registry;
+}
 
 @end
 
@@ -47,6 +65,8 @@ static GPBFileDescriptor *ScmessageRoot_FileDescriptor(void) {
 @dynamic replyTo;
 @dynamic action;
 @dynamic payload;
+@dynamic jwt;
+@dynamic hasTime, time;
 
 typedef struct SCMessage__storage_ {
   uint32_t _has_storage_[1];
@@ -54,6 +74,8 @@ typedef struct SCMessage__storage_ {
   int32_t action;
   NSString *replyTo;
   NSString *payload;
+  NSString *jwt;
+  GPBTimestamp *time;
 } SCMessage__storage_;
 
 // This method is threadsafe because it is initially called
@@ -97,6 +119,24 @@ typedef struct SCMessage__storage_ {
         .offset = (uint32_t)offsetof(SCMessage__storage_, payload),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "jwt",
+        .dataTypeSpecific.className = NULL,
+        .number = SCMessage_FieldNumber_Jwt,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(SCMessage__storage_, jwt),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "time",
+        .dataTypeSpecific.className = GPBStringifySymbol(GPBTimestamp),
+        .number = SCMessage_FieldNumber_Time,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(SCMessage__storage_, time),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
