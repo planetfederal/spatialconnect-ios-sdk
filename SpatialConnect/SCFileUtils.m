@@ -88,11 +88,14 @@
   if (strs.count == 2) {
     filePrefix = strs.firstObject;
   } else {
+    if (strs.count < 2) {
+      return nil;
+    }
     filePrefix = [[strs
-        objectsAtIndexes:[NSIndexSet
-                             indexSetWithIndexesInRange:NSMakeRange(
-                                                            0, strs.count - 2)]]
-        componentsJoinedByString:@"."];
+                   objectsAtIndexes:[NSIndexSet
+                                     indexSetWithIndexesInRange:NSMakeRange(
+                                                                            0, strs.count - 2)]]
+                  componentsJoinedByString:@"."];
   }
   NSString *extension = [strs lastObject];
   NSString *filePath =
