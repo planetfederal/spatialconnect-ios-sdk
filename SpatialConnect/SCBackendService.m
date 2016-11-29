@@ -77,7 +77,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       map:^id(SCMessage *m) {
         return [[SCNotification alloc] initWithMessage:m];
       }];
-
+  
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
     SpatialConnect *sc = [SpatialConnect sharedInstance];

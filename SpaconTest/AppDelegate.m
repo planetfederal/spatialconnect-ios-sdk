@@ -14,6 +14,9 @@
  */
 
 #import "AppDelegate.h"
+#import <SpatialConnect/SCPoint.h>
+#import <SpatialConnect/SCFormStore.h>
+#import <SpatialConnect/SCFormFeature.h>
 
 @interface AppDelegate ()
 
@@ -37,6 +40,28 @@
     [sc startAllServices];
     [sc.sensorService enableGPS];
     [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+
+    NSArray *arr = [sc.dataService.formStore layers];
+    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
+                                                            @(12.65625), @(54.97761367069628)
+                                                            ]];
+    SCFormFeature *f = [[SCFormFeature alloc] init];
+    GeopackageStore *ds = sc.dataService.defaultStore;
+    f.layerId = @"test_form";
+    f.storeId = ds.storeId;
+    f.geometry = p;
+    [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
+    [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
+      return [v boolValue];
+    }] take:1] subscribeNext:^(id x) {
+      [[sc.dataService.formStore create:f] subscribeError:^(NSError *error) {
+                                                     DDLogError(@"%@", error.description);
+                                                   }
+                                               completed:^{
+                                                 NSLog(@"FUN");
+                                               }];
+    }];
+
   }
 }
 
