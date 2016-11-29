@@ -28,7 +28,7 @@
 
 @implementation SCNotification
 
-@synthesize to = _to, priority = _priority, icon = _icon, title = _title,
+@synthesize to = _to, priority = _priority, title = _title,
             body = _body, payload = _payload;
 
 - (id)initWithMessage:(SCMessage *)m {
@@ -37,9 +37,8 @@
     NSDictionary *d = [m.payload objectFromJSONString];
     self.to = d[@"to"];
     self.priority = d[@"priority"];
-    self.icon = d[@"notification"][@"icon"];
-    self.title = d[@"notification"][@"title"];
-    self.body = d[@"notification"][@"body"];
+    self.title = d[@"title"];
+    self.body = d[@"body"];
     self.payload = d[@"payload"];
   }
   return self;
@@ -49,8 +48,8 @@
   return @{
     @"to" : self.to,
     @"priority" : self.priority,
-    @"notification" :
-        @{@"body" : self.body, @"title" : self.title, @"icon" : self.icon},
+    @"body" : self.body,
+    @"title" : self.title,
     @"payload" : self.payload
   };
 }

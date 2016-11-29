@@ -20,7 +20,6 @@
 
 @property(nonatomic, readonly) NSString *to;
 @property(nonatomic, readonly) NSString *priority;
-@property(nonatomic, readonly) NSString *icon;
 @property(nonatomic, readonly) NSString *title;
 @property(nonatomic, readonly) NSString *body;
 @property(nonatomic, readonly) NSDictionary *payload;

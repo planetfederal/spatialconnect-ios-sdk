@@ -188,11 +188,10 @@
   ]];
   SCFormFeature *f = [[SCFormFeature alloc] init];
   GeopackageStore *ds = sc.dataService.defaultStore;
-  f.layerId = @"baseball_team";
+  f.layerId = @"test_form";
   f.storeId = ds.storeId;
   f.geometry = p;
-  [f.properties setObject:@"Baltimore Orioles" forKey:@"favorite"];
-  [f.properties setObject:@"Why Not?" forKey:@"why"];
+  [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
   [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
     return [v boolValue];
   }] take:1] subscribeNext:^(id x) {
