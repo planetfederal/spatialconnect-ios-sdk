@@ -88,10 +88,10 @@
   return nil;
 }
 
-- (RACSignal *)download:(NSString *)urll to:(NSString *)path {
+- (RACSignal *)download:(NSString *)url to:(NSString *)path {
   self.status = SC_DATASTORE_DOWNLOADINGDATA;
-  NSURL *url = [[NSURL alloc] initWithString:urll];
-  RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:url];
+  NSURL *u = [[NSURL alloc] initWithString:url];
+  RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:u];
   __block NSMutableData *data = nil;
   [dload$ subscribeNext:^(RACTuple *t) {
     data = t.first;
@@ -101,9 +101,7 @@
         self.status = SC_DATASTORE_DOWNLOADFAIL;
       }
       completed:^{
-        DDLogInfo(@"Saving GEOJSON to %@", path);
         [data writeToFile:path atomically:YES];
-        //                    [self initWithFileName:path];
         self.downloadProgress = @(1.0f);
         self.status = SC_DATASTORE_RUNNING;
       }];
