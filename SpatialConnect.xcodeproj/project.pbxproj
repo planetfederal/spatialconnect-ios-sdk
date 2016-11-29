@@ -15,8 +15,6 @@
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
-		560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71261BE8577000CE473F /* GeopackageFileAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71271BE8577000CE473F /* GeopackageFileAdapter.m */; };
 		560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560AFB2B1C7E2750006A060F /* SCGpkgFeatureSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 560AFB291C7E2750006A060F /* SCGpkgFeatureSource.m */; };
 		560AFB2E1C7E2762006A060F /* SCGpkgTileSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB2C1C7E2762006A060F /* SCGpkgTileSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -105,10 +103,6 @@
 		5649B4D31BE28079009947EF /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4BF1BE28079009947EF /* simple.json */; };
 		5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
 		5649B4D61BE28079009947EF /* tests.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4C31BE28079009947EF /* tests.scfg */; };
-		5649B57C1BE280D6009947EF /* GeoJSONAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4D71BE280D5009947EF /* GeoJSONAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B57D1BE280D6009947EF /* GeoJSONAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4D81BE280D5009947EF /* GeoJSONAdapter.m */; };
-		5649B57E1BE280D6009947EF /* GeoJSONStorageConnector.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5649B57F1BE280D6009947EF /* GeoJSONStorageConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */; };
 		5649B5801BE280D6009947EF /* GeoJSONStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4DB1BE280D5009947EF /* GeoJSONStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4DC1BE280D5009947EF /* GeoJSONStore.m */; };
 		5649B5841BE280D6009947EF /* SCBoundingBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 5649B4DF1BE280D5009947EF /* SCBoundingBox.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -467,8 +461,6 @@
 		547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
-		560A71261BE8577000CE473F /* GeopackageFileAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageFileAdapter.h; sourceTree = "<group>"; };
-		560A71271BE8577000CE473F /* GeopackageFileAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageFileAdapter.m; sourceTree = "<group>"; };
 		560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgFeatureSource.h; sourceTree = "<group>"; };
 		560AFB291C7E2750006A060F /* SCGpkgFeatureSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgFeatureSource.m; sourceTree = "<group>"; };
 		560AFB2C1C7E2762006A060F /* SCGpkgTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgTileSource.h; sourceTree = "<group>"; };
@@ -562,10 +554,6 @@
 		5649B4C11BE28079009947EF /* SpatialConnectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectHelper.h; sourceTree = "<group>"; };
 		5649B4C21BE28079009947EF /* SpatialConnectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnectHelper.m; sourceTree = "<group>"; };
 		5649B4C31BE28079009947EF /* tests.scfg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tests.scfg; sourceTree = "<group>"; };
-		5649B4D71BE280D5009947EF /* GeoJSONAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONAdapter.h; sourceTree = "<group>"; };
-		5649B4D81BE280D5009947EF /* GeoJSONAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONAdapter.m; sourceTree = "<group>"; };
-		5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONStorageConnector.h; sourceTree = "<group>"; };
-		5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONStorageConnector.m; sourceTree = "<group>"; };
 		5649B4DB1BE280D5009947EF /* GeoJSONStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoJSONStore.h; sourceTree = "<group>"; };
 		5649B4DC1BE280D5009947EF /* GeoJSONStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoJSONStore.m; sourceTree = "<group>"; };
 		5649B4DF1BE280D5009947EF /* SCBoundingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SCBoundingBox.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1041,10 +1029,6 @@
 		563BEC541BE500D500778EDA /* GeoJSON */ = {
 			isa = PBXGroup;
 			children = (
-				5649B4D71BE280D5009947EF /* GeoJSONAdapter.h */,
-				5649B4D81BE280D5009947EF /* GeoJSONAdapter.m */,
-				5649B4D91BE280D5009947EF /* GeoJSONStorageConnector.h */,
-				5649B4DA1BE280D5009947EF /* GeoJSONStorageConnector.m */,
 				5649B4DB1BE280D5009947EF /* GeoJSONStore.h */,
 				5649B4DC1BE280D5009947EF /* GeoJSONStore.m */,
 			);
@@ -1291,8 +1275,6 @@
 			children = (
 				563BEC6C1BE6F42800778EDA /* GeopackageStore.h */,
 				563BEC6D1BE6F42800778EDA /* GeopackageStore.m */,
-				560A71261BE8577000CE473F /* GeopackageFileAdapter.h */,
-				560A71271BE8577000CE473F /* GeopackageFileAdapter.m */,
 			);
 			name = Geopackage;
 			sourceTree = "<group>";
@@ -1754,13 +1736,10 @@
 				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
 				5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */,
 				5649B5951BE280D6009947EF /* SCFilter.h in Headers */,
-				5649B57E1BE280D6009947EF /* GeoJSONStorageConnector.h in Headers */,
 				5649B5FF1BE280D6009947EF /* SCPrefixHeader.pch in Headers */,
 				5649B5B81BE280D6009947EF /* SCGeoJSONExtensions.h in Headers */,
 				560B10E61C77C16000BA15B8 /* SCGpkgTable.h in Headers */,
-				5649B57C1BE280D6009947EF /* GeoJSONAdapter.h in Headers */,
 				56CC079D1C6ED59000407D4A /* SCGpkgContentsTable.h in Headers */,
-				560A71281BE8577000CE473F /* GeopackageFileAdapter.h in Headers */,
 				5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */,
 				5649B5BD1BE280D6009947EF /* SCGeometry+MapKit.h in Headers */,
 				5645C4EA1BED796D006E4128 /* SCPolygon+GPKG.h in Headers */,
@@ -2234,7 +2213,6 @@
 				5616860A1C75025100FC7FA6 /* SCGpkgDataColumn.m in Sources */,
 				563F426C1DB0622B005022A7 /* README.md in Sources */,
 				5649B5811BE280D6009947EF /* GeoJSONStore.m in Sources */,
-				560A71291BE8577000CE473F /* GeopackageFileAdapter.m in Sources */,
 				5649B5E21BE280D6009947EF /* SCMultiPoint.m in Sources */,
 				569A80D01D822458006581F0 /* SCTileMatrixRow.m in Sources */,
 				5649B5FC1BE280D6009947EF /* SCPolygon+MapKit.m in Sources */,
@@ -2298,7 +2276,6 @@
 				5649B5E41BE280D6009947EF /* SCMultiPoint+GeoJSON.m in Sources */,
 				56CC07A61C6EE85700407D4A /* SCGpkgContent.m in Sources */,
 				5649B5D31BE280D6009947EF /* SCLineString+GeoJSON.m in Sources */,
-				5649B57D1BE280D6009947EF /* GeoJSONAdapter.m in Sources */,
 				56DBFA0D1D2F269C00FFE4FF /* KeychainItemWrapper.m in Sources */,
 				56F437641CA0955200EA1344 /* FMDatabasePool.m in Sources */,
 				565CD2911D23115D00A3DB5C /* WFSDataStore.m in Sources */,
@@ -2319,7 +2296,6 @@
 				56CC07961C6E90F700407D4A /* SCGeopackage.m in Sources */,
 				5649B6151BE280D6009947EF /* SCStyle.m in Sources */,
 				5649B6011BE280D6009947EF /* SCQueryFilter.m in Sources */,
-				5649B57F1BE280D6009947EF /* GeoJSONStorageConnector.m in Sources */,
 				5649B58F1BE280D6009947EF /* SCDataService.m in Sources */,
 				56FB3EBA1CF6A2BD00C3DA4B /* FMDatabaseAdditions.m in Sources */,
 			);

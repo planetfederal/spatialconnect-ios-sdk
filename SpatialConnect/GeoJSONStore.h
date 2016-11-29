@@ -17,9 +17,13 @@
 * under the License.
 ******************************************************************************/
 
-#import "GeoJSONAdapter.h"
 #import "SCDataStore.h"
+#import "SCGeometry.h"
+#import "SCQueryFilter.h"
+#import "SCSpatialFeature.h"
 #import "SCSpatialStore.h"
+#import "SCStoreConfig.h"
+#import "SCStyle.h"
 #import <Foundation/Foundation.h>
 
 extern const NSString *kTYPE;
@@ -33,7 +37,13 @@ typedef NS_ENUM(NSInteger, SCGeoJsonError) {
 };
 
 @interface GeoJSONStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle> {
-  GeoJSONAdapter *adapter;
+  NSBundle *geojsonBundle;
+  NSString *geojsonFilePath;
+  NSString *filename;
 }
+
+@property(nonatomic, strong) SCStyle *defaultStyle;
+@property(nonatomic, strong) NSString *storeId;
+@property(readonly, nonatomic, strong) NSString *uri;
 
 @end

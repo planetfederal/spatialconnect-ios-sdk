@@ -15,6 +15,7 @@
  */
 
 #import "SCLocationStore.h"
+#import "GeopackageStore.h"
 #import "JSONKit.h"
 #import "SCPoint+GeoJSON.h"
 #import "Scmessage.pbobjc.h"
@@ -32,7 +33,7 @@
     self.permission = SC_DATASTORE_READWRITE;
     _storeType = @"gpkg";
     _storeVersion = @"1";
-    [self.adapter connectBlocking];
+    [super connectBlocking];
   }
   return self;
 }
@@ -82,7 +83,7 @@
 - (RACSignal *)create:(SCPoint *)pt {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   pt.layerId = @"last_known_location";
-  RACSignal *c = [self.adapter createFeature:pt];
+  RACSignal *c = [super create:pt];
   if (!sc.backendService.backendUri) {
     return c;
   } else {
