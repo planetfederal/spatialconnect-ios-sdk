@@ -25,7 +25,7 @@
 /**
  *  Returns SCSpatialFeature on the returned signal
  *
- *  @param filter query definition
+ *  @param filter definition
  *
  *  @return SCSpatialFeature
  */

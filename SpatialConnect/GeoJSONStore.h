@@ -43,7 +43,6 @@ typedef NS_ENUM(NSInteger, SCGeoJsonError) {
 }
 
 @property(nonatomic, strong) SCStyle *defaultStyle;
-@property(nonatomic, strong) NSString *storeId;
 @property(readonly, nonatomic, strong) NSString *uri;
 
 @end

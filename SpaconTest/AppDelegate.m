@@ -41,7 +41,6 @@
     [sc.sensorService enableGPS];
     [sc.authService authenticate:@"admin@something.com" password:@"admin"];
 
-    NSArray *arr = [sc.dataService.formStore layers];
     SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
                                                             @(12.65625), @(54.97761367069628)
                                                             ]];

@@ -44,7 +44,9 @@ static NSString *const DEFAULT_LAYERS = @"default_layers";
     _uniqueid = dict[IDENT] == nil ? [[NSUUID UUID] UUIDString] : dict[IDENT];
     _uri = dict[URI];
     NSArray *layers = dict[DEFAULT_LAYERS];
-    _defaultLayers = [layers isKindOfClass:[NSNull class]] ? [NSArray new] : dict[DEFAULT_LAYERS];
+    _defaultLayers = [layers isKindOfClass:[NSNull class]]
+                         ? [NSArray new]
+                         : dict[DEFAULT_LAYERS];
     _name = dict[NAME];
   }
   return self;

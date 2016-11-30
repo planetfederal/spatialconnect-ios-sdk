@@ -74,7 +74,6 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   return [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
 }
 
-
 #pragma mark -
 #pragma SCServiceLifecycle
 
