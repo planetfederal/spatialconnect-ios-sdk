@@ -28,8 +28,8 @@
 
 @implementation SCNotification
 
-@synthesize to = _to, priority = _priority, title = _title,
-            body = _body, payload = _payload;
+@synthesize to = _to, priority = _priority, title = _title, body = _body,
+            payload = _payload;
 
 - (id)initWithMessage:(SCMessage *)m {
   self = [super init];

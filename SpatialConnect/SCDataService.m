@@ -208,36 +208,43 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (void)pauseRemoteStores {
-  [self.stores enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *ds, BOOL *stop) {
+  [self.stores enumerateKeysAndObjectsUsingBlock:^(
+                   NSString *key, SCDataStore *ds, BOOL *stop) {
     id<SCDataStoreLifeCycle> sl = (id<SCDataStoreLifeCycle>)ds;
-    if ([ds isKindOfClass:[SCRemoteDataStore class]]
-        && ds.status == SC_DATASTORE_RUNNING) {
+    if ([ds isKindOfClass:[SCRemoteDataStore class]] &&
+        ds.status == SC_DATASTORE_RUNNING) {
       [sl pause];
-      [self.storeEventSubject sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_PAUSED andStoreId:ds.storeId]];
+      [self.storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_PAUSED
+                                      andStoreId:ds.storeId]];
     }
   }];
 }
 
 - (void)resumeRemoteStores {
-  [self.stores enumerateKeysAndObjectsUsingBlock:^(NSString *key, SCDataStore *ds, BOOL *stop) {
+  [self.stores enumerateKeysAndObjectsUsingBlock:^(
+                   NSString *key, SCDataStore *ds, BOOL *stop) {
     id<SCDataStoreLifeCycle> sl = (id<SCDataStoreLifeCycle>)ds;
-    if ([ds isKindOfClass:[SCRemoteDataStore class]]
-        && ds.status == SC_DATASTORE_PAUSED) {
+    if ([ds isKindOfClass:[SCRemoteDataStore class]] &&
+        ds.status == SC_DATASTORE_PAUSED) {
       [sl resume];
-      [self.storeEventSubject sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_RESUMED andStoreId:ds.storeId]];
+      [self.storeEventSubject
+          sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_RESUMED
+                                      andStoreId:ds.storeId]];
     }
   }];
 }
 
 - (void)setupSubscriptions {
-  [[[[SpatialConnect sharedInstance] sensorService] isConnected] subscribeNext:^(NSNumber *conn) {
-    BOOL connected = conn.boolValue;
-    if (connected) {
-      [self resumeRemoteStores];
-    } else {
-      [self pauseRemoteStores];
-    }
-  }];
+  [[[[SpatialConnect sharedInstance] sensorService] isConnected]
+      subscribeNext:^(NSNumber *conn) {
+        BOOL connected = conn.boolValue;
+        if (connected) {
+          [self resumeRemoteStores];
+        } else {
+          [self pauseRemoteStores];
+        }
+      }];
 }
 
 - (RACSignal *)start {

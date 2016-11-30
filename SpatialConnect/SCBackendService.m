@@ -77,7 +77,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       map:^id(SCMessage *m) {
         return [[SCNotification alloc] initWithMessage:m];
       }];
-  
+
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
     SpatialConnect *sc = [SpatialConnect sharedInstance];
@@ -140,7 +140,9 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   NSDictionary *regDict = @{
     @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
     @"device_info" : @{@"os" : @"ios"},
-    @"name":[NSString stringWithFormat:@"mobile:%@",[[[SpatialConnect sharedInstance] authService] username]]
+    @"name" : [NSString
+        stringWithFormat:@"mobile:%@", [[[SpatialConnect sharedInstance]
+                                           authService] username]]
   };
   SCMessage *regMsg = [[SCMessage alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;

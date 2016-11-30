@@ -200,6 +200,10 @@ static NSString *const FIELDS = @"fields";
   };
 }
 
+- (NSDictionary *)JSONDict {
+  return self.dictionary;
+}
+
 - (NSString *)description {
   return self.dictionary.JSONString;
 }

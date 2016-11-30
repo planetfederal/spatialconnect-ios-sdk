@@ -1,0 +1,6 @@
+framework module SpatialConnect {
+  umbrella header "SpatialConnectFramework.h"
+
+  export *
+  module * { export * }
+}

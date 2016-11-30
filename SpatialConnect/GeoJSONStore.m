@@ -49,7 +49,6 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     return nil;
   }
   self.name = config.name;
-  self.storeId = config.uniqueid;
   self.uri = config.uri;
   geojsonFilePath = nil;
   filename = nil;

@@ -14,9 +14,9 @@
  * limitations under the License
  */
 
+#import "SCRemoteDataStore.h"
 #import "SCSpatialStore.h"
 #import <SpatialConnect/SpatialConnect.h>
-#import "SCRemoteDataStore.h"
 
 @interface WFSDataStore : SCRemoteDataStore <SCSpatialStore>
 
