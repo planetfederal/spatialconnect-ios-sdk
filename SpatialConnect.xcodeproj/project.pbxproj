@@ -13,6 +13,8 @@
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		547F3EDB1D77688700AE354E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 547F3ED91D77688700AE354E /* Reachability.m */; };
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
+		548C840F1DF6002300068FE7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
+		548C84101DF6002300068FE7 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
 		560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -67,7 +69,7 @@
 		563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F426E1DB06233005022A7 /* WebViewJavascriptBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563F42721DB06233005022A7 /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 563F426F1DB06233005022A7 /* WebViewJavascriptBridge.js.txt */; };
 		563F42731DB06233005022A7 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42701DB06233005022A7 /* WebViewJavascriptBridge.m */; };
-		563F42841DB06318005022A7 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42831DB06318005022A7 /* Commands.h */; };
+		563F42841DB06318005022A7 /* Commands.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42831DB06318005022A7 /* Commands.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563F42851DB0643E005022A7 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */; };
 		563F42941DB120C4005022A7 /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5641B1951CB5DFC700334907 /* SCConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5641B1931CB5DFC700334907 /* SCConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -273,11 +275,10 @@
 		565E9ECF1DB7C49F00AEAB60 /* SCCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 565E9ECD1DB7C49F00AEAB60 /* SCCache.m */; };
 		5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 566617581CE14FA200874119 /* SCDefaultStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617591CE14FA200874119 /* SCDefaultStore.m */; };
-		5667B7841DE3F452003D02E6 /* JWT_iOS_Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */; };
 		566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; };
-		566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; };
-		566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 5667E1721D58EF490044F195 /* SpatialConnectFramework.h */; };
+		566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 5667E1721D58EF490044F195 /* SpatialConnectFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD28E1D23115D00A3DB5C /* WFSDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566F5F751D9080B3001C6692 /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
 		566F5F791D9080B3001C6692 /* SCGeometryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4B81BE28079009947EF /* SCGeometryHelper.m */; };
@@ -305,7 +306,6 @@
 		567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */; };
 		567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 567D7A031D6380FF00BDC3CC /* SCNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		567D7A061D6380FF00BDC3CC /* SCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D7A041D6380FF00BDC3CC /* SCNotification.m */; };
-		5684C0511DEF48AB0011783D /* JWT_iOS_Framework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5684C0521DEF48AE0011783D /* proj4.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5694D2A91D7F564400E380BB /* proj4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5684C0531DEF48B10011783D /* MQTTFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 560DC1C61D47C9CB007D66A1 /* MQTTFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5684C0541DEF48B70011783D /* libgpkgios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -327,7 +327,7 @@
 		56CC07A61C6EE85700407D4A /* SCGpkgContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CC07A41C6EE85700407D4A /* SCGpkgContent.m */; };
 		56D5AD391D5D037800597300 /* SCBackendService.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D5AD371D5D037800597300 /* SCBackendService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56D5AD3A1D5D037800597300 /* SCBackendService.m in Sources */ = {isa = PBXBuildFile; fileRef = 56D5AD381D5D037800597300 /* SCBackendService.m */; };
-		56DBE2541DDF57C4003C58ED /* SCRemoteDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBE2521DDF57C4003C58ED /* SCRemoteDataStore.h */; };
+		56DBE2541DDF57C4003C58ED /* SCRemoteDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBE2521DDF57C4003C58ED /* SCRemoteDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DBE2551DDF57C4003C58ED /* SCRemoteDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DBE2531DDF57C4003C58ED /* SCRemoteDataStore.m */; };
 		56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */ = {isa = PBXBuildFile; fileRef = 56DBFA041D2F0CC600FFE4FF /* SCAuthService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56DBFA071D2F0CC600FFE4FF /* SCAuthService.m in Sources */ = {isa = PBXBuildFile; fileRef = 56DBFA051D2F0CC600FFE4FF /* SCAuthService.m */; };
@@ -444,7 +444,7 @@
 				5684C0561DEF48BC0011783D /* ZipZap.framework in Embed Frameworks */,
 				5684C0541DEF48B70011783D /* libgpkgios.framework in Embed Frameworks */,
 				5684C0521DEF48AE0011783D /* proj4.framework in Embed Frameworks */,
-				5684C0511DEF48AB0011783D /* JWT_iOS_Framework.framework in Embed Frameworks */,
+				548C84101DF6002300068FE7 /* ReactiveCocoa.framework in Embed Frameworks */,
 				5653F8801D99D25E0028B840 /* SpatialConnect.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -729,7 +729,6 @@
 		565E9ECD1DB7C49F00AEAB60 /* SCCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCCache.m; sourceTree = "<group>"; };
 		566617581CE14FA200874119 /* SCDefaultStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDefaultStore.h; sourceTree = "<group>"; };
 		566617591CE14FA200874119 /* SCDefaultStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDefaultStore.m; sourceTree = "<group>"; };
-		5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JWT_iOS_Framework.framework; path = Carthage/Build/iOS/JWT_iOS_Framework.framework; sourceTree = "<group>"; };
 		5667E1721D58EF490044F195 /* SpatialConnectFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectFramework.h; sourceTree = "<group>"; };
 		566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialConnectIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SpatialConnectTests copy-Info.plist"; path = "/Users/wesr/Development/boundless/SC/spatialconnect-ios-sdk/SpatialConnectTests copy-Info.plist"; sourceTree = "<absolute>"; };
@@ -801,7 +800,6 @@
 				567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */,
 				547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */,
 				560DC1CC1D47CFB4007D66A1 /* MQTTFramework.framework in Frameworks */,
-				5667B7841DE3F452003D02E6 /* JWT_iOS_Framework.framework in Frameworks */,
 				56E258061D4D1B2700CA7ED8 /* libProtocolBuffers.a in Frameworks */,
 				56DBFA091D2F25F900FFE4FF /* Security.framework in Frameworks */,
 				5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */,
@@ -830,6 +828,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				56F671F51DA4AFE00032E6A6 /* libProtocolBuffers.a in Frameworks */,
+				548C840F1DF6002300068FE7 /* ReactiveCocoa.framework in Frameworks */,
 				5653F86E1D99A8BB0028B840 /* SpatialConnect.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -860,7 +859,6 @@
 		0B5FE958508C82B8D8FF4D5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5667B7831DE3F452003D02E6 /* JWT_iOS_Framework.framework */,
 				567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */,
 				547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */,
 				5694D2A91D7F564400E380BB /* proj4.framework */,
@@ -1717,7 +1715,6 @@
 				560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */,
 				560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */,
 				5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */,
-				563F42841DB06318005022A7 /* Commands.h in Headers */,
 				5649B5CC1BE280D6009947EF /* SCLinearRing+GeoJSON.h in Headers */,
 				566F6E421CE3B5680043FF0C /* SCFormConfig.h in Headers */,
 				5649B5D21BE280D6009947EF /* SCLineString+GeoJSON.h in Headers */,
@@ -1805,7 +1802,6 @@
 				56F4375D1CA0955200EA1344 /* FMResultSet.h in Headers */,
 				5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */,
 				561685EC1C73DB3300FC7FA6 /* SCGpkgSpatialRefSys.h in Headers */,
-				56DBE2541DDF57C4003C58ED /* SCRemoteDataStore.h in Headers */,
 				5649B5971BE280D6009947EF /* SCFilterBetween.h in Headers */,
 				5649B5DD1BE280D6009947EF /* SCMultiLineString+GeoJSON.h in Headers */,
 				5649B5A91BE280D6009947EF /* SCFilterNotEqual.h in Headers */,
@@ -1823,9 +1819,6 @@
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				561685F41C74E3D800FC7FA6 /* SCGpkgExtension.h in Headers */,
 				547F3EDA1D77688700AE354E /* Reachability.h in Headers */,
-				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
-				566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */,
-				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */,
 				5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */,
 				5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */,
@@ -1840,9 +1833,14 @@
 				56A23B051D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h in Headers */,
 				56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */,
 				565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */,
+				566B1AF71D91B72F00A545A4 /* SpatialConnectFramework.h in Headers */,
+				56DBE2541DDF57C4003C58ED /* SCRemoteDataStore.h in Headers */,
 				563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */,
+				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
 				546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */,
 				56A23B0D1D7B1BB300AB258B /* SCMapkitTileGridSource.h in Headers */,
+				563F42841DB06318005022A7 /* Commands.h in Headers */,
+				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 			);
@@ -2547,7 +2545,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -2595,7 +2593,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
