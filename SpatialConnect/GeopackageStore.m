@@ -135,6 +135,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   self.status = SC_DATASTORE_STOPPED;
 }
 
+- (void)destroy {
+    [super deleteFile: [self path]];
+}
+
 - (NSString *)defaultLayerName {
   SCGpkgFeatureSource *fs =
       (SCGpkgFeatureSource *)[self.gpkg.featureContents firstObject];

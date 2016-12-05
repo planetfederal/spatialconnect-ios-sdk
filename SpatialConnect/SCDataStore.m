@@ -108,6 +108,14 @@
   return dload$;
 }
 
+- (void)deleteFile:(NSString *)path {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL fileExists = [fileManager fileExistsAtPath:path];
+    if (fileExists) {
+        [fileManager removeItemAtPath:path error:nil];
+    }
+}
+
 #pragma mark -
 #pragma mark Class Methods
 
