@@ -1,25 +1,31 @@
 # SpatialConnect iOS Library
-Version 0.5
+Version 0.7
 
 # Overview
 
 SpatialConnect is a collection of libraries that makes it easier for developers to write
 apps that connect to multiple spatial data stores online and offline. It leverages [Github's ReactiveCocoa](http://github.com/reactivecocoa/reactivecocoa/) for communicating with the data stores using a common API across [iOS](https://github.com/boundlessgeo/spatialconnect-ios-sdk), [Android](https://github.com/boundlessgeo/spatialconnect-android-sdk), and [Javascript](https://github.com/boundlessgeo/spatialconnect-js) runtimes.
- 
+
 This library provides native APIs for iOS as well as a Javascript bridge to communicate to the native API from mobile browsers.   The SpatialConnect iOS SDK is packaged as a library and can be imported as a dependency to your iOS app.
 
 ## Core Concepts
-All services and data stores in SpatialConnect provide an API that returns an [Observable](http://reactivex.io/documentation/observable.html) that emits data or events for subscribers to consume. 
+All services and data stores in SpatialConnect provide an API that returns an [Observable](http://reactivex.io/documentation/observable.html) that emits data or events for subscribers to consume.
 
 ### Services and the ServiceManager
-SpatialConnect consists of a collection of services which each handle specific functionality.  For instance, the `SCDataService` handles reads and writes to data stores while the `SCSensorService` handles subscribing to and reciving GPS updates.  All services are managed by the `SCServiceManager` which is responsible for loading a configuration file that will initialize the services and data stores.
+SpatialConnect consists of a collection of services which each handle specific functionality.  For instance, the `SCDataService` handles reads and writes to data stores while the `SCSensorService` handles subscribing to and receiving GPS updates.
 
-Currently there are 3 services, the `SCDataService`, the `SCNetworkService`, and the `SCSensorService`.  The `SCServiceManager` is responsible for managing the service lifecycle (registering them, starting/stopping them, etc).  When you create an instance of the `SCServiceManager`, it will enable all the services and read the configuration file to determine what to do next.  If data stores are defined, it will attempt to register each store with the `SCDataService`.
+Currently there are 5 services:
+- SCDataService
+- SCConfigService
+- SCSensorService
+- SCAuthService
+- SCBackendService
 
+The main `SpatialConnect` instance is responsible for managing the service lifecycle (registering them, starting/stopping them, etc).  When you call `startAllServices`, it will enable all the services and read the configuration file to determine what to do next.  If data stores are defined, it will attempt to register each store with the `SCDataService`.
 
 ### Store Lifecycle
 
-In the SCDataService there is an NSDictionary named 'supportedStores'. The this will contain a Class distinguished by key TYPE.VERSION (i.e. geojson.1). These can be added to the data service after SpatialConnect has been instantiated. When SCDataService starts, it will instantiate the appropriate version and type stored in the 'supportedStores' dictionary. 
+In the SCDataService there is an NSDictionary named 'supportedStores'. The this will contain a Class distinguished by key TYPE.VERSION (i.e. geojson.1). These can be added to the data service after SpatialConnect has been instantiated. When SCDataService starts, it will instantiate the appropriate version and type stored in the 'supportedStores' dictionary.
 
 ### Web Bundles
 
@@ -30,14 +36,16 @@ The data store needs an adapter to connect to the underlying data source (a GeoJ
 ### Store Configuration
 The stores array will load the stores on start in no guaranteed order. The configuration files will have an extension of ".scfg". SpatialConnect can support multiple configs and will be loaded in no guaranteed order.
 
-#### type ####
-SpatialConnect will support geojson and geopackage
+#### store_type ####
+SpatialConnect will support geojson, geopackage, and WFS.
+#### name ####
+A string used to describe the store.
 #### version ####
 This is the version of adapter that SpatialConnect will use "geojson.1" will be the identifier for version 1 of the GeoJSONStore
 #### uri ####
-This is the filepath to the resource relative to the config file location.
+This can be a local filepath to the resource relative to the config file location, or a fully qualified URL to a resource on the web.
 #### id ####
-This unique identifier can be generated online [here](https://guidgenerator.com) or using any other unique identifier. Identifiers are not required by SpatialConnect to be a hash. If there is a collision between identifiers, the last loaded store will overwrite all previously loaded stores with the same identifier. 
+This unique identifier can be generated online [here](https://guidgenerator.com) or using any other unique identifier. Identifiers are not required by SpatialConnect to be a hash. If there is a collision between identifiers, the last loaded store will overwrite all previously loaded stores with the same identifier.
 ```
     {
       "remote": {
@@ -50,26 +58,26 @@ This unique identifier can be generated online [here](https://guidgenerator.com)
   		},
       "stores":[
         {
-            "type": "geojson",
+            "store_type": "geojson",
             "version": "1",
             "uri": "simple.geojson",
             "id":"63602599-3ad3-439f-9c49-3c8a7579933b"
         },
         {
-            "type": "geojson",
+            "store_type": "geojson",
             "version": "1",
             "uri": "feature.geojson",
             "id":"276d2186-24f4-11e5-b345-feff819cdc9f"
         },   
 		{
-			"type":"gpkg",
+			"store_type":"gpkg",
 			"version":"1",
 			"name":"Haiti",
 			"uri":"http://www.geopackage.org/data/haiti-vectors-split.gpkg",
 			"id":"a5d93796-5026-46f7-a2ff-e5dec85heh6b"
 		},
 		{
-			"type":"gpkg",
+			"store_type":"gpkg",
 			"version":"1",
 			"name":"Whitehorse Imagery",
 			"uri":"https://portal.opengeospatial.org/files/63156",
@@ -88,7 +96,7 @@ The `SCDataService` is responsible for interacting with the data stores.  All da
 - (RACSignal *)update:(SCSpatialFeature *)feature;
 - (RACSignal *) delete:(SCKeyTuple *)key;
 ```
-Implementations exist for GeoJSON (read only) and GeoPackage (read write) data stores but to 
+Implementations exist for GeoJSON (read only) and GeoPackage (read write) data stores but to
 create a new data store developers need to create a class that implements this interface and update a configuration file to let SpatialConnect know
 that the store exists.
 
@@ -102,7 +110,7 @@ Here's an example config file:
 {
   "stores":[
     {
-      "type": "geojson",
+      "store_type": "geojson",
       "version": "1",
       "uri": "all.geojson",
       "isMainBundle":true,
@@ -110,14 +118,14 @@ Here's an example config file:
       "name":"Simple"
     },
     {
-      "type":"gpkg",
+      "store_type":"gpkg",
       "version":"1",
       "name":"Haiti",
       "uri":"https://s3.amazonaws.com/test.spacon/haiti4mobile.gpkg",
       "id":"a5d93796-5026-46f7-a2ff-e5dec85heh6b"
     },
     {
-      "type":"gpkg",
+      "store_type":"gpkg",
       "version":"1",
       "name":"Whitehorse",
       "uri":"https://s3.amazonaws.com/test.spacon/whitehorse.gpkg",
@@ -150,7 +158,7 @@ Now to query across all stores for features in that bounding box, we can use the
 AppDelegate *ad = [[UIApplication sharedApplication] delegate];
 SpatialConnect *sc = [ad spatialConnectSharedInstance];
 @weakify(self);
-[[[[self.sc.manager.dataService queryAllStores:filter]
+[[[[self.sc.dataService queryAllStores:filter]
 	map:^SCGeometry *(SCGeometry *geom) {
    		if ([geom isKindOfClass:SCGeometry.class]) {
    			geom.style = [styleDict objectForKey:geom.key.storeId];
@@ -170,7 +178,7 @@ In addition to using `SCPredicate`s to query, you can also use the `SCKeyTuple` 
 
 ```
 SCKeyTuple *t = [[SCKeyTuple alloc] initWithStoreId:storeId layerId:layerId featureId:featureId];
-[[manager.dataService storeById:t.storeId] queryById:k] subscribeNext:^(SCGeometry *g) {
+[[sc.dataService storeById:t.storeId] queryById:k] subscribeNext:^(SCGeometry *g) {
    		NSLog(@"%@",g.identifier);
 }];
 ```
@@ -187,7 +195,7 @@ object model is a blend of the OGC Simple Feature Specification and the
 GeoJSON spec but it doesn’t strictly follow either because it’s trying to be
 a useful, developer-friendly abstraction.
 
-As mentioned before, each `SCSpatialFeature` contains a `SCKeyTuple` containing the layer id, store id, and feature id.  When sending a `SCSpatialFeature` through the Javascript bridge, we Base64 encode each part of the tuple and use that for the GeoJSON Feature's id.  This will allow us to keep track of features even after they are edited by a Javascript maping client like OpenLayers. 
+As mentioned before, each `SCSpatialFeature` contains a `SCKeyTuple` containing the layer id, store id, and feature id.  When sending a `SCSpatialFeature` through the Javascript bridge, we Base64 encode each part of the tuple and use that for the GeoJSON Feature's id.  This will allow us to keep track of features even after they are edited by a Javascript maping client like OpenLayers.
 
 ### Examples
 
@@ -195,21 +203,23 @@ See [https://github.com/boundlessgeo/spatialconnect-examples/](https://github.co
 
 ### Building
 
-SpatialConnect uses CocoaPods locally. Here is the Podfile for the example app:
+SpatialConnect uses Carthage locally. Here is the Cartfile for the library:
 ```
-source 'https://github.com/CocoaPods/Specs.git'
-xcodeproj 'SpatialConnectSample'
-platform :ios, '8.0'
+github "ReactiveCocoa/ReactiveCocoa" == 2.5
+github "tetriscode/libgpkgios" "master"
+github "pixelglow/zipzap" == 8.0.6
+github "boundlessgeo/geopackage-wkb-ios" "develop"
+github "tetriscode/MQTT-Client-Framework" "master"
+github "tetriscode/Proj4-iOS" == 4.9.2
+github "tetriscode/CocoaLumberjack" "master"
+github "yourkarma/JWT" == 2.2.0
+```
 
-pod 'ReactiveCocoa', '2.5'
-pod 'spatialconnect', :path => './../../spatialconnect-ios'
-pod 'wkb-ios', :path => './../../geopackage-wkb-ios'
-pod 'geopackage-ios', :path=> './../../geopackage-ios'
-pod 'zipzap', '8.0.6'
-pod 'AFNetworking','~> 2.1'
-pod 'libextobjc','0.4.1'
-pod 'ReactiveViewModel','0.3'
-```
+Run `carthage update --platform iOS` to install dependencies.
+
+## Installation
+
+See [Installation Instructions](INSTALLATION.md).
 
 ## Testing
 
