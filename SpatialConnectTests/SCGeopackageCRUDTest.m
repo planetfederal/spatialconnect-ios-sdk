@@ -160,30 +160,30 @@
 }
 
 - (void)testGpkgDestroy {
-    XCTestExpectation *expect = [self expectationWithDescription:@"Destroy"];
-    [[SCGeopackageHelper loadGPKGDataStore:self.sc]
-     subscribeNext:^(GeopackageStore *ds) {
-         BOOL saveToDocsDir = ![SCFileUtils isTesting];
-         NSString *dbName = @"haiti4mobile.gpkg";
-         NSString *path;
-         if (saveToDocsDir) {
-             NSArray *paths = NSSearchPathForDirectoriesInDomains(
-                                                                  NSDocumentDirectory, NSUserDomainMask, YES);
-             NSString *documentsDirectory = [paths objectAtIndex:0];
-             path = [documentsDirectory stringByAppendingPathComponent:dbName];
-         } else {
-             path = [SCFileUtils filePathFromNSHomeDirectory:ds.filepath];
-         }
-         BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-         XCTAssertTrue(b);
-         
-         [ds destroy];
-         b =[[NSFileManager defaultManager] fileExistsAtPath:path];
-         XCTAssertEqual(b, NO);
-         
-         [expect fulfill];
-     }];
-    
-    [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  XCTestExpectation *expect = [self expectationWithDescription:@"Destroy"];
+  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+      subscribeNext:^(GeopackageStore *ds) {
+        BOOL saveToDocsDir = ![SCFileUtils isTesting];
+        NSString *dbName = @"haiti4mobile.gpkg";
+        NSString *path;
+        if (saveToDocsDir) {
+          NSArray *paths = NSSearchPathForDirectoriesInDomains(
+              NSDocumentDirectory, NSUserDomainMask, YES);
+          NSString *documentsDirectory = [paths objectAtIndex:0];
+          path = [documentsDirectory stringByAppendingPathComponent:dbName];
+        } else {
+          path = [SCFileUtils filePathFromNSHomeDirectory:ds.filepath];
+        }
+        BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        XCTAssertTrue(b);
+
+        [ds destroy];
+        b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        XCTAssertEqual(b, NO);
+
+        [expect fulfill];
+      }];
+
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 @end

@@ -64,7 +64,7 @@
 }
 
 - (void)destroy {
-    [super destroy];
+  [super destroy];
 }
 
 - (void)registerFormByConfig:(SCFormConfig *)f {

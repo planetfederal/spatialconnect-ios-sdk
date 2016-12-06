@@ -338,7 +338,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
 }
 
 - (void)destroy {
-    [super deleteFile: [self path]];
+  [super deleteFile:[self path]];
 }
 
 + (NSString *)versionKey {

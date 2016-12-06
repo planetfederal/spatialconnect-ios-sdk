@@ -45,7 +45,6 @@
 }
 
 - (void)destroy {
-    
 }
 
 @end

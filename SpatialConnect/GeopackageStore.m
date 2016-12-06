@@ -136,7 +136,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (void)destroy {
-    [super deleteFile: [self path]];
+  [super deleteFile:[self path]];
 }
 
 - (NSString *)defaultLayerName {

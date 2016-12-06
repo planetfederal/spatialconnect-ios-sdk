@@ -208,19 +208,19 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (void)destroyStore:(SCDataStore *)store {
-    if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
-        [((id<SCDataStoreLifeCycle>)store)destroy];
-        [self.storeEventSubject
-         sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_REMOVED
-                                     andStoreId:store.storeId]];
-    } else {
-        DDLogWarn(
-                  @"%@",
-                  [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
-                   @"was not destroyed. Make sure the store "
-                   @"conforms to the SCDataStoreLifeCycle",
-                   store.name, store.key, store.storeId]);
-    }
+  if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
+    [((id<SCDataStoreLifeCycle>)store)destroy];
+    [self.storeEventSubject
+        sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_REMOVED
+                                    andStoreId:store.storeId]];
+  } else {
+    DDLogWarn(
+        @"%@",
+        [NSString stringWithFormat:@"Store %@ with key:%@ id:%@ "
+                                   @"was not destroyed. Make sure the store "
+                                   @"conforms to the SCDataStoreLifeCycle",
+                                   store.name, store.key, store.storeId]);
+  }
 }
 
 - (void)pauseRemoteStores {
