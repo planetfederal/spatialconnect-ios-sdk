@@ -24,6 +24,7 @@
 
 - (RACSignal *)start;
 - (void)stop;
+- (void)destroy;
 
 @optional
 

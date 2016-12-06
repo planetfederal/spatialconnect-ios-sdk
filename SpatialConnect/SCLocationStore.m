@@ -62,6 +62,10 @@
 - (void)pause {
 }
 
+- (void)destroy {
+  [super destroy];
+}
+
 #pragma mark -
 #pragma mark SCSpatialStore
 - (RACSignal *)query:(SCQueryFilter *)filter {

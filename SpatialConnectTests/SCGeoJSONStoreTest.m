@@ -14,6 +14,7 @@
  * limitations under the License
  */
 
+#import "GeoJSONStore.h"
 #import "SpatialConnectHelper.h"
 #import <XCTest/XCTest.h>
 
@@ -45,6 +46,29 @@
       subscribeNext:^(id<SCSpatialStore> ds) {
         BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
         XCTAssertTrue(b);
+        [expect fulfill];
+      }
+      error:^(NSError *error) {
+        XCTFail(@"Error getting store");
+        [expect fulfill];
+      }];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
+- (void)testGeoJSONDestroy {
+  XCTestExpectation *expect = [self expectationWithDescription:@"Destroy"];
+  NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
+  NSString *fileName = [NSString stringWithFormat:@"%@.geojson", geojsonStore];
+  NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
+  [[SpatialConnectHelper loadGeojsonDataStore:self.sc]
+      subscribeNext:^(GeoJSONStore *ds) {
+        BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        XCTAssertTrue(b);
+
+        [ds destroy];
+        b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        XCTAssertEqual(b, NO);
+
         [expect fulfill];
       }
       error:^(NSError *error) {

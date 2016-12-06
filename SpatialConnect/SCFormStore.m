@@ -63,6 +63,10 @@
 - (void)pause {
 }
 
+- (void)destroy {
+  [super destroy];
+}
+
 - (void)registerFormByConfig:(SCFormConfig *)f {
   [storeForms setObject:f forKey:f.key];
   [formIds setObject:@(f.identifier) forKey:f.key];

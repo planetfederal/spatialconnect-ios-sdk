@@ -17,6 +17,8 @@
  * under the License.
  ******************************************************************************/
 
+#import <Foundation/Foundation.h>
+
 @interface SCSimplePoint : NSObject
 
 @property(nonatomic) double x;

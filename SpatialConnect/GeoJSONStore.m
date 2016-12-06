@@ -337,6 +337,10 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   self.status = SC_DATASTORE_RUNNING;
 }
 
+- (void)destroy {
+  [super deleteFile:[self path]];
+}
+
 + (NSString *)versionKey {
   return [NSString stringWithFormat:@"%@.%d", kTYPE, kVERSION];
 }

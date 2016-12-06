@@ -44,4 +44,7 @@
   self.status = SC_DATASTORE_STOPPED;
 }
 
+- (void)destroy {
+}
+
 @end
