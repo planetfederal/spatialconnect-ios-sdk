@@ -210,6 +210,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (void)destroyStore:(SCDataStore *)store {
   if ([store conformsToProtocol:@protocol(SCDataStoreLifeCycle)]) {
     [((id<SCDataStoreLifeCycle>)store)destroy];
+    [_hasStores sendNext:@([[self stores] count] > 0)];
     [self.storeEventSubject
         sendNext:[SCStoreStatusEvent fromEvent:SC_DATASTORE_EVT_REMOVED
                                     andStoreId:store.storeId]];
@@ -321,11 +322,11 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (void)unregisterStore:(SCDataStore *)store {
+  [self.stores removeObjectForKey:store.storeId];
   if (store.status == SC_DATASTORE_RUNNING) {
     [self stopStore:store];
     [self destroyStore:store];
   }
-  [self.stores removeObjectForKey:store.storeId];
 }
 
 - (void)updateStore:(SCDataStore *)store {
