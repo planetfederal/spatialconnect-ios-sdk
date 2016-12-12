@@ -22,8 +22,6 @@
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
-static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
-
 @interface SCBackendService ()
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
 - (void)subscribeToTopic:(NSString *)topic;
@@ -413,10 +411,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   }];
   [self subscribeToTopic:topic];
   return s;
-}
-
-+ (NSString *)serviceId {
-  return kSERVICENAME;
 }
 
 @end

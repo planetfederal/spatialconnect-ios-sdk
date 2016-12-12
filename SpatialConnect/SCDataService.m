@@ -490,7 +490,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
       }];
 }
 
-- (RACSignal *)queryStoresByIds:(NSArray *)storeIds
+- (RACSignal *)queryStores:(NSArray *)storeIds
                      withFilter:(SCQueryFilter *)filter {
   NSArray *stores = [self storesByProtocol:@protocol(SCSpatialStore)];
   NSArray *filtered =
