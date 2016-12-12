@@ -187,8 +187,8 @@
       responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
   [[[[SpatialConnect sharedInstance] dataService]
-      queryStores:value[@"storeId"]
-            withFilter:filter] subscribeNext:^(SCSpatialFeature *value) {
+      queryStoresById:value[@"storeId"]
+               filter:filter] subscribeNext:^(SCSpatialFeature *value) {
     [subscriber sendNext:[value JSONDict]];
   }
       completed:^{
@@ -214,8 +214,8 @@
          responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
   [[[[[SpatialConnect sharedInstance] dataService]
-      queryStores:value[@"storeId"]
-            withFilter:filter] map:^NSDictionary *(SCSpatialFeature *value) {
+      queryStoresById:value[@"storeId"]
+               filter:filter] map:^NSDictionary *(SCSpatialFeature *value) {
     return [value JSONDict];
   }] subscribeNext:^(NSDictionary *d) {
     [subscriber sendNext:d];
