@@ -490,8 +490,8 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
       }];
 }
 
-- (RACSignal *)queryStores:(NSArray *)storeIds
-                withFilter:(SCQueryFilter *)filter {
+- (RACSignal *)queryStoresByIds:(NSArray *)storeIds
+                         filter:(SCQueryFilter *)filter {
   NSArray *stores = [self storesByProtocol:@protocol(SCSpatialStore)];
   NSArray *filtered =
       [[[[stores rac_sequence] signal] filter:^BOOL(SCDataStore *store) {
@@ -501,7 +501,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (RACSignal *)queryStoreById:(NSString *)storeId
-                   withFilter:(SCQueryFilter *)filter {
+                       filter:(SCQueryFilter *)filter {
   id<SCSpatialStore> store =
       (id<SCSpatialStore>)[self.stores objectForKey:storeId];
   return [store query:filter];

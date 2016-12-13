@@ -71,7 +71,8 @@
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter;
 - (RACSignal *)queryStoreById:(NSString *)storeId
                        filter:(SCQueryFilter *)filter;
-- (RACSignal *)queryStoresById:(NSArray *)storeIds
-                        filter:(SCQueryFilter *)filter;
+- (RACSignal *)queryStoresByIds:(NSArray *)storeIds
+                         filter:(SCQueryFilter *)filter;
+- (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter;
 
 @end
