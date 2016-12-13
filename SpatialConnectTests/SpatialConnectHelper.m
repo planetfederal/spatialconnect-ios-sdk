@@ -21,7 +21,7 @@
 
 @implementation SpatialConnectHelper
 
-NSString *wfsStore = @"0f193979-b871-47cd-b60d-e271d6504359";
+NSString *wfsStore = @"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a";
 NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
 
 + (SpatialConnect *)loadLocalConfig {

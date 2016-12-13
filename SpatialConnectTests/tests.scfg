@@ -39,8 +39,8 @@
 "store_type":"wfs",
 "version":"1.1.0",
 "name":"WFS Demo",
-"default_layers":["osm:polygon_barrier"],
-"uri":"http://demo.boundlessgeo.com/geoserver/wfs",
+"default_layers":["spatialconnect:baseball_team"],
+"uri":"http://efc-dev.boundlessgeo.com:8080/geoserver/wfs",
 "id":"0f193979-b871-47cd-b60d-e271d6504359"
 }
 ]
