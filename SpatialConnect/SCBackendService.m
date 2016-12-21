@@ -365,7 +365,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 - (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
-  msg.correlationId = ti;
+  msg.correlationId = @(ti*1000).unsignedIntegerValue;
   msg.replyTo =
       [NSString stringWithFormat:@"/device/%@-replyTo", sc.deviceIdentifier];
   msg.jwt = self.jwt;
