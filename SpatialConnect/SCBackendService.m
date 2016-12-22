@@ -59,6 +59,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 - (RACSignal *)start {
   [super start];
   [self listenForNetworkConnection];
+  [self registerForLocalNotifications];
   return [RACSignal empty];
 }
 
@@ -66,6 +67,20 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   if (sessionManager) {
     [sessionManager disconnect];
   }
+}
+
+- (void)registerForLocalNotifications {
+  UNUserNotificationCenter *center =
+      [UNUserNotificationCenter currentNotificationCenter];
+  center.delegate = self;
+  [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound |
+                                           UNAuthorizationOptionAlert |
+                                           UNAuthorizationOptionBadge)
+                        completionHandler:^(BOOL granted,
+                                            NSError *_Nullable error) {
+                          if (!error) {
+                          }
+                        }];
 }
 
 - (void)setupSubscriptions {
@@ -77,6 +92,10 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       map:^id(SCMessage *m) {
         return [[SCNotification alloc] initWithMessage:m];
       }];
+
+  [self.notifications subscribeNext:^(SCNotification *notification) {
+    [self createNotification:notification];
+  }];
 
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
@@ -417,6 +436,38 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   }];
   [self subscribeToTopic:topic];
   return s;
+}
+
+- (void)createNotification:(SCNotification *)notification {
+  UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+  content.title = notification.title;
+  content.body = notification.body;
+  content.sound = [UNNotificationSound defaultSound];
+  UNTimeIntervalNotificationTrigger *trigger =
+      [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+  NSString *identifier = @"UYLLocalNotification";
+  UNNotificationRequest *request =
+      [UNNotificationRequest requestWithIdentifier:identifier
+                                           content:content
+                                           trigger:trigger];
+
+  UNUserNotificationCenter *center =
+      [UNUserNotificationCenter currentNotificationCenter];
+  [center addNotificationRequest:request
+           withCompletionHandler:^(NSError *_Nullable error) {
+             if (error != nil) {
+               NSLog(@"Something went wrong: %@", error);
+             }
+           }];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:
+             (void (^)(UNNotificationPresentationOptions options))
+                 completionHandler {
+  completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert |
+                    UNAuthorizationOptionBadge);
 }
 
 + (NSString *)serviceId {

@@ -14,6 +14,7 @@
  * limitations under the License
  */
 
+#import "SCNotification.h"
 #import "SCRemoteConfig.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
@@ -21,8 +22,10 @@
 #import <MQTTFramework/MQTTFramework.h>
 #import <MQTTFramework/MQTTSessionManager.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import <UserNotifications/UserNotifications.h>
 
-@interface SCBackendService : SCService <SCServiceLifecycle> {
+@interface SCBackendService
+    : SCService <SCServiceLifecycle, UNUserNotificationCenterDelegate> {
   NSString *mqttEndpoint;
   NSString *mqttPort;
   NSString *mqttProtocol;
@@ -39,7 +42,8 @@
 @property(readonly, strong) RACBehaviorSubject *configReceived;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
-
+- (void)registerForLocalNotifications;
+- (void)createNotification:(SCNotification *)notification;
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
