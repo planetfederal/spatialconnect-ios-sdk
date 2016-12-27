@@ -99,9 +99,11 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       break;
     }
     case CONFIG_REMOVE_STORE: {
+      NSDictionary *json = [payload objectFromJSONString];
+      NSString *storeid = [json objectForKey:@"id"];
       SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
-          storeByIdentifier:payload];
-      [cachedConfig removeStore:payload];
+          storeByIdentifier:storeid];
+      [cachedConfig removeStore:storeid];
       [sc.dataService unregisterStore:ds];
       break;
     }
@@ -124,8 +126,10 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       break;
     }
     case CONFIG_REMOVE_FORM: {
-      [cachedConfig removeForm:payload];
-      [sc.dataService.formStore unregisterFormByKey:payload];
+      NSDictionary *json = [payload objectFromJSONString];
+      NSString *formKey = [json objectForKey:@"form-key"];
+      [cachedConfig removeForm:formKey];
+      [sc.dataService.formStore unregisterFormByKey:formKey];
       break;
     }
     default:
