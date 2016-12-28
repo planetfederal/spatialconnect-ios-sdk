@@ -25,6 +25,7 @@
 @interface WFSDataStore ()
 @property(readwrite) NSString *baseUri;
 @property(readwrite) NSArray *defaultLayers;
+@property(readwrite) NSArray *vectorLayers;
 @end
 
 @implementation WFSDataStore
@@ -32,7 +33,7 @@
 #define TYPE @"wfs"
 #define VERSION @"1.1.0"
 
-@synthesize baseUri, storeVersion, storeType, defaultLayers;
+@synthesize baseUri, storeVersion, storeType, defaultLayers, vectorLayers;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -42,6 +43,7 @@
   self.baseUri = config.uri;
   self.name = config.name;
   self.defaultLayers = config.defaultLayers;
+  self.vectorLayers = [self getLayers];
   return self;
 }
 
@@ -58,7 +60,15 @@
   return self.vectorLayers;
 }
 
-- (NSArray *)vectorLayers {
+- (NSString *)storeType {
+  return @"wfs";
+}
+
+- (NSString *)storeVersion {
+  return @"1.1.0";
+}
+
+- (NSArray *)getLayers {
   NSString *url = [NSString
       stringWithFormat:@"%@?service=WFS&version=%@&request=GetCapabilities",
                        self.baseUri, self.storeVersion];
@@ -76,14 +86,6 @@
     }];
   }
   return [NSArray arrayWithArray:layers];
-}
-
-- (NSString *)storeType {
-  return @"wfs";
-}
-
-- (NSString *)storeVersion {
-  return @"1.1.0";
 }
 
 #pragma mark -
