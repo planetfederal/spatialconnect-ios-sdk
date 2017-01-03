@@ -23,6 +23,10 @@
 #import "SpatialConnect.h"
 
 static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)                             \
+  ([[[UIDevice currentDevice] systemVersion]                                   \
+       compare:v                                                               \
+       options:NSNumericSearch] != NSOrderedAscending)
 
 @interface SCBackendService ()
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
@@ -70,17 +74,27 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)registerForLocalNotifications {
-  UNUserNotificationCenter *center =
-      [UNUserNotificationCenter currentNotificationCenter];
-  center.delegate = self;
-  [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound |
-                                           UNAuthorizationOptionAlert |
-                                           UNAuthorizationOptionBadge)
-                        completionHandler:^(BOOL granted,
-                                            NSError *_Nullable error) {
-                          if (!error) {
-                          }
-                        }];
+  if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+    UNUserNotificationCenter *center =
+        [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound |
+                                             UNAuthorizationOptionAlert |
+                                             UNAuthorizationOptionBadge)
+                          completionHandler:^(BOOL granted,
+                                              NSError *_Nullable error) {
+                            if (!error) {
+                            }
+                          }];
+  } else {
+    [[UIApplication sharedApplication]
+        registerUserNotificationSettings:
+            [UIUserNotificationSettings
+                settingsForTypes:UIUserNotificationTypeAlert |
+                                 UIUserNotificationTypeBadge |
+                                 UIUserNotificationTypeSound
+                      categories:nil]];
+  }
 }
 
 - (void)setupSubscriptions {
@@ -439,26 +453,36 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 - (void)createNotification:(SCNotification *)notification {
-  UNMutableNotificationContent *content = [UNMutableNotificationContent new];
-  content.title = notification.title;
-  content.body = notification.body;
-  content.sound = [UNNotificationSound defaultSound];
-  UNTimeIntervalNotificationTrigger *trigger =
-      [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
-  NSString *identifier = @"UYLLocalNotification";
-  UNNotificationRequest *request =
-      [UNNotificationRequest requestWithIdentifier:identifier
-                                           content:content
-                                           trigger:trigger];
+  if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+    UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+    content.title = notification.title;
+    content.body = notification.body;
+    content.sound = [UNNotificationSound defaultSound];
+    UNTimeIntervalNotificationTrigger *trigger =
+        [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1
+                                                           repeats:NO];
+    NSString *identifier = @"UYLLocalNotification";
+    UNNotificationRequest *request =
+        [UNNotificationRequest requestWithIdentifier:identifier
+                                             content:content
+                                             trigger:trigger];
 
-  UNUserNotificationCenter *center =
-      [UNUserNotificationCenter currentNotificationCenter];
-  [center addNotificationRequest:request
-           withCompletionHandler:^(NSError *_Nullable error) {
-             if (error != nil) {
-               NSLog(@"Something went wrong: %@", error);
-             }
-           }];
+    UNUserNotificationCenter *center =
+        [UNUserNotificationCenter currentNotificationCenter];
+    [center addNotificationRequest:request
+             withCompletionHandler:^(NSError *_Nullable error) {
+               if (error != nil) {
+                 NSLog(@"Something went wrong: %@", error);
+               }
+             }];
+  } else {
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+    localNotification.alertBody = notification.body;
+    localNotification.timeZone = [NSTimeZone defaultTimeZone];
+    [[UIApplication sharedApplication]
+        scheduleLocalNotification:localNotification];
+  }
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
