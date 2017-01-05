@@ -31,12 +31,12 @@
   NSString *httpPort;
   MQTTSessionManager *sessionManager;
   RACSignal *multicast;
-  RACBehaviorSubject *connectedToBroker;
 }
 
 @property(readonly, strong) NSString *backendUri;
 @property(readonly, strong) RACSignal *notifications;
 @property(readonly, strong) RACBehaviorSubject *configReceived;
+@property(readonly, strong) RACBehaviorSubject *connectedToBroker;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 

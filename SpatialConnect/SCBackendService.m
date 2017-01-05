@@ -36,6 +36,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 @synthesize notifications;
 @synthesize backendUri = _backendUri;
 @synthesize configReceived = _configReceived;
+@synthesize connectedToBroker;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg {
   self = [super init];
@@ -177,11 +178,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     NSString *token =
         [[[SpatialConnect sharedInstance] authService] xAccessToken];
     sessionManager = [[MQTTSessionManager alloc] init];
-    [sessionManager addObserver:self
-                     forKeyPath:@"state"
-                        options:NSKeyValueObservingOptionInitial |
-                                NSKeyValueObservingOptionNew
-                        context:nil];
 
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
     policy.allowInvalidCertificates = NO;
@@ -230,6 +226,12 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
       [sessionManager connectToLast];
     }];
   }
+
+  [sessionManager addObserver:self
+                   forKeyPath:@"state"
+                      options:NSKeyValueObservingOptionInitial |
+                              NSKeyValueObservingOptionNew
+                      context:nil];
 }
 
 - (void)listenForNetworkConnection {
@@ -249,6 +251,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
     if (connected) {
       [self authListener];
     } else {
+      [connectedToBroker sendNext:@(NO)];
       [self loadCachedConfig];
     }
   }];

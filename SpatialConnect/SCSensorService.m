@@ -32,9 +32,9 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 @property(nonatomic) CLLocationAccuracy accuracy;
 @property(nonatomic) BOOL isTracking;
 @property(nonatomic) RACSignal *lastKnown;
-@property RACSignal *isConnectedViaWifi;
-@property RACSignal *isConnectedViaWAN;
-@property RACSignal *isConnected;
+@property RACBehaviorSubject *isConnectedViaWifi;
+@property RACBehaviorSubject *isConnectedViaWAN;
+@property RACBehaviorSubject *isConnected;
 
 - (void)startLocationManager;
 - (void)stopLocationManager;
