@@ -32,6 +32,8 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 @property(nonatomic, readwrite, strong) RACSignal *notifications;
 - (void)subscribeToTopic:(NSString *)topic;
 - (void)connect;
+- (void)registerForLocalNotifications;
+- (void)createNotification:(SCNotification *)notification;
 - (NSString *)jwt;
 @end
 

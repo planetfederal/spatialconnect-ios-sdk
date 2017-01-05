@@ -42,8 +42,6 @@
 @property(readonly, strong) RACBehaviorSubject *configReceived;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
-- (void)registerForLocalNotifications;
-- (void)createNotification:(SCNotification *)notification;
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
