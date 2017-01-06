@@ -115,6 +115,9 @@
     case BACKENDSERVICE_HTTP_URI:
       [self getBackendUri:subscriber];
       break;
+    case BACKENDSERVICE_MQTT_CONNECTED:
+      [self mqttConnected:subscriber];
+      break;
     default:
       break;
     }
@@ -429,6 +432,16 @@
       }];
 
   [subscriber sendCompleted];
+}
+
+- (void)mqttConnected:(id<RACSubscriber>)subscriber {
+  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+      subscribeNext:^(id value) {
+        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+        [[bs connectedToBroker] subscribeNext:^(id x) {
+          [subscriber sendNext:x];
+        }];
+      }];
 }
 
 @end
