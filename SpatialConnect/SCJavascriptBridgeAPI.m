@@ -439,7 +439,7 @@
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
         [[bs connectedToBroker] subscribeNext:^(id x) {
-          [subscriber sendNext:x];
+          [subscriber sendNext:@{ @"connected" : x }];
         }];
       }];
 }
