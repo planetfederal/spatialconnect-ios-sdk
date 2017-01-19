@@ -26,6 +26,9 @@
 
 @interface SpatialConnect ()
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
+@property(readwrite, atomic, strong) NSMutableDictionary *services;
+- (void)initialize;
+- (void)addDefaultServices;
 @end
 
 @implementation SpatialConnect
@@ -41,6 +44,11 @@
 
 @synthesize serviceEvents = _serviceEvents;
 
+/**
+ This singleton of SpatialConnect is shared across your app.
+
+ @return instance of SC
+ */
 + (id)sharedInstance {
   static SpatialConnect *sc;
   static dispatch_once_t onceToken;
@@ -54,8 +62,7 @@
   if (self = [super init]) {
     filepaths = [NSMutableArray new];
     _cache = [SCCache new];
-    [self createConfigService];
-    [self initServices];
+    [self initialize];
     self.serviceEventSubject = [RACSubject new];
     _serviceEvents = [self.serviceEventSubject publish];
     [self setupLogger];
@@ -63,12 +70,9 @@
   return self;
 }
 
-- (void)createConfigService {
-  _configService = [[SCConfigService alloc] init];
-}
-
-- (void)initServices {
+- (void)initialize {
   _services = [[NSMutableDictionary alloc] init];
+  _configService = [[SCConfigService alloc] init];
   _dataService = [SCDataService new];
   _sensorService = [SCSensorService new];
   _authService = [SCAuthService new];
@@ -121,17 +125,17 @@
       }];
 }
 
-- (RACSignal *)serviceStarted:(NSString *)serviceId {
+- (RACSignal *)serviceRunning:(NSString *)serviceId {
   if ([[self serviceById:serviceId] status] == SC_SERVICE_RUNNING) {
     SCServiceStatusEvent *evt =
-        [SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STARTED
+        [SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_RUNNING
                          andServiceName:serviceId];
     return [RACSignal return:evt];
   }
   RACMulticastConnection *rmcc = self.serviceEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCServiceStatusEvent *evt) {
-    if (evt.status == SC_SERVICE_EVT_STARTED &&
+    if (evt.status == SC_SERVICE_EVT_RUNNING &&
         [evt.serviceName isEqualToString:serviceId]) {
       return YES;
     }

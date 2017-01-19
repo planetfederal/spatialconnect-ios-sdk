@@ -278,7 +278,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
    * else if connected
    *    wait for authentication
    */
-  [[[sc serviceStarted:SCSensorService.serviceId]
+  [[[sc serviceRunning:SCSensorService.serviceId]
       flattenMap:^RACStream *(id value) {
         return sc.sensorService.isConnected;
       }] subscribeNext:^(NSNumber *x) {
