@@ -80,7 +80,7 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
 - (RACSignal *)start {
   [super start];
   [[[SpatialConnect sharedInstance]
-      serviceStarted:[SCBackendService serviceId]] subscribeNext:^(id value) {
+      serviceRunning:[SCBackendService serviceId]] subscribeNext:^(id value) {
     NSString *password = [keychainItem objectForKey:(__bridge id)kSecValueData];
     NSString *username =
         [keychainItem objectForKey:(__bridge id)kSecAttrAccount];

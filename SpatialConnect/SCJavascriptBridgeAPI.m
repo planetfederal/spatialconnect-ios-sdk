@@ -368,7 +368,7 @@
 }
 
 - (void)loginStatus:(id<RACSubscriber>)subscriber {
-  [[[SpatialConnect sharedInstance] serviceStarted:[SCAuthService serviceId]]
+  [[[SpatialConnect sharedInstance] serviceRunning:[SCAuthService serviceId]]
       subscribeNext:^(id value) {
         SCAuthService *as = [[SpatialConnect sharedInstance] authService];
         [[as loginStatus] subscribeNext:^(NSNumber *status) {
@@ -379,7 +379,7 @@
 
 - (void)listenForNotifications:(id<RACSubscriber>)subscriber {
   SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
         [[[[bs configReceived] filter:^BOOL(NSNumber *received) {
           return received.boolValue;
@@ -423,7 +423,7 @@
 }
 
 - (void)getBackendUri:(id<RACSubscriber>)subscriber {
-  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
         [subscriber sendNext:@{
@@ -435,7 +435,7 @@
 }
 
 - (void)mqttConnected:(id<RACSubscriber>)subscriber {
-  [[[SpatialConnect sharedInstance] serviceStarted:[SCBackendService serviceId]]
+  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
         [[bs connectedToBroker] subscribeNext:^(id x) {
