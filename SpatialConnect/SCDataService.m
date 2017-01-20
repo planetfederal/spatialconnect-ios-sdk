@@ -38,6 +38,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 - (void)stopAllStores;
 - (void)startStore:(SCDataStore *)store;
 - (void)stopStore:(SCDataStore *)store;
+- (Class)supportedStoreByKey:(NSString *)key;
 @property(readwrite, nonatomic) BOOL storesStarted;
 @property(readwrite, nonatomic) SCServiceStatus status;
 @property(readwrite, nonatomic, strong)
@@ -286,11 +287,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   }
 }
 
-/**
- * Stores can be registered automatically here through the use of configuration
- * files. If the service is already running, it will start newly registered
- *stores.
- **/
+
 - (BOOL)registerStore:(SCDataStore *)store {
   if (!store.storeId) {
     NSCAssert(store.storeId, @"Store Id not set");
