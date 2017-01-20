@@ -36,17 +36,42 @@ typedef enum : NSUInteger {
   RACBehaviorSubject *isReachableSubject;
 }
 
+/**
+ BOOL for location updates being active
+ */
 @property(nonatomic, readonly) BOOL isTracking;
-@property(nonatomic, retain) NSArray *location;
+
+/**
+ Last known location of the device emiting SCPoint over an Observable
+ */
 @property(nonatomic, readonly) RACSignal *lastKnown;
+
+/**
+ Behavior subject return YES for Internet access, NO for offline
+ */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnected;
+
+/**
+ Behavior subject return YES for Wifi access, NO for no Wifi connectivity
+ */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnectedViaWifi;
+
+/**
+ Behavior subject return YES for WAN access, NO for no WAN connectivity
+ */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnectedViaWAN;
 
 - (void)locationAccuracy:(CLLocationAccuracy)accuracy
             withDistance:(CLLocationDistance)distance;
 
+/**
+ Turns on location updates
+ */
 - (void)enableGPS;
+
+/**
+ Turns off location updates
+ */
 - (void)disableGPS;
 
 @end

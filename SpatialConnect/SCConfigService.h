@@ -28,16 +28,67 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 };
 
 @interface SCConfigService : SCService {
+
   NSMutableArray *configPaths;
 }
 
 - (id)init;
+
+/**
+ Add a new config to be loaded into SpatialConnect on Start
+
+ @param p Full path to file
+ */
 - (void)addConfigFilepath:(NSString *)p;
+
+/**
+ Load config in a running Config Service
+
+ @param c Config object to be loaded
+ */
 - (void)loadConfig:(SCConfig *)c;
+
+/**
+ Add store to SpatialConnect using a Store Config object
+
+ @param c Instance of Store Config
+ */
 - (void)addStore:(SCStoreConfig *)c;
+
+/**
+ Remove store from SpatialConnect using a config
+
+ @param c Instance of Store Config
+ */
 - (void)removeStore:(SCStoreConfig *)c;
+
+/**
+ Add form to SpatialConnect using a Form Config object
+
+ @param c Instance of Form Config
+ */
 - (void)addForm:(SCFormConfig *)c;
+
+/**
+ Remove form from SpatialConnect using a config
+
+ @param c Instance of Form Config
+ */
 - (void)removeForm:(SCFormConfig *)c;
+
+/**
+ This will overwrite the current cached config and will be used to configure the
+ system if the Backend Service is unable to fetch a config from the server.
+
+ @param c Instance of Config
+ */
 - (void)setCachedConfig:(SCConfig *)c;
+
+/**
+ Retrieves the last cached config. This is used when the Backend Service is not
+ able to fetch a config from the SpatialConnect server
+
+ @return SCConfig
+ */
 - (SCConfig *)cachedConfig;
 @end

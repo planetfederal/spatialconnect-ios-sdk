@@ -19,8 +19,6 @@
 #import <Foundation/Foundation.h>
 
 @interface SCLocationStore
-    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore> {
-  NSMutableDictionary *formIds;
-}
+    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore>
 
 @end

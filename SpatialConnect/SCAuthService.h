@@ -59,6 +59,11 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
  */
 - (RACSignal *)loginStatus;
 
+/**
+ The user's email address
+
+ @return NSString email
+ */
 - (NSString *)username;
 
 @end

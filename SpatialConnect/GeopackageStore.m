@@ -85,6 +85,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return path;
 }
 
+/**
+ Used by location store and form store for simplicity becaue they are
+ initializing a geopackage on the file system.
+ */
 - (void)connectBlocking {
   NSString *path = [self path];
   self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];

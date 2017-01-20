@@ -1281,7 +1281,7 @@
 			name = SensorService;
 			sourceTree = "<group>";
 		};
-		563BEC691BE52A2400778EDA /* RasterService */ = {
+		563BEC691BE52A2400778EDA /* Raster */ = {
 			isa = PBXGroup;
 			children = (
 				5649B5711BE280D6009947EF /* SCTileMapSource.h */,
@@ -1298,7 +1298,7 @@
 				56A23B0B1D7B1BB300AB258B /* SCMapkitTileGridSource.h */,
 				56A23B0C1D7B1BB300AB258B /* SCMapkitTileGridSource.m */,
 			);
-			name = RasterService;
+			name = Raster;
 			sourceTree = "<group>";
 		};
 		563BEC6A1BE52A4200778EDA /* Style */ = {
@@ -1404,7 +1404,7 @@
 				563BEC551BE500E900778EDA /* Utils */,
 				562428961CAC60610087756C /* Config Service */,
 				567B1FD31BFD5CB6003254C7 /* Events */,
-				563BEC691BE52A2400778EDA /* RasterService */,
+				563BEC691BE52A2400778EDA /* Raster */,
 				563BEC681BE529ED00778EDA /* SensorService */,
 				563BEC531BE500C500778EDA /* DataService */,
 				56CC07971C6E92EF00407D4A /* Storage */,

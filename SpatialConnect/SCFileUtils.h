@@ -28,5 +28,12 @@
 + (NSString *)filePathFromMainBundle:(NSString *)fileName;
 + (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName;
 + (NSURL *)applicationDocumentsDirectory;
+
+/**
+ Checks for the testing mode. Usually used for Test targets
+
+ @return BOOL
+ */
 + (BOOL)isTesting;
+
 @end

@@ -90,6 +90,13 @@
 
 #pragma mark -
 #pragma mark SCSpatialStore
+
+/**
+ Queries the default layers unless the filter has an array of layerIds
+
+ @param filter
+ @return RACSignal returning SCGeometry's
+ */
 - (RACSignal *)query:(SCQueryFilter *)filter {
   NSArray *layers =
       filter.layerIds.count == 0 ? [self defaultLayers] : filter.layerIds;
