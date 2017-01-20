@@ -20,9 +20,31 @@
 
 @protocol SCRasterStore <NSObject>
 
+
+/**
+ Binds a raster layer to a Tile Renderer used by Apple's MapKit
+
+ @param layer name of the raster layer
+ @param mapView Reference to a MKMapView instance
+ @return MKTileOverlay for MKMapkit usage
+ */
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView;
+
+
+/**
+ Returns the coverage polygon for a raster layer
+
+ @param layer Raster layer name
+ @return Returns an SCPolygon the represents the imagery footprint
+ */
 - (SCPolygon *)coverage:(NSString *)layer;
-- (NSArray *)rasterLayers;
+
+/**
+ Retrieves a list of Raster Layers
+
+ @return List of raster layer names
+ */
+- (NSArray<NSString *> *)rasterLayers;
 
 @end
