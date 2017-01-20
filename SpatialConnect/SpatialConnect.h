@@ -52,7 +52,7 @@
 @property(readonly) RACMulticastConnection *serviceEvents;
 
 /**
- This singleton of SpatialConnect is shared across your app.
+ @description This singleton of SpatialConnect is shared across your app.
 
  @return instance of SpatialConnect
  */
@@ -63,7 +63,7 @@
  Sensor, Config, and Auth are all started. Backend Service waits for the Config
  service to find a remote backend.
 
- @brief starts all the services
+ @brief Starts all the services
  */
 - (void)startAllServices;
 
@@ -71,7 +71,7 @@
  @discussion Stops all the services in the order they were added to the services
  dictionary.
 
- @brief stops the services
+ @brief Stops the services
  */
 - (void)stopAllServices;
 
@@ -79,7 +79,7 @@
  @description Stops all the services and then restarts them in the order they
  are added to the dictionary.
 
- @brief restarts the services
+ @brief Restarts the services
  */
 - (void)restartAllServices;
 
@@ -87,16 +87,16 @@
  @description Adds an instantiated instance of Service that extends the
  SCService class. The 'service' must extend the SCService class.
 
- @brief adds a service to the SpatialConnect instance
+ @brief Adds a service to the SpatialConnect instance
 
  @param service instance of SCService class
  */
 - (void)addService:(SCService *)service;
 
 /**
- @description this stops and removes a service from the SpatialConnect instance.
+ @description This stops and removes a service from the SpatialConnect instance.
 
- @brief removes a service from the SpatialConnect instance
+ @brief Removes a service from the SpatialConnect instance
 
  @param serviceId Service's unique identifier
  */
@@ -115,10 +115,10 @@
 /**
  @discussion This is the preferred way to start a service.
 
- @warning do not call service start on the service instance. Use this method to
+ @warning Do not call service start on the service instance. Use this method to
  start a service.
 
- @brief starts a single service
+ @brief Starts a single service
 
  @param serviceId the unique id of the service.
  */
@@ -127,10 +127,10 @@
 /**
  @discussion This is the preferred way to stop a service.
 
- @warning do not call service stop on the service instance. Use this method to
+ @warning Do not call service stop on the service instance. Use this method to
  stop a service.
 
- @brief stops a single service
+ @brief Stops a single service
 
  @param serviceId the unique id of the service.
  */
@@ -139,10 +139,10 @@
 /**
  @discussion This is the preferred way to restart a service.
 
- @warning do not call service restart on the service instance. Use this method
+ @warning Do not call service restart on the service instance. Use this method
  to start a service.
 
- @brief restarts a single service
+ @brief Restarts a single service
 
  @param serviceId the unique id of the service.
  */
@@ -153,7 +153,7 @@
  would register it. Passing in a remote configuration object will use the info
  to start the connection to the backend.
 
- @brief connects to SpatialConnect Server
+ @brief Connects to SpatialConnect Server
 
  @param r remote configuration
  */
@@ -172,7 +172,8 @@
 
 /**
  @description emits an SCServiceStatusEvent when the service is running. If the
- service isn't started, this will wait until it is started. This can be by your
+ service isn't started, this will wait until it is started. This can be used by
+ your
  app to start wiring up functionality waiting for it to occur. This is the best
  way to know if a service is started. If the service is already started, it will
  return an event immediately. You can also receive errors in the subscribe's

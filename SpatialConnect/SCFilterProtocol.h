@@ -23,7 +23,19 @@
 
 @required
 
+/**
+ Converts a SCQueryFilter to a SQL clause
+
+ @return Returns a SQL query clause
+ */
 - (NSString *)asSQL;
+
+/**
+ Tests the LHS of the query in a WHERE clause
+
+ @param lhs The value to be tested
+ @return YES for passing, NO for failing
+ */
 - (BOOL)compareLHS:(NSObject *)lhs;
 
 @end
