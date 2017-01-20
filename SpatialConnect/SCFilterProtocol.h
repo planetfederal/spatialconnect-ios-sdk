@@ -30,7 +30,6 @@
  */
 - (NSString *)asSQL;
 
-
 /**
  Tests the LHS of the query in a WHERE clause
 

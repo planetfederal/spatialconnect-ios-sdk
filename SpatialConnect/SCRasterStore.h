@@ -20,7 +20,6 @@
 
 @protocol SCRasterStore <NSObject>
 
-
 /**
  Binds a raster layer to a Tile Renderer used by Apple's MapKit
 
@@ -30,7 +29,6 @@
  */
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView;
-
 
 /**
  Returns the coverage polygon for a raster layer

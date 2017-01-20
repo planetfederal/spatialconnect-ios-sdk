@@ -172,7 +172,8 @@
 
 /**
  @description emits an SCServiceStatusEvent when the service is running. If the
- service isn't started, this will wait until it is started. This can be used by your
+ service isn't started, this will wait until it is started. This can be used by
+ your
  app to start wiring up functionality waiting for it to occur. This is the best
  way to know if a service is started. If the service is already started, it will
  return an event immediately. You can also receive errors in the subscribe's

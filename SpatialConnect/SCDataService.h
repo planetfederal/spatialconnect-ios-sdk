@@ -35,7 +35,6 @@
   SCDefaultStore *defaultStore;
 }
 
-
 /**
  The stateful status of the Data Service
  */
@@ -46,7 +45,6 @@
  */
 @property(nonatomic) RACMulticastConnection *storeEvents;
 
-
 /**
  BOOL value is emitted on this observable if there are stores
  loaded in the Data Service. The default value is NO and will
@@ -55,9 +53,11 @@
  */
 @property(readonly) RACBehaviorSubject *hasStores;
 
-
 /**
- @description This is how you add an SCDataStore to be managed by the DataService. Stores can be registered automatically here through the use of configuration files. If the service is already running, it will start newly registered stores
+ @description This is how you add an SCDataStore to be managed by the
+ DataService. Stores can be registered automatically here through the use of
+ configuration files. If the service is already running, it will start newly
+ registered stores
 
  @brief Registers a store with the Data Service
 
@@ -66,16 +66,14 @@
  */
 - (BOOL)registerStore:(SCDataStore *)store;
 
-
 /**
  @description Removes store from the data services
- 
+
  @brief Removes store from the Data Service
 
  @param store to be removed
  */
 - (void)unregisterStore:(SCDataStore *)store;
-
 
 /**
  @brief Replaces the store with a new instance.
@@ -91,9 +89,11 @@
  */
 - (BOOL)updateStoreByConfig:(SCStoreConfig *)c;
 
-
 /**
- @description This is how you add an SCDataStore to be managed by the DataService. Stores can be registered automatically here through the use of configuration files. If the service is already running, it will start newly registered stores
+ @description This is how you add an SCDataStore to be managed by the
+ DataService. Stores can be registered automatically here through the use of
+ configuration files. If the service is already running, it will start newly
+ registered stores
 
  @brief Registers a store with the Data Service using a Store Config
 
@@ -109,7 +109,6 @@
  */
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg;
 
-
 /**
  @discussion this is the store where all forms get persisted
 
@@ -123,7 +122,6 @@
  @return a reference to the location store
  */
 - (SCLocationStore *)locationStore;
-
 
 /**
  Retrieves a store by the store instance's unique identifier
@@ -150,7 +148,8 @@
 - (NSArray *)storeListDictionary;
 
 /**
- Retrieves an array of all the stores in the data service that are currently running
+ Retrieves an array of all the stores in the data service that are currently
+ running
 
  @brief Gets an array of running stores
 
@@ -159,14 +158,14 @@
 - (NSArray *)activeStoreList;
 
 /**
- Retrieves an array of all the stores in the data service that are currently running as a dictionary
+ Retrieves an array of all the stores in the data service that are currently
+ running as a dictionary
 
  @brief Gets an array of running stores as NSDictionary
 
  @return NSArray of running stores
  */
 - (NSArray<NSDictionary *> *)activeStoreListDictionary;
-
 
 /**
  Retrieves a dictionary representation of the store
@@ -184,7 +183,6 @@
  */
 - (NSDictionary *)storeAsDictionary:(SCDataStore *)ds;
 
-
 /**
  Stores that implements a specific protocol
 
@@ -197,9 +195,11 @@
  Stores that implements a specific protocol and are running
 
  @param protocol The protocol to filter for. (i.e. SCSpatialStore)
- @return Returns an NSArray of store references that implement the protocol and are running
+ @return Returns an NSArray of store references that implement the protocol and
+ are running
  */
-- (NSArray<Protocol *> *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
+- (NSArray<Protocol *> *)storesByProtocol:(Protocol *)protocol
+                              onlyRunning:(BOOL)running;
 
 /**
  Stores that implement SCRasterStore
@@ -207,7 +207,6 @@
  @return Returns an NSArray of store references that implement the SCRasterStore
  */
 - (NSArray *)storesRaster;
-
 
 /**
  Returns an observable
@@ -217,12 +216,12 @@
  */
 - (RACSignal *)storeStarted:(NSString *)storeId;
 
-
 /**
  Calls the query method on all stores of a defined Protocol
 
  @discussion Default count is limited to 100. filter.limit = <int>
- @param protocol The Protocol the store must implement to be included in the query
+ @param protocol The Protocol the store must implement to be included in the
+ query
  @param filter Filter object passed to limit the query
  @return A RACSignal of SCSpatialFeature
  */
@@ -233,9 +232,10 @@
  Sends an @selector to stores that implement a defined protocol
 
  @discussion Default count is limited to 100. filter.limit = <int>
- 
+
  @param selector Objective-C message to send to the objects
- @param protocol The Protocol the store must implement to be included in the selector message call
+ @param protocol The Protocol the store must implement to be included in the
+ selector message call
 
  @param filter Filter object passed to the query.
  @return RACSignal returning SCSpatialFeatures
@@ -243,7 +243,6 @@
 - (RACSignal *)send:(SEL *)selector
          ofProtocol:(Protocol *)protocol
              filter:(SCQueryFilter *)filter;
-
 
 /**
  Queries all active stores with the SCQueryFilter

@@ -287,7 +287,6 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   }
 }
 
-
 - (BOOL)registerStore:(SCDataStore *)store {
   if (!store.storeId) {
     NSCAssert(store.storeId, @"Store Id not set");
