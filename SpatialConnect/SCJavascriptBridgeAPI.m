@@ -256,9 +256,6 @@
   NSString *layerId = [geoJsonDict objectForKey:@"layerId"];
   SCDataStore *store =
       [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:storeId];
-  if (store == nil) {
-    store = [[[SpatialConnect sharedInstance] dataService] defaultStore];
-  }
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     NSError *err;
@@ -290,9 +287,6 @@
   NSString *layerId = [metadata objectForKey:@"layerId"];
   SCDataStore *store =
       [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:storeId];
-  if (store == nil) {
-    store = [[[SpatialConnect sharedInstance] dataService] defaultStore];
-  }
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     SCSpatialFeature *feat = [SCGeoJSON parseDict:geoJsonDict];
@@ -321,9 +315,6 @@
   SCKeyTuple *key = [SCKeyTuple tupleFromEncodedCompositeKey:value];
   SCDataStore *store = [[[SpatialConnect sharedInstance] dataService]
       storeByIdentifier:key.storeId];
-  if (store == nil) {
-    store = [[[SpatialConnect sharedInstance] dataService] defaultStore];
-  }
   if ([store conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> s = (id<SCSpatialStore>)store;
     [[s delete:key] subscribeError:^(NSError *error) {

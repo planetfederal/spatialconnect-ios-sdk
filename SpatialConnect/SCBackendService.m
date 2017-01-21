@@ -175,6 +175,11 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   }];
 }
 
+/**
+ Registers the mobile device's identifier and retrieves the config for the
+ device. The identifier is sent and the server will filter for only
+ configuration specific to this user/device.
+ */
 - (void)registerAndFetchConfig {
 
   NSDictionary *regDict = @{
@@ -292,6 +297,9 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   }];
 }
 
+/**
+ Load a cached config from SCCache
+ */
 - (void)loadCachedConfig {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCConfig *config = [sc.configService cachedConfig];

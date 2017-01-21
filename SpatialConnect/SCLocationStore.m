@@ -84,6 +84,12 @@
       }];
 }
 
+/**
+ Writes data to the local Geopackage and then pushes it to the server
+
+ @param pt Location feature
+ @return RACSignal Completes upon successful creation
+ */
 - (RACSignal *)create:(SCPoint *)pt {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   pt.layerId = @"last_known_location";

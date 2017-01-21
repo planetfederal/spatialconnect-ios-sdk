@@ -16,6 +16,10 @@
 
 #import <SpatialConnect/SpatialConnect.h>
 
+/**
+ Remote Data stores are SCDataStore's that require internet access to retrieve
+ data
+ */
 @interface SCRemoteDataStore : SCDataStore <SCDataStoreLifeCycle>
 
 @end

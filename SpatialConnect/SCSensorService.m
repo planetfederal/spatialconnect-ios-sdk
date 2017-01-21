@@ -204,6 +204,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   self.isTracking = NO;
 }
 
+// TODO set CE error
 - (void)locationAccuracy:(CLLocationAccuracy)acc
             withDistance:(CLLocationDistance)dist {
   self.accuracy = accuracy;
