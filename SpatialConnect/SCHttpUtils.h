@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,7 @@
  */
 + (RACSignal *)postRequestAsData:(NSURL *)url body:(NSData *)data;
 
-/**
+/*!
  POST JSON Object as NSDictionary returns RACSignal with an NSDictionary
 
  @param url url to request
@@ -73,7 +73,7 @@
  */
 + (RACSignal *)postDictRequestAsDict:(NSURL *)url body:(NSDictionary *)dict;
 
-/**
+/*!
  POST JSON Object as NSDictionary returns an NSDictionary
  @warning BLOCKING request
  @param url url to request
@@ -83,7 +83,7 @@
 + (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict;
 
-/**
+/*!
  POST JSON Object as NSDictionary returns NSData
  @warning BLOCKING request
  @param url url to request

@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -26,7 +26,7 @@
 @property(readonly, nonatomic) NSString *featureId;
 @property(readonly, nonatomic) NSString *encodedCompositeKey;
 
-/**
+/*!
  *  Creates an SCKeyTuple from a base64 encoded key
  *
  *  @param cKey format is <base64>.<base64>.<base64>

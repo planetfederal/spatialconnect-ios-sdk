@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -22,31 +22,31 @@
 
 @required
 
-/**
+/*!
  Starts a store
 
  @return Returns a RACSignal that emits when the store starts successfully
  */
 - (RACSignal *)start;
 
-/**
+/*!
  Stops a started store
  */
 - (void)stop;
 
-/**
+/*!
  @description Stops the Data Store and cleans resources on the file system
  */
 - (void)destroy;
 
 @optional
 
-/**
+/*!
  Starts a paused store
  */
 - (void)resume;
 
-/**
+/*!
  Pauses a started store
  */
 - (void)pause;

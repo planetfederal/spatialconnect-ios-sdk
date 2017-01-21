@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -35,17 +35,17 @@
   SCDefaultStore *defaultStore;
 }
 
-/**
+/*!
  The stateful status of the Data Service
  */
 @property(readonly, nonatomic) SCServiceStatus status;
 
-/**
+/*!
  RACSignal stream that sends events the stores emit
  */
 @property(nonatomic) RACMulticastConnection *storeEvents;
 
-/**
+/*!
  BOOL value is emitted on this observable if there are stores
  loaded in the Data Service. The default value is NO and will
  emit YES when the first store gets loaded given the all clear
@@ -53,7 +53,7 @@
  */
 @property(readonly) RACBehaviorSubject *hasStores;
 
-/**
+/*!
  @description This is how you add an SCDataStore to be managed by the
  DataService. Stores can be registered automatically here through the use of
  configuration files. If the service is already running, it will start newly
@@ -66,7 +66,7 @@
  */
 - (BOOL)registerStore:(SCDataStore *)store;
 
-/**
+/*!
  @description Removes store from the data services
 
  @brief Removes store from the Data Service
@@ -75,21 +75,21 @@
  */
 - (void)unregisterStore:(SCDataStore *)store;
 
-/**
+/*!
  @brief Replaces the store with a new instance.
 
  @param store new store to replace the existing by id
  */
 - (void)updateStore:(SCDataStore *)store;
 
-/**
+/*!
  @brief Replaces the store with a new instance using the config
 
  @param c Config used to instantiate a new store and replace the old by id
  */
 - (BOOL)updateStoreByConfig:(SCStoreConfig *)c;
 
-/**
+/*!
  @description This is how you add an SCDataStore to be managed by the
  DataService. Stores can be registered automatically here through the use of
  configuration files. If the service is already running, it will start newly
@@ -102,28 +102,28 @@
  */
 - (BOOL)registerStoreByConfig:(SCStoreConfig *)c;
 
-/**
+/*!
  @brief Registers a store with a config and then starts it
 
  @param cfg used to instantiate the store
  */
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg;
 
-/**
+/*!
  @discussion this is the store where all forms get persisted
 
  @return a reference to the form store
  */
 - (SCFormStore *)formStore;
 
-/**
+/*!
  @discussion this is the store where all device locations get persisted
 
  @return a reference to the location store
  */
 - (SCLocationStore *)locationStore;
 
-/**
+/*!
  Retrieves a store by the store instance's unique identifier
 
  @param identifier The store's unique id
@@ -131,14 +131,14 @@
  */
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier;
 
-/**
+/*!
  Retrieves an array of all the stores in the data service
 
  @return NSArray of the store references
  */
 - (NSArray *)storeList;
 
-/**
+/*!
  Retrieves an array of all the stores in the data service as a dictionary
 
  @brief Gets an array of store dictionaries
@@ -147,7 +147,7 @@
  */
 - (NSArray *)storeListDictionary;
 
-/**
+/*!
  Retrieves an array of all the stores in the data service that are currently
  running
 
@@ -157,7 +157,7 @@
  */
 - (NSArray *)activeStoreList;
 
-/**
+/*!
  Retrieves an array of all the stores in the data service that are currently
  running as a dictionary
 
@@ -167,7 +167,7 @@
  */
 - (NSArray<NSDictionary *> *)activeStoreListDictionary;
 
-/**
+/*!
  Retrieves a dictionary representation of the store
 
  @param storeId The unique identifier of the store
@@ -175,7 +175,7 @@
  */
 - (NSDictionary *)storeByIdAsDictionary:(NSString *)storeId;
 
-/**
+/*!
  Retrieves a dictionary representation of the store
 
  @param ds The store you want to retrieve a dictionary representation of
@@ -183,7 +183,7 @@
  */
 - (NSDictionary *)storeAsDictionary:(SCDataStore *)ds;
 
-/**
+/*!
  Stores that implements a specific protocol
 
  @param protocol The protocol to filter for. (i.e. SCSpatialStore)
@@ -191,7 +191,7 @@
  */
 - (NSArray<Protocol *> *)storesByProtocol:(Protocol *)protocol;
 
-/**
+/*!
  Stores that implements a specific protocol and are running
 
  @param protocol The protocol to filter for. (i.e. SCSpatialStore)
@@ -201,14 +201,14 @@
 - (NSArray<Protocol *> *)storesByProtocol:(Protocol *)protocol
                               onlyRunning:(BOOL)running;
 
-/**
+/*!
  Stores that implement SCRasterStore
 
  @return Returns an NSArray of store references that implement the SCRasterStore
  */
 - (NSArray *)storesRaster;
 
-/**
+/*!
  Returns an observable
 
  @param storeId The store's unique identifier
@@ -216,7 +216,7 @@
  */
 - (RACSignal *)storeStarted:(NSString *)storeId;
 
-/**
+/*!
  Calls the query method on all stores of a defined Protocol
 
  @discussion Default count is limited to 100. filter.limit = <int>
@@ -228,7 +228,7 @@
 - (RACSignal *)queryAllStoresOfProtocol:(Protocol *)protocol
                                  filter:(SCQueryFilter *)filter;
 
-/**
+/*!
  Sends an @selector to stores that implement a defined protocol
 
  @discussion Default count is limited to 100. filter.limit = <int>
@@ -244,7 +244,7 @@
          ofProtocol:(Protocol *)protocol
              filter:(SCQueryFilter *)filter;
 
-/**
+/*!
  Queries all active stores with the SCQueryFilter
 
  @discussion Default count is limited to 100. filter.limit = <int>
@@ -254,7 +254,7 @@
  */
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter;
 
-/**
+/*!
  Queries a single store with the SCQueryFilter
 
  @discussion Default count is limited to 100. filter.limit = <int>
@@ -265,7 +265,7 @@
 - (RACSignal *)queryStoreById:(NSString *)storeId
                        filter:(SCQueryFilter *)filter;
 
-/**
+/*!
  Queries a list of stores by id with the SCQueryFilter
 
  @discussion Default count is limited to 100. filter.limit = <int>
@@ -276,7 +276,7 @@
 - (RACSignal *)queryStoresByIds:(NSArray *)storeIds
                          filter:(SCQueryFilter *)filter;
 
-/**
+/*!
  Queries a list of stores by instance with the SCQueryFilter
 
  @discussion Default count is limited to 100. filter.limit = <int>
