@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -51,14 +51,14 @@
 
 @property(readonly) RACMulticastConnection *serviceEvents;
 
-/**
+/*!
  @description This singleton of SpatialConnect is shared across your app.
 
  @return instance of SpatialConnect
  */
 + (id)sharedInstance;
 
-/**
+/*!
  @discussion This starts all the services in the order they were added. Data,
  Sensor, Config, and Auth are all started. Backend Service waits for the Config
  service to find a remote backend.
@@ -67,7 +67,7 @@
  */
 - (void)startAllServices;
 
-/**
+/*!
  @discussion Stops all the services in the order they were added to the services
  dictionary.
 
@@ -75,7 +75,7 @@
  */
 - (void)stopAllServices;
 
-/**
+/*!
  @description Stops all the services and then restarts them in the order they
  are added to the dictionary.
 
@@ -83,7 +83,7 @@
  */
 - (void)restartAllServices;
 
-/**
+/*!
  @description Adds an instantiated instance of Service that extends the
  SCService class. The 'service' must extend the SCService class.
 
@@ -93,7 +93,7 @@
  */
 - (void)addService:(SCService *)service;
 
-/**
+/*!
  @description This stops and removes a service from the SpatialConnect instance.
 
  @brief Removes a service from the SpatialConnect instance
@@ -102,7 +102,7 @@
  */
 - (void)removeService:(NSString *)serviceId;
 
-/**
+/*!
  @discussion This is the preferred way to fetch a service from the spatial
  connect instance.
 
@@ -112,7 +112,7 @@
  */
 - (SCService *)serviceById:(NSString *)ident;
 
-/**
+/*!
  @discussion This is the preferred way to start a service.
 
  @warning Do not call service start on the service instance. Use this method to
@@ -124,7 +124,7 @@
  */
 - (void)startService:(NSString *)serviceId;
 
-/**
+/*!
  @discussion This is the preferred way to stop a service.
 
  @warning Do not call service stop on the service instance. Use this method to
@@ -136,7 +136,7 @@
  */
 - (void)stopService:(NSString *)serviceId;
 
-/**
+/*!
  @discussion This is the preferred way to restart a service.
 
  @warning Do not call service restart on the service instance. Use this method
@@ -148,7 +148,7 @@
  */
 - (void)restartService:(NSString *)serviceId;
 
-/**
+/*!
  @discussion If you have an instance of SpatialConnect Server, this is how you
  would register it. Passing in a remote configuration object will use the info
  to start the connection to the backend.
@@ -159,7 +159,7 @@
  */
 - (void)connectBackend:(SCRemoteConfig *)r;
 
-/**
+/*!
  @discussion this is the unique identifier that is App Store compliant and used
  to uniquely identify the installation id which is unique per install on a
  device. ID's tied to the hardware are not allowed to be used by the app store
@@ -170,7 +170,7 @@
  */
 - (NSString *)deviceIdentifier;
 
-/**
+/*!
  @description emits an SCServiceStatusEvent when the service is running. If the
  service isn't started, this will wait until it is started. This can be used by
  your

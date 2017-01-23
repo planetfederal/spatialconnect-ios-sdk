@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,30 +36,30 @@
   RACSignal *multicast;
 }
 
-/**
+/*!
  Endpoint running SpatialConnect Server
  */
 @property(readonly, strong) NSString *backendUri;
 
-/**
+/*!
  Observable emiting SCNotifications
  */
 @property(readonly, strong) RACSignal *notifications;
 
-/**
+/*!
  Behavior Observable emitting YES when the SpatialConnect SCConfig has been
  received
  */
 @property(readonly, strong) RACBehaviorSubject *configReceived;
 
-/**
+/*!
  Behavior Observable emitting YES when Connected, NO when the Connection is down
  */
 @property(readonly, strong) RACBehaviorSubject *connectedToBroker;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
-/**
+/*!
  Publishes an SCMessage to the SpatialConnect Server
 
  @param msg SCMessage to be sent
@@ -67,7 +67,7 @@
  */
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
 
-/**
+/*!
  Publishes an SCMessage to the SpatialConnect Server with At Most Once Delivery
  QoS 0
 
@@ -76,7 +76,7 @@
  */
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
 
-/**
+/*!
  Publishes an SCMessage to the SpatialConnect Server with At Least Once Delivery
  QoS 1
 
@@ -85,7 +85,7 @@
  */
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
 
-/**
+/*!
  Publishes an SCMessage to the SpatialConnect Server with Exactly Once Delivery
  QoS 2
 
@@ -94,7 +94,7 @@
  */
 - (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic;
 
-/**
+/*!
  Publishes a message with a reply-to observable returned for creating a request
  reply with the server.
 
@@ -104,7 +104,7 @@
  */
 - (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic;
 
-/**
+/*!
  Subscribes to an MQTT Topic
 
  @param topic to Listen on

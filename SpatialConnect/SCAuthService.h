@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
  */
 - (RACSignal *)loginStatus;
 
-/**
+/*!
  The user's email address
 
  @return NSString email

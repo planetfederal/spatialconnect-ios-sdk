@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -20,7 +20,7 @@
 
 @protocol SCRasterStore <NSObject>
 
-/**
+/*!
  Binds a raster layer to a Tile Renderer used by Apple's MapKit
 
  @param layer name of the raster layer
@@ -30,7 +30,7 @@
 - (MKTileOverlay *)overlayFromLayer:(NSString *)layer
                             mapview:(MKMapView *)mapView;
 
-/**
+/*!
  Returns the coverage polygon for a raster layer
 
  @param layer Raster layer name
@@ -38,7 +38,7 @@
  */
 - (SCPolygon *)coverage:(NSString *)layer;
 
-/**
+/*!
  Retrieves a list of Raster Layers
 
  @return List of raster layer names
