@@ -22,11 +22,12 @@
 
 @protocol SCServiceLifecycle <NSObject>
 
+@required
 - (RACSignal *)start;
 - (void)pause;
 - (void)resume;
 - (void)stop;
-- (void)startError;
+- (void)startError:(NSError *)e;
 - (NSArray *)requires;
 
 @end

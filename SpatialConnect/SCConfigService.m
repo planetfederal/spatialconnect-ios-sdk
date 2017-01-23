@@ -52,6 +52,11 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 
 - (void)stop {
   [super stop];
+  [self clearConfigs];
+}
+
+- (NSArray*)requires {
+  return @[[SCDataService serviceId]];
 }
 
 - (void)addConfigFilepath:(NSString *)fp {
@@ -92,6 +97,10 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
       [self loadConfig:s];
     }
   }];
+}
+
+- (void)clearConfigs {
+  [configPaths removeAllObjects];
 }
 
 - (void)loadConfig:(SCConfig *)c {

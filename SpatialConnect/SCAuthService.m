@@ -18,7 +18,7 @@
 #import "SCHttpUtils.h"
 #import "SpatialConnect.h"
 
-static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
+static NSString *const kAuthServiceName = @"SC_AUTH_SERVICE";
 
 @implementation SCAuthService
 
@@ -33,14 +33,12 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   return self;
 }
 
+- (id)initWithAuthMethod:(SCAuthMethod *)auth {
+  self.method = auth;
+}
+
 - (void)authenticate:(NSString *)username password:(NSString *)pass {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCBackendService *bs = sc.backendService;
-  NSString *serverUrl = bs.backendUri;
-  if (!serverUrl) {
-    DDLogError(@"There is no remote server uri set");
-    return;
-  }
+  [self.method user:username pass:pass]
   NSURL *url =
       [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/authenticate",
                                                       serverUrl]];
@@ -110,11 +108,11 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
 }
 
 - (NSArray *)requires {
-  return nil;
+  return @[[SCBackendService serviceId]];
 }
 
 + (NSString *)serviceId {
-  return kSERVICENAME;
+  return kAuthServiceName;
 }
 
 @end
