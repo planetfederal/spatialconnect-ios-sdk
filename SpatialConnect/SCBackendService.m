@@ -22,7 +22,7 @@
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
-static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
+static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)                             \
   ([[[UIDevice currentDevice] systemVersion]                                   \
        compare:v                                                               \
@@ -63,7 +63,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   return self;
 }
 
-- (RACSignal *)start {
+- (RACSignal *)start:(NSArray *)dependencies {
   [super start];
   [self listenForNetworkConnection];
   [self registerForLocalNotifications];
@@ -74,6 +74,10 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
   if (sessionManager) {
     [sessionManager disconnect];
   }
+}
+
+- (NSArray *)requires {
+  return @[[SCAuthService serviceId],[SCConfigService serviceId]];
 }
 
 - (void)registerForLocalNotifications {
@@ -415,7 +419,7 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 - (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
-  msg.correlationId = @(ti * 1000).unsignedIntegerValue;
+  msg.correlationId = @(ti * 1000).intValue;
   msg.replyTo =
       [NSString stringWithFormat:@"/device/%@-replyTo", sc.deviceIdentifier];
   msg.jwt = self.jwt;
@@ -508,6 +512,6 @@ static NSString *const kSERVICENAME = @"SC_BACKEND_SERVICE";
 }
 
 + (NSString *)serviceId {
-  return kSERVICENAME;
+  return kBackendServiceName;
 }
 @end

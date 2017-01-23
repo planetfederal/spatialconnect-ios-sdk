@@ -20,7 +20,6 @@
 #import "SCDataService.h"
 #import "GeoJSONStore.h"
 #import "GeopackageStore.h"
-#import "SCConfigService.h"
 #import "SCGeometry.h"
 #import "SCServiceStatusEvent.h"
 #import "SCSpatialStore.h"
@@ -265,6 +264,8 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
       }];
 }
 
+#pragma mark -
+#pragma mark SCServiceLifecycle
 - (RACSignal *)start {
   [super start];
   [self startAllStores];
@@ -278,6 +279,18 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   self.stores = [NSMutableDictionary new];
   self.storesStarted = NO;
   [_hasStores sendNext:@(NO)];
+}
+
+- (void)pause {
+  [super pause];
+  [self stopAllStores];
+  self.storesStarted = NO;
+}
+
+- (void)resume {
+  [super resume];
+  [self startAllStores];
+  [self setupSubscriptions];
 }
 
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg {

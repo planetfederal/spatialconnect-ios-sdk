@@ -24,6 +24,7 @@
  *  what the mobile architecture speak
  */
 @interface SCConfig : NSObject {
+  SCAuthConfig *config;
   NSMutableArray *stores;
   NSMutableArray *forms;
   SCRemoteConfig *r;

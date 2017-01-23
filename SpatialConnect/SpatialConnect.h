@@ -42,13 +42,7 @@
   NSMutableArray *filepaths;
 }
 
-@property(readonly, strong) SCDataService *dataService;
-@property(readonly, strong) SCSensorService *sensorService;
-@property(readonly, strong) SCConfigService *configService;
-@property(readonly, strong) SCAuthService *authService;
-@property(readonly, strong) SCBackendService *backendService;
 @property(readonly, strong) SCCache *cache;
-
 @property(readonly) RACMulticastConnection *serviceEvents;
 
 /*!
@@ -101,16 +95,6 @@
  @param serviceId Service's unique identifier
  */
 - (void)removeService:(NSString *)serviceId;
-
-/*!
- @discussion This is the preferred way to fetch a service from the spatial
- connect instance.
-
- @param ident a service's unique id
-
- @return the instance of the service
- */
-- (SCService *)serviceById:(NSString *)ident;
 
 /*!
  @discussion This is the preferred way to start a service.

@@ -28,17 +28,11 @@
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
 @property(readwrite, atomic, strong) NSMutableDictionary *services;
 - (void)initialize;
-- (void)addDefaultServices;
 @end
 
 @implementation SpatialConnect
 
 @synthesize services = _services;
-@synthesize dataService = _dataService;
-@synthesize sensorService = _sensorService;
-@synthesize configService = _configService;
-@synthesize authService = _authService;
-@synthesize backendService = _backendService;
 @synthesize serviceEventSubject = _serviceEventSubject;
 @synthesize cache = _cache;
 
@@ -70,13 +64,12 @@
   return self;
 }
 
-- (void)initialize {
+- (void)addDefaultServices {
   _services = [[NSMutableDictionary alloc] init];
-  _configService = [[SCConfigService alloc] init];
-  _dataService = [SCDataService new];
-  _sensorService = [SCSensorService new];
-  _authService = [SCAuthService new];
-  [self addDefaultServices];
+  [self addService:[SCConfigService new]];
+  [self addService:[SCDataService new]];
+  [self addService:[SCSensorService new]];
+  [self addService:[SCAuthService new]];
 }
 
 - (void)setupLogger {
@@ -88,17 +81,7 @@
   [DDLog addLogger:fileLogger];
 }
 
-- (void)addDefaultServices {
-  // Config services relies on the keyvalue service
-  // Order matters here
-  [self addService:self.dataService];
-  [self addService:self.configService];
-  [self addService:self.sensorService];
-  [self addService:self.authService];
-}
-
 #pragma mark - Service Lifecycle
-
 - (void)addService:(SCService *)service {
   [self.services setObject:service forKey:[service.class serviceId]];
 }
@@ -154,10 +137,7 @@
 }
 
 - (void)startAllServices {
-  [self startService:[self.authService.class serviceId]];
-  [self startService:[self.dataService.class serviceId]];
-  [self startService:[self.configService.class serviceId]];
-  [self startService:[self.sensorService.class serviceId]];
+  
 }
 
 - (void)stopAllServices {
@@ -172,9 +152,8 @@
 }
 
 - (void)connectBackend:(SCRemoteConfig *)r {
-  if (!self.backendService) {
-    _backendService = [[SCBackendService alloc] initWithRemoteConfig:r];
-    [self addService:self.backendService];
+  if ([_services objectForKey:[SCBackendService serviceId]]) {
+    [self addService:[[SCBackendService alloc] initWithRemoteConfig:r]];
     [self startService:[SCBackendService serviceId]];
   } else {
     DDLogWarn(@"SCBackendService Already Connected");
