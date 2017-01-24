@@ -91,25 +91,27 @@
  @return RACSignal Completes upon successful creation
  */
 - (RACSignal *)create:(SCPoint *)pt {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
   pt.layerId = @"last_known_location";
   RACSignal *c = [super create:pt];
-  if (!sc.backendService.backendUri) {
-    return c;
-  } else {
-    return [[[c materialize] filter:^BOOL(RACEvent *evt) {
-      if (evt.eventType == RACEventTypeCompleted) {
-        return YES;
-      } else {
-        return NO;
-      }
-    }] flattenMap:^RACStream *(id value) {
-      SCMessage *msg = [[SCMessage alloc] init];
-      msg.payload = [[pt JSONDict] JSONString];
-      [sc.backendService publish:msg onTopic:@"/store/tracking"];
-      return [RACSignal empty];
-    }];
-  }
+  return c;
+  //TODO
+//  if (!sc.backendService.backendUri) {
+//    return c;
+//  } else {
+//    return [[[c materialize] filter:^BOOL(RACEvent *evt) {
+//      if (evt.eventType == RACEventTypeCompleted) {
+//        return YES;
+//      } else {
+//        return NO;
+//      }
+//    }] flattenMap:^RACStream *(id value) {
+//      SCMessage *msg = [[SCMessage alloc] init];
+//      msg.payload = [[pt JSONDict] JSONString];
+//      [sc.backendService publish:msg onTopic:@"/store/tracking"];
+//      return [RACSignal empty];
+//    }];
+//  }
+
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {

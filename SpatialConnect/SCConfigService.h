@@ -15,6 +15,7 @@
  */
 
 #import "SCConfig.h"
+#import "SCDataService.h"
 #import "SCFormConfig.h"
 #import "SCService.h"
 #import "SCStoreConfig.h"
@@ -28,7 +29,7 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 };
 
 @interface SCConfigService : SCService {
-
+  SCDataService *dataService;
   NSMutableArray *configPaths;
 }
 

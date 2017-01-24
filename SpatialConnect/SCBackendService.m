@@ -77,7 +77,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 }
 
 - (NSArray *)requires {
-  return @[[SCAuthService serviceId],[SCConfigService serviceId]];
+  return @[ [SCAuthService serviceId], [SCConfigService serviceId] ];
 }
 
 - (void)registerForLocalNotifications {
@@ -121,30 +121,28 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
     SpatialConnect *sc = [SpatialConnect sharedInstance];
-    SCConfigService *cs = sc.configService;
-    SCConfig *cachedConfig = cs.cachedConfig;
+    SCConfig *cachedConfig = configService.cachedConfig;
     switch (msg.action) {
     case CONFIG_ADD_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig addStore:config];
-      [sc.dataService registerAndStartStoreByConfig:config];
+      [dataService registerAndStartStoreByConfig:config];
       break;
     }
     case CONFIG_UPDATE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig updateStore:config];
-      [sc.dataService updateStoreByConfig:config];
+      [dataService updateStoreByConfig:config];
       break;
     }
     case CONFIG_REMOVE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *storeid = [json objectForKey:@"id"];
-      SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
-          storeByIdentifier:storeid];
+      SCDataStore *ds = [dataService storeByIdentifier:storeid];
       [cachedConfig removeStore:storeid];
-      [sc.dataService unregisterStore:ds];
+      [dataService unregisterStore:ds];
       break;
     }
     case CONFIG_ADD_FORM: {
@@ -152,7 +150,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig addForm:f];
-        [sc.dataService.formStore registerFormByConfig:f];
+        [dataService.formStore registerFormByConfig:f];
       }
       break;
     }
@@ -161,7 +159,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig updateForm:f];
-        [sc.dataService.formStore updateFormByConfig:f];
+        [dataService.formStore updateFormByConfig:f];
       }
       break;
     }
@@ -169,7 +167,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       NSDictionary *json = [payload objectFromJSONString];
       NSString *formKey = [json objectForKey:@"form_key"];
       [cachedConfig removeForm:formKey];
-      [sc.dataService.formStore unregisterFormByKey:formKey];
+      [dataService.formStore unregisterFormByKey:formKey];
       break;
     }
     default:

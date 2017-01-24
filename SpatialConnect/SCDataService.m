@@ -253,15 +253,16 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (void)setupSubscriptions {
-  [[[[SpatialConnect sharedInstance] sensorService] isConnected]
-      subscribeNext:^(NSNumber *conn) {
-        BOOL connected = conn.boolValue;
-        if (connected) {
-          [self resumeRemoteStores];
-        } else {
-          [self pauseRemoteStores];
-        }
-      }];
+  //TODO
+//  [[[[SpatialConnect sharedInstance] sensorService] isConnected]
+//      subscribeNext:^(NSNumber *conn) {
+//        BOOL connected = conn.boolValue;
+//        if (connected) {
+//          [self resumeRemoteStores];
+//        } else {
+//          [self pauseRemoteStores];
+//        }
+//      }];
 }
 
 #pragma mark -
@@ -291,6 +292,10 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   [super resume];
   [self startAllStores];
   [self setupSubscriptions];
+}
+
+- (NSArray *)requires {
+  return @[[SCSensorService serviceId]];
 }
 
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg {
@@ -412,20 +417,30 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   return store;
 }
 
-- (NSArray *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running {
-
-  NSMutableArray *arr = [NSMutableArray new];
-  [self.stores enumerateKeysAndObjectsUsingBlock:^(
-                   NSString *key, SCDataStore *ds, BOOL *stop) {
-    BOOL conforms = [ds conformsToProtocol:protocol];
-    SCDataStoreStatus d = ds.status;
-    BOOL running = d == SC_DATASTORE_RUNNING;
-    if (conforms && running) {
-      [arr addObject:ds];
+- (RACSignal *)storesByProtocol:(Protocol *)protocol
+                    onlyRunning:(BOOL)onlyRunning {
+  return [[self.stores.rac_sequence.signal filter:^BOOL(SCDataStore *ds) {
+    return [ds conformsToProtocol:protocol];
+  }] filter:^BOOL(SCDataStore *ds) {
+    if (!onlyRunning) {
+      return true;
+    } else {
+      return ds.status == SC_DATASTORE_RUNNING;
     }
   }];
+}
 
-  return [NSArray arrayWithArray:arr];
+- (NSArray *)storesByProtocolArray:(Protocol *)protocol
+                       onlyRunning:(BOOL)onlyRunning {
+  return [[self storesByProtocol:protocol onlyRunning:onlyRunning] toArray];
+}
+
+- (RACSignal *)storesByProtocol:(Protocol *)protocol {
+  return [self storesByProtocol:protocol onlyRunning:@(YES)];
+}
+
+- (NSArray *)storesByProtocolArray:(Protocol *)protocol {
+  return [[self storesByProtocol:protocol] toArray];
 }
 
 - (NSDictionary *)storeAsDictionary:(SCDataStore *)ds {
@@ -451,12 +466,8 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   return store;
 }
 
-- (NSArray *)storesByProtocol:(Protocol *)protocol {
-  return [self storesByProtocol:protocol onlyRunning:YES];
-}
-
 - (NSArray *)storesRaster {
-  return [self storesByProtocol:@protocol(SCRasterStore)];
+  return [[self storesByProtocol:@protocol(SCRasterStore)] toArray];
 }
 
 - (SCDataStore *)storeByIdentifier:(NSString *)identifier {
@@ -467,46 +478,48 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 #pragma mark Store Query/Messaging Methods
 - (RACSignal *)queryAllStoresOfProtocol:(Protocol *)protocol
                                  filter:(SCQueryFilter *)filter {
-  return [self queryStores:[self storesByProtocol:protocol onlyRunning:YES]
+  return [self queryStores:[self storesByProtocolArray:protocol onlyRunning:YES]
                     filter:filter];
 }
 
 - (RACSignal *)send:(SEL *)selector
          ofProtocol:(Protocol *)protocol
              filter:(SCQueryFilter *)filter {
-  return [[[[self storesByProtocol:protocol onlyRunning:YES] rac_sequence]
+  return [[self storesByProtocol:protocol onlyRunning:YES]
       flattenMap:^RACSignal *(id store) {
         if ([store respondsToSelector:@selector(query)]) {
           return [store query:filter];
         } else {
           return nil;
         }
-      }] signal];
+      }];
 }
 
 - (RACSignal *)queryAllStores:(SCQueryFilter *)filter {
-  NSArray *arr = [self storesByProtocol:@protocol(SCSpatialStore)];
-  if (arr.count == 0) {
-    return [RACSignal empty];
-  }
-  return [self queryStores:arr filter:filter];
-}
-
-- (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter {
-  return [[[stores rac_sequence] signal]
+  return [[self storesByProtocol:@protocol(SCSpatialStore)]
       flattenMap:^RACStream *(id<SCSpatialStore> store) {
         return [store query:filter];
       }];
 }
 
-- (RACSignal *)queryStoresByIds:(NSArray *)storeIds
-                         filter:(SCQueryFilter *)filter {
-  NSArray *stores = [self storesByProtocol:@protocol(SCSpatialStore)];
-  NSArray *filtered =
-      [[[[stores rac_sequence] signal] filter:^BOOL(SCDataStore *store) {
-        return [storeIds containsObject:store.storeId];
+- (RACSignal *)queryStores:(NSArray<SCDataStore *> *)stores
+                    filter:(SCQueryFilter *)filter {
+  NSArray<NSString *> *storeIds =
+      [[stores.rac_sequence.signal map:^NSString *(SCDataStore *ds) {
+        return ds.storeId;
       }] toArray];
-  return [self queryStores:filtered filter:filter];
+
+  return [self queryStoresByIds:storeIds filter:filter];
+}
+
+- (RACSignal *)queryStoresByIds:(NSArray<NSString *> *)storeIds
+                         filter:(SCQueryFilter *)filter {
+  return [[[self storesByProtocol:@protocol(SCSpatialStore)]
+      filter:^BOOL(SCDataStore *ds) {
+        return [storeIds containsObject:ds.storeId];
+      }] flattenMap:^RACStream *(id<SCSpatialStore> store) {
+    return [store query:filter];
+  }];
 }
 
 - (RACSignal *)queryStoreById:(NSString *)storeId

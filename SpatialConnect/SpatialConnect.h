@@ -143,6 +143,11 @@
  */
 - (void)connectBackend:(SCRemoteConfig *)r;
 
+/*
+
+ */
+- (void)connectAuth:(id<SCAuthProtocol>)ap;
+
 /*!
  @discussion this is the unique identifier that is App Store compliant and used
  to uniquely identify the installation id which is unique per install on a

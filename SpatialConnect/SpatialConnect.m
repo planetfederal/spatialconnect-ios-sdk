@@ -137,6 +137,7 @@
 }
 
 - (void)startAllServices {
+
   
 }
 
@@ -152,11 +153,20 @@
 }
 
 - (void)connectBackend:(SCRemoteConfig *)r {
-  if ([_services objectForKey:[SCBackendService serviceId]]) {
+  if (![_services objectForKey:[SCBackendService serviceId]]) {
     [self addService:[[SCBackendService alloc] initWithRemoteConfig:r]];
     [self startService:[SCBackendService serviceId]];
   } else {
     DDLogWarn(@"SCBackendService Already Connected");
+  }
+}
+
+- (void)connectAuth:(id<SCAuthProtocol>)ap {
+  if (![_services objectForKey:[SCAuthService serviceId]]) {
+    [self addService:[[SCAuthService alloc] initWithAuthMethod:ap]];
+    [self startService:[SCAuthService serviceId]];
+  } else {
+    DDLogWarn(@"SCAuthService Already Connected");
   }
 }
 

@@ -19,6 +19,7 @@
 
 #import "Reachability.h"
 #import "SCService.h"
+#import "SCDataService.h"
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/RACSignal.h>
@@ -34,6 +35,7 @@ typedef enum : NSUInteger {
   CLLocationDistance distance;
   CLLocationAccuracy accuracy;
   RACBehaviorSubject *isReachableSubject;
+  SCDataService *dataService;
 }
 
 /*!

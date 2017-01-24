@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and limitations under the License
  */
 
-#import "SCAuthMethod.h"
+#import <Foundation/Foundation.h>
+#import "SCServiceNode.h"
 
-@implementation SCAuthMethod
+@interface SCServiceEdge : NSObject
+
+@property (nonatomic,readonly) SCServiceNode *from;
+@property (nonatomic,readonly) SCServiceNode *to;
 
 @end
