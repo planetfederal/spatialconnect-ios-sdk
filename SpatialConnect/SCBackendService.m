@@ -35,6 +35,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (void)registerForLocalNotifications;
 - (void)createNotification:(SCNotification *)notification;
 - (NSString *)jwt;
+@property(nonatomic, readwrite, strong) SCDataService *dataService;
+@property(nonatomic, readwrite, strong) SCConfigService *configService;
+@property(nonatomic, readwrite, strong) SCAuthService *authService;
+@property(nonatomic, readwrite, strong) SCSensorService *sensorService;
 @end
 
 @implementation SCBackendService
@@ -43,6 +47,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 @synthesize backendUri = _backendUri;
 @synthesize configReceived = _configReceived;
 @synthesize connectedToBroker;
+@synthesize dataService = _dataService;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg {
   self = [super init];
@@ -53,8 +58,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     mqttEndpoint = cfg.mqttHost;
     mqttPort = cfg.mqttPort;
     mqttProtocol = cfg.mqttProtocol;
-    _backendUri = [NSString
-        stringWithFormat:@"%@://%@:%@", httpProtocol, httpEndpoint, httpPort];
+    _backendUri = cfg.httpUri;
     _configReceived =
         [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
     connectedToBroker =
@@ -63,21 +67,33 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSArray *)dependencies {
-  [super start];
-  [self listenForNetworkConnection];
-  [self registerForLocalNotifications];
-  return [RACSignal empty];
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+  self.status = SC_SERVICE_STARTED;
+  self.authService = [deps objectForKey:[SCAuthService serviceId]];
+  self.configService = [deps objectForKey:[SCConfigService serviceId]];
+  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [subscriber sendNext:@(self.status)];
+    DDLogInfo(@"Starting Backend Service...");
+    [self listenForNetworkConnection];
+    [self registerForLocalNotifications];
+    DDLogInfo(@"Backend Service Started");
+    self.status = SC_SERVICE_RUNNING;
+    [subscriber sendNext:@(self.status)];
+    [subscriber sendCompleted];
+    return nil;
+  }];
 }
 
-- (void)stop {
+- (RACSignal*)stop {
+  self.status = SC_SERVICE_STOPPED;
   if (sessionManager) {
     [sessionManager disconnect];
   }
+  return [RACSignal empty];
 }
 
 - (NSArray *)requires {
-  return @[[SCAuthService serviceId],[SCConfigService serviceId]];
+  return @[ [SCAuthService serviceId], [SCConfigService serviceId] ];
 }
 
 - (void)registerForLocalNotifications {
@@ -120,31 +136,28 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
     NSString *payload = msg.payload;
-    SpatialConnect *sc = [SpatialConnect sharedInstance];
-    SCConfigService *cs = sc.configService;
-    SCConfig *cachedConfig = cs.cachedConfig;
+    SCConfig *cachedConfig = configService.cachedConfig;
     switch (msg.action) {
     case CONFIG_ADD_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig addStore:config];
-      [sc.dataService registerAndStartStoreByConfig:config];
+      [self.dataService registerAndStartStoreByConfig:config];
       break;
     }
     case CONFIG_UPDATE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig updateStore:config];
-      [sc.dataService updateStoreByConfig:config];
+      [self.dataService updateStoreByConfig:config];
       break;
     }
     case CONFIG_REMOVE_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *storeid = [json objectForKey:@"id"];
-      SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
-          storeByIdentifier:storeid];
+      SCDataStore *ds = [self.dataService storeByIdentifier:storeid];
       [cachedConfig removeStore:storeid];
-      [sc.dataService unregisterStore:ds];
+      [self.dataService unregisterStore:ds];
       break;
     }
     case CONFIG_ADD_FORM: {
@@ -152,7 +165,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig addForm:f];
-        [sc.dataService.formStore registerFormByConfig:f];
+        [self.dataService.formStore registerFormByConfig:f];
       }
       break;
     }
@@ -161,7 +174,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig updateForm:f];
-        [sc.dataService.formStore updateFormByConfig:f];
+        [self.dataService.formStore updateFormByConfig:f];
       }
       break;
     }
@@ -169,13 +182,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       NSDictionary *json = [payload objectFromJSONString];
       NSString *formKey = [json objectForKey:@"form_key"];
       [cachedConfig removeForm:formKey];
-      [sc.dataService.formStore unregisterFormByKey:formKey];
+      [self.dataService.formStore unregisterFormByKey:formKey];
       break;
     }
     default:
       break;
     }
-    [cs setCachedConfig:cachedConfig];
+    [self.configService setCachedConfig:cachedConfig];
   }];
 }
 
@@ -190,8 +203,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
     @"device_info" : @{@"os" : @"ios"},
     @"name" : [NSString
-        stringWithFormat:@"mobile:%@", [[[SpatialConnect sharedInstance]
-                                           authService] username]]
+        stringWithFormat:@"mobile:%@", [self.authService username]]
   };
   SCMessage *regMsg = [[SCMessage alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
@@ -203,15 +215,14 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
-    SpatialConnect *sc = [SpatialConnect sharedInstance];
-    [sc.configService loadConfig:cfg];
-    [sc.configService setCachedConfig:cfg];
+    [self.configService loadConfig:cfg];
+    [self.configService setCachedConfig:cfg];
     [_configReceived sendNext:@(YES)];
   }];
 }
 
 - (NSString *)jwt {
-  return [[[SpatialConnect sharedInstance] authService] xAccessToken];
+  return [self.authService xAccessToken];
 }
 
 - (void)connect {
@@ -219,8 +230,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   if (!sessionManager) {
 
     NSString *ident = [[SpatialConnect sharedInstance] deviceIdentifier];
-    NSString *token =
-        [[[SpatialConnect sharedInstance] authService] xAccessToken];
+    NSString *token = [self.authService xAccessToken];
     sessionManager = [[MQTTSessionManager alloc] init];
 
     MQTTSSLSecurityPolicy *policy = [MQTTSSLSecurityPolicy defaultPolicy];
@@ -279,7 +289,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 }
 
 - (void)listenForNetworkConnection {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
   /*
    * Check for connectivity.
    * If not connected
@@ -287,10 +296,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
    * else if connected
    *    wait for authentication
    */
-  [[[sc serviceRunning:SCSensorService.serviceId]
-      flattenMap:^RACStream *(id value) {
-        return sc.sensorService.isConnected;
-      }] subscribeNext:^(NSNumber *x) {
+  [self.sensorService.isConnected subscribeNext:^(NSNumber *x) {
     BOOL connected = x.boolValue;
     if (connected) {
       [self authListener];
@@ -305,28 +311,27 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
  Load a cached config from SCCache
  */
 - (void)loadCachedConfig {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCConfig *config = [sc.configService cachedConfig];
+  SCConfig *config = [self.configService cachedConfig];
   if (config) {
-    [[[SpatialConnect sharedInstance] configService] loadConfig:config];
+    [self.configService loadConfig:config];
     [_configReceived sendNext:@(YES)];
   }
 }
 
 - (void)authListener {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCAuthService *as = sc.authService;
   // You have the url to the server. Wait for someone to properly
   // authenticate before fetching the config
-  RACSignal *authed = [[[as loginStatus] filter:^BOOL(NSNumber *n) {
-    SCAuthStatus s = [n integerValue];
-    return s == SCAUTH_AUTHENTICATED;
-  }] take:1];
+  RACSignal *authed =
+      [[[self.authService loginStatus] filter:^BOOL(NSNumber *n) {
+        SCAuthStatus s = [n integerValue];
+        return s == SCAUTH_AUTHENTICATED;
+      }] take:1];
 
-  RACSignal *failedAuth = [[[as loginStatus] filter:^BOOL(NSNumber *n) {
-    SCAuthStatus s = [n integerValue];
-    return s == SCAUTH_AUTHENTICATION_FAILED;
-  }] take:1];
+  RACSignal *failedAuth =
+      [[[self.authService loginStatus] filter:^BOOL(NSNumber *n) {
+        SCAuthStatus s = [n integerValue];
+        return s == SCAUTH_AUTHENTICATION_FAILED;
+      }] take:1];
 
   [authed subscribeNext:^(NSNumber *n) {
     [self connect];
@@ -417,11 +422,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 }
 
 - (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
   msg.correlationId = @(ti * 1000).intValue;
   msg.replyTo =
-      [NSString stringWithFormat:@"/device/%@-replyTo", sc.deviceIdentifier];
+      [NSString stringWithFormat:@"/device/%@-replyTo", [[SpatialConnect sharedInstance] deviceIdentifier]];
   msg.jwt = self.jwt;
   msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {

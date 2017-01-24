@@ -126,7 +126,8 @@
 }
 
 - (void)startAllServices {
-  [[SpatialConnect sharedInstance] startAllServices];
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  [sc startAllServices];
 }
 
 - (void)storeList:(id<RACSubscriber>)subscriber {
@@ -142,6 +143,7 @@
 
     [subscriber sendNext:@{ @"stores" : arr }];
   }];
+
 }
 
 - (void)activeStoreList:(id<RACSubscriber>)subscriber {
@@ -187,11 +189,11 @@
 - (void)queryStoresByIds:(NSDictionary *)value
       responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  [[[[SpatialConnect sharedInstance] dataService]
-      queryStoresByIds:value[@"storeId"]
-                filter:filter] subscribeNext:^(SCSpatialFeature *value) {
-    [subscriber sendNext:[value JSONDict]];
-  }
+  SCDataService *ds = (SCDataService*)[[SpatialConnect sharedInstance] serviceById:[SCDataService serviceId]];
+  [[ds queryStoresByIds:value[@"storeId"] filter:filter]
+      subscribeNext:^(SCSpatialFeature *value) {
+        [subscriber sendNext:[value JSONDict]];
+      }
       completed:^{
         [subscriber sendCompleted];
       }];
@@ -200,9 +202,8 @@
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  [[[[[SpatialConnect sharedInstance] dataService]
-      queryAllStoresOfProtocol:@protocol(SCSpatialStore)
-                        filter:filter]
+  SCDataService *ds = (SCDataService*)[[SpatialConnect sharedInstance] serviceById:[SCDataService serviceId]];
+  [[[ds queryAllStores:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
@@ -216,8 +217,8 @@
 - (void)queryGeoStoresByIds:(NSDictionary *)value
          responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  [[[[[SpatialConnect sharedInstance] dataService]
-      queryStoresByIds:value[@"storeId"]
+  SCDataService *ds = (SCDataService*)[[SpatialConnect sharedInstance] serviceById:[SCDataService serviceId]];
+  [[[ds queryStoresByIds:value[@"storeId"]
                 filter:filter] map:^NSDictionary *(SCSpatialFeature *value) {
     return [value JSONDict];
   }] subscribeNext:^(NSDictionary *d) {
@@ -231,9 +232,10 @@
 - (void)spatialConnectGPS:(NSNumber *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   BOOL enable = [value boolValue];
+  SCSensorService *ss = (SCSensorService*)[[SpatialConnect sharedInstance] serviceById:[SCSensorService serviceId]];
   if (enable) {
-    [[[SpatialConnect sharedInstance] sensorService] enableGPS];
-    [[[[SpatialConnect sharedInstance] sensorService] lastKnown]
+    [ss enableGPS];
+    [[ss lastKnown]
         subscribeNext:^(CLLocation *loc) {
           CLLocationDistance alt = loc.altitude;
           float lat = loc.coordinate.latitude;
@@ -245,7 +247,7 @@
           }];
         }];
   } else {
-    [[[SpatialConnect sharedInstance] sensorService] disableGPS];
+    [ss disableGPS];
   }
 }
 
@@ -345,8 +347,7 @@
 }
 
 - (void)logout:(id<RACSubscriber>)subscriber {
-  SCAuthService *as = [[SpatialConnect sharedInstance] authService];
-  [as logout];
+  [[[SpatialConnect sharedInstance] authService] logout];
   [subscriber sendCompleted];
 }
 

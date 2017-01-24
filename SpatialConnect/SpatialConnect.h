@@ -30,6 +30,7 @@
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
 #import "SCService.h"
+#import "SCServiceGraph.h"
 #import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
 #import "SCSpatialStore.h"
@@ -38,12 +39,15 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-@interface SpatialConnect : NSObject {
-  NSMutableArray *filepaths;
-}
+@interface SpatialConnect : NSObject
+
+@property(readonly) SCSensorService *sensorService;
+@property(readonly) SCDataService *dataService;
+@property(readonly) SCConfigService *configService;
+@property(readonly) SCAuthService *authService;
+@property(readonly) SCBackendService *backendService;
 
 @property(readonly, strong) SCCache *cache;
-@property(readonly) RACMulticastConnection *serviceEvents;
 
 /*!
  @description This singleton of SpatialConnect is shared across your app.
@@ -143,6 +147,11 @@
  */
 - (void)connectBackend:(SCRemoteConfig *)r;
 
+/*
+
+ */
+- (void)connectAuth:(id<SCAuthProtocol>)ap;
+
 /*!
  @discussion this is the unique identifier that is App Store compliant and used
  to uniquely identify the installation id which is unique per install on a
@@ -171,5 +180,13 @@
  @return RACSignal that emits when the service is running
  */
 - (RACSignal *)serviceRunning:(NSString *)serviceId;
+
+- (SCService *)serviceById:(NSString *)serviceId;
+
+- (SCDataService *)dataService;
+- (SCConfigService *)configService;
+- (SCAuthService *)authService;
+- (SCBackendService *)backendService;
+- (SCSensorService *)sensorService;
 
 @end

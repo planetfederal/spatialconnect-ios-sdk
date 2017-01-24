@@ -20,15 +20,12 @@
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
+#import "SCServerAuthMethod.h"
 #import "SCStoreConfig.h"
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
-
-@interface SCConfigService ()
-- (void)setupSignals;
-@end
 
 @implementation SCConfigService
 
@@ -40,23 +37,29 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   return self;
 }
 
-- (void)setupSignals {
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+  self.status = SC_SERVICE_STARTED;
+  dataService = [deps objectForKey:[SCDataService serviceId]];
+  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    DDLogInfo(@"Config Service Started");
+    [subscriber sendNext:@(self.status)];
+    [self loadConfigs];
+    self.status = SC_SERVICE_RUNNING;
+    [subscriber sendNext:@(self.status)];
+    DDLogInfo(@"Config Service Running");
+    [subscriber sendCompleted];
+    return nil;
+  }];
 }
 
-- (RACSignal *)start {
-  [super start];
-  //  [self sweepDataDirectory];
-  [self loadConfigs];
+- (RACSignal *)stop {
+  [self clearConfigs];
+  self.status = SC_SERVICE_STOPPED;
   return [RACSignal empty];
 }
 
-- (void)stop {
-  [super stop];
-  [self clearConfigs];
-}
-
-- (NSArray*)requires {
-  return @[[SCDataService serviceId]];
+- (NSArray *)requires {
+  return @[ [SCDataService serviceId] ];
 }
 
 - (void)addConfigFilepath:(NSString *)fp {
@@ -107,13 +110,14 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   [c.forms enumerateObjectsUsingBlock:^(SCFormConfig *f, NSUInteger idx,
                                         BOOL *stop) {
-    [sc.dataService.formStore registerFormByConfig:f];
+    [dataService.formStore registerFormByConfig:f];
   }];
   [c.stores enumerateObjectsUsingBlock:^(SCStoreConfig *scfg, NSUInteger idx,
                                          BOOL *stop) {
-    [sc.dataService registerAndStartStoreByConfig:scfg];
+    [dataService registerAndStartStoreByConfig:scfg];
   }];
   if (c.remote) {
+    [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{@"server_url":c.remote.httpUri}]];
     [sc connectBackend:c.remote];
   }
 }
@@ -123,24 +127,19 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 }
 
 - (void)addForm:(SCFormConfig *)c {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [sc.dataService.formStore registerFormByConfig:c];
+  [dataService.formStore registerFormByConfig:c];
 }
 
 - (void)removeForm:(SCFormConfig *)c {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [sc.dataService.formStore unregisterFormByConfig:c];
+  [dataService.formStore unregisterFormByConfig:c];
 }
 
 - (void)addStore:(SCStoreConfig *)c {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [sc.dataService registerAndStartStoreByConfig:c];
+  [dataService registerAndStartStoreByConfig:c];
 }
 
 - (void)removeStore:(SCStoreConfig *)c {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [sc.dataService
-      unregisterStore:[sc.dataService storeByIdentifier:c.uniqueid]];
+  [dataService unregisterStore:[dataService storeByIdentifier:c.uniqueid]];
 }
 
 - (void)setCachedConfig:(SCConfig *)cfg {

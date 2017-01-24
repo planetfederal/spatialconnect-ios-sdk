@@ -48,7 +48,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *n) {
@@ -67,7 +67,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *n) {
@@ -125,7 +125,7 @@
 
   SCPoint *p =
       [[SCPoint alloc] initWithCoordinateArray:@[ @(-32), @(arc4random()) ]];
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *cr) {
@@ -147,7 +147,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[sc serviceStarted:[SCSensorService serviceId]] subscribeNext:^(id value) {
+  [[sc serviceRunning:[SCSensorService serviceId]] subscribeNext:^(id value) {
     [sc.sensorService.isConnectedViaWifi subscribeNext:^(NSNumber *n) {
       XCTAssertNotNil(n);
       XCTAssertTrue([n boolValue]);
@@ -187,7 +187,7 @@
     @(-22.3 + arc4random()), @(56.2 + arc4random())
   ]];
   SCFormFeature *f = [[SCFormFeature alloc] init];
-  GeopackageStore *ds = sc.dataService.defaultStore;
+  GeopackageStore *ds = sc.dataService.formStore;
   f.layerId = @"test_form";
   f.storeId = ds.storeId;
   f.geometry = p;
@@ -215,7 +215,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.dataService.formStore.hasForms;
       }] filter:^BOOL(NSNumber *o) {

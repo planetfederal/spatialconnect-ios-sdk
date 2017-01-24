@@ -38,7 +38,7 @@
 
 // download geojson file and check if file exists
 - (void)testGeoJSONDownload {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Delete"];
+  XCTestExpectation *expect = [self expectationWithDescription:@"GeoJson"];
   NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
   NSString *fileName = [NSString stringWithFormat:@"%@.geojson", geojsonStore];
   NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
@@ -51,8 +51,11 @@
       error:^(NSError *error) {
         XCTFail(@"Error getting store");
         [expect fulfill];
+      } completed:^{
+        NSLog(@"FOO");
+        [expect fulfill];
       }];
-  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+  [self waitForExpectationsWithTimeout:500.0 handler:nil];
 }
 
 - (void)testGeoJSONDestroy {

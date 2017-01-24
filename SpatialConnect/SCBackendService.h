@@ -14,6 +14,8 @@
  * limitations under the License
  */
 
+#import "SCConfigService.h"
+#import "SCDataService.h"
 #import "SCNotification.h"
 #import "SCRemoteConfig.h"
 #import "SCService.h"
@@ -34,6 +36,8 @@
   NSString *httpPort;
   MQTTSessionManager *sessionManager;
   RACSignal *multicast;
+  SCConfigService *configService;
+  SCDataService *dateService;
 }
 
 /*!

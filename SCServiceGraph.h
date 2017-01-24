@@ -13,8 +13,24 @@
  * See the License for the specific language governing permissions and limitations under the License
  */
 
-#import "SCAuthMethod.h"
+#import <Foundation/Foundation.h>
+#import "SCServiceLifecycle.h"
+#import "SCServiceNode.h"
 
-@implementation SCAuthMethod
+@interface SCServiceGraph : NSObject {
+  NSMutableArray *serviceNodes;
+}
+
+@property(readonly) RACMulticastConnection *serviceEvents;
+
+- (void)addService:(id<SCServiceLifecycle>)s;
+- (void)removeService:(NSString *)serviceId;
+- (SCServiceNode*)nodeById:(NSString*)serviceId;
+
+- (void)startAllServices;
+- (RACSignal *)startService:(NSString *)serviceId;
+- (void)stopAllServices;
+- (RACSignal *)stopService:(NSString *)serviceId;
+- (void)restartAllServices;
 
 @end

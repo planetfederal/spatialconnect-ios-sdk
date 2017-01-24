@@ -14,6 +14,7 @@
  * limitations under the License
  */
 #import "KeychainItemWrapper.h"
+#import "SCAuthProtocol.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -28,7 +29,17 @@ typedef NS_ENUM(NSUInteger, SCAuthStatus) {
   NSString *jsonWebToken;
   RACBehaviorSubject *loginStatus;
   KeychainItemWrapper *keychainItem;
+  id<SCAuthProtocol> authProtocol;
 }
+
+/*!
+ Upon initialization you will inject the authentication method to use for your
+ application
+
+ @param ap Any auth method that implements the SCAuthProtcol
+ @return id Instance of SCAuthService
+ */
+- (id)initWithAuthMethod:(id<SCAuthProtocol>)ap;
 
 /*!
  *  @brief sets the token and auth status in the library for the

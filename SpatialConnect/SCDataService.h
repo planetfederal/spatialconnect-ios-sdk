@@ -36,11 +36,6 @@
 }
 
 /*!
- The stateful status of the Data Service
- */
-@property(readonly, nonatomic) SCServiceStatus status;
-
-/*!
  RACSignal stream that sends events the stores emit
  */
 @property(nonatomic) RACMulticastConnection *storeEvents;
@@ -189,7 +184,9 @@
  @param protocol The protocol to filter for. (i.e. SCSpatialStore)
  @return Returns an NSArray of store references that implement the protocol
  */
-- (NSArray<Protocol *> *)storesByProtocol:(Protocol *)protocol;
+- (NSArray<Protocol *> *)storesByProtocolArray:(Protocol *)protocol;
+
+- (RACSignal *)storesByProtocol:(Protocol *)protocol;
 
 /*!
  Stores that implements a specific protocol and are running
@@ -198,8 +195,10 @@
  @return Returns an NSArray of store references that implement the protocol and
  are running
  */
-- (NSArray<Protocol *> *)storesByProtocol:(Protocol *)protocol
-                              onlyRunning:(BOOL)running;
+- (NSArray<Protocol *> *)storesByProtocolArray:(Protocol *)protocol
+                                   onlyRunning:(BOOL)running;
+
+- (RACSignal *)storesByProtocol:(Protocol *)protocol onlyRunning:(BOOL)running;
 
 /*!
  Stores that implement SCRasterStore

@@ -45,7 +45,7 @@
                                                             @(12.65625), @(54.97761367069628)
                                                             ]];
     SCFormFeature *f = [[SCFormFeature alloc] init];
-    GeopackageStore *ds = sc.dataService.defaultStore;
+    GeopackageStore *ds = sc.dataService.formStore;
     f.layerId = @"test_form";
     f.storeId = ds.storeId;
     f.geometry = p;

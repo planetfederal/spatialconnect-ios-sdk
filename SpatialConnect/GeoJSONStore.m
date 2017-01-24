@@ -286,12 +286,22 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
       return [RACSignal empty];
     }
 
-    RACSignal *dload$ = [super download:self.uri to:path];
-    [dload$ subscribeCompleted:^{
-      DDLogInfo(@"Saving GEOJSON to %@", path);
-      [self initWithFileName:path];
+
+//    [dload$ subscribeCompleted:^{
+//      DDLogInfo(@"Saving GEOJSON to %@", path);
+//      [self initWithFileName:path];
+//    }];
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      [[super download:self.uri to:path] subscribeNext:^(id x) {
+        [subscriber sendNext:x];
+      } error:^(NSError *error) {
+        [subscriber sendError:error];
+      } completed:^{
+        [self initWithFileName:path];
+        [subscriber sendCompleted];
+      }];
+      return nil;
     }];
-    return dload$;
   } else {
     NSString *filePath = nil;
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];

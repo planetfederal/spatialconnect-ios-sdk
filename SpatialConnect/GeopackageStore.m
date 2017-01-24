@@ -73,15 +73,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (NSString *)path {
   NSString *path = nil;
-  BOOL saveToDocsDir = ![SCFileUtils isTesting];
-  if (saveToDocsDir) {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                         NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    path = [documentsDirectory stringByAppendingPathComponent:self.filepath];
-  } else {
-    path = [SCFileUtils filePathFromNSHomeDirectory:self.filepath];
-  }
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                       NSUserDomainMask, YES);
+  NSString *documentsDirectory = [paths objectAtIndex:0];
+  path = [documentsDirectory stringByAppendingPathComponent:self.filepath];
   return path;
 }
 
