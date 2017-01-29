@@ -20,7 +20,7 @@
   NSMutableArray *serviceNodes;
 }
 
-- (void)addService:(id<SCServiceLifecycle>)s deps:(NSArray<id<SCServiceLifecycle>>*)deps;
+- (void)addService:(id<SCServiceLifecycle>)s;
 - (void)removeService:(NSString *)serviceId;
 - (id<SCServiceLifecycle>)nodeById:(NSString*)serviceId;
 

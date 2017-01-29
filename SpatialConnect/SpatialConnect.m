@@ -27,7 +27,6 @@
 @interface SpatialConnect ()
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
 @property(readwrite, atomic, strong) SCServiceGraph *serviceGraph;
-- (void)initialize;
 @end
 
 @implementation SpatialConnect
@@ -56,24 +55,24 @@
   if (self = [super init]) {
     filepaths = [NSMutableArray new];
     _cache = [SCCache new];
-    [self initialize];
     self.serviceEventSubject = [RACSubject new];
     _serviceEvents = [self.serviceEventSubject publish];
+    [self addDefaultServices];
     [self setupLogger];
   }
   return self;
 }
 
 - (void)addDefaultServices {
-  SCServiceGraph *sg = [SCServiceGraph new];
+  _serviceGraph = [SCServiceGraph new];
 
   SCSensorService *ss = [SCSensorService new];
   SCDataService *ds = [SCDataService new];
   SCConfigService *cs = [SCConfigService new];
 
-  [sg addService:ss deps:nil];
-  [sg addService:ds deps:@[ ss ]];
-  [sg addService:cs deps:@[ ds ]];
+  [self addService:ss];
+  [self addService:ds];
+  [self addService:cs];
 }
 
 - (void)setupLogger {
@@ -87,15 +86,7 @@
 
 #pragma mark - Service Lifecycle
 - (void)addService:(SCService *)service {
-  NSMutableArray *deps = nil;
-  if (service.requires) {
-    deps = [NSMutableArray new];
-    [service.requires enumerateObjectsUsingBlock:^(NSString *str,
-                                                   NSUInteger idx, BOOL *stop) {
-      [deps addObject:[_serviceGraph nodeById:str]];
-    }];
-  }
-  [_serviceGraph addService:service deps:deps];
+  [_serviceGraph addService:service];
 }
 
 - (void)removeService:(NSString *)serviceId {
@@ -150,10 +141,10 @@
 
 - (void)startAllServices {
   [[_serviceGraph startAllServices] subscribeError:^(NSError *error) {
-
+    DDLogError(@"%@",error.localizedDescription);
   }
                                          completed:^{
-
+                                           DDLogInfo(@"Services Started");
                                          }];
 }
 

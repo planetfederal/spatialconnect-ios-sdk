@@ -61,8 +61,6 @@
 		563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 563296441E37B40F002D1F07 /* SCAuthProtocol.h */; };
 		5632964C1E37EE47002D1F07 /* SCServiceNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 5632964A1E37EE47002D1F07 /* SCServiceNode.h */; };
 		5632964D1E37EE47002D1F07 /* SCServiceNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5632964B1E37EE47002D1F07 /* SCServiceNode.m */; };
-		563296501E37EED3002D1F07 /* SCServiceEdge.h in Headers */ = {isa = PBXBuildFile; fileRef = 5632964E1E37EED3002D1F07 /* SCServiceEdge.h */; };
-		563296511E37EED3002D1F07 /* SCServiceEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 5632964F1E37EED3002D1F07 /* SCServiceEdge.m */; };
 		563296541E37EFD6002D1F07 /* SCServiceGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 563296521E37EFD6002D1F07 /* SCServiceGraph.h */; };
 		563296551E37EFD6002D1F07 /* SCServiceGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 563296531E37EFD6002D1F07 /* SCServiceGraph.m */; };
 		563683CB1DB560AA001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
@@ -516,8 +514,6 @@
 		563296441E37B40F002D1F07 /* SCAuthProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAuthProtocol.h; sourceTree = "<group>"; };
 		5632964A1E37EE47002D1F07 /* SCServiceNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServiceNode.h; sourceTree = "<group>"; };
 		5632964B1E37EE47002D1F07 /* SCServiceNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCServiceNode.m; sourceTree = "<group>"; };
-		5632964E1E37EED3002D1F07 /* SCServiceEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCServiceEdge.h; path = ../SCServiceEdge.h; sourceTree = "<group>"; };
-		5632964F1E37EED3002D1F07 /* SCServiceEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCServiceEdge.m; path = ../SCServiceEdge.m; sourceTree = "<group>"; };
 		563296521E37EFD6002D1F07 /* SCServiceGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCServiceGraph.h; path = ../SCServiceGraph.h; sourceTree = "<group>"; };
 		563296531E37EFD6002D1F07 /* SCServiceGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCServiceGraph.m; path = ../SCServiceGraph.m; sourceTree = "<group>"; };
 		563683CA1DB560AA001F636B /* ca.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ca.crt; sourceTree = "<group>"; };
@@ -1441,8 +1437,6 @@
 				565E9ECC1DB7C49F00AEAB60 /* SCCache.h */,
 				565E9ECD1DB7C49F00AEAB60 /* SCCache.m */,
 				5684C0581DEF4A4E0011783D /* spatialconnect.modulemap */,
-				5632964E1E37EED3002D1F07 /* SCServiceEdge.h */,
-				5632964F1E37EED3002D1F07 /* SCServiceEdge.m */,
 				5632964A1E37EE47002D1F07 /* SCServiceNode.h */,
 				5632964B1E37EE47002D1F07 /* SCServiceNode.m */,
 				563296521E37EFD6002D1F07 /* SCServiceGraph.h */,
@@ -1726,7 +1720,6 @@
 				567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */,
 				56D5AD391D5D037800597300 /* SCBackendService.h in Headers */,
 				56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */,
-				563296501E37EED3002D1F07 /* SCServiceEdge.h in Headers */,
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
 				5616860E1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.h in Headers */,
 				561685E81C73D00500FC7FA6 /* SCGpkgSpatialRefSysTable.h in Headers */,
@@ -2311,7 +2304,6 @@
 				563F426B1DB0622B005022A7 /* JSONKit.m in Sources */,
 				5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */,
 				5649B5BA1BE280D6009947EF /* SCGeometry.m in Sources */,
-				563296511E37EED3002D1F07 /* SCServiceEdge.m in Sources */,
 				5649B5D51BE280D6009947EF /* SCLineString+MapKit.m in Sources */,
 				56A23B061D79EFEA00AB258B /* SCBoundingBox+GeoJSON.m in Sources */,
 				561685F11C73DFE000FC7FA6 /* SCGpkgExtensionsTable.m in Sources */,

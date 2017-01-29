@@ -18,7 +18,7 @@
 
 @interface SCServiceNode ()
 @property(nonatomic, readwrite, strong) id<SCServiceLifecycle> service;
-@property(nonatomic, readwrite, strong) NSArray<SCServiceEdge *> *edges;
+@property(nonatomic, readwrite, strong) NSArray<SCServiceNode *> *edges;
 @end
 
 @implementation SCServiceNode
@@ -27,7 +27,7 @@
 @synthesize edges = _edges;
 
 - (id)initWithService:(id<SCServiceLifecycle>)s
-             andEdges:(NSArray<SCServiceEdge *> *)e {
+             andEdges:(NSArray<SCServiceNode *> *)e {
   self = [super init];
   if (self) {
     _service = s;

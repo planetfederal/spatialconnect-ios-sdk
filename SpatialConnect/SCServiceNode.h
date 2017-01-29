@@ -17,14 +17,12 @@
 #import "SCService.h"
 #import <Foundation/Foundation.h>
 
-@class SCServiceEdge;
-
 @interface SCServiceNode : NSObject
 
 @property(nonatomic, readonly) id<SCServiceLifecycle> service;
-@property(nonatomic, readonly) NSArray<SCServiceEdge *> *edges;
+@property(nonatomic, readonly) NSArray<SCServiceNode *> *edges;
 
 - (id)initWithService:(id<SCServiceLifecycle>)s
-             andEdges:(NSArray<SCServiceEdge *> *)e;
+             andEdges:(NSArray<SCServiceNode *> *)e;
 
 @end

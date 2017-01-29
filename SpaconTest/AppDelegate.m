@@ -36,30 +36,30 @@
   if (!sc) {
     NSString *cfgPath = [SCFileUtils filePathFromMainBundle:@"remote.scfg"];
     sc = [SpatialConnect sharedInstance];
-    [sc.configService addConfigFilepath:cfgPath];
+//    [sc.configService addConfigFilepath:cfgPath];
     [sc startAllServices];
-    [sc.sensorService enableGPS];
-    [sc.authService authenticate:@"admin@something.com" password:@"admin"];
+//    [sc.sensorService enableGPS];
+//    [sc.authService authenticate:@"admin@something.com" password:@"admin"];
 
-    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-                                                            @(12.65625), @(54.97761367069628)
-                                                            ]];
-    SCFormFeature *f = [[SCFormFeature alloc] init];
-    GeopackageStore *ds = sc.dataService.defaultStore;
-    f.layerId = @"test_form";
-    f.storeId = ds.storeId;
-    f.geometry = p;
-    [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
-    [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
-      return [v boolValue];
-    }] take:1] subscribeNext:^(id x) {
-      [[sc.dataService.formStore create:f] subscribeError:^(NSError *error) {
-                                                     DDLogError(@"%@", error.description);
-                                                   }
-                                               completed:^{
-                                                 NSLog(@"FUN");
-                                               }];
-    }];
+//    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
+//                                                            @(12.65625), @(54.97761367069628)
+//                                                            ]];
+//    SCFormFeature *f = [[SCFormFeature alloc] init];
+//    GeopackageStore *ds = sc.dataService.defaultStore;
+//    f.layerId = @"test_form";
+//    f.storeId = ds.storeId;
+//    f.geometry = p;
+//    [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
+//    [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
+//      return [v boolValue];
+//    }] take:1] subscribeNext:^(id x) {
+//      [[sc.dataService.formStore create:f] subscribeError:^(NSError *error) {
+//                                                     DDLogError(@"%@", error.description);
+//                                                   }
+//                                               completed:^{
+//                                                 NSLog(@"FUN");
+//                                               }];
+//    }];
 
   }
 }

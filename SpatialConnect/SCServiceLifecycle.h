@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, SCServiceStatus) {
 - (RACSignal *)start;
 - (void)pause;
 - (void)resume;
-- (void)stop;
+- (RACSignal *)stop;
 - (void)startError:(NSError *)e;
 - (NSArray *)requires;
 - (SCServiceStatus)status;

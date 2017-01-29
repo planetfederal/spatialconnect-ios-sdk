@@ -15,7 +15,6 @@
 
 #import "SCServiceGraph.h"
 #import "SCServiceNode.h"
-#import "SCServiceEdge.h"
 #import "SCDataStore.h"
 
 @interface SCServiceGraph (Private)
@@ -33,25 +32,25 @@
   return self;
 }
 
-- (void)addService:(id<SCServiceLifecycle>)s deps:(NSArray<id<SCServiceLifecycle>>*)deps{
-  NSMutableArray<SCServiceEdge*>* edges = nil;
+- (void)addService:(id<SCServiceLifecycle>)s {
+  NSArray *deps = [s requires];
+  NSMutableArray<SCServiceNode*>* edges = nil;
   if (deps) {
-    edges = [NSMutableArray new];
-    [deps enumerateObjectsUsingBlock:^(id<SCServiceLifecycle> dep, NSUInteger idx, BOOL * _Nonnull stop) {
-      [edges addObject:[SCServiceEdge withNode:s dep:dep]];
-    }];
+    edges = [[deps.rac_sequence map:^SCServiceNode*(NSString *serviceId) {
+      return [self nodeById:serviceId];
+    }] array];
   }
   SCServiceNode *sn = [[SCServiceNode alloc] initWithService:s andEdges:edges];
   [serviceNodes addObject:sn];
 }
 
 - (void)removeService:(NSString *)serviceId {
-  SCServiceNode *serviceNode = [self nodeById:serviceId];
-  [serviceNode.edges enumerateObjectsUsingBlock:^(SCServiceEdge *edge, NSUInteger idx, BOOL *stop) {
-    [self removeService:[edge.dep.service.class serviceId]];
-  }];
-  [serviceNode.service stop];
-  [serviceNodes removeObject:serviceNode];
+//  SCServiceNode *serviceNode = [self nodeById:serviceId];
+//  [serviceNode.edges enumerateObjectsUsingBlock:^(SCServiceEdge *edge, NSUInteger idx, BOOL *stop) {
+//    [self removeService:[edge.dep.service.class serviceId]];
+//  }];
+//  [serviceNode.service stop];
+//  [serviceNodes removeObject:serviceNode];
 }
 
 - (SCServiceNode *)nodeById:(NSString*)serviceId {
@@ -81,8 +80,8 @@
 
   RACSignal *dep$ = nil;
   if (node.edges) {
-    dep$ = [node.edges.rac_sequence.signal flattenMap:^RACStream *(SCServiceEdge *e) {
-      return [self startService:[e.node.service.class serviceId]];
+    dep$ = [node.edges.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *e) {
+      return [self startService:[e.service.class serviceId]];
     }];
   }
 
@@ -104,12 +103,39 @@
 }
 
 - (RACSignal *)stopAllServices {
-  return nil;
+  return [serviceNodes.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *sn) {
+    return [self stopService:[sn.service.class serviceId]];
+  }];
 }
 
 - (RACSignal *)stopService:(NSString *)serviceId {
   SCServiceNode *node = [self nodeById:serviceId];
-  return nil;
+  if ([node.service status] == SC_SERVICE_STOPPED) {
+    return [RACSignal empty];
+  }
+
+  RACSignal *dep$ = nil;
+  if (node.edges) {
+    dep$ = [node.edges.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *e) {
+      return [self stopService:[e.service.class serviceId]];
+    }];
+  }
+
+  //No Deps, just start it
+  if (!dep$) {
+    return [node.service stop];
+  } else {
+    return [[[dep$ materialize] filter:^BOOL(RACEvent *evt) {
+      return evt.eventType == RACEventTypeError ||
+      evt.eventType == RACEventTypeCompleted;
+    }] flattenMap:^RACStream *(RACEvent *evt) {
+      if (evt.eventType == RACEventTypeError) {
+        return [RACSignal error:evt.error];
+      } else {
+        return [node.service stop];
+      }
+    }];
+  }
 }
 
 @end
