@@ -18,8 +18,8 @@
 ******************************************************************************/
 
 #import "Reachability.h"
-#import "SCService.h"
 #import "SCDataService.h"
+#import "SCService.h"
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/RACSignal.h>

@@ -117,16 +117,17 @@
   return [[[[super create:feature] materialize] filter:^BOOL(RACEvent *evt) {
     return evt.eventType == RACEventTypeCompleted;
   }] flattenMap:^RACStream *(id value) {
-    if (sc.backendService.status == SC_SERVICE_RUNNING) {
-      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-      SCMessage *msg = [[SCMessage alloc] init];
-      NSString *formId = [formIds objectForKey:feature.layerId];
-      NSDictionary *submission =
-          @{ @"form_id" : formId,
-             @"feature" : feature.JSONDict };
-      msg.payload = submission.JSONString;
-      [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
-    }
+    //TODO
+//    if (sc.backendService.status == SC_SERVICE_RUNNING) {
+//      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
+//      SCMessage *msg = [[SCMessage alloc] init];
+//      NSString *formId = [formIds objectForKey:feature.layerId];
+//      NSDictionary *submission =
+//          @{ @"form_id" : formId,
+//             @"feature" : feature.JSONDict };
+//      msg.payload = submission.JSONString;
+//      [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
+//    }
     return [RACSignal empty];
   }];
 }

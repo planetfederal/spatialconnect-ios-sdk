@@ -20,6 +20,14 @@
   NSMutableArray *serviceNodes;
 }
 
-- (void)addService:(id<SCServiceLifecycle>)s;
+- (void)addService:(id<SCServiceLifecycle>)s deps:(NSArray<id<SCServiceLifecycle>>*)deps;
+- (void)removeService:(NSString *)serviceId;
+- (id<SCServiceLifecycle>)nodeById:(NSString*)serviceId;
+
+- (RACSignal *)startAllServices;
+- (RACSignal *)startService:(NSString *)serviceId;
+- (RACSignal *)stopAllServices;
+- (RACSignal *)stopService:(NSString *)serviceId;
+
 
 @end

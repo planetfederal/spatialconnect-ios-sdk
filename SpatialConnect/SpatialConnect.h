@@ -30,6 +30,7 @@
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
 #import "SCService.h"
+#import "SCServiceGraph.h"
 #import "SCSimplePoint.h"
 #import "SCSpatialStore.h"
 #import "SCSpatialStore.h"
@@ -176,5 +177,7 @@
  @return RACSignal that emits when the service is running
  */
 - (RACSignal *)serviceRunning:(NSString *)serviceId;
+
+- (SCService *)serviceById:(NSString *)serviceId;
 
 @end

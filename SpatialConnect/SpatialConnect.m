@@ -26,13 +26,13 @@
 
 @interface SpatialConnect ()
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
-@property(readwrite, atomic, strong) NSMutableDictionary *services;
+@property(readwrite, atomic, strong) SCServiceGraph *serviceGraph;
 - (void)initialize;
 @end
 
 @implementation SpatialConnect
 
-@synthesize services = _services;
+@synthesize serviceGraph = _serviceGraph;
 @synthesize serviceEventSubject = _serviceEventSubject;
 @synthesize cache = _cache;
 
@@ -65,11 +65,15 @@
 }
 
 - (void)addDefaultServices {
-  _services = [[NSMutableDictionary alloc] init];
-  [self addService:[SCConfigService new]];
-  [self addService:[SCDataService new]];
-  [self addService:[SCSensorService new]];
-  [self addService:[SCAuthService new]];
+  SCServiceGraph *sg = [SCServiceGraph new];
+
+  SCSensorService *ss = [SCSensorService new];
+  SCDataService *ds = [SCDataService new];
+  SCConfigService *cs = [SCConfigService new];
+
+  [sg addService:ss deps:nil];
+  [sg addService:ds deps:@[ ss ]];
+  [sg addService:cs deps:@[ ds ]];
 }
 
 - (void)setupLogger {
@@ -83,20 +87,27 @@
 
 #pragma mark - Service Lifecycle
 - (void)addService:(SCService *)service {
-  [self.services setObject:service forKey:[service.class serviceId]];
+  NSMutableArray *deps = nil;
+  if (service.requires) {
+    deps = [NSMutableArray new];
+    [service.requires enumerateObjectsUsingBlock:^(NSString *str,
+                                                   NSUInteger idx, BOOL *stop) {
+      [deps addObject:[_serviceGraph nodeById:str]];
+    }];
+  }
+  [_serviceGraph addService:service deps:deps];
 }
 
 - (void)removeService:(NSString *)serviceId {
-  [self.services removeObjectForKey:serviceId];
+  [_serviceGraph removeService:serviceId];
 }
 
 - (SCService *)serviceById:(NSString *)ident {
-  return [self.services objectForKey:ident];
+  return [_serviceGraph nodeById:ident];
 }
 
 - (void)startService:(NSString *)serviceId {
-  SCService *service = [self.services objectForKey:serviceId];
-  [[service start] subscribeError:^(NSError *error) {
+  [[_serviceGraph startService:serviceId] subscribeError:^(NSError *error) {
     [self.serviceEventSubject
         sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR
                                   andServiceName:serviceId]];
@@ -127,33 +138,36 @@
 }
 
 - (void)stopService:(NSString *)serviceId {
-  [[self.services objectForKey:serviceId] stop];
+  [_serviceGraph stopService:serviceId];
 }
 
 - (void)restartService:(NSString *)serviceId {
-  SCService *service = [self.services objectForKey:serviceId];
-  [service stop];
-  [service start];
+  //TODO
+//  SCService *service = [self.services objectForKey:serviceId];
+//  [service stop];
+//  [service start];
 }
 
 - (void)startAllServices {
+  [[_serviceGraph startAllServices] subscribeError:^(NSError *error) {
 
-  
+  }
+                                         completed:^{
+
+                                         }];
 }
 
 - (void)stopAllServices {
-  for (SCService *service in [self.services allValues]) {
-    [service stop];
-  }
+  [_serviceGraph stopAllServices];
 }
 
 - (void)restartAllServices {
-  [self stopAllServices];
-  [self startAllServices];
+  [_serviceGraph stopAllServices];
+  [_serviceGraph startAllServices];
 }
 
 - (void)connectBackend:(SCRemoteConfig *)r {
-  if (![_services objectForKey:[SCBackendService serviceId]]) {
+  if (![_serviceGraph nodeById:[SCBackendService serviceId]]) {
     [self addService:[[SCBackendService alloc] initWithRemoteConfig:r]];
     [self startService:[SCBackendService serviceId]];
   } else {
@@ -162,7 +176,7 @@
 }
 
 - (void)connectAuth:(id<SCAuthProtocol>)ap {
-  if (![_services objectForKey:[SCAuthService serviceId]]) {
+  if (![_serviceGraph nodeById:[SCAuthService serviceId]]) {
     [self addService:[[SCAuthService alloc] initWithAuthMethod:ap]];
     [self startService:[SCAuthService serviceId]];
   } else {

@@ -170,12 +170,12 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   [c setValue:@(YES) forKey:GPS_ENABLED];
   [self startLocationManager];
 
-  //TODO Dataservice should listen and push to location store
-//  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
-//    return [dataService.locationStore create:p];
-//  }] subscribeNext:^(id x) {
-//    DDLogVerbose(@"Location sent to Location Store");
-//  }];
+  // TODO Dataservice should listen and push to location store
+  //  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
+  //    return [dataService.locationStore create:p];
+  //  }] subscribeNext:^(id x) {
+  //    DDLogVerbose(@"Location sent to Location Store");
+  //  }];
 }
 
 - (void)disableGPS {

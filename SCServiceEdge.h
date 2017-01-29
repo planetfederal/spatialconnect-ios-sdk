@@ -18,7 +18,9 @@
 
 @interface SCServiceEdge : NSObject
 
-@property (nonatomic,readonly) SCServiceNode *from;
-@property (nonatomic,readonly) SCServiceNode *to;
+@property (nonatomic,readonly) SCServiceNode *node;
+@property (nonatomic,readonly) SCServiceNode *dep;
+
++ (SCServiceEdge *)withNode:(SCServiceNode *)node dep:(SCServiceNode *)dep;
 
 @end

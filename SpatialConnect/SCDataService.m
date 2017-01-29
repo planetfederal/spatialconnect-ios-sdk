@@ -253,16 +253,16 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (void)setupSubscriptions {
-  //TODO
-//  [[[[SpatialConnect sharedInstance] sensorService] isConnected]
-//      subscribeNext:^(NSNumber *conn) {
-//        BOOL connected = conn.boolValue;
-//        if (connected) {
-//          [self resumeRemoteStores];
-//        } else {
-//          [self pauseRemoteStores];
-//        }
-//      }];
+  // TODO
+  //  [[[[SpatialConnect sharedInstance] sensorService] isConnected]
+  //      subscribeNext:^(NSNumber *conn) {
+  //        BOOL connected = conn.boolValue;
+  //        if (connected) {
+  //          [self resumeRemoteStores];
+  //        } else {
+  //          [self pauseRemoteStores];
+  //        }
+  //      }];
 }
 
 #pragma mark -
@@ -295,7 +295,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (NSArray *)requires {
-  return @[[SCSensorService serviceId]];
+  return @[ [SCSensorService serviceId] ];
 }
 
 - (void)registerAndStartStoreByConfig:(SCStoreConfig *)cfg {

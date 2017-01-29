@@ -15,9 +15,25 @@
 
 #import "SCServiceEdge.h"
 
+@interface SCServiceEdge()
+
+@end
+
 @implementation SCServiceEdge
 
-@synthesize from = _from;
-@synthesize to = _to;
+@synthesize node = _node;
+@synthesize dep = _dep;
 
++ (SCServiceEdge *)withNode:(SCServiceNode *)node andDep:(SCServiceNode *)dep {
+  return [SCServiceEdge withNode:node andDep:dep];
+}
+
+- (id)initWithNode:(SCServiceNode *)n dep:(SCServiceNode *)d {
+  self = [super init];
+  if (self) {
+    _node = n;
+    _dep = d;
+  }
+  return self;
+}
 @end

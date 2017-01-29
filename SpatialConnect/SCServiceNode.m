@@ -10,17 +10,24 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License
+ * See the License for the specific language governing permissions and
+ * limitations under the License
  */
 
 #import "SCServiceNode.h"
+
+@interface SCServiceNode ()
+@property(nonatomic, readwrite, strong) id<SCServiceLifecycle> service;
+@property(nonatomic, readwrite, strong) NSArray<SCServiceEdge *> *edges;
+@end
 
 @implementation SCServiceNode
 
 @synthesize service = _service;
 @synthesize edges = _edges;
 
-- (id)initWithService:(id<SCServiceLifecycle>)s andEdges:(NSArray<SCServiceEdge*>*)e {
+- (id)initWithService:(id<SCServiceLifecycle>)s
+             andEdges:(NSArray<SCServiceEdge *> *)e {
   self = [super init];
   if (self) {
     _service = s;
