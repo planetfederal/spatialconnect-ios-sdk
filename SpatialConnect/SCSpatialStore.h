@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 
 @required
 
-/**
+/*!
  *  Returns SCSpatialFeature on the returned signal
  *
  *  @param filter definition
@@ -33,7 +33,7 @@
 
 - (RACSignal *)queryById:(SCKeyTuple *)key;
 
-/**
+/*!
  *  Returns RACSignal completion on successful creation
  *  if the layerId ivar in the feature is empty it will go
  *  to the default store.
@@ -44,7 +44,7 @@
  */
 - (RACSignal *)create:(SCSpatialFeature *)feature;
 
-/**
+/*!
  *  Returns RACSignal completion on successful update
  *
  *  @param feature to be updated
@@ -53,7 +53,7 @@
  */
 - (RACSignal *)update:(SCSpatialFeature *)feature;
 
-/**
+/*!
  *  Returns RACSignal completion on successful delete
  *
  *  @param key feature to be deleted
@@ -62,7 +62,7 @@
  */
 - (RACSignal *) delete:(SCKeyTuple *)key;
 
-/**
+/*!
  *  List of vector layers in the store
  *
  *  @return NSArray of strings

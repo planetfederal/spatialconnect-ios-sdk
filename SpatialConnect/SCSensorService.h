@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -18,6 +18,7 @@
 ******************************************************************************/
 
 #import "Reachability.h"
+#import "SCDataService.h"
 #import "SCService.h"
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
@@ -34,19 +35,45 @@ typedef enum : NSUInteger {
   CLLocationDistance distance;
   CLLocationAccuracy accuracy;
   RACBehaviorSubject *isReachableSubject;
+  SCDataService *dataService;
 }
 
+/*!
+ BOOL for location updates being active
+ */
 @property(nonatomic, readonly) BOOL isTracking;
-@property(nonatomic, retain) NSArray *location;
+
+/*!
+ Last known location of the device emiting SCPoint over an Observable
+ */
 @property(nonatomic, readonly) RACSignal *lastKnown;
+
+/*!
+ Behavior subject return YES for Internet access, NO for offline
+ */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnected;
+
+/*!
+ Behavior subject return YES for Wifi access, NO for no Wifi connectivity
+ */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnectedViaWifi;
+
+/*!
+ Behavior subject return YES for WAN access, NO for no WAN connectivity
+ */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnectedViaWAN;
 
 - (void)locationAccuracy:(CLLocationAccuracy)accuracy
             withDistance:(CLLocationDistance)distance;
 
+/*!
+ Turns on location updates
+ */
 - (void)enableGPS;
+
+/*!
+ Turns off location updates
+ */
 - (void)disableGPS;
 
 @end

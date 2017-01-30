@@ -21,6 +21,12 @@
 @interface WFSDataStore : SCRemoteDataStore <SCSpatialStore>
 
 @property(readonly) NSString *baseUri;
+
+/**
+ Layers configured by the SpatialConnect server/SCConfig default_layers to be
+ the default layers that are queried unless they are have and SCQueryFilter that
+ overrides them with the filter.layerIds array.
+ */
 @property(readonly) NSArray *defaultLayers;
 
 @end

@@ -55,7 +55,14 @@
 		561686131C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 561686111C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m */; };
 		562428991CAC60740087756C /* SCConfigService.h in Headers */ = {isa = PBXBuildFile; fileRef = 562428971CAC60740087756C /* SCConfigService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5624289A1CAC60740087756C /* SCConfigService.m in Sources */ = {isa = PBXBuildFile; fileRef = 562428981CAC60740087756C /* SCConfigService.m */; };
+		56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 56285CE01E36BC13002D9934 /* SCServerAuthMethod.h */; };
+		56285CE31E36BC13002D9934 /* SCServerAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 56285CE11E36BC13002D9934 /* SCServerAuthMethod.m */; };
 		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
+		563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 563296441E37B40F002D1F07 /* SCAuthProtocol.h */; };
+		5632964C1E37EE47002D1F07 /* SCServiceNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 5632964A1E37EE47002D1F07 /* SCServiceNode.h */; };
+		5632964D1E37EE47002D1F07 /* SCServiceNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5632964B1E37EE47002D1F07 /* SCServiceNode.m */; };
+		563296541E37EFD6002D1F07 /* SCServiceGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 563296521E37EFD6002D1F07 /* SCServiceGraph.h */; };
+		563296551E37EFD6002D1F07 /* SCServiceGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 563296531E37EFD6002D1F07 /* SCServiceGraph.m */; };
 		563683CB1DB560AA001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
 		563683D01DB5615B001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
 		563683D11DB56165001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
@@ -501,7 +508,14 @@
 		561686111C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgDataColumnConstraint.m; sourceTree = "<group>"; };
 		562428971CAC60740087756C /* SCConfigService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCConfigService.h; sourceTree = "<group>"; };
 		562428981CAC60740087756C /* SCConfigService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCConfigService.m; sourceTree = "<group>"; };
+		56285CE01E36BC13002D9934 /* SCServerAuthMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServerAuthMethod.h; sourceTree = "<group>"; };
+		56285CE11E36BC13002D9934 /* SCServerAuthMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCServerAuthMethod.m; sourceTree = "<group>"; };
 		563090661D0646D0001FE1B5 /* libgpkgios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libgpkgios.framework; path = Carthage/Build/iOS/libgpkgios.framework; sourceTree = "<group>"; };
+		563296441E37B40F002D1F07 /* SCAuthProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAuthProtocol.h; sourceTree = "<group>"; };
+		5632964A1E37EE47002D1F07 /* SCServiceNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCServiceNode.h; sourceTree = "<group>"; };
+		5632964B1E37EE47002D1F07 /* SCServiceNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCServiceNode.m; sourceTree = "<group>"; };
+		563296521E37EFD6002D1F07 /* SCServiceGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCServiceGraph.h; path = ../SCServiceGraph.h; sourceTree = "<group>"; };
+		563296531E37EFD6002D1F07 /* SCServiceGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCServiceGraph.m; path = ../SCServiceGraph.m; sourceTree = "<group>"; };
 		563683CA1DB560AA001F636B /* ca.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ca.crt; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
@@ -1281,7 +1295,7 @@
 			name = SensorService;
 			sourceTree = "<group>";
 		};
-		563BEC691BE52A2400778EDA /* RasterService */ = {
+		563BEC691BE52A2400778EDA /* Raster */ = {
 			isa = PBXGroup;
 			children = (
 				5649B5711BE280D6009947EF /* SCTileMapSource.h */,
@@ -1298,7 +1312,7 @@
 				56A23B0B1D7B1BB300AB258B /* SCMapkitTileGridSource.h */,
 				56A23B0C1D7B1BB300AB258B /* SCMapkitTileGridSource.m */,
 			);
-			name = RasterService;
+			name = Raster;
 			sourceTree = "<group>";
 		};
 		563BEC6A1BE52A4200778EDA /* Style */ = {
@@ -1404,7 +1418,7 @@
 				563BEC551BE500E900778EDA /* Utils */,
 				562428961CAC60610087756C /* Config Service */,
 				567B1FD31BFD5CB6003254C7 /* Events */,
-				563BEC691BE52A2400778EDA /* RasterService */,
+				563BEC691BE52A2400778EDA /* Raster */,
 				563BEC681BE529ED00778EDA /* SensorService */,
 				563BEC531BE500C500778EDA /* DataService */,
 				56CC07971C6E92EF00407D4A /* Storage */,
@@ -1423,6 +1437,10 @@
 				565E9ECC1DB7C49F00AEAB60 /* SCCache.h */,
 				565E9ECD1DB7C49F00AEAB60 /* SCCache.m */,
 				5684C0581DEF4A4E0011783D /* spatialconnect.modulemap */,
+				5632964A1E37EE47002D1F07 /* SCServiceNode.h */,
+				5632964B1E37EE47002D1F07 /* SCServiceNode.m */,
+				563296521E37EFD6002D1F07 /* SCServiceGraph.h */,
+				563296531E37EFD6002D1F07 /* SCServiceGraph.m */,
 			);
 			path = SpatialConnect;
 			sourceTree = "<group>";
@@ -1638,6 +1656,9 @@
 			children = (
 				56DBFA041D2F0CC600FFE4FF /* SCAuthService.h */,
 				56DBFA051D2F0CC600FFE4FF /* SCAuthService.m */,
+				56285CE01E36BC13002D9934 /* SCServerAuthMethod.h */,
+				56285CE11E36BC13002D9934 /* SCServerAuthMethod.m */,
+				563296441E37B40F002D1F07 /* SCAuthProtocol.h */,
 			);
 			name = AuthService;
 			sourceTree = "<group>";
@@ -1728,7 +1749,9 @@
 				560B10E61C77C16000BA15B8 /* SCGpkgTable.h in Headers */,
 				56CC079D1C6ED59000407D4A /* SCGpkgContentsTable.h in Headers */,
 				5649B5F51BE280D6009947EF /* SCPoint+MapKit.h in Headers */,
+				5632964C1E37EE47002D1F07 /* SCServiceNode.h in Headers */,
 				5649B5BD1BE280D6009947EF /* SCGeometry+MapKit.h in Headers */,
+				563296541E37EFD6002D1F07 /* SCServiceGraph.h in Headers */,
 				5645C4EA1BED796D006E4128 /* SCPolygon+GPKG.h in Headers */,
 				5649B6141BE280D6009947EF /* SCStyle.h in Headers */,
 				5649B61A1BE280D6009947EF /* SCTileOverlayRenderer.h in Headers */,
@@ -1769,6 +1792,8 @@
 				560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */,
 				561686091C75025100FC7FA6 /* SCGpkgDataColumn.h in Headers */,
 				5649B6091BE280D6009947EF /* SCService.h in Headers */,
+				56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */,
+				563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */,
 				5649B5E11BE280D6009947EF /* SCMultiPoint.h in Headers */,
 				5649B5BF1BE280D6009947EF /* SCGeometryCollection.h in Headers */,
 				5649B58A1BE280D6009947EF /* SCCompoundPredicate.h in Headers */,
@@ -2175,8 +2200,10 @@
 				5645C4E11BED31F1006E4128 /* SCGeometry+GPKG.mm in Sources */,
 				56DBE2551DDF57C4003C58ED /* SCRemoteDataStore.m in Sources */,
 				5616860F1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.m in Sources */,
+				5632964D1E37EE47002D1F07 /* SCServiceNode.m in Sources */,
 				5649B61B1BE280D6009947EF /* SCTileOverlayRenderer.m in Sources */,
 				560AFB2F1C7E2762006A060F /* SCGpkgTileSource.m in Sources */,
+				563296551E37EFD6002D1F07 /* SCServiceGraph.m in Sources */,
 				5649B5D11BE280D6009947EF /* SCLineString.m in Sources */,
 				5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */,
 				5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */,
@@ -2271,6 +2298,7 @@
 				560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */,
 				56554E691D54EA03000D77E7 /* SCFormStore.m in Sources */,
 				5645C4EB1BED796D006E4128 /* SCPolygon+GPKG.m in Sources */,
+				56285CE31E36BC13002D9934 /* SCServerAuthMethod.m in Sources */,
 				5649B5DC1BE280D6009947EF /* SCMultiLineString.m in Sources */,
 				560B10E71C77C16000BA15B8 /* SCGpkgTable.m in Sources */,
 				563F426B1DB0622B005022A7 /* JSONKit.m in Sources */,
@@ -2500,6 +2528,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 82EPDLMXNS;
@@ -2549,6 +2578,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 82EPDLMXNS;

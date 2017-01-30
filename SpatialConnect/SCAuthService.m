@@ -16,43 +16,34 @@
 
 #import "SCAuthService.h"
 #import "SCHttpUtils.h"
+#import "SCServerAuthMethod.h"
 #import "SpatialConnect.h"
 
-static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
+static NSString *const kAuthServiceName = @"SC_AUTH_SERVICE";
 
 @implementation SCAuthService
 
-- (id)init {
+- (id)initWithAuthMethod:(id<SCAuthProtocol>)ap {
   if (self = [super init]) {
-    keychainItem =
-        [[KeychainItemWrapper alloc] initWithIdentifier:@"SpatialConnect"
-                                            accessGroup:nil];
     loginStatus = [RACBehaviorSubject
         behaviorSubjectWithDefaultValue:@(SCAUTH_NOT_AUTHENTICATED)];
+    authProtocol = ap;
   }
   return self;
 }
 
+- (void)setup {
+  loginStatus = [RACBehaviorSubject
+      behaviorSubjectWithDefaultValue:@(SCAUTH_NOT_AUTHENTICATED)];
+}
+
 - (void)authenticate:(NSString *)username password:(NSString *)pass {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  SCBackendService *bs = sc.backendService;
-  NSString *serverUrl = bs.backendUri;
-  if (!serverUrl) {
-    DDLogError(@"There is no remote server uri set");
-    return;
-  }
-  NSURL *url =
-      [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/authenticate",
-                                                      serverUrl]];
-  NSDictionary *authDict = @{ @"email" : username, @"password" : pass };
-  NSDictionary *res =
-      [SCHttpUtils postDictRequestAsDictBLOCKING:url body:authDict];
-  if (res && (jsonWebToken = res[@"result"][@"token"])) {
-    [keychainItem setObject:pass forKey:(__bridge id)kSecValueData];
-    [keychainItem setObject:username forKey:(__bridge id)kSecAttrAccount];
+  BOOL authed = [authProtocol authenticate:username password:pass];
+
+  if (authed) {
     [loginStatus sendNext:@(SCAUTH_AUTHENTICATED)];
   } else {
-    [self logout];
+    [authProtocol logout];
     [loginStatus sendNext:@(SCAUTH_AUTHENTICATION_FAILED)];
   }
 }
@@ -62,34 +53,31 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
 }
 
 - (NSString *)xAccessToken {
-  return jsonWebToken;
+  return [authProtocol xAccessToken];
 }
 
 - (void)logout {
-  [keychainItem resetKeychainItem];
+  [authProtocol logout];
   [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
 }
 
 - (NSString *)username {
-  return [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+  return [authProtocol username];
 }
 
 #pragma mark -
 #pragma SCServiceLifecycle
 
-- (RACSignal *)start {
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
   [super start];
-  [[[SpatialConnect sharedInstance]
-      serviceStarted:[SCBackendService serviceId]] subscribeNext:^(id value) {
-    NSString *password = [keychainItem objectForKey:(__bridge id)kSecValueData];
-    NSString *username =
-        [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
-    if (![password isEqualToString:@""] && ![username isEqualToString:@""]) {
-      [self authenticate:username password:password];
-    } else {
-      [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
-    }
-  }];
+  DDLogInfo(@"Starting Auth Service");
+  BOOL authed = [authProtocol authFromCache];
+  if (authed) {
+    [loginStatus sendNext:@(SCAUTH_AUTHENTICATED)];
+  } else {
+    [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
+  };
+  DDLogInfo(@"Auth Service Started");
   return [RACSignal empty];
 }
 
@@ -105,16 +93,12 @@ static NSString *const kSERVICENAME = @"SC_AUTH_SERVICE";
   [super stop];
 }
 
-- (void)startError {
-  [super startError];
-}
-
 - (NSArray *)requires {
   return nil;
 }
 
 + (NSString *)serviceId {
-  return kSERVICENAME;
+  return kAuthServiceName;
 }
 
 @end

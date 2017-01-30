@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@
 @property(nonatomic, readonly) NSString *mqttPort;
 
 - (id)initWithDict:(NSDictionary *)d;
+- (NSString *)httpUri;
 - (NSDictionary *)dictionary;
 
 @end

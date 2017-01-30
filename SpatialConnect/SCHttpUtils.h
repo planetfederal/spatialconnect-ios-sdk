@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +29,22 @@
  */
 + (RACSignal *)getRequestURLAsDict:(NSURL *)url;
 
+/*!
+ *  @brief Blocking request to fetch an JSON Response
+ *
+ *  @param url http/https resource with JSON Response
+ *
+ *  @return NSDictionary of a JSON Response
+ */
 + (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url;
 
+/*!
+ *  @brief Blocking request to fetch data
+ *
+ *  @param url http/https resource
+ *
+ *  @return Response as NSData
+ */
 + (NSData *)getRequestURLAsDataBLOCKING:(NSURL *)url;
 
 /*!
@@ -50,11 +64,32 @@
  */
 + (RACSignal *)postRequestAsData:(NSURL *)url body:(NSData *)data;
 
+/*!
+ POST JSON Object as NSDictionary returns RACSignal with an NSDictionary
+
+ @param url url to request
+ @param dict HTTP Body JSON Params
+ @return RACSignal emitting JSON Response as NSDictionary
+ */
 + (RACSignal *)postDictRequestAsDict:(NSURL *)url body:(NSDictionary *)dict;
 
+/*!
+ POST JSON Object as NSDictionary returns an NSDictionary
+ @warning BLOCKING request
+ @param url url to request
+ @param dict HTTP Body JSON Params
+ @return JSON Response as NSDictionary
+ */
 + (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict;
 
+/*!
+ POST JSON Object as NSDictionary returns NSData
+ @warning BLOCKING request
+ @param url url to request
+ @param dict HTTP Body JSON Params
+ @return NSData
+ */
 + (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict;
 
 @end

@@ -62,8 +62,12 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   return self;
 }
 
-- (RACSignal *)start {
+#pragma mark -
+#pragma mark SCServiceLifecyle methods
+
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
   [super start];
+  DDLogInfo(@"Starting Sensor Service...");
   if (!locationManager) {
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
@@ -86,7 +90,31 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   }
 
   [self setupSignals];
+  DDLogInfo(@"Sensor Service Started");
   return [RACSignal empty];
+}
+
+- (void)stop {
+  [super stop];
+  if (locationManager) {
+    [self stopLocationManager];
+    locationManager = nil;
+    locationManager.delegate = nil;
+  }
+}
+
+- (void)resume {
+  [super resume];
+  [self shoudlEnableGPS];
+}
+
+- (void)pause {
+  [super pause];
+  [self stopLocationManager];
+}
+
+- (NSArray *)requires {
+  return nil;
 }
 
 - (void)setupSignals {
@@ -135,25 +163,6 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   [reach startNotifier];
 }
 
-- (void)stop {
-  [super stop];
-  if (locationManager) {
-    [self stopLocationManager];
-    locationManager = nil;
-    locationManager.delegate = nil;
-  }
-}
-
-- (void)resume {
-  [super resume];
-  [self shoudlEnableGPS];
-}
-
-- (void)pause {
-  [super pause];
-  [self stopLocationManager];
-}
-
 - (void)enableGPS {
   if (self.status != SC_SERVICE_RUNNING) {
     [self start];
@@ -163,11 +172,12 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   [c setValue:@(YES) forKey:GPS_ENABLED];
   [self startLocationManager];
 
-  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
-    return [sc.dataService.locationStore create:p];
-  }] subscribeNext:^(id x) {
-    DDLogVerbose(@"Location sent to Location Store");
-  }];
+  // TODO Dataservice should listen and push to location store
+  //  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
+  //    return [dataService.locationStore create:p];
+  //  }] subscribeNext:^(id x) {
+  //    DDLogVerbose(@"Location sent to Location Store");
+  //  }];
 }
 
 - (void)disableGPS {
@@ -204,6 +214,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   self.isTracking = NO;
 }
 
+// TODO set CE error
 - (void)locationAccuracy:(CLLocationAccuracy)acc
             withDistance:(CLLocationDistance)dist {
   self.accuracy = accuracy;

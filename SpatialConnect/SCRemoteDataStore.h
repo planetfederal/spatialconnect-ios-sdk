@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,10 @@
 
 #import <SpatialConnect/SpatialConnect.h>
 
+/*!
+ Remote Data stores are SCDataStore's that require internet access to retrieve
+ data
+ */
 @interface SCRemoteDataStore : SCDataStore <SCDataStoreLifeCycle>
 
 @end

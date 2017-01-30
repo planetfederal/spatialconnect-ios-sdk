@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -21,6 +21,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, ServiceStatusEvent) {
+  SC_SERVICE_EVT_RUNNING,
   SC_SERVICE_EVT_STARTED,
   SC_SERVICE_EVT_ERROR,
   SC_SERVICE_EVT_STOPPED

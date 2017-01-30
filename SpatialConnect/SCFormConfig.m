@@ -46,6 +46,11 @@ static NSString *const FIELDS = @"fields";
   return self;
 }
 
+/**
+ Validates form fields as valid
+
+ @return BOOL YES if valid, NO if not
+ */
 - (BOOL)isValid {
   __block BOOL isValid = YES;
   if (self.identifier <= 0) {
@@ -88,7 +93,13 @@ static NSString *const FIELDS = @"fields";
   return isValid;
 }
 
-- (NSInteger)strToFormType:(NSString *)s {
+/**
+ T-Comb type to SCFormItemType
+
+ @param s
+ @return NSInteger as SCFormItemType
+ */
+- (SCFormItemType)strToFormType:(NSString *)s {
   if ([s containsString:@"string"]) {
     return SCFORM_TYPE_STRING;
   } else if ([s containsString:@"number"]) {
@@ -111,6 +122,12 @@ static NSString *const FIELDS = @"fields";
   return -1;
 }
 
+/**
+ @(SCFormItemType) to T-Comb
+
+ @param n SCFormItemType
+ @return T-Comb type
+ */
 - (NSString *)formTypeToStr:(NSNumber *)n {
   SCFormItemType t = [n integerValue];
   if (t == SCFORM_TYPE_STRING) {
@@ -135,6 +152,12 @@ static NSString *const FIELDS = @"fields";
   return nil;
 }
 
+/**
+ SCFormItemType to SQLType
+
+ @param t SCFormItemType
+ @return NSString of SQL column type
+ */
 - (NSString *)formTypeToSQLType:(SCFormItemType)t {
   if (t == SCFORM_TYPE_STRING) {
     return @"TEXT";
@@ -158,6 +181,12 @@ static NSString *const FIELDS = @"fields";
   return @"NULL";
 }
 
+/**
+ Maps a t-comb type to a SQL Type
+
+ @param t T-Comb type
+ @return SQL Column Type
+ */
 - (NSString *)stringToSQLType:(NSString *)t {
   if ([t isEqualToString:@"string"]) {
     return @"TEXT";
@@ -179,6 +208,11 @@ static NSString *const FIELDS = @"fields";
   return @"NULL";
 }
 
+/**
+ Maps over fields and creates a Dictionary of <field_key,SQL Type>
+
+ @return NSDictionary of <field key,type>
+ */
 - (NSDictionary *)sqlTypes {
   NSMutableDictionary *t = [NSMutableDictionary new];
   [self.fields enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,

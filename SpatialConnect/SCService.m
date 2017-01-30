@@ -44,7 +44,7 @@
 
 #pragma mark - Service Lifecycle
 
-- (RACSignal *)start {
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps{
   self.status = SC_SERVICE_RUNNING;
   return [RACSignal empty];
 }

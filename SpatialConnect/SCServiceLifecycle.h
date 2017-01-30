@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -20,13 +20,23 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
+typedef NS_ENUM(NSInteger, SCServiceStatus) {
+  SC_SERVICE_STARTED,
+  SC_SERVICE_PAUSED,
+  SC_SERVICE_RUNNING,
+  SC_SERVICE_STOPPED,
+  SC_SERVICE_ERROR
+};
+
 @protocol SCServiceLifecycle <NSObject>
 
-- (RACSignal *)start;
+@required
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps;
 - (void)pause;
 - (void)resume;
-- (void)stop;
-- (void)startError;
+- (RACSignal *)stop;
+- (void)startError:(NSError *)e;
 - (NSArray *)requires;
+- (SCServiceStatus)status;
 
 @end

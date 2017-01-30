@@ -26,21 +26,25 @@
 
 @interface SpatialConnect ()
 @property(readwrite, nonatomic, strong) RACSubject *serviceEventSubject;
+@property(readwrite, atomic, strong) SCServiceGraph *serviceGraph;
 @end
 
 @implementation SpatialConnect
 
-@synthesize services = _services;
-@synthesize dataService = _dataService;
+@synthesize serviceGraph = _serviceGraph;
+@synthesize serviceEventSubject = _serviceEventSubject;
+@synthesize cache = _cache;
+@synthesize serviceEvents = _serviceEvents;
 @synthesize sensorService = _sensorService;
+@synthesize dataService = _dataService;
 @synthesize configService = _configService;
 @synthesize authService = _authService;
 @synthesize backendService = _backendService;
-@synthesize serviceEventSubject = _serviceEventSubject;
-@synthesize cache = _cache;
+/**
+ This singleton of SpatialConnect is shared across your app.
 
-@synthesize serviceEvents = _serviceEvents;
-
+ @return instance of SC
+ */
 + (id)sharedInstance {
   static SpatialConnect *sc;
   static dispatch_once_t onceToken;
@@ -52,27 +56,23 @@
 
 - (id)init {
   if (self = [super init]) {
-    filepaths = [NSMutableArray new];
     _cache = [SCCache new];
-    [self createConfigService];
-    [self initServices];
-    self.serviceEventSubject = [RACSubject new];
+    _serviceEventSubject = [RACSubject new];
     _serviceEvents = [self.serviceEventSubject publish];
+    _serviceGraph = [SCServiceGraph new];
+    _sensorService = [SCSensorService new];
+    _dataService = [SCDataService new];
+    _configService = [SCConfigService new];
+    [self addDefaultServices];
     [self setupLogger];
   }
   return self;
 }
 
-- (void)createConfigService {
-  _configService = [[SCConfigService alloc] init];
-}
-
-- (void)initServices {
-  _services = [[NSMutableDictionary alloc] init];
-  _dataService = [SCDataService new];
-  _sensorService = [SCSensorService new];
-  _authService = [SCAuthService new];
-  [self addDefaultServices];
+- (void)addDefaultServices {
+  [self addService:self.sensorService];
+  [self addService:self.dataService];
+  [self addService:self.configService];
 }
 
 - (void)setupLogger {
@@ -84,32 +84,21 @@
   [DDLog addLogger:fileLogger];
 }
 
-- (void)addDefaultServices {
-  // Config services relies on the keyvalue service
-  // Order matters here
-  [self addService:self.dataService];
-  [self addService:self.configService];
-  [self addService:self.sensorService];
-  [self addService:self.authService];
-}
-
 #pragma mark - Service Lifecycle
-
 - (void)addService:(SCService *)service {
-  [self.services setObject:service forKey:[service.class serviceId]];
+  [_serviceGraph addService:service];
 }
 
 - (void)removeService:(NSString *)serviceId {
-  [self.services removeObjectForKey:serviceId];
+  [_serviceGraph removeService:serviceId];
 }
 
 - (SCService *)serviceById:(NSString *)ident {
-  return [self.services objectForKey:ident];
+  return [_serviceGraph nodeById:ident];
 }
 
 - (void)startService:(NSString *)serviceId {
-  SCService *service = [self.services objectForKey:serviceId];
-  [[service start] subscribeError:^(NSError *error) {
+  [[_serviceGraph startService:serviceId] subscribeError:^(NSError *error) {
     [self.serviceEventSubject
         sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR
                                   andServiceName:serviceId]];
@@ -121,17 +110,17 @@
       }];
 }
 
-- (RACSignal *)serviceStarted:(NSString *)serviceId {
+- (RACSignal *)serviceRunning:(NSString *)serviceId {
   if ([[self serviceById:serviceId] status] == SC_SERVICE_RUNNING) {
     SCServiceStatusEvent *evt =
-        [SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STARTED
+        [SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_RUNNING
                          andServiceName:serviceId];
     return [RACSignal return:evt];
   }
   RACMulticastConnection *rmcc = self.serviceEvents;
   [rmcc connect];
   return [[rmcc.signal filter:^BOOL(SCServiceStatusEvent *evt) {
-    if (evt.status == SC_SERVICE_EVT_STARTED &&
+    if (evt.status == SC_SERVICE_EVT_RUNNING &&
         [evt.serviceName isEqualToString:serviceId]) {
       return YES;
     }
@@ -140,40 +129,49 @@
 }
 
 - (void)stopService:(NSString *)serviceId {
-  [[self.services objectForKey:serviceId] stop];
+  [_serviceGraph stopService:serviceId];
 }
 
 - (void)restartService:(NSString *)serviceId {
-  SCService *service = [self.services objectForKey:serviceId];
-  [service stop];
-  [service start];
+  //TODO
+//  SCService *service = [self.services objectForKey:serviceId];
+//  [service stop];
+//  [service start];
 }
 
 - (void)startAllServices {
-  [self startService:[self.authService.class serviceId]];
-  [self startService:[self.dataService.class serviceId]];
-  [self startService:[self.configService.class serviceId]];
-  [self startService:[self.sensorService.class serviceId]];
+  [[_serviceGraph startAllServices] subscribeError:^(NSError *error) {
+    DDLogError(@"%@",error.localizedDescription);
+  }
+                                         completed:^{
+                                           DDLogInfo(@"Services Started");
+                                         }];
 }
 
 - (void)stopAllServices {
-  for (SCService *service in [self.services allValues]) {
-    [service stop];
-  }
+  [_serviceGraph stopAllServices];
 }
 
 - (void)restartAllServices {
-  [self stopAllServices];
-  [self startAllServices];
+  [_serviceGraph stopAllServices];
+  [_serviceGraph startAllServices];
 }
 
 - (void)connectBackend:(SCRemoteConfig *)r {
-  if (!self.backendService) {
-    _backendService = [[SCBackendService alloc] initWithRemoteConfig:r];
-    [self addService:self.backendService];
+  if (![_serviceGraph nodeById:[SCBackendService serviceId]]) {
+    [self addService:[[SCBackendService alloc] initWithRemoteConfig:r]];
     [self startService:[SCBackendService serviceId]];
   } else {
     DDLogWarn(@"SCBackendService Already Connected");
+  }
+}
+
+- (void)connectAuth:(id<SCAuthProtocol>)ap {
+  if (![_serviceGraph nodeById:[SCAuthService serviceId]]) {
+    [self addService:[[SCAuthService alloc] initWithAuthMethod:ap]];
+    [self startService:[SCAuthService serviceId]];
+  } else {
+    DDLogWarn(@"SCAuthService Already Connected");
   }
 }
 
