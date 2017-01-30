@@ -39,9 +39,13 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-@interface SpatialConnect : NSObject {
-  NSMutableArray *filepaths;
-}
+@interface SpatialConnect : NSObject
+
+@property(readonly) SCSensorService *sensorService;
+@property(readonly) SCDataService *dataService;
+@property(readonly) SCConfigService *configService;
+@property(readonly) SCAuthService *authService;
+@property(readonly) SCBackendService *backendService;
 
 @property(readonly, strong) SCCache *cache;
 @property(readonly) RACMulticastConnection *serviceEvents;
@@ -179,5 +183,11 @@
 - (RACSignal *)serviceRunning:(NSString *)serviceId;
 
 - (SCService *)serviceById:(NSString *)serviceId;
+
+- (SCDataService *)dataService;
+- (SCConfigService *)configService;
+- (SCAuthService *)authService;
+- (SCBackendService *)backendService;
+- (SCSensorService *)sensorService;
 
 @end

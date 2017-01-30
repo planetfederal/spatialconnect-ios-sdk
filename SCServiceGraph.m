@@ -87,7 +87,7 @@
 
   //No Deps, just start it
   if (!dep$) {
-    return [node.service start];
+    return [node.service start:nil];
   } else {
     return [[[dep$ materialize] filter:^BOOL(RACEvent *evt) {
       return evt.eventType == RACEventTypeError ||
@@ -96,7 +96,13 @@
       if (evt.eventType == RACEventTypeError) {
         return [RACSignal error:evt.error];
       } else {
-        return [node.service start];
+        NSDictionary *deps = [[node.edges.rac_sequence map:^id<SCServiceLifecycle>(SCServiceNode *n) {
+          return n.service;
+        }] dictionaryWithValuesForKeys:[node.edges.rac_sequence map:^NSString*(SCServiceNode *n) {
+          return [((SCService*)n.service).class serviceId];
+        }]];
+
+        return [node.service start:deps];
       }
     }];
   }

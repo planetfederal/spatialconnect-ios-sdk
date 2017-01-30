@@ -25,4 +25,6 @@
   KeychainItemWrapper *keychainItem;
 }
 
+- (id)initWithDictionary:(NSDictionary *)d;
+
 @end

@@ -20,6 +20,7 @@
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
+#import "SCServerAuthMethod.h"
 #import "SCStoreConfig.h"
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
@@ -41,12 +42,15 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 }
 
 - (void)setupSignals {
+
 }
 
-- (RACSignal *)start {
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
   [super start];
+  DDLogInfo(@"Starting Config Service...");
   //  [self sweepDataDirectory];
   [self loadConfigs];
+  DDLogInfo(@"Config Service Started");
   return [RACSignal empty];
 }
 
@@ -114,6 +118,7 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
     [dataService registerAndStartStoreByConfig:scfg];
   }];
   if (c.remote) {
+    [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{@"server_url":c.remote.httpUri}]];
     [sc connectBackend:c.remote];
   }
 }

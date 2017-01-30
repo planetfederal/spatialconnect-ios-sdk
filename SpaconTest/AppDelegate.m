@@ -36,7 +36,7 @@
   if (!sc) {
     NSString *cfgPath = [SCFileUtils filePathFromMainBundle:@"remote.scfg"];
     sc = [SpatialConnect sharedInstance];
-//    [sc.configService addConfigFilepath:cfgPath];
+    [sc.configService addConfigFilepath:cfgPath];
     [sc startAllServices];
 //    [sc.sensorService enableGPS];
 //    [sc.authService authenticate:@"admin@something.com" password:@"admin"];

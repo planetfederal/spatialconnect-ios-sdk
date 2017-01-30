@@ -267,10 +267,12 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 #pragma mark -
 #pragma mark SCServiceLifecycle
-- (RACSignal *)start {
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
   [super start];
+  DDLogInfo(@"Starting Data Service...");
   [self startAllStores];
   [self setupSubscriptions];
+  DDLogInfo(@"Data Service Started");
   return [RACSignal empty];
 }
 

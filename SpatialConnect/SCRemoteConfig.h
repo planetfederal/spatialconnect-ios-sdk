@@ -26,6 +26,7 @@
 @property(nonatomic, readonly) NSString *mqttPort;
 
 - (id)initWithDict:(NSDictionary *)d;
+- (NSString *)httpUri;
 - (NSDictionary *)dictionary;
 
 @end

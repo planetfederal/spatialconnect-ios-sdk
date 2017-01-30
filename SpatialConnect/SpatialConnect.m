@@ -34,9 +34,12 @@
 @synthesize serviceGraph = _serviceGraph;
 @synthesize serviceEventSubject = _serviceEventSubject;
 @synthesize cache = _cache;
-
 @synthesize serviceEvents = _serviceEvents;
-
+@synthesize sensorService = _sensorService;
+@synthesize dataService = _dataService;
+@synthesize configService = _configService;
+@synthesize authService = _authService;
+@synthesize backendService = _backendService;
 /**
  This singleton of SpatialConnect is shared across your app.
 
@@ -53,10 +56,13 @@
 
 - (id)init {
   if (self = [super init]) {
-    filepaths = [NSMutableArray new];
     _cache = [SCCache new];
-    self.serviceEventSubject = [RACSubject new];
+    _serviceEventSubject = [RACSubject new];
     _serviceEvents = [self.serviceEventSubject publish];
+    _serviceGraph = [SCServiceGraph new];
+    _sensorService = [SCSensorService new];
+    _dataService = [SCDataService new];
+    _configService = [SCConfigService new];
     [self addDefaultServices];
     [self setupLogger];
   }
@@ -64,15 +70,9 @@
 }
 
 - (void)addDefaultServices {
-  _serviceGraph = [SCServiceGraph new];
-
-  SCSensorService *ss = [SCSensorService new];
-  SCDataService *ds = [SCDataService new];
-  SCConfigService *cs = [SCConfigService new];
-
-  [self addService:ss];
-  [self addService:ds];
-  [self addService:cs];
+  [self addService:self.sensorService];
+  [self addService:self.dataService];
+  [self addService:self.configService];
 }
 
 - (void)setupLogger {

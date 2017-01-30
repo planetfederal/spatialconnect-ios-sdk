@@ -58,8 +58,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     mqttEndpoint = cfg.mqttHost;
     mqttPort = cfg.mqttPort;
     mqttProtocol = cfg.mqttProtocol;
-    _backendUri = [NSString
-        stringWithFormat:@"%@://%@:%@", httpProtocol, httpEndpoint, httpPort];
+    _backendUri = cfg.httpUri;
     _configReceived =
         [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
     connectedToBroker =
@@ -68,10 +67,12 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSArray *)dependencies {
+- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
   [super start];
+  DDLogInfo(@"Starting Backend Service...");
   [self listenForNetworkConnection];
   [self registerForLocalNotifications];
+  DDLogInfo(@"Backend Service Started");
   return [RACSignal empty];
 }
 
