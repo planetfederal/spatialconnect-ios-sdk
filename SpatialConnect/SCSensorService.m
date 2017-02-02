@@ -65,39 +65,34 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 #pragma mark -
 #pragma mark SCServiceLifecyle methods
 
-- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   self.status = SC_SERVICE_STARTED;
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [subscriber sendNext:@(self.status)];
-    DDLogInfo(@"Starting Sensor Service...");
-    if (!locationManager) {
-      locationManager = [CLLocationManager new];
-      locationManager.delegate = self;
+  DDLogInfo(@"Starting Sensor Service...");
+  if (!locationManager) {
+    locationManager = [CLLocationManager new];
+    locationManager.delegate = self;
+  }
+
+  if ([CLLocationManager locationServicesEnabled]) {
+    if ([CLLocationManager authorizationStatus] ==
+        kCLAuthorizationStatusNotDetermined) {
+      [locationManager requestAlwaysAuthorization];
     }
 
-    if ([CLLocationManager locationServicesEnabled]) {
-      if ([CLLocationManager authorizationStatus] ==
-          kCLAuthorizationStatusNotDetermined) {
-        [locationManager requestAlwaysAuthorization];
-      }
-
-      if ([CLLocationManager authorizationStatus] !=
-          kCLAuthorizationStatusDenied &&
-          [CLLocationManager authorizationStatus] !=
-          kCLAuthorizationStatusRestricted) {
-        [self startLocationManager];
-      }
-    } else {
-      DDLogInfo(@"Please Enable Location Services");
+    if ([CLLocationManager authorizationStatus] !=
+            kCLAuthorizationStatusDenied &&
+        [CLLocationManager authorizationStatus] !=
+            kCLAuthorizationStatusRestricted) {
+      [self startLocationManager];
     }
+  } else {
+    DDLogInfo(@"Please Enable Location Services");
+  }
 
-    [self setupSignals];
-    DDLogInfo(@"Sensor Service Started");
-    self.status = SC_SERVICE_RUNNING;
-    [subscriber sendNext:@(self.status)];
-    [subscriber sendCompleted];
-    return nil;
-  }];
+  [self setupSignals];
+  DDLogInfo(@"Sensor Service Started");
+  self.status = SC_SERVICE_RUNNING;
+  return [RACSignal empty];
 }
 
 - (RACSignal *)stop {

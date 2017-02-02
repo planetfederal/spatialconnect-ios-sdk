@@ -67,24 +67,19 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   self.status = SC_SERVICE_STARTED;
   self.authService = [deps objectForKey:[SCAuthService serviceId]];
   self.configService = [deps objectForKey:[SCConfigService serviceId]];
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [subscriber sendNext:@(self.status)];
-    DDLogInfo(@"Starting Backend Service...");
-    [self listenForNetworkConnection];
-    [self registerForLocalNotifications];
-    DDLogInfo(@"Backend Service Started");
-    self.status = SC_SERVICE_RUNNING;
-    [subscriber sendNext:@(self.status)];
-    [subscriber sendCompleted];
-    return nil;
-  }];
+  DDLogInfo(@"Starting Backend Service...");
+  [self listenForNetworkConnection];
+  [self registerForLocalNotifications];
+  DDLogInfo(@"Backend Service Started");
+  self.status = SC_SERVICE_RUNNING;
+  return [RACSignal empty];
 }
 
-- (RACSignal*)stop {
+- (RACSignal *)stop {
   self.status = SC_SERVICE_STOPPED;
   if (sessionManager) {
     [sessionManager disconnect];
@@ -202,8 +197,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   NSDictionary *regDict = @{
     @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
     @"device_info" : @{@"os" : @"ios"},
-    @"name" : [NSString
-        stringWithFormat:@"mobile:%@", [self.authService username]]
+    @"name" :
+        [NSString stringWithFormat:@"mobile:%@", [self.authService username]]
   };
   SCMessage *regMsg = [[SCMessage alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
@@ -424,8 +419,9 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
   msg.correlationId = @(ti * 1000).intValue;
-  msg.replyTo =
-      [NSString stringWithFormat:@"/device/%@-replyTo", [[SpatialConnect sharedInstance] deviceIdentifier]];
+  msg.replyTo = [NSString
+      stringWithFormat:@"/device/%@-replyTo",
+                       [[SpatialConnect sharedInstance] deviceIdentifier]];
   msg.jwt = self.jwt;
   msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {

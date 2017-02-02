@@ -126,7 +126,9 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
   NSArray *directoryAndFileNames =
       [fm contentsOfDirectoryAtPath:path error:&error];
 
-  NSURL *documentsPath = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+  NSURL *documentsPath = [[[NSFileManager defaultManager]
+      URLsForDirectory:NSDocumentDirectory
+             inDomains:NSUserDomainMask] lastObject];
 
   [directoryAndFileNames enumerateObjectsUsingBlock:^(
                              NSString *fileName, NSUInteger idx, BOOL *stop) {

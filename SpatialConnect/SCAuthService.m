@@ -68,21 +68,16 @@ static NSString *const kAuthServiceName = @"SC_AUTH_SERVICE";
 #pragma mark -
 #pragma SCServiceLifecycle
 
-- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   self.status = SC_SERVICE_STARTED;
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [subscriber sendNext:@(self.status)];
-    BOOL authed = [authProtocol authFromCache];
-    if (authed) {
-      [loginStatus sendNext:@(SCAUTH_AUTHENTICATED)];
-    } else {
-      [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
-    };
-    self.status = SC_SERVICE_RUNNING;
-    [subscriber sendNext:@(self.status)];
-    [subscriber sendCompleted];
-    return nil;
-  }];
+  BOOL authed = [authProtocol authFromCache];
+  if (authed) {
+    [loginStatus sendNext:@(SCAUTH_AUTHENTICATED)];
+  } else {
+    [loginStatus sendNext:@(SCAUTH_NOT_AUTHENTICATED)];
+  };
+  self.status = SC_SERVICE_RUNNING;
+  return [RACSignal empty];
 }
 
 - (void)pause {

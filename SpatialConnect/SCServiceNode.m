@@ -19,7 +19,8 @@
 @interface SCServiceNode ()
 @property(nonatomic, readwrite, strong) id<SCServiceLifecycle> service;
 @property(nonatomic, readwrite, strong) NSArray<SCServiceNode *> *dependencies;
-@property(nonatomic, readwrite, strong) NSMutableArray<SCServiceNode *> *recipients;
+@property(nonatomic, readwrite, strong)
+    NSMutableArray<SCServiceNode *> *recipients;
 @end
 
 @implementation SCServiceNode
@@ -29,7 +30,7 @@
 @synthesize recipients = _recipients;
 
 - (id)initWithService:(id<SCServiceLifecycle>)s
-             andDependencies:(NSArray<SCServiceNode *> *)d {
+      andDependencies:(NSArray<SCServiceNode *> *)d {
   self = [super init];
   if (self) {
     _service = s;

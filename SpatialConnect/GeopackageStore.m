@@ -113,12 +113,15 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     return [RACSignal empty];
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
 
-    RACSignal *dload$ = [super download:self.uri to:path];
-    [dload$ subscribeCompleted:^{
-      DDLogInfo(@"Saving GPKG to %@", path);
-      self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-    }];
-    return dload$;
+    return
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          [[super download:self.uri to:path] subscribeCompleted:^{
+            DDLogInfo(@"Saving GPKG to %@", path);
+            self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+            [subscriber sendCompleted];
+          }];
+          return nil;
+        }];
   } else if ([path containsString:@"DEFAULT_STORE"]) {
     // initialize empty geopackage
     self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];

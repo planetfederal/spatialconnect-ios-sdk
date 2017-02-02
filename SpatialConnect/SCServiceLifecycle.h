@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, SCServiceStatus) {
 @protocol SCServiceLifecycle <NSObject>
 
 @required
-- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps;
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps;
 - (void)pause;
 - (void)resume;
 - (RACSignal *)stop;

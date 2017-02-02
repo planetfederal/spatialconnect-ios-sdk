@@ -118,10 +118,6 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   return path;
 }
 
-- (void)initWithFileName:(NSString *)fileName {
-  filename = [NSString stringWithString:fileName];
-}
-
 - (void)write:(NSString *)str error:(NSError *)error {
   [str writeToFile:str
         atomically:YES
@@ -282,26 +278,26 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
     if (b) {
       self.status = SC_DATASTORE_RUNNING;
-      [self initWithFileName:path];
+      filename = path;
       return [RACSignal empty];
     }
 
-
-//    [dload$ subscribeCompleted:^{
-//      DDLogInfo(@"Saving GEOJSON to %@", path);
-//      [self initWithFileName:path];
-//    }];
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-      [[super download:self.uri to:path] subscribeNext:^(id x) {
-        [subscriber sendNext:x];
-      } error:^(NSError *error) {
-        [subscriber sendError:error];
-      } completed:^{
-        [self initWithFileName:path];
-        [subscriber sendCompleted];
-      }];
-      return nil;
-    }];
+    return
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          [[[super download:self.uri to:path]
+              subscribeOn:[RACScheduler mainThreadScheduler]]
+              subscribeNext:^(id x) {
+                [subscriber sendNext:x];
+              }
+              error:^(NSError *error) {
+                [subscriber sendError:error];
+              }
+              completed:^{
+                filename = path;
+                [subscriber sendCompleted];
+              }];
+          return nil;
+        }];
   } else {
     NSString *filePath = nil;
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
@@ -319,7 +315,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           if (filePath != nil &&
               [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-            [self initWithFileName:filePath];
+            filename = filePath;
             self.status = SC_DATASTORE_RUNNING;
             [subscriber sendCompleted];
           } else {

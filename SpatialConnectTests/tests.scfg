@@ -1,11 +1,47 @@
 {
 "stores":[
 {
+"store_type": "geojson",
+"version": "1",
+"uri": "all.geojson",
+"id":"63602599-3ad3-439f-9c49-3c8a7579933b",
+"name":"Simple"
+},
+{
+"store_type":"geojson",
+"version":"1",
+"name":"20m Points",
+"uri":"gz_2010_us_500_11_20m.json",
+"id":"a5d93796-5026-46f7-a2ff-e5dec85d116b"
+},
+{
 "store_type":"geojson",
 "version":"1",
 "name":"bars",
 "uri":"https://s3.amazonaws.com/test.spacon/bars.geojson",
 "id":"a5d93796-5026-46f7-a2ff-e5dec85d116c"
+},
+{
+"store_type":"gpkg",
+"version":"1",
+"name":"Haiti",
+"uri":"https://s3.amazonaws.com/test.spacon/haiti4mobile.gpkg",
+"id":"f6dcc750-1349-46b9-a324-0223764d46d1"
+},
+{
+"store_type":"gpkg",
+"version":"1",
+"name":"Whitehorse",
+"uri":"https://portal.opengeospatial.org/files/63156",
+"id":"ba293796-5026-46f7-a2ff-e5dec85heh6b"
+},
+{
+"store_type":"wfs",
+"version":"1.1.0",
+"name":"WFS Demo",
+"default_layers":["spatialconnect:baseball_team"],
+"uri":"http://efc-dev.boundlessgeo.com:8080/geoserver/wfs",
+"id":"0f193979-b871-47cd-b60d-e271d6504359"
 }
 ]
 }

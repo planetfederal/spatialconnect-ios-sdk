@@ -24,12 +24,12 @@
 }
 
 - (void)listenForConnection {
-    SCSensorService *ss = [[SpatialConnect sharedInstance] sensorService];
-    [[[ss.isConnected filter:^BOOL(NSNumber *x) {
-      return x.boolValue;
-    }] take:1] subscribeNext:^(NSNumber *x) {
-      self.status = SC_DATASTORE_RUNNING;
-    }];
+  SCSensorService *ss = [[SpatialConnect sharedInstance] sensorService];
+  [[[ss.isConnected filter:^BOOL(NSNumber *x) {
+    return x.boolValue;
+  }] take:1] subscribeNext:^(NSNumber *x) {
+    self.status = SC_DATASTORE_RUNNING;
+  }];
 }
 
 - (void)resume {

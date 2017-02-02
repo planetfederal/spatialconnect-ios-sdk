@@ -254,40 +254,34 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (void)setupSubscriptions {
-    [[_sensorService isConnected]
-        subscribeNext:^(NSNumber *conn) {
-          BOOL connected = conn.boolValue;
-          if (connected) {
-            [self resumeRemoteStores];
-          } else {
-            [self pauseRemoteStores];
-          }
-        }];
+  [[_sensorService isConnected] subscribeNext:^(NSNumber *conn) {
+    BOOL connected = conn.boolValue;
+    if (connected) {
+      [self resumeRemoteStores];
+    } else {
+      [self pauseRemoteStores];
+    }
+  }];
 
-    [[_sensorService.lastKnown flattenMap:^RACStream *(SCPoint *p) {
-      return [locationStore create:(SCSpatialFeature*)p];
-    }] subscribeNext:^(id x) {
-      DDLogVerbose(@"Location sent to Location Store");
-    }];
+  [[_sensorService.lastKnown flattenMap:^RACStream *(SCPoint *p) {
+    return [locationStore create:(SCSpatialFeature *)p];
+  }] subscribeNext:^(id x) {
+    DDLogVerbose(@"Location sent to Location Store");
+  }];
 }
 
 #pragma mark -
 #pragma mark SCServiceLifecycle
-- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   self.status = SC_SERVICE_STARTED;
-  _sensorService = (SCSensorService*)[deps objectForKey:[SCSensorService serviceId]];
+  DDLogInfo(@"Starting Data Service...");
+  _sensorService =
+      (SCSensorService *)[deps objectForKey:[SCSensorService serviceId]];
   [self setupSubscriptions];
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [subscriber sendNext:@(self.status)];
-    DDLogInfo(@"Starting Data Service...");
-    [self startAllStores];
-    [self setupSubscriptions];
-    DDLogInfo(@"Data Service Started");
-    self.status = SC_SERVICE_RUNNING;
-    [subscriber sendNext:@(self.status)];
-    [subscriber sendCompleted];
-    return nil;
-  }];
+  [self startAllStores];
+  self.status = SC_SERVICE_RUNNING;
+  DDLogInfo(@"Data Service Running");
+  return [RACSignal empty];
 }
 
 - (RACSignal *)stop {

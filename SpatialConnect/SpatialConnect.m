@@ -112,12 +112,14 @@
 
 - (void)startService:(NSString *)serviceId {
   [[_serviceGraph startService:serviceId] subscribeNext:^(id x) {
-    DDLogInfo(@"%@",serviceId);
-  } error:^(NSError *error) {
-    DDLogError(@"%@",error.description);
-  } completed:^{
-    DDLogInfo(@"%@",serviceId);
-  }];
+    DDLogInfo(@"%@", serviceId);
+  }
+      error:^(NSError *error) {
+        DDLogError(@"%@", error.description);
+      }
+      completed:^{
+        DDLogInfo(@"%@", serviceId);
+      }];
 }
 
 - (void)stopService:(NSString *)serviceId {
@@ -125,10 +127,10 @@
 }
 
 - (void)restartService:(NSString *)serviceId {
-  //TODO
-//  SCService *service = [self.services objectForKey:serviceId];
-//  [service stop];
-//  [service start];
+  // TODO
+  //  SCService *service = [self.services objectForKey:serviceId];
+  //  [service stop];
+  //  [service start];
 }
 
 - (void)startAllServices {

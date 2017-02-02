@@ -62,53 +62,51 @@ NSString *const SCJavascriptBridgeErrorDomain =
 #pragma mark Private Methods
 
 - (void)setupBridge {
-    self.bridge = [WebViewJavascriptBridge
-        bridgeForWebView:self.webview
-         webViewDelegate:self.webViewDelegate
-                 handler:^(id action, WVJBResponseCallback responseCallback) {
-                   [[self.jsbridge parseJSAction:action]
-                       subscribeNext:^(NSDictionary *payload) {
-                         DDLogVerbose(@"Response");
-                         DDLogVerbose(@"%@", payload);
-                         NSDictionary *newAction =
-                             @{ @"type" : action[@"type"],
-                                @"payload" : payload };
-                         [_bridge callHandler:action[@"type"] data:newAction];
-                       }];
-                 }];
-  
-    [self.spatialConnect.sensorService enableGPS];
-    [self.spatialConnect.sensorService.lastKnown
-        subscribeNext:^(CLLocation *loc) {
-          CLLocationDistance alt = loc.altitude;
-          float lat = loc.coordinate.latitude;
-          float lon = loc.coordinate.longitude;
-          NSDictionary *action = @{
-            @"type" : @"lastKnownLocation",
-            @"payload" : @{
-              @"latitude" : [NSNumber numberWithFloat:lat],
-              @"longitude" : [NSNumber numberWithFloat:lon],
-              @"altitude" : [NSNumber numberWithFloat:alt]
-            }
-          };
-          [_bridge callHandler:@"lastKnownLocation" data:action];
-        }];
-    [[self.spatialConnect.authService loginStatus] subscribeNext:^(
-                                                       NSNumber *authStatus) {
-      NSDictionary *action = @{
-        @"type" : [@(AUTHSERVICE_LOGIN_STATUS) stringValue],
-        @"payload" : authStatus
-      };
-      [_bridge callHandler:[@(AUTHSERVICE_LOGIN_STATUS) stringValue]
-      data:action];
-    }];
-  
-    [[self.spatialConnect.backendService notifications]
-        subscribeNext:^(SCMessage *msg) {
-          SCNotification *notif = [[SCNotification alloc]
-          initWithMessage:msg];
-          [_bridge callHandler:@"notification" data:[notif dictionary]];
-        }];
+  self.bridge = [WebViewJavascriptBridge
+      bridgeForWebView:self.webview
+       webViewDelegate:self.webViewDelegate
+               handler:^(id action, WVJBResponseCallback responseCallback) {
+                 [[self.jsbridge parseJSAction:action]
+                     subscribeNext:^(NSDictionary *payload) {
+                       DDLogVerbose(@"Response");
+                       DDLogVerbose(@"%@", payload);
+                       NSDictionary *newAction =
+                           @{ @"type" : action[@"type"],
+                              @"payload" : payload };
+                       [_bridge callHandler:action[@"type"] data:newAction];
+                     }];
+               }];
+
+  [self.spatialConnect.sensorService enableGPS];
+  [self.spatialConnect.sensorService.lastKnown
+      subscribeNext:^(CLLocation *loc) {
+        CLLocationDistance alt = loc.altitude;
+        float lat = loc.coordinate.latitude;
+        float lon = loc.coordinate.longitude;
+        NSDictionary *action = @{
+          @"type" : @"lastKnownLocation",
+          @"payload" : @{
+            @"latitude" : [NSNumber numberWithFloat:lat],
+            @"longitude" : [NSNumber numberWithFloat:lon],
+            @"altitude" : [NSNumber numberWithFloat:alt]
+          }
+        };
+        [_bridge callHandler:@"lastKnownLocation" data:action];
+      }];
+  [[self.spatialConnect.authService loginStatus] subscribeNext:^(
+                                                     NSNumber *authStatus) {
+    NSDictionary *action = @{
+      @"type" : [@(AUTHSERVICE_LOGIN_STATUS) stringValue],
+      @"payload" : authStatus
+    };
+    [_bridge callHandler:[@(AUTHSERVICE_LOGIN_STATUS) stringValue] data:action];
+  }];
+
+  [[self.spatialConnect.backendService notifications]
+      subscribeNext:^(SCMessage *msg) {
+        SCNotification *notif = [[SCNotification alloc] initWithMessage:msg];
+        [_bridge callHandler:@"notification" data:[notif dictionary]];
+      }];
 }
 
 @end

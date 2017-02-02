@@ -51,11 +51,8 @@
       error:^(NSError *error) {
         XCTFail(@"Error getting store");
         [expect fulfill];
-      } completed:^{
-        NSLog(@"FOO");
-        [expect fulfill];
       }];
-  [self waitForExpectationsWithTimeout:500.0 handler:nil];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testGeoJSONDestroy {

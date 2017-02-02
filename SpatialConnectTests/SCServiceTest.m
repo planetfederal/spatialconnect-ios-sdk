@@ -10,7 +10,8 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License
+ * See the License for the specific language governing permissions and
+ * limitations under the License
  */
 
 #import "GeopackageStore.h"
@@ -43,44 +44,51 @@
 }
 
 - (void)testDataService {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Data Service Start"];
-  [[self.sc serviceRunning:[SCDataService serviceId]] subscribeError:^(NSError *error) {
-    DDLogError(@"Error:%@",error.description);
-    [expect fulfill];
-  } completed:^{
-    XCTAssertNotNil(self.sc.dataService);
-    XCTAssertTrue(self.sc.dataService.status == SC_SERVICE_RUNNING);
-    [expect fulfill];
-  }];
+  XCTestExpectation *expect =
+      [self expectationWithDescription:@"Data Service Start"];
+  [[self.sc serviceRunning:[SCDataService serviceId]]
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Error:%@", error.description);
+        [expect fulfill];
+      }
+      completed:^{
+        XCTAssertNotNil(self.sc.dataService);
+        XCTAssertTrue(self.sc.dataService.status == SC_SERVICE_RUNNING);
+        [expect fulfill];
+      }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testSensorService {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Sensor Service Start"];
-  [[self.sc serviceRunning:[SCSensorService serviceId]] subscribeError:^(NSError *error) {
-    DDLogError(@"Error:%@",error.description);
-    [expect fulfill];
-  } completed:^{
-    XCTAssertNotNil(self.sc.sensorService);
-    XCTAssertTrue(self.sc.sensorService.status == SC_SERVICE_RUNNING);
-    [expect fulfill];
-  }];
+  XCTestExpectation *expect =
+      [self expectationWithDescription:@"Sensor Service Start"];
+  [[self.sc serviceRunning:[SCSensorService serviceId]]
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Error:%@", error.description);
+        [expect fulfill];
+      }
+      completed:^{
+        XCTAssertNotNil(self.sc.sensorService);
+        XCTAssertTrue(self.sc.sensorService.status == SC_SERVICE_RUNNING);
+        [expect fulfill];
+      }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testConfigService {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Config Service Start"];
-  [[self.sc serviceRunning:[SCConfigService serviceId]] subscribeError:^(NSError *error) {
-    DDLogError(@"Error:%@",error.description);
-    [expect fulfill];
-  } completed:^{
-    XCTAssertNotNil(self.sc.configService);
-    XCTAssertTrue(self.sc.configService.status == SC_SERVICE_RUNNING);
-    [expect fulfill];
-  }];
+  XCTestExpectation *expect =
+      [self expectationWithDescription:@"Config Service Start"];
+  [[self.sc serviceRunning:[SCConfigService serviceId]]
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Error:%@", error.description);
+        [expect fulfill];
+      }
+      completed:^{
+        XCTAssertNotNil(self.sc.configService);
+        XCTAssertTrue(self.sc.configService.status == SC_SERVICE_RUNNING);
+        [expect fulfill];
+      }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
-
 @end
-

@@ -20,13 +20,13 @@
 @interface SCServiceNode : NSObject
 
 @property(nonatomic, readonly) id<SCServiceLifecycle> service;
-//Services this node depends on
+// Services this node depends on
 @property(nonatomic, readonly) NSArray<SCServiceNode *> *dependencies;
-//Services this node is a dependency of
+// Services this node is a dependency of
 @property(nonatomic, readonly) NSArray<SCServiceNode *> *recipients;
 
 - (id)initWithService:(id<SCServiceLifecycle>)s
-             andDependencies:(NSArray<SCServiceNode *> *)d;
+      andDependencies:(NSArray<SCServiceNode *> *)d;
 
 - (void)addRecipient:(SCServiceNode *)node;
 

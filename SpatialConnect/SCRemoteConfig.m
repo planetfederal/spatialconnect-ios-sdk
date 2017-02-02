@@ -46,8 +46,8 @@ static NSString *const MQTT_PORT = @"mqtt_port";
 }
 
 - (NSString *)httpUri {
-  return [NSString
-   stringWithFormat:@"%@://%@:%@", self.httpProtocol, self.httpHost, self.httpPort];
+  return [NSString stringWithFormat:@"%@://%@:%@", self.httpProtocol,
+                                    self.httpHost, self.httpPort];
 }
 
 - (NSDictionary *)dictionary {

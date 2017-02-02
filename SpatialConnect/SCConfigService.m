@@ -37,19 +37,14 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSDictionary<NSString*,id<SCServiceLifecycle>>*)deps {
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   self.status = SC_SERVICE_STARTED;
   dataService = [deps objectForKey:[SCDataService serviceId]];
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    DDLogInfo(@"Config Service Started");
-    [subscriber sendNext:@(self.status)];
-    [self loadConfigs];
-    self.status = SC_SERVICE_RUNNING;
-    [subscriber sendNext:@(self.status)];
-    DDLogInfo(@"Config Service Running");
-    [subscriber sendCompleted];
-    return nil;
-  }];
+  DDLogInfo(@"Config Service Started");
+  [self loadConfigs];
+  self.status = SC_SERVICE_RUNNING;
+  DDLogInfo(@"Config Service Running");
+  return [RACSignal empty];
 }
 
 - (RACSignal *)stop {
@@ -103,7 +98,9 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 }
 
 - (void)clearConfigs {
-  [configPaths removeAllObjects];
+  if (configPaths.count > 0) {
+    [configPaths removeAllObjects];
+  }
 }
 
 - (void)loadConfig:(SCConfig *)c {
@@ -117,7 +114,9 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
     [dataService registerAndStartStoreByConfig:scfg];
   }];
   if (c.remote) {
-    [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{@"server_url":c.remote.httpUri}]];
+    [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{
+          @"server_url" : c.remote.httpUri
+        }]];
     [sc connectBackend:c.remote];
   }
 }
