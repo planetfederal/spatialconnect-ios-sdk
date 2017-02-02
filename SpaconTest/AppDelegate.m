@@ -35,32 +35,15 @@
 - (void)startSpatialConnect {
   if (!sc) {
     NSString *cfgPath = [SCFileUtils filePathFromMainBundle:@"remote.scfg"];
+    NSString *cfgPath2 = [SCFileUtils filePathFromMainBundle:@"tests.scfg"];
     sc = [SpatialConnect sharedInstance];
     [sc.configService addConfigFilepath:cfgPath];
+    [sc.configService addConfigFilepath:cfgPath2];
     [sc startAllServices];
-    [sc.sensorService enableGPS];
-    [sc.authService authenticate:@"admin@something.com" password:@"admin"];
 
-    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-                                                            @(12.65625), @(54.97761367069628)
-                                                            ]];
-    SCFormFeature *f = [[SCFormFeature alloc] init];
-    GeopackageStore *ds = sc.dataService.formStore;
-    f.layerId = @"test_form";
-    f.storeId = ds.storeId;
-    f.geometry = p;
-    [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
-    [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
-      return [v boolValue];
-    }] take:1] subscribeNext:^(id x) {
-      [[sc.dataService.formStore create:f] subscribeError:^(NSError *error) {
-                                                     DDLogError(@"%@", error.description);
-                                                   }
-                                               completed:^{
-                                                 NSLog(@"FUN");
-                                               }];
+    [[sc serviceRunning:[SCAuthService serviceId]] subscribeCompleted:^() {
+      [sc.authService authenticate:@"admin@something.com" password:@"admin"];
     }];
-
   }
 }
 

@@ -97,6 +97,7 @@
         [[SCHttpUtils getRequestURLAsData:u] subscribeNext:^(RACTuple *t) {
           data = t.first;
           self.downloadProgress = t.second;
+        
         }
             error:^(NSError *error) {
               self.status = SC_DATASTORE_DOWNLOADFAIL;

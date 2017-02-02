@@ -28,28 +28,25 @@
 #import <XCTest/XCTest.h>
 
 @interface SCGeopackageTests : XCTestCase
-@property(nonatomic) SpatialConnect *sc;
 @end
 
 @implementation SCGeopackageTests
 
-@synthesize sc;
-
-- (void)setUp {
-  [super setUp];
-  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
-}
-
-- (void)tearDown {
-  [super tearDown];
-  [self.sc stopAllServices];
+- (void)testQueryAllStores {
+  XCTestExpectation *expect = [self expectationWithDescription:@"QueryAll"];
+  NSMutableArray *arr = [NSMutableArray new];
+  [[SCGeopackageHelper loadGPKGDataStore:[SpatialConnect sharedInstance]]
+      subscribeNext:^(SCStoreStatusEvent *e) {
+        [expect fulfill];
+      }];
+  [self waitForExpectationsWithTimeout:12.0 handler:nil];
 }
 
 - (void)testGpkgFeatureDelete {
   XCTestExpectation *expect = [self expectationWithDescription:@"Delete"];
   SCQueryFilter *filter = [[SCQueryFilter alloc] init];
   filter.limit = 1;
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+  [[SCGeopackageHelper loadGPKGDataStore:[SpatialConnect sharedInstance]]
       subscribeNext:^(id<SCSpatialStore> ds) {
         [[[ds query:filter] flattenMap:^RACStream *(SCSpatialFeature *f) {
           return [ds delete:f.key];
@@ -73,7 +70,7 @@
 - (void)testGpkgDownload {
   XCTestExpectation *expect = [self expectationWithDescription:@"Download"];
 
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+  [[SCGeopackageHelper loadGPKGDataStore:[SpatialConnect sharedInstance]]
       subscribeNext:^(SCDataStore *ds) {
         if (ds) {
           XCTAssertNotNil(ds.layers, @"Layer list as array");
@@ -87,7 +84,7 @@
         [expect fulfill];
       }];
 
-  [self waitForExpectationsWithTimeout:100.0 handler:nil];
+  [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)testGpkgFeatureQuery {
@@ -97,7 +94,7 @@
   SCGeoFilterContains *gfc = [[SCGeoFilterContains alloc] initWithBBOX:bbox];
   SCPredicate *predicate = [[SCPredicate alloc] initWithFilter:gfc];
   [filter addPredicate:predicate];
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+  [[SCGeopackageHelper loadGPKGDataStore:[SpatialConnect sharedInstance]]
       subscribeNext:^(GeopackageStore *ds) {
         [[ds query:filter] subscribeError:^(NSError *error) {
           DDLogError(@"%@", error.description);
@@ -112,78 +109,55 @@
 
 - (void)testGpkgFeatureCreate {
   XCTestExpectation *expect = [self expectationWithDescription:@"Create"];
-  [[[SCGeopackageHelper loadGPKGDataStore:self.sc]
-      flattenMap:^RACStream *(GeopackageStore *ds) {
+  [[SCGeopackageHelper loadGPKGDataStore:[SpatialConnect sharedInstance]]
+      subscribeNext:^(GeopackageStore *ds) {
         SCPoint *p =
             [[SCPoint alloc] initWithCoordinateArray:@[ @(32.3), @(43.1) ]];
         NSArray *list = ds.layers;
         p.layerId = list[0];
-        return [ds create:p];
-      }] subscribeError:^(NSError *error) {
-    DDLogError(@"%@", error.description);
-    XCTAssert(NO, @"Error creating point");
-    [expect fulfill];
-  }
-      completed:^{
-        XCTAssert(YES, @"Point created");
-        [expect fulfill];
+        [[ds create:p] subscribeNext:^(id x) {
+          NSLog(@"FOO");
+          [expect fulfill];
+        }
+            error:^(NSError *error) {
+              DDLogError(@"%@", error.description);
+              XCTAssert(NO, @"Error creating point");
+              [expect fulfill];
+            }
+            completed:^{
+              XCTAssert(YES, @"Point created");
+              [expect fulfill];
+            }];
       }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [self waitForExpectationsWithTimeout:100.0 handler:nil];
 }
 
 - (void)testGpkgFeatureUpdate {
   XCTestExpectation *expect = [self expectationWithDescription:@"Update"];
-
-  [[SCGeopackageHelper
-      loadGPKGDataStore:self.sc] subscribeNext:^(GeopackageStore *ds) {
-    RACSignal *query = [[ds query:nil] take:1];
-    RACSignal *complete = [[query materialize] filter:^BOOL(RACEvent *evt) {
-      return RACEventTypeCompleted == evt.eventType;
-    }];
-    [[[query combineLatestWith:complete] flattenMap:^RACStream *(RACTuple *t) {
-      SCSpatialFeature *f = (SCSpatialFeature *)t.first;
-      NSString *key = [[f.properties allKeys] objectAtIndex:0];
-      [f.properties setObject:[SCTestString randomStringWithLength:200]
-                       forKey:key];
-      return [ds update:f];
-    }] subscribeError:^(NSError *error) {
-      XCTAssert(NO, @"Error loading GPGK");
-      [expect fulfill];
-    }
-        completed:^{
-          XCTAssert(YES, @"Update successfully");
-          [expect fulfill];
-        }];
-  }];
-
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
-}
-
-- (void)testGpkgDestroy {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Destroy"];
-  [[SCGeopackageHelper loadGPKGDataStore:self.sc]
+  [[SCGeopackageHelper loadGPKGDataStore:[SpatialConnect sharedInstance]]
       subscribeNext:^(GeopackageStore *ds) {
-        BOOL saveToDocsDir = ![SCFileUtils isTesting];
-        NSString *dbName = @"haiti4mobile.gpkg";
-        NSString *path;
-        if (saveToDocsDir) {
-          NSArray *paths = NSSearchPathForDirectoriesInDomains(
-              NSDocumentDirectory, NSUserDomainMask, YES);
-          NSString *documentsDirectory = [paths objectAtIndex:0];
-          path = [documentsDirectory stringByAppendingPathComponent:dbName];
-        } else {
-          path = [SCFileUtils filePathFromNSHomeDirectory:ds.filepath];
+        RACSignal *query = [[ds query:nil] take:1];
+        RACSignal *complete = [[query materialize] filter:^BOOL(RACEvent *evt) {
+          return RACEventTypeCompleted == evt.eventType;
+        }];
+        [[[query combineLatestWith:complete]
+            flattenMap:^RACStream *(RACTuple *t) {
+              SCSpatialFeature *f = (SCSpatialFeature *)t.first;
+              NSString *key = [[f.properties allKeys] objectAtIndex:0];
+              [f.properties setObject:[SCTestString randomStringWithLength:200]
+                               forKey:key];
+              return [ds update:f];
+            }] subscribeError:^(NSError *error) {
+          XCTAssert(NO, @"Error loading GPGK");
+          [expect fulfill];
         }
-        BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-        XCTAssertTrue(b);
-
-        [ds destroy];
-        b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-        XCTAssertEqual(b, NO);
-
-        [expect fulfill];
+            completed:^{
+              XCTAssert(YES, @"Update successfully");
+              [expect fulfill];
+            }];
       }];
 
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
+
 @end

@@ -115,11 +115,16 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          [[super download:self.uri to:path] subscribeCompleted:^{
-            DDLogInfo(@"Saving GPKG to %@", path);
-            self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-            [subscriber sendCompleted];
-          }];
+          [[[super download:self.uri to:path]
+              subscribeOn:[RACScheduler mainThreadScheduler]]
+              subscribeError:^(NSError *error) {
+                [subscriber sendError:error];
+              }
+              completed:^{
+                DDLogInfo(@"Saving GPKG to %@", path);
+                self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+                [subscriber sendCompleted];
+              }];
           return nil;
         }];
   } else if ([path containsString:@"DEFAULT_STORE"]) {
@@ -195,7 +200,16 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (feature.layerId == nil) {
     feature.layerId = self.defaultLayerName;
   }
-  return [[self.gpkg featureSource:feature.layerId] create:feature];
+  SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
+  if (fs) {
+    return [fs create:feature];
+  } else {
+    NSDictionary *userInfo = @{
+                               NSLocalizedDescriptionKey: NSLocalizedString(@"Operation was unsuccessful.", nil),
+                               NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Layer id does not exist.", nil),
+                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Have you created a layer in Geopackage by this name?", nil)};
+                               return [RACSignal error:[NSError errorWithDomain:@"SpatialConnect" code:-1 userInfo:userInfo]];
+  }
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {

@@ -90,6 +90,7 @@
     DDLogError(@"StartAllServices Error:%@",error.description);
   } completed:^{
     DDLogInfo(@"StartAllServices Complete");
+    [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ALLSTARTED andServiceName:nil]];
   }];
 }
 
@@ -176,7 +177,11 @@
   RACSignal *rec$ = nil;
   if (node.recipients) {
     rec$ = [node.recipients.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *e) {
-      return [self stopService:[e.service.class serviceId]];
+      if ([e.service status] == SC_SERVICE_STOPPED) {
+        return [RACSignal empty];
+      } else {
+        return [self stopService:[e.service.class serviceId]];
+      }
     }];
   }
 
@@ -203,6 +208,10 @@
       } else {
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           //We need to subscribe to the start to send events on the Service Event Subject
+          if ([node.service status] == SC_SERVICE_STOPPED) {
+            [subscriber sendCompleted];
+            return nil;
+          }
           [[node.service stop] subscribeError:^(NSError *error) {
             [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[node.service.class serviceId]]];
             [subscriber sendError:error];

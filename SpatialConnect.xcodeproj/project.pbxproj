@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
-		542E9B931D6F4442007AB0ED /* SCGeoJSONStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */; };
 		546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 546D088F1D2462E200EBB95A /* SCRCTBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 546D08901D2462E200EBB95A /* SCRCTBridge.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -28,7 +27,6 @@
 		560DC1C71D47C9CB007D66A1 /* MQTTFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560DC1C61D47C9CB007D66A1 /* MQTTFramework.framework */; };
 		560DC1CC1D47CFB4007D66A1 /* MQTTFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560DC1C61D47C9CB007D66A1 /* MQTTFramework.framework */; };
 		560E31BA1BF106E2009DA680 /* SCGeopackageGeometryExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 560E31B91BF1067A009DA680 /* SCGeopackageGeometryExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		560E31C11BF10F5F009DA680 /* SCGeopackageCRUDTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C01BF10F5F009DA680 /* SCGeopackageCRUDTest.m */; };
 		560E31C41BF1212B009DA680 /* SCGeopackageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */; };
 		560E31C81BF15CBD009DA680 /* SCTestString.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C71BF15CBD009DA680 /* SCTestString.m */; };
 		560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 560E31CD1BF23F83009DA680 /* SCKeyTuple.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -109,7 +107,6 @@
 		5649B4CE1BE28079009947EF /* SCMultiPolygonTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BA1BE28079009947EF /* SCMultiPolygonTest.m */; };
 		5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BB1BE28079009947EF /* SCPointTest.m */; };
 		5649B4D01BE28079009947EF /* SCPolygonTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BC1BE28079009947EF /* SCPolygonTest.m */; };
-		5649B4D11BE28079009947EF /* SCQueryFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4BD1BE28079009947EF /* SCQueryFilterTest.m */; };
 		5649B4D31BE28079009947EF /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4BF1BE28079009947EF /* simple.json */; };
 		5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5649B4C21BE28079009947EF /* SpatialConnectHelper.m */; };
 		5649B4D61BE28079009947EF /* tests.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4C31BE28079009947EF /* tests.scfg */; };
@@ -305,6 +302,9 @@
 		566F6E421CE3B5680043FF0C /* SCFormConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 566F6E401CE3B5680043FF0C /* SCFormConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566F6E431CE3B5680043FF0C /* SCFormConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 566F6E411CE3B5680043FF0C /* SCFormConfig.m */; };
 		5673B8371E429EEF00ACB8D1 /* tests.scfg in Resources */ = {isa = PBXBuildFile; fileRef = 5649B4C31BE28079009947EF /* tests.scfg */; };
+		5673B8451E43927400ACB8D1 /* SCGeoJSONStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */; };
+		5673B8461E43927800ACB8D1 /* SCGeopackageCRUDTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C01BF10F5F009DA680 /* SCGeopackageCRUDTest.m */; };
+		5673B8471E4393C500ACB8D1 /* SCTestString.m in Sources */ = {isa = PBXBuildFile; fileRef = 560E31C71BF15CBD009DA680 /* SCTestString.m */; };
 		5677D6DB1C3F046E00C1E0F2 /* SCRasterStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56789C401C32C0AC001B5ABE /* SCSimplePoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 56789C3E1C32C0AC001B5ABE /* SCSimplePoint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */; };
@@ -463,7 +463,7 @@
 
 /* Begin PBXFileReference section */
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
-		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
+		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeoJSONStoreTest.m; path = SpatialConnectTests/SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
 		546D088F1D2462E200EBB95A /* SCRCTBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRCTBridge.h; sourceTree = "<group>"; };
 		546D08901D2462E200EBB95A /* SCRCTBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRCTBridge.m; sourceTree = "<group>"; };
 		547F3ED81D77688700AE354E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -481,7 +481,7 @@
 		560DC1C61D47C9CB007D66A1 /* MQTTFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTFramework.framework; path = Carthage/Build/iOS/MQTTFramework.framework; sourceTree = "<group>"; };
 		560DC1CD1D47D065007D66A1 /* SCMQTTTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCMQTTTest.m; path = SpatialConnectTests/SCMQTTTest.m; sourceTree = "<group>"; };
 		560E31B91BF1067A009DA680 /* SCGeopackageGeometryExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCGeopackageGeometryExtensions.h; sourceTree = "<group>"; };
-		560E31C01BF10F5F009DA680 /* SCGeopackageCRUDTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageCRUDTest.m; sourceTree = "<group>"; };
+		560E31C01BF10F5F009DA680 /* SCGeopackageCRUDTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeopackageCRUDTest.m; path = SpatialConnectTests/SCGeopackageCRUDTest.m; sourceTree = "<group>"; };
 		560E31C21BF1212B009DA680 /* SCGeopackageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGeopackageHelper.h; sourceTree = "<group>"; };
 		560E31C31BF1212B009DA680 /* SCGeopackageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGeopackageHelper.m; sourceTree = "<group>"; };
 		560E31C61BF15CBD009DA680 /* SCTestString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCTestString.h; sourceTree = "<group>"; };
@@ -566,7 +566,6 @@
 		5649B4BA1BE28079009947EF /* SCMultiPolygonTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMultiPolygonTest.m; sourceTree = "<group>"; };
 		5649B4BB1BE28079009947EF /* SCPointTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPointTest.m; sourceTree = "<group>"; };
 		5649B4BC1BE28079009947EF /* SCPolygonTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCPolygonTest.m; sourceTree = "<group>"; };
-		5649B4BD1BE28079009947EF /* SCQueryFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCQueryFilterTest.m; sourceTree = "<group>"; };
 		5649B4BF1BE28079009947EF /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
 		5649B4C11BE28079009947EF /* SpatialConnectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectHelper.h; sourceTree = "<group>"; };
 		5649B4C21BE28079009947EF /* SpatialConnectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialConnectHelper.m; sourceTree = "<group>"; };
@@ -908,14 +907,6 @@
 				560B10E51C77C16000BA15B8 /* SCGpkgTable.m */,
 			);
 			name = Base;
-			sourceTree = "<group>";
-		};
-		560E31BB1BF10F20009DA680 /* GeoPackage */ = {
-			isa = PBXGroup;
-			children = (
-				560E31C01BF10F5F009DA680 /* SCGeopackageCRUDTest.m */,
-			);
-			name = GeoPackage;
 			sourceTree = "<group>";
 		};
 		560E31C51BF15C90009DA680 /* TestingUtils */ = {
@@ -1454,7 +1445,6 @@
 				569921E01E3F83DB00DEA260 /* Services */,
 				56CC07981C6EA85700407D4A /* Storage */,
 				560E31C51BF15C90009DA680 /* TestingUtils */,
-				560E31BB1BF10F20009DA680 /* GeoPackage */,
 				567B1FD71BFE130D003254C7 /* Data */,
 				567B1FD61BFE12F1003254C7 /* CRUD */,
 				567B1FD41BFE12D1003254C7 /* GeoJSON */,
@@ -1541,6 +1531,8 @@
 		566F5F641D90804E001C6692 /* SpatialConnectIntegrationTests */ = {
 			isa = PBXGroup;
 			children = (
+				542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */,
+				560E31C01BF10F5F009DA680 /* SCGeopackageCRUDTest.m */,
 				44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */,
 				560DC1CD1D47D065007D66A1 /* SCMQTTTest.m */,
 				56ED69C51CE212FC00843C44 /* remote.scfg */,
@@ -1564,7 +1556,6 @@
 			children = (
 				5649B4B51BE28079009947EF /* SCGeoJSONParserTest.m */,
 				5649B4B61BE28079009947EF /* SCGeoJSONWriterTest.m */,
-				542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */,
 			);
 			name = GeoJSON;
 			sourceTree = "<group>";
@@ -1584,7 +1575,6 @@
 			isa = PBXGroup;
 			children = (
 				5649B4B21BE28079009947EF /* LocalFilterTests.m */,
-				5649B4BD1BE28079009947EF /* SCQueryFilterTest.m */,
 			);
 			name = CRUD;
 			sourceTree = "<group>";
@@ -2336,15 +2326,12 @@
 			files = (
 				5649B4CE1BE28079009947EF /* SCMultiPolygonTest.m in Sources */,
 				569921E61E3F840000DEA260 /* SCServiceTest.m in Sources */,
-				560E31C11BF10F5F009DA680 /* SCGeopackageCRUDTest.m in Sources */,
 				560E31C81BF15CBD009DA680 /* SCTestString.m in Sources */,
 				56CC079A1C6EA86D00407D4A /* SCGeopackageTest.m in Sources */,
 				5649B4CA1BE28079009947EF /* SCGeoJSONParserTest.m in Sources */,
 				5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */,
-				542E9B931D6F4442007AB0ED /* SCGeoJSONStoreTest.m in Sources */,
 				5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */,
 				5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */,
-				5649B4D11BE28079009947EF /* SCQueryFilterTest.m in Sources */,
 				5649B4CD1BE28079009947EF /* SCMultiPointTest.m in Sources */,
 				560E31C41BF1212B009DA680 /* SCGeopackageHelper.m in Sources */,
 				5649B4C71BE28079009947EF /* LocalFilterTests.m in Sources */,
@@ -2376,7 +2363,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5673B8471E4393C500ACB8D1 /* SCTestString.m in Sources */,
 				56F671FF1DA572820032E6A6 /* SCMQTTTest.m in Sources */,
+				5673B8451E43927400ACB8D1 /* SCGeoJSONStoreTest.m in Sources */,
+				5673B8461E43927800ACB8D1 /* SCGeopackageCRUDTest.m in Sources */,
 				56F672061DA572820032E6A6 /* SCGeometryHelper.h in Sources */,
 				56F672071DA572820032E6A6 /* SCGeopackageHelper.h in Sources */,
 				56F6720A1DA572820032E6A6 /* SpatialConnectHelper.h in Sources */,

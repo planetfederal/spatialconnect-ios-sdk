@@ -106,15 +106,10 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   }
   NSString *path = nil;
   NSString *dbName = [NSString stringWithFormat:@"%@.geojson", self.storeId];
-  BOOL saveToDocsDir = ![SCFileUtils isTesting];
-  if (saveToDocsDir) {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                         NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    path = [documentsDirectory stringByAppendingPathComponent:dbName];
-  } else {
-    path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
-  }
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                       NSUserDomainMask, YES);
+  NSString *documentsDirectory = [paths objectAtIndex:0];
+  path = [documentsDirectory stringByAppendingPathComponent:dbName];
   return path;
 }
 
@@ -294,6 +289,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
               }
               completed:^{
                 filename = path;
+                self.status = SC_DATASTORE_RUNNING;
                 [subscriber sendCompleted];
               }];
           return nil;

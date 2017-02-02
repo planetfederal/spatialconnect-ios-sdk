@@ -43,7 +43,6 @@
   self.baseUri = config.uri;
   self.name = config.name;
   self.defaultLayers = config.defaultLayers;
-  self.vectorLayers = [self getLayers];
   return self;
 }
 
@@ -54,6 +53,12 @@
   }
   self.style = style;
   return self;
+}
+
+- (RACSignal *)start {
+  [super start];
+  self.vectorLayers = [self getLayers];
+  return [RACSignal empty];
 }
 
 - (NSArray *)layers {

@@ -427,13 +427,15 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 - (RACSignal *)storesByProtocol:(Protocol *)protocol
                     onlyRunning:(BOOL)onlyRunning {
-  return [[self.stores.rac_sequence.signal filter:^BOOL(SCDataStore *ds) {
-    return [ds conformsToProtocol:protocol];
+  return [[[self.stores.rac_sequence.signal filter:^BOOL(RACTuple *t) {
+    return [t.second conformsToProtocol:protocol];
+  }] map:^SCDataStore *(RACTuple *t) {
+    return (SCDataStore *)t.second;
   }] filter:^BOOL(SCDataStore *ds) {
     if (!onlyRunning) {
       return true;
     } else {
-      return ds.status == SC_DATASTORE_RUNNING;
+      return [ds status] == SC_DATASTORE_RUNNING;
     }
   }];
 }
@@ -444,7 +446,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (RACSignal *)storesByProtocol:(Protocol *)protocol {
-  return [self storesByProtocol:protocol onlyRunning:@(YES)];
+  return [self storesByProtocol:protocol onlyRunning:YES];
 }
 
 - (NSArray *)storesByProtocolArray:(Protocol *)protocol {

@@ -147,7 +147,8 @@
 
 - (void)connectBackend:(SCRemoteConfig *)r {
   if (![_serviceGraph nodeById:[SCBackendService serviceId]]) {
-    [self addService:[[SCBackendService alloc] initWithRemoteConfig:r]];
+    _backendService = [[SCBackendService alloc] initWithRemoteConfig:r];
+    [self addService:_backendService];
     [self startService:[SCBackendService serviceId]];
   } else {
     DDLogWarn(@"SCBackendService Already Connected");
@@ -156,7 +157,8 @@
 
 - (void)connectAuth:(id<SCAuthProtocol>)ap {
   if (![_serviceGraph nodeById:[SCAuthService serviceId]]) {
-    [self addService:[[SCAuthService alloc] initWithAuthMethod:ap]];
+    _authService = [[SCAuthService alloc] initWithAuthMethod:ap];
+    [self addService:_authService];
     [self startService:[SCAuthService serviceId]];
   } else {
     DDLogWarn(@"SCAuthService Already Connected");

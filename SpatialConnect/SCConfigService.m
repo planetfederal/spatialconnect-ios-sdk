@@ -48,8 +48,8 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 }
 
 - (RACSignal *)stop {
-  [self clearConfigs];
   self.status = SC_SERVICE_STOPPED;
+  [self clearConfigs];
   return [RACSignal empty];
 }
 
