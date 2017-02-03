@@ -63,17 +63,17 @@
     case DATASERVICE_STORELIST:
       [self storeList:subscriber];
       break;
-    case DATASERVICE_SPATIALQUERY:
+    case DATASERVICE_QUERY:
       [self queryStoresByIds:action[@"payload"] responseSubscriber:subscriber];
       break;
-    case DATASERVICE_SPATIALQUERYALL:
+    case DATASERVICE_QUERYALL:
       [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
       break;
-    case DATASERVICE_GEOSPATIALQUERY:
+    case DATASERVICE_SPATIALQUERY:
       [self queryGeoStoresByIds:action[@"payload"]
              responseSubscriber:subscriber];
       break;
-    case DATASERVICE_GEOSPATIALQUERYALL:
+    case DATASERVICE_SPATIALQUERYALL:
       [self queryAllGeoStores:action[@"payload"] responseSubscriber:subscriber];
       break;
     case DATASERVICE_CREATEFEATURE:
@@ -173,9 +173,7 @@
 - (void)queryAllStores:(NSDictionary *)value
     responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  [[[[[SpatialConnect sharedInstance] dataService]
-      queryAllStoresOfProtocol:@protocol(SCSpatialStore)
-                        filter:filter]
+  [[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
@@ -202,7 +200,9 @@
 - (void)queryAllGeoStores:(NSDictionary *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   SCQueryFilter *filter = [SCQueryFilter filterFromDictionary:value[@"filter"]];
-  [[[[[SpatialConnect sharedInstance] dataService] queryAllStores:filter]
+  [[[[[SpatialConnect sharedInstance] dataService]
+      queryAllStoresOfProtocol:@protocol(SCSpatialStore)
+                        filter:filter]
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
