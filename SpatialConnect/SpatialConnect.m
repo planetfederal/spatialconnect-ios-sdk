@@ -111,15 +111,7 @@
 }
 
 - (void)startService:(NSString *)serviceId {
-  [[_serviceGraph startService:serviceId] subscribeNext:^(id x) {
-    DDLogInfo(@"%@", serviceId);
-  }
-      error:^(NSError *error) {
-        DDLogError(@"%@", error.description);
-      }
-      completed:^{
-        DDLogInfo(@"%@", serviceId);
-      }];
+  [_serviceGraph startService:serviceId];
 }
 
 - (void)stopService:(NSString *)serviceId {

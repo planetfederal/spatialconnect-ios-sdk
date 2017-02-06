@@ -28,9 +28,9 @@
 - (SCServiceNode*)nodeById:(NSString*)serviceId;
 
 - (void)startAllServices;
-- (RACSignal *)startService:(NSString *)serviceId;
+- (BOOL)startService:(NSString *)serviceId;
 - (void)stopAllServices;
-- (RACSignal *)stopService:(NSString *)serviceId;
+- (BOOL)stopService:(NSString *)serviceId;
 - (void)restartAllServices;
 
 @end

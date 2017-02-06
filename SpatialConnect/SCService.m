@@ -23,8 +23,8 @@
 
 @interface SCService ()
 
-@property(nonatomic, strong) NSString *identifier;
-
+@property(strong) NSString *identifier;
+@property(atomic,readwrite) SCServiceStatus status;
 @end
 
 @implementation SCService
@@ -44,6 +44,26 @@
 + (NSString *)serviceId {
   NSAssert(NO, @"Name must be set on the Service");
   return nil;
+}
+
+- (BOOL)start:(NSDictionary<NSString *,id<SCServiceLifecycle>> *)deps {
+  self.status = SC_SERVICE_RUNNING;
+  return YES;
+}
+
+- (BOOL)pause {
+  self.status = SC_SERVICE_PAUSED;
+  return YES;
+}
+
+- (BOOL)resume {
+  self.status = SC_SERVICE_RUNNING;
+  return YES;
+}
+
+- (BOOL)stop {
+  self.status = SC_SERVICE_STOPPED;
+  return YES;
 }
 
 @end

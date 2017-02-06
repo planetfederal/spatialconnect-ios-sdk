@@ -272,34 +272,34 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 
 #pragma mark -
 #pragma mark SCServiceLifecycle
-- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
-  self.status = SC_SERVICE_STARTED;
-  DDLogInfo(@"Starting Data Service...");
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   _sensorService =
       (SCSensorService *)[deps objectForKey:[SCSensorService serviceId]];
   [self setupSubscriptions];
   [self startAllStores];
   self.status = SC_SERVICE_RUNNING;
   DDLogInfo(@"Data Service Running");
-  return [RACSignal empty];
+  return [super start:nil];
 }
 
-- (RACSignal *)stop {
+- (BOOL)stop {
   [self stopAllStores];
   self.stores = [NSMutableDictionary new];
   self.storesStarted = NO;
   [_hasStores sendNext:@(NO)];
-  return [RACSignal empty];
+  return [super stop];
 }
 
-- (void)pause {
+- (BOOL)pause {
   [self stopAllStores];
   self.storesStarted = NO;
+  return [super pause];
 }
 
-- (void)resume {
+- (BOOL)resume {
   [self startAllStores];
   [self setupSubscriptions];
+  return [super resume];
 }
 
 - (NSArray *)requires {

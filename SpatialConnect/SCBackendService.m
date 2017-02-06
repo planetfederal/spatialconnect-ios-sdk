@@ -62,8 +62,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
-  self.status = SC_SERVICE_STARTED;
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   authService = [deps objectForKey:[SCAuthService serviceId]];
   configService = [deps objectForKey:[SCConfigService serviceId]];
   sensorService = [deps objectForKey:[SCSensorService serviceId]];
@@ -72,16 +71,14 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   [self listenForNetworkConnection];
   [self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
-  self.status = SC_SERVICE_RUNNING;
-  return [RACSignal empty];
+  return [super start:nil];
 }
 
-- (RACSignal *)stop {
-  self.status = SC_SERVICE_STOPPED;
+- (BOOL)stop {
   if (sessionManager) {
     [sessionManager disconnect];
   }
-  return [RACSignal empty];
+  return [super stop];
 }
 
 - (NSArray *)requires {
