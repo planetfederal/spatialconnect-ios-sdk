@@ -205,10 +205,16 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     return [fs create:feature];
   } else {
     NSDictionary *userInfo = @{
-                               NSLocalizedDescriptionKey: NSLocalizedString(@"Operation was unsuccessful.", nil),
-                               NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Layer id does not exist.", nil),
-                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Have you created a layer in Geopackage by this name?", nil)};
-                               return [RACSignal error:[NSError errorWithDomain:@"SpatialConnect" code:-1 userInfo:userInfo]];
+      NSLocalizedDescriptionKey :
+          NSLocalizedString(@"Operation was unsuccessful.", nil),
+      NSLocalizedFailureReasonErrorKey :
+          NSLocalizedString(@"Layer id does not exist.", nil),
+      NSLocalizedRecoverySuggestionErrorKey : NSLocalizedString(
+          @"Have you created a layer in Geopackage by this name?", nil)
+    };
+    return [RACSignal error:[NSError errorWithDomain:@"SpatialConnect"
+                                                code:-1
+                                            userInfo:userInfo]];
   }
 }
 

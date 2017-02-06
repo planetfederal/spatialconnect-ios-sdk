@@ -24,7 +24,7 @@
 @interface SCService ()
 
 @property(strong) NSString *identifier;
-@property(atomic,readwrite) SCServiceStatus status;
+@property(atomic, readwrite) SCServiceStatus status;
 @end
 
 @implementation SCService
@@ -46,7 +46,7 @@
   return nil;
 }
 
-- (BOOL)start:(NSDictionary<NSString *,id<SCServiceLifecycle>> *)deps {
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   self.status = SC_SERVICE_RUNNING;
   return YES;
 }

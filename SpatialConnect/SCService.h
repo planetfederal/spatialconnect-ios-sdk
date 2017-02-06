@@ -22,7 +22,7 @@
 
 @interface SCService : NSObject <SCServiceLifecycle>
 
-@property(atomic,readonly) SCServiceStatus status;
+@property(atomic, readonly) SCServiceStatus status;
 
 + (NSString *)serviceId;
 
