@@ -126,7 +126,10 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
   NSArray *directoryAndFileNames =
       [fm contentsOfDirectoryAtPath:path error:&error];
 
-  NSString *documentsPath = NSHomeDirectory();
+  NSURL *documentsPath = [[[NSFileManager defaultManager]
+      URLsForDirectory:NSDocumentDirectory
+             inDomains:NSUserDomainMask] lastObject];
+
   [directoryAndFileNames enumerateObjectsUsingBlock:^(
                              NSString *fileName, NSUInteger idx, BOOL *stop) {
     if ([fileName containsString:@"scfg"] ||
@@ -134,7 +137,7 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
         [fileName containsString:@"geojson"]) {
       NSString *item = [NSString stringWithFormat:@"%@/%@", path, fileName];
       NSString *to =
-          [NSString stringWithFormat:@"%@/%@", documentsPath, fileName];
+          [NSString stringWithFormat:@"%@/%@", [documentsPath path], fileName];
       NSError *error;
       [fm copyItemAtPath:item toPath:to error:&error];
       if (error) {

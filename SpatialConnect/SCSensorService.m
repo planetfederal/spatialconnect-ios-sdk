@@ -62,8 +62,12 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   return self;
 }
 
-- (RACSignal *)start {
-  [super start];
+#pragma mark -
+#pragma mark SCServiceLifecyle methods
+
+- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
+  self.status = SC_SERVICE_STARTED;
+  DDLogInfo(@"Starting Sensor Service...");
   if (!locationManager) {
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
@@ -86,7 +90,31 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   }
 
   [self setupSignals];
+  DDLogInfo(@"Sensor Service Started");
+  self.status = SC_SERVICE_RUNNING;
   return [RACSignal empty];
+}
+
+- (RACSignal *)stop {
+  if (locationManager) {
+    [self stopLocationManager];
+    locationManager = nil;
+    locationManager.delegate = nil;
+  }
+  self.status = SC_SERVICE_STOPPED;
+  return [RACSignal empty];
+}
+
+- (void)resume {
+  [self shoudlEnableGPS];
+}
+
+- (void)pause {
+  [self stopLocationManager];
+}
+
+- (NSArray *)requires {
+  return nil;
 }
 
 - (void)setupSignals {
@@ -135,39 +163,15 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   [reach startNotifier];
 }
 
-- (void)stop {
-  [super stop];
-  if (locationManager) {
-    [self stopLocationManager];
-    locationManager = nil;
-    locationManager.delegate = nil;
-  }
-}
-
-- (void)resume {
-  [super resume];
-  [self shoudlEnableGPS];
-}
-
-- (void)pause {
-  [super pause];
-  [self stopLocationManager];
-}
-
 - (void)enableGPS {
   if (self.status != SC_SERVICE_RUNNING) {
-    [self start];
+    DDLogInfo(@"SCSensorService not running");
+    return;
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCCache *c = sc.cache;
   [c setValue:@(YES) forKey:GPS_ENABLED];
   [self startLocationManager];
-
-  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
-    return [sc.dataService.locationStore create:p];
-  }] subscribeNext:^(id x) {
-    DDLogVerbose(@"Location sent to Location Store");
-  }];
 }
 
 - (void)disableGPS {

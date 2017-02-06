@@ -14,11 +14,15 @@
  * limitations under the License
  */
 
+#import "SCConfigService.h"
+#import "SCDataService.h"
 #import "SCNotification.h"
 #import "SCRemoteConfig.h"
+#import "SCAuthService.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
 #import "Scmessage.pbobjc.h"
+#import "SCSensorService.h"
 #import <MQTTFramework/MQTTFramework.h>
 #import <MQTTFramework/MQTTSessionManager.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -34,6 +38,10 @@
   NSString *httpPort;
   MQTTSessionManager *sessionManager;
   RACSignal *multicast;
+  SCConfigService *configService;
+      SCAuthService *authService;
+  SCDataService *dataService;
+      SCSensorService *sensorService;
 }
 
 /*!

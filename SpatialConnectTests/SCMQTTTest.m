@@ -48,7 +48,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *n) {
@@ -67,7 +67,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *n) {
@@ -92,32 +92,6 @@
                                }];
 }
 
-- (void)testTrackingNotification {
-  XCTestExpectation *expect =
-      [self expectationWithDescription:@"MQTTTrackingNotif"];
-
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-
-  [[[[sc.backendService configReceived] filter:^BOOL(NSNumber *n) {
-    return [n boolValue] == YES;
-  }] take:1] subscribeNext:^(id x) {
-    SCMessage *msg = [[SCMessage alloc] init];
-    msg.correlationId = 234;
-    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-      @(-122.0396089553833), @(37.33529260332278)
-    ]];
-    msg.payload = [[p JSONDict] JSONString];
-    [[[sc.backendService notifications] take:1]
-        subscribeNext:^(SCNotification *n) {
-          XCTAssertNotNil(n);
-          XCTAssertNotNil([n dictionary]);
-          [expect fulfill];
-        }];
-    [sc.backendService publish:msg onTopic:@"/store/tracking"];
-  }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
-}
-
 - (void)testLocation {
   XCTestExpectation *expect = [self expectationWithDescription:@"Location"];
 
@@ -125,7 +99,7 @@
 
   SCPoint *p =
       [[SCPoint alloc] initWithCoordinateArray:@[ @(-32), @(arc4random()) ]];
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *cr) {
@@ -147,7 +121,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[sc serviceStarted:[SCSensorService serviceId]] subscribeNext:^(id value) {
+  [[sc serviceRunning:[SCSensorService serviceId]] subscribeNext:^(id value) {
     [sc.sensorService.isConnectedViaWifi subscribeNext:^(NSNumber *n) {
       XCTAssertNotNil(n);
       XCTAssertTrue([n boolValue]);
@@ -186,15 +160,16 @@
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
     @(-22.3 + arc4random()), @(56.2 + arc4random())
   ]];
-  SCFormFeature *f = [[SCFormFeature alloc] init];
-  GeopackageStore *ds = sc.dataService.defaultStore;
-  f.layerId = @"test_form";
-  f.storeId = ds.storeId;
-  f.geometry = p;
-  [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
   [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
-    return [v boolValue];
+    BOOL yes = [v boolValue];
+    return yes;
   }] take:1] subscribeNext:^(id x) {
+    SCFormFeature *f = [[SCFormFeature alloc] init];
+    SCFormStore *ds = sc.dataService.formStore;
+    f.layerId = ds.layers[0];
+    f.storeId = ds.storeId;
+    f.geometry = p;
+    [f.properties setObject:@"Baltimore Orioles" forKey:@"d"];
     [[sc.dataService.formStore create:f] subscribeNext:^(id x) {
       [expect fulfill];
     }
@@ -207,7 +182,7 @@
           [expect fulfill];
         }];
   }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [self waitForExpectationsWithTimeout:100.0 handler:nil];
 }
 
 - (void)testFormToDict {
@@ -215,7 +190,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.dataService.formStore.hasForms;
       }] filter:^BOOL(NSNumber *o) {

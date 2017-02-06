@@ -325,6 +325,7 @@
       if (err) {
         DDLogError(@"%@", err.description);
         [subscriber sendError:err];
+        return;
       }
       if (success) {
         f.identifier =

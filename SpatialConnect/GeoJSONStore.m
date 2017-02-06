@@ -106,20 +106,11 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
   }
   NSString *path = nil;
   NSString *dbName = [NSString stringWithFormat:@"%@.geojson", self.storeId];
-  BOOL saveToDocsDir = ![SCFileUtils isTesting];
-  if (saveToDocsDir) {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                         NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    path = [documentsDirectory stringByAppendingPathComponent:dbName];
-  } else {
-    path = [SCFileUtils filePathFromNSHomeDirectory:dbName];
-  }
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                       NSUserDomainMask, YES);
+  NSString *documentsDirectory = [paths objectAtIndex:0];
+  path = [documentsDirectory stringByAppendingPathComponent:dbName];
   return path;
-}
-
-- (void)initWithFileName:(NSString *)fileName {
-  filename = [NSString stringWithString:fileName];
 }
 
 - (void)write:(NSString *)str error:(NSError *)error {
@@ -282,16 +273,27 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
     if (b) {
       self.status = SC_DATASTORE_RUNNING;
-      [self initWithFileName:path];
+      filename = path;
       return [RACSignal empty];
     }
 
-    RACSignal *dload$ = [super download:self.uri to:path];
-    [dload$ subscribeCompleted:^{
-      DDLogInfo(@"Saving GEOJSON to %@", path);
-      [self initWithFileName:path];
-    }];
-    return dload$;
+    return
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          [[[super download:self.uri to:path]
+              subscribeOn:[RACScheduler mainThreadScheduler]]
+              subscribeNext:^(id x) {
+                [subscriber sendNext:x];
+              }
+              error:^(NSError *error) {
+                [subscriber sendError:error];
+              }
+              completed:^{
+                filename = path;
+                self.status = SC_DATASTORE_RUNNING;
+                [subscriber sendCompleted];
+              }];
+          return nil;
+        }];
   } else {
     NSString *filePath = nil;
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
@@ -309,7 +311,7 @@ const NSString *kSTORE_NAME = @"GeoJSONStore";
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           if (filePath != nil &&
               [[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-            [self initWithFileName:filePath];
+            filename = filePath;
             self.status = SC_DATASTORE_RUNNING;
             [subscriber sendCompleted];
           } else {

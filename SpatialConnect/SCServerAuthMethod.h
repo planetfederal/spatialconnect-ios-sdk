@@ -1,5 +1,5 @@
-/*!
- * Copyright 2016 Boundless http://boundlessgeo.com
+/**
+ * Copyright 2017 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
  * limitations under the License
  */
 
+#import "KeychainItemWrapper.h"
+#import "SCAuthProtocol.h"
 #import <Foundation/Foundation.h>
 
-@interface SCRemoteConfig : NSObject
+@interface SCServerAuthMethod : NSObject <SCAuthProtocol> {
+  NSString *username;
+  NSString *jwt;
+  NSString *serverUrl;
+  KeychainItemWrapper *keychainItem;
+}
 
-@property(nonatomic, readonly) NSString *httpProtocol;
-@property(nonatomic, readonly) NSString *httpHost;
-@property(nonatomic, readonly) NSString *httpPort;
-@property(nonatomic, readonly) NSString *mqttProtocol;
-@property(nonatomic, readonly) NSString *mqttHost;
-@property(nonatomic, readonly) NSString *mqttPort;
-
-- (id)initWithDict:(NSDictionary *)d;
-- (NSString *)httpUri;
-- (NSDictionary *)dictionary;
+- (id)initWithDictionary:(NSDictionary *)d;
 
 @end

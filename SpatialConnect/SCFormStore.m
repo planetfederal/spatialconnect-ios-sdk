@@ -117,6 +117,7 @@
   return [[[[super create:feature] materialize] filter:^BOOL(RACEvent *evt) {
     return evt.eventType == RACEventTypeCompleted;
   }] flattenMap:^RACStream *(id value) {
+    // TODO Synching Service should handle this
     if (sc.backendService.status == SC_SERVICE_RUNNING) {
       feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
       SCMessage *msg = [[SCMessage alloc] init];

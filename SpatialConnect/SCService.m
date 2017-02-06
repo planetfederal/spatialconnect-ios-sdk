@@ -24,7 +24,6 @@
 @interface SCService ()
 
 @property(nonatomic, strong) NSString *identifier;
-@property(nonatomic, readwrite) SCServiceStatus status;
 
 @end
 
@@ -40,33 +39,6 @@
   }
   _status = SC_SERVICE_STOPPED;
   return self;
-}
-
-#pragma mark - Service Lifecycle
-
-- (RACSignal *)start {
-  self.status = SC_SERVICE_RUNNING;
-  return [RACSignal empty];
-}
-
-- (void)stop {
-  self.status = SC_SERVICE_STOPPED;
-}
-
-- (void)resume {
-  self.status = SC_SERVICE_RUNNING;
-}
-
-- (void)startError {
-  self.status = SC_SERVICE_ERROR;
-}
-
-- (void)pause {
-  self.status = SC_SERVICE_PAUSED;
-}
-
-- (NSArray *)requires {
-  return nil;
 }
 
 + (NSString *)serviceId {

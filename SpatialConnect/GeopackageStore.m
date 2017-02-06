@@ -73,15 +73,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (NSString *)path {
   NSString *path = nil;
-  BOOL saveToDocsDir = ![SCFileUtils isTesting];
-  if (saveToDocsDir) {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                         NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    path = [documentsDirectory stringByAppendingPathComponent:self.filepath];
-  } else {
-    path = [SCFileUtils filePathFromNSHomeDirectory:self.filepath];
-  }
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                       NSUserDomainMask, YES);
+  NSString *documentsDirectory = [paths objectAtIndex:0];
+  path = [documentsDirectory stringByAppendingPathComponent:self.filepath];
   return path;
 }
 
@@ -118,12 +113,20 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     return [RACSignal empty];
   } else if ([self.uri.lowercaseString containsString:@"http"]) {
 
-    RACSignal *dload$ = [super download:self.uri to:path];
-    [dload$ subscribeCompleted:^{
-      DDLogInfo(@"Saving GPKG to %@", path);
-      self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-    }];
-    return dload$;
+    return
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          [[[super download:self.uri to:path]
+              subscribeOn:[RACScheduler mainThreadScheduler]]
+              subscribeError:^(NSError *error) {
+                [subscriber sendError:error];
+              }
+              completed:^{
+                DDLogInfo(@"Saving GPKG to %@", path);
+                self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+                [subscriber sendCompleted];
+              }];
+          return nil;
+        }];
   } else if ([path containsString:@"DEFAULT_STORE"]) {
     // initialize empty geopackage
     self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
@@ -197,7 +200,16 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   if (feature.layerId == nil) {
     feature.layerId = self.defaultLayerName;
   }
-  return [[self.gpkg featureSource:feature.layerId] create:feature];
+  SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
+  if (fs) {
+    return [fs create:feature];
+  } else {
+    NSDictionary *userInfo = @{
+                               NSLocalizedDescriptionKey: NSLocalizedString(@"Operation was unsuccessful.", nil),
+                               NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Layer id does not exist.", nil),
+                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Have you created a layer in Geopackage by this name?", nil)};
+                               return [RACSignal error:[NSError errorWithDomain:@"SpatialConnect" code:-1 userInfo:userInfo]];
+  }
 }
 
 - (RACSignal *)update:(SCSpatialFeature *)feature {

@@ -1,5 +1,5 @@
-/*!
- * Copyright 2016 Boundless http://boundlessgeo.com
+/**
+ * Copyright 2017 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License
  */
 
+#import "SCService.h"
 #import <Foundation/Foundation.h>
 
-@interface SCRemoteConfig : NSObject
+@interface SCServiceNode : NSObject
 
-@property(nonatomic, readonly) NSString *httpProtocol;
-@property(nonatomic, readonly) NSString *httpHost;
-@property(nonatomic, readonly) NSString *httpPort;
-@property(nonatomic, readonly) NSString *mqttProtocol;
-@property(nonatomic, readonly) NSString *mqttHost;
-@property(nonatomic, readonly) NSString *mqttPort;
+@property(nonatomic, readonly) id<SCServiceLifecycle> service;
+// Services this node depends on
+@property(nonatomic, readonly) NSArray<SCServiceNode *> *dependencies;
+// Services this node is a dependency of
+@property(nonatomic, readonly) NSArray<SCServiceNode *> *recipients;
 
-- (id)initWithDict:(NSDictionary *)d;
-- (NSString *)httpUri;
-- (NSDictionary *)dictionary;
+- (id)initWithService:(id<SCServiceLifecycle>)s
+      andDependencies:(NSArray<SCServiceNode *> *)d;
+
+- (void)addRecipient:(SCServiceNode *)node;
 
 @end

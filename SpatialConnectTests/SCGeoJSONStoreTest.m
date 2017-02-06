@@ -19,56 +19,31 @@
 #import <XCTest/XCTest.h>
 
 @interface SCGeoJSONStoreTest : XCTestCase
-@property SpatialConnect *sc;
 @end
 
 @implementation SCGeoJSONStoreTest
 
-@synthesize sc;
-
 - (void)setUp {
   [super setUp];
-  self.sc = [SpatialConnectHelper loadConfigAndStartServices];
 }
 
 - (void)tearDown {
   [super tearDown];
-  [self.sc stopAllServices];
 }
 
 // download geojson file and check if file exists
-- (void)testGeoJSONDownload {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Delete"];
+- (void)testGeoJSONDownloadAndDestroy {
+  XCTestExpectation *expect = [self expectationWithDescription:@"GeoJson"];
   NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
   NSString *fileName = [NSString stringWithFormat:@"%@.geojson", geojsonStore];
-  NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
-  [[SpatialConnectHelper loadGeojsonDataStore:self.sc]
-      subscribeNext:^(id<SCSpatialStore> ds) {
+  NSString *path = [SCFileUtils filePathFromDocumentsDirectory:fileName];
+  [[SpatialConnectHelper loadGeojsonDataStore:[SpatialConnect sharedInstance]]
+      subscribeNext:^(id<SCDataStoreLifeCycle> ds) {
         BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
         XCTAssertTrue(b);
-        [expect fulfill];
-      }
-      error:^(NSError *error) {
-        XCTFail(@"Error getting store");
-        [expect fulfill];
-      }];
-  [self waitForExpectationsWithTimeout:5.0 handler:nil];
-}
-
-- (void)testGeoJSONDestroy {
-  XCTestExpectation *expect = [self expectationWithDescription:@"Destroy"];
-  NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
-  NSString *fileName = [NSString stringWithFormat:@"%@.geojson", geojsonStore];
-  NSString *path = [SCFileUtils filePathFromNSHomeDirectory:fileName];
-  [[SpatialConnectHelper loadGeojsonDataStore:self.sc]
-      subscribeNext:^(GeoJSONStore *ds) {
-        BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-        XCTAssertTrue(b);
-
         [ds destroy];
         b = [[NSFileManager defaultManager] fileExistsAtPath:path];
         XCTAssertEqual(b, NO);
-
         [expect fulfill];
       }
       error:^(NSError *error) {
