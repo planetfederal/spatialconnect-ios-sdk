@@ -133,7 +133,14 @@
 }
 
 - (void)stopAllServices {
-//TODO
+  [serviceNodes enumerateObjectsUsingBlock:^(SCServiceNode *n, NSUInteger idx, BOOL * _Nonnull stop) {
+    BOOL stopped = [self stopService:[n.service.class serviceId]];
+    if (stopped) {
+      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STOPPED andServiceName:[n.service.class serviceId]]];
+    } else {
+      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[n.service.class serviceId]]];
+    }
+  }];
 }
 
 - (BOOL)stopService:(NSString *)serviceId {
