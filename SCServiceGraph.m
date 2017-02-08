@@ -84,146 +84,98 @@
 }
 
 - (void)startAllServices {
-  [[serviceNodes.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *sn) {
-    return [self startService:[sn.service.class serviceId]];
-  }] subscribeError:^(NSError *error) {
-    DDLogError(@"StartAllServices Error:%@",error.description);
-  } completed:^{
-    DDLogInfo(@"StartAllServices Complete");
-    [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ALLSTARTED andServiceName:nil]];
-  }];
-}
-
-- (RACSignal *)checkAndStartService:(id<SCServiceLifecycle>)service withDeps:(NSDictionary *)dict {
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    if ([service status] == SC_SERVICE_STARTED || [service status] == SC_SERVICE_RUNNING) {
-      [subscriber sendCompleted];
-      return nil;
+  [serviceNodes enumerateObjectsUsingBlock:^(SCServiceNode *n, NSUInteger idx, BOOL * _Nonnull stop) {
+    BOOL started = [self startService:[n.service.class serviceId]];
+    if (started) {
+      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_RUNNING andServiceName:[n.service.class serviceId]]];
+    } else {
+      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[n.service.class serviceId]]];
     }
-    //We need to subscribe to the start to send events on the Service Event Subject
-    [[service start:dict] subscribeError:^(NSError *error) {
-      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[service.class serviceId]]];
-      [subscriber sendError:error];
-    } completed:^{
-      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_RUNNING andServiceName:[service.class serviceId]]];
-      [subscriber sendCompleted];
-    }];
-    return nil;
   }];
 }
 
-- (RACSignal *)startService:(NSString *)serviceId {
-  SCServiceNode *node = [self nodeById:serviceId];
 
-  SCServiceStatus status = [node.service status];
-  // Terminal Case
-  if(status == SC_SERVICE_RUNNING) {
-    return [RACSignal empty];
+- (BOOL)startService:(NSString *)serviceId {
+  SCServiceNode *node = [self nodeById:serviceId];
+  if([node.service status] == SC_SERVICE_RUNNING) {
+    return YES;
   }
 
   // Get all the dependencies and recursively pass them into this method
-  RACSignal *dep$ = nil;
+  NSArray *depsStarts = nil;
   if (node.dependencies) {
-    dep$ = [node.dependencies.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *e) {
-      if ([e.service status] == SC_SERVICE_STARTED || [e.service status] == SC_SERVICE_RUNNING) {
-        return [RACSignal empty];
+    depsStarts = [[node.dependencies.rac_sequence filter:^BOOL(SCServiceNode *e) {
+      if ([e.service status] == SC_SERVICE_RUNNING) {
+        return YES;
       } else {
         return [self startService:[e.service.class serviceId]];
       }
-    }];
+    }] array];
   }
 
   //No Deps, just start it
-  if (!dep$) {
-    return [self checkAndStartService:node.service withDeps:nil];
+  if (!depsStarts) {
+    return [node.service start:nil];
   } else {
-    return [[[dep$ materialize] filter:^BOOL(RACEvent *evt) {
-      return evt.eventType == RACEventTypeError ||
-        evt.eventType == RACEventTypeCompleted;
-    }] flattenMap:^RACStream *(RACEvent *evt) {
-      if (evt.eventType == RACEventTypeError) {
-        return [RACSignal error:evt.error];
-      } else {
-        NSArray<NSString*>* keys = [[node.dependencies.rac_sequence map:^NSString*(SCServiceNode *n) {
-          return [((SCService*)n.service).class serviceId];
-        }] array];
-        NSArray *deps = [[node.dependencies.rac_sequence map:^id<SCServiceLifecycle>(SCServiceNode *n) {
-          return n.service;
-        }] array];
-        NSDictionary *dict = [NSDictionary dictionaryWithObjects:deps forKeys:keys];
-        return [self checkAndStartService:node.service withDeps:dict];
-      }
-    }];
+    if (node.dependencies.count != depsStarts.count) {
+      DDLogError(@"Not all of the dependencies started");
+      return NO;
+    }
+    NSArray<NSString*>* keys = [[node.dependencies.rac_sequence map:^NSString*(SCServiceNode *n) {
+      return [((SCService*)n.service).class serviceId];
+    }] array];
+    NSArray *deps = [[node.dependencies.rac_sequence map:^id<SCServiceLifecycle>(SCServiceNode *n) {
+      return n.service;
+    }] array];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:deps forKeys:keys];
+    return [node.service start:dict];
   }
 }
 
 - (void)stopAllServices {
-  [[serviceNodes.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *sn) {
-    return [self stopService:[sn.service.class serviceId]];
-  }] subscribeError:^(NSError *error) {
-    DDLogError(@"StartAllServices Error:%@",error.description);
-  } completed:^{
-    DDLogInfo(@"StartAllServices Complete");
+  [serviceNodes enumerateObjectsUsingBlock:^(SCServiceNode *n, NSUInteger idx, BOOL * _Nonnull stop) {
+    BOOL stopped = [self stopService:[n.service.class serviceId]];
+    if (stopped) {
+      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STOPPED andServiceName:[n.service.class serviceId]]];
+    } else {
+      [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[n.service.class serviceId]]];
+    }
   }];
 }
 
-- (RACSignal *)stopService:(NSString *)serviceId {
+- (BOOL)stopService:(NSString *)serviceId {
   SCServiceNode *node = [self nodeById:serviceId];
 
   if ([node.service status] == SC_SERVICE_STOPPED) {
-    return [RACSignal empty];
+    return YES;
   }
 
-  RACSignal *rec$ = nil;
+  NSArray *recipsStops = nil;
   if (node.recipients) {
-    rec$ = [node.recipients.rac_sequence.signal flattenMap:^RACStream *(SCServiceNode *e) {
+    recipsStops = [[node.recipients.rac_sequence filter:^BOOL(SCServiceNode *e) {
       if ([e.service status] == SC_SERVICE_STOPPED) {
-        return [RACSignal empty];
+        return YES;
       } else {
         return [self stopService:[e.service.class serviceId]];
       }
-    }];
+    }] array];
   }
 
-  //No Recips, just start it
-  if (!rec$) {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-      //We need to subscribe to the start to send events on the Service Event Subject
-      [[node.service stop] subscribeError:^(NSError *error) {
-        [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[node.service.class serviceId]]];
-        [subscriber sendError:error];
-      } completed:^{
-        [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STOPPED andServiceName:[node.service.class serviceId]]];
-        [subscriber sendCompleted];
-      }];
-      return nil;
-    }];
+  if (!recipsStops) {
+    return [node.service stop];
   } else {
-    return [[[rec$ materialize] filter:^BOOL(RACEvent *evt) {
-      return evt.eventType == RACEventTypeError ||
-      evt.eventType == RACEventTypeCompleted;
-    }] flattenMap:^RACStream *(RACEvent *evt) {
-      if (evt.eventType == RACEventTypeError) {
-        return [RACSignal error:evt.error];
-      } else {
-        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-          //We need to subscribe to the start to send events on the Service Event Subject
-          if ([node.service status] == SC_SERVICE_STOPPED) {
-            [subscriber sendCompleted];
-            return nil;
-          }
-          [[node.service stop] subscribeError:^(NSError *error) {
-            [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_ERROR andServiceName:[node.service.class serviceId]]];
-            [subscriber sendError:error];
-          } completed:^{
-            [self.serviceEventSubject sendNext:[SCServiceStatusEvent fromEvent:SC_SERVICE_EVT_STOPPED andServiceName:[node.service.class serviceId]]];
-            [subscriber sendCompleted];
-          }];
-          return nil;
-        }];
-      }
-    }];
+    if (node.recipients.count != recipsStops.count) {
+      DDLogError(@"Not all of the dependencies started");
+      return NO;
+    } else {
+      return [node.service stop];
+    }
   }
+}
+
+- (void)restartAllServices {
+  [self stopAllServices];
+  [self startAllServices];
 }
 
 @end

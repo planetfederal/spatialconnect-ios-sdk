@@ -62,8 +62,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
-  self.status = SC_SERVICE_STARTED;
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   authService = [deps objectForKey:[SCAuthService serviceId]];
   configService = [deps objectForKey:[SCConfigService serviceId]];
   sensorService = [deps objectForKey:[SCSensorService serviceId]];
@@ -72,20 +71,21 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   [self listenForNetworkConnection];
   [self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
-  self.status = SC_SERVICE_RUNNING;
-  return [RACSignal empty];
+  return [super start:nil];
 }
 
-- (RACSignal *)stop {
-  self.status = SC_SERVICE_STOPPED;
+- (BOOL)stop {
   if (sessionManager) {
     [sessionManager disconnect];
   }
-  return [RACSignal empty];
+  return [super stop];
 }
 
 - (NSArray *)requires {
-  return @[ [SCAuthService serviceId], [SCConfigService serviceId], [SCSensorService serviceId], [SCDataService serviceId] ];
+  return @[
+    [SCAuthService serviceId], [SCConfigService serviceId],
+    [SCSensorService serviceId], [SCDataService serviceId]
+  ];
 }
 
 - (void)registerForLocalNotifications {
@@ -194,8 +194,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   NSDictionary *regDict = @{
     @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
     @"device_info" : @{@"os" : @"ios"},
-    @"name" :
-        [NSString stringWithFormat:@"mobile:%@", [authService username]]
+    @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
   };
   SCMessage *regMsg = [[SCMessage alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
@@ -313,11 +312,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (void)authListener {
   // You have the url to the server. Wait for someone to properly
   // authenticate before fetching the config
-  RACSignal *authed =
-      [[[authService loginStatus] filter:^BOOL(NSNumber *n) {
-        SCAuthStatus s = [n integerValue];
-        return s == SCAUTH_AUTHENTICATED;
-      }] take:1];
+  RACSignal *authed = [[[authService loginStatus] filter:^BOOL(NSNumber *n) {
+    SCAuthStatus s = [n integerValue];
+    return s == SCAUTH_AUTHENTICATED;
+  }] take:1];
 
   RACSignal *failedAuth =
       [[[authService loginStatus] filter:^BOOL(NSNumber *n) {

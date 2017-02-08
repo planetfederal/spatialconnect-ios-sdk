@@ -21,7 +21,6 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef NS_ENUM(NSInteger, SCServiceStatus) {
-  SC_SERVICE_STARTED,
   SC_SERVICE_PAUSED,
   SC_SERVICE_RUNNING,
   SC_SERVICE_STOPPED,
@@ -31,10 +30,10 @@ typedef NS_ENUM(NSInteger, SCServiceStatus) {
 @protocol SCServiceLifecycle <NSObject>
 
 @required
-- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps;
-- (void)pause;
-- (void)resume;
-- (RACSignal *)stop;
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps;
+- (BOOL)pause;
+- (BOOL)resume;
+- (BOOL)stop;
 - (void)startError:(NSError *)e;
 - (NSArray *)requires;
 - (SCServiceStatus)status;

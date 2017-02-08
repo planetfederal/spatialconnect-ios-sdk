@@ -65,8 +65,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 #pragma mark -
 #pragma mark SCServiceLifecyle methods
 
-- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
-  self.status = SC_SERVICE_STARTED;
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   DDLogInfo(@"Starting Sensor Service...");
   if (!locationManager) {
     locationManager = [CLLocationManager new];
@@ -91,26 +90,26 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 
   [self setupSignals];
   DDLogInfo(@"Sensor Service Started");
-  self.status = SC_SERVICE_RUNNING;
-  return [RACSignal empty];
+  return [super start:nil];
 }
 
-- (RACSignal *)stop {
+- (BOOL)stop {
   if (locationManager) {
     [self stopLocationManager];
     locationManager = nil;
     locationManager.delegate = nil;
   }
-  self.status = SC_SERVICE_STOPPED;
-  return [RACSignal empty];
+  return [super stop];
 }
 
-- (void)resume {
+- (BOOL)resume {
   [self shoudlEnableGPS];
+  return [super resume];
 }
 
-- (void)pause {
+- (BOOL)pause {
   [self stopLocationManager];
+  return [super pause];
 }
 
 - (NSArray *)requires {

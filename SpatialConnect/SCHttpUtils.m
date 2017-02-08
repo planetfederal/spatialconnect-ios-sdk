@@ -55,7 +55,7 @@
                                        returningResponse:&response
                                                    error:&error];
   if (error) {
-    DDLogError(@"%@",error);
+    DDLogError(@"%@", error);
     return nil;
   }
   return data;

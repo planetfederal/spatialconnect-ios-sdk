@@ -37,20 +37,15 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   return self;
 }
 
-- (RACSignal *)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
-  self.status = SC_SERVICE_STARTED;
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   dataService = [deps objectForKey:[SCDataService serviceId]];
-  DDLogInfo(@"Config Service Started");
   [self loadConfigs];
-  self.status = SC_SERVICE_RUNNING;
-  DDLogInfo(@"Config Service Running");
-  return [RACSignal empty];
+  return [super start:nil];
 }
 
-- (RACSignal *)stop {
-  self.status = SC_SERVICE_STOPPED;
+- (BOOL)stop {
   [self clearConfigs];
-  return [RACSignal empty];
+  return [super stop];
 }
 
 - (NSArray *)requires {

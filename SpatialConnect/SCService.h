@@ -20,9 +20,9 @@
 #import "SCServiceLifecycle.h"
 #import "SCServiceStatusEvent.h"
 
-@interface SCService : NSObject
+@interface SCService : NSObject <SCServiceLifecycle>
 
-@property(atomic) SCServiceStatus status;
+@property(atomic, readonly) SCServiceStatus status;
 
 + (NSString *)serviceId;
 
