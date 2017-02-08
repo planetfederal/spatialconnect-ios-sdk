@@ -1,0 +1,5 @@
+{
+  "build":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect build",
+  "install":"carthage update",
+  "test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test"
+}
