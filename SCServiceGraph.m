@@ -173,4 +173,9 @@
   }
 }
 
+- (void)restartAllServices {
+  [self stopAllServices];
+  [self startAllServices];
+}
+
 @end
