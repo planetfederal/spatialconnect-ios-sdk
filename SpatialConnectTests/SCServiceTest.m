@@ -93,20 +93,20 @@
 
 - (void)testServiceStop {
   XCTestExpectation *expect =
-  [self expectationWithDescription:@"Config Service Start"];
+      [self expectationWithDescription:@"Config Service Start"];
   [[self.sc serviceRunning:[SCConfigService serviceId]]
-   subscribeError:^(NSError *error) {
-     DDLogError(@"Error:%@", error.description);
-     [expect fulfill];
-   }
-   completed:^{
-     [self.sc stopAllServices];
-     XCTAssertNotNil(self.sc.configService);
-     XCTAssertTrue(self.sc.configService.status == SC_SERVICE_STOPPED);
-     XCTAssertTrue(self.sc.dataService.status == SC_SERVICE_STOPPED);
-     XCTAssertTrue(self.sc.sensorService.status == SC_SERVICE_STOPPED);
-     [expect fulfill];
-   }];
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Error:%@", error.description);
+        [expect fulfill];
+      }
+      completed:^{
+        [self.sc stopAllServices];
+        XCTAssertNotNil(self.sc.configService);
+        XCTAssertTrue(self.sc.configService.status == SC_SERVICE_STOPPED);
+        XCTAssertTrue(self.sc.dataService.status == SC_SERVICE_STOPPED);
+        XCTAssertTrue(self.sc.sensorService.status == SC_SERVICE_STOPPED);
+        [expect fulfill];
+      }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 

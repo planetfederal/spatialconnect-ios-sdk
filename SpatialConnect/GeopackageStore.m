@@ -87,7 +87,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 - (void)connectBlocking {
   NSString *path = [self path];
   self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
-  self.status = SC_DATASTORE_RUNNING;
 }
 
 #pragma mark -

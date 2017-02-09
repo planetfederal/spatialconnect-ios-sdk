@@ -27,7 +27,6 @@
 #import "SpatialConnect.h"
 #import "WFSDataStore.h"
 
-NSString *const kDEFAULTSTORE = @"DEFAULT_STORE";
 NSString *const kFORMSTORE = @"FORM_STORE";
 NSString *const kLOCATIONSTORE = @"LOCATION_STORE";
 static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
@@ -65,21 +64,10 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
     _hasStores = [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
-    [self setupDefaultStore];
     [self setupFormsStore];
     [self setupLocationStore];
   }
   return self;
-}
-
-- (void)setupDefaultStore {
-  SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:@{
-    @"id" : @"DEFAULT_STORE",
-    @"uri" : @"spacon_default_store.db",
-    @"name" : @"DEFAULT_STORE"
-  }];
-  defaultStore = [[SCDefaultStore alloc] initWithStoreConfig:config];
-  [_stores setObject:defaultStore forKey:config.uniqueid];
 }
 
 - (void)setupFormsStore {
@@ -100,10 +88,6 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   }];
   locationStore = [[SCLocationStore alloc] initWithStoreConfig:config];
   [_stores setObject:locationStore forKey:config.uniqueid];
-}
-
-- (SCDefaultStore *)defaultStore {
-  return [_stores objectForKey:kDEFAULTSTORE];
 }
 
 - (SCFormStore *)formStore {

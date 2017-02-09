@@ -32,7 +32,6 @@
   RACSignal *removeStore;
   SCFormStore *formStore;
   SCLocationStore *locationStore;
-  SCDefaultStore *defaultStore;
 }
 
 /*!
