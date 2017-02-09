@@ -1,8 +1,8 @@
 {
   "build":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect build",
   "install":"carthage update",
-  "unit-test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test",
-  "integration-test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test",
+  "unit_test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test",
+  "integration_test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test",
   "run":"",
   "release":"carthage archive SpatialConnect"
 }
