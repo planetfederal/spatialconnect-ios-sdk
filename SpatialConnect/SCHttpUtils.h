@@ -29,6 +29,9 @@
  */
 + (RACSignal *)getRequestURLAsDict:(NSURL *)url;
 
++ (RACSignal *)getRequestURLAsDict:(NSURL *)url headers:(NSDictionary<NSString*,NSString*> *)header;
+
+
 /*!
  *  @brief Blocking request to fetch an JSON Response
  *
@@ -53,6 +56,16 @@
  * @return NSData over RACSignal
  */
 + (RACSignal *)getRequestURLAsData:(NSURL *)url;
+
+
+/*!
+ HTTP Get Request
+
+ @param url to GET request
+ @param header KV of Headers
+ @return NSData over RACSignal
+ */
++ (RACSignal *)getRequestURLAsData:(NSURL *)url headers:(NSDictionary *)header;
 
 /*!
  *  @brief returns NSDictionary on signal

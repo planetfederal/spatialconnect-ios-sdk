@@ -20,8 +20,8 @@
 #import <Foundation/Foundation.h>
 
 @interface SCFormStore
-    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore> {
-  NSMutableDictionary *formIds;
+: GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore> {
+  NSMutableDictionary<NSString *,NSNumber *> *formIds;
   NSMutableDictionary *storeForms;
 }
 
@@ -32,5 +32,6 @@
 - (void)unregisterFormByConfig:(SCFormConfig *)f;
 - (void)unregisterFormByKey:(NSString *)k;
 - (NSArray *)formsDictionaryArray;
+- (NSNumber *)formIdForLayer:(NSString *)layer;
 
 @end
