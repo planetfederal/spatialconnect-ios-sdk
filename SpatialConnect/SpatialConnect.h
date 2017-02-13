@@ -26,7 +26,6 @@
 #import "SCGeoJSON.h"
 #import "SCJavascriptCommands.h"
 #import "SCLineString.h"
-#import "SCRCTBridge.h"
 #import "SCRasterStore.h"
 #import "SCSensorService.h"
 #import "SCService.h"

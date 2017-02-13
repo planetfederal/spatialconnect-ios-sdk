@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
-		546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 546D088F1D2462E200EBB95A /* SCRCTBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 546D08901D2462E200EBB95A /* SCRCTBridge.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		547F3EDB1D77688700AE354E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 547F3ED91D77688700AE354E /* Reachability.m */; };
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
@@ -464,8 +462,6 @@
 /* Begin PBXFileReference section */
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
 		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeoJSONStoreTest.m; path = SpatialConnectTests/SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
-		546D088F1D2462E200EBB95A /* SCRCTBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRCTBridge.h; sourceTree = "<group>"; };
-		546D08901D2462E200EBB95A /* SCRCTBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRCTBridge.m; sourceTree = "<group>"; };
 		547F3ED81D77688700AE354E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		547F3ED91D77688700AE354E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1117,8 +1113,6 @@
 				5649B5221BE280D6009947EF /* SCJavascriptBridgeAPI.h */,
 				5649B5231BE280D6009947EF /* SCJavascriptBridgeAPI.m */,
 				5649B5241BE280D6009947EF /* SCJavascriptCommands.h */,
-				546D088F1D2462E200EBB95A /* SCRCTBridge.h */,
-				546D08901D2462E200EBB95A /* SCRCTBridge.m */,
 			);
 			name = Bridge;
 			sourceTree = "<group>";
@@ -1856,7 +1850,6 @@
 				56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */,
 				563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */,
 				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
-				546D08911D2462E200EBB95A /* SCRCTBridge.h in Headers */,
 				56A23B0D1D7B1BB300AB258B /* SCMapkitTileGridSource.h in Headers */,
 				563F42841DB06318005022A7 /* Commands.h in Headers */,
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
@@ -2284,7 +2277,6 @@
 				5649B5A01BE280D6009947EF /* SCFilterIn.m in Sources */,
 				567D7A061D6380FF00BDC3CC /* SCNotification.m in Sources */,
 				563F42731DB06233005022A7 /* WebViewJavascriptBridge.m in Sources */,
-				546D08921D2462E200EBB95A /* SCRCTBridge.m in Sources */,
 				5649B6101BE280D6009947EF /* SCSpatialFeature.m in Sources */,
 				5649B5A41BE280D6009947EF /* SCFilterLessThanEqual.m in Sources */,
 				5649B5CF1BE280D6009947EF /* SCLinearRing+MapKit.m in Sources */,
