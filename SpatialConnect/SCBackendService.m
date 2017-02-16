@@ -98,8 +98,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
                                              UNAuthorizationOptionBadge)
                           completionHandler:^(BOOL granted,
                                               NSError *_Nullable error) {
-                            if (!error) {
-                            }
+
                           }];
   } else {
     [[UIApplication sharedApplication]
@@ -325,10 +324,14 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
   [authed subscribeNext:^(NSNumber *n) {
     [self connect];
-    [[[connectedToBroker filter:^BOOL(NSNumber *n) {
+    [[connectedToBroker filter:^BOOL(NSNumber *n) {
       return n.boolValue;
-    }] take:1] subscribeNext:^(id x) {
-      [self registerAndFetchConfig];
+    }] subscribeNext:^(id x) {
+      [[_configReceived filter:^BOOL(NSNumber *received) {
+        return !received.boolValue;
+      }] subscribeNext:^(id x) {
+        [self registerAndFetchConfig];
+      }];
     }];
   }];
 

@@ -39,8 +39,9 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   dataService = [deps objectForKey:[SCDataService serviceId]];
+  BOOL success = [super start:nil];
   [self loadConfigs];
-  return [super start:nil];
+  return success;
 }
 
 - (BOOL)stop {
