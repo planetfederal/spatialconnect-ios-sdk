@@ -68,24 +68,10 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
   DDLogInfo(@"Starting Sensor Service...");
   if (!locationManager) {
-    locationManager = [CLLocationManager new];
-    locationManager.delegate = self;
-  }
-
-  if ([CLLocationManager locationServicesEnabled]) {
-    if ([CLLocationManager authorizationStatus] ==
-        kCLAuthorizationStatusNotDetermined) {
-      [locationManager requestAlwaysAuthorization];
-    }
-
-    if ([CLLocationManager authorizationStatus] !=
-            kCLAuthorizationStatusDenied &&
-        [CLLocationManager authorizationStatus] !=
-            kCLAuthorizationStatusRestricted) {
-      [self startLocationManager];
-    }
-  } else {
-    DDLogInfo(@"Please Enable Location Services");
+    dispatch_async(dispatch_get_main_queue(), ^{
+      locationManager = [CLLocationManager new];
+      locationManager.delegate = self;
+    });
   }
 
   [self setupSignals];
@@ -170,7 +156,26 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCCache *c = sc.cache;
   [c setValue:@(YES) forKey:GPS_ENABLED];
-  [self startLocationManager];
+  [[[[self rac_signalForSelector:@selector(locationManager:didChangeAuthorizationStatus:)
+                  fromProtocol:@protocol(CLLocationManagerDelegate)]
+    map:^id(RACTuple *arguments) {
+      return arguments.second;
+    }] filter:^BOOL(NSNumber *value) {
+      return [value intValue] == kCLAuthorizationStatusAuthorizedAlways;
+    }] subscribeNext:^(id x) {
+    [self startLocationManager];
+  }];
+  
+  if ([CLLocationManager locationServicesEnabled]) {
+    if ([CLLocationManager authorizationStatus] ==
+        kCLAuthorizationStatusNotDetermined) {
+      [locationManager requestAlwaysAuthorization];
+    } else {
+      [self startLocationManager];
+    }
+  } else {
+    DDLogInfo(@"Please Enable Location Services");
+  }
 }
 
 - (void)disableGPS {
@@ -195,8 +200,10 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   locationManager.desiredAccuracy = self.accuracy;
   locationManager.distanceFilter = self.distance;
   if ([CLLocationManager locationServicesEnabled]) {
-    [locationManager startUpdatingLocation];
-    [locationManager startUpdatingHeading];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [locationManager startUpdatingLocation];
+      [locationManager startUpdatingHeading];
+    });
     self.isTracking = YES;
   }
 }

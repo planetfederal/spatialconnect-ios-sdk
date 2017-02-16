@@ -233,23 +233,25 @@
 - (void)spatialConnectGPS:(NSNumber *)value
        responseSubscriber:(id<RACSubscriber>)subscriber {
   BOOL enable = [value boolValue];
-  SCSensorService *ss = (SCSensorService *)[[SpatialConnect sharedInstance]
-      serviceById:[SCSensorService serviceId]];
-  if (enable) {
-    [ss enableGPS];
-    [[ss lastKnown] subscribeNext:^(CLLocation *loc) {
-      CLLocationDistance alt = loc.altitude;
-      float lat = loc.coordinate.latitude;
-      float lon = loc.coordinate.longitude;
-      [subscriber sendNext:@{
-        @"latitude" : [NSNumber numberWithFloat:lat],
-        @"longitude" : [NSNumber numberWithFloat:lon],
-        @"altitude" : [NSNumber numberWithFloat:alt]
-      }];
-    }];
-  } else {
-    [ss disableGPS];
-  }
+  [[[SpatialConnect sharedInstance] serviceRunning:[SCSensorService serviceId]]
+    subscribeNext:^(id value) {
+      SCSensorService *ss = [[SpatialConnect sharedInstance] sensorService];
+      if (enable) {
+        [ss enableGPS];
+        [[ss lastKnown] subscribeNext:^(CLLocation *loc) {
+          CLLocationDistance alt = loc.altitude;
+          float lat = loc.coordinate.latitude;
+          float lon = loc.coordinate.longitude;
+          [subscriber sendNext:@{
+            @"latitude" : [NSNumber numberWithFloat:lat],
+            @"longitude" : [NSNumber numberWithFloat:lon],
+            @"altitude" : [NSNumber numberWithFloat:alt]
+          }];
+        }];
+      } else {
+        [ss disableGPS];
+      }
+  }];
 }
 
 - (void)createFeature:(NSDictionary *)value
