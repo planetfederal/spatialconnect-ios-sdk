@@ -322,17 +322,17 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
         return s == SCAUTH_AUTHENTICATION_FAILED;
       }] take:1];
 
-  [authed subscribeNext:^(NSNumber *n) {
+  [[[[[authed flattenMap:^RACSignal*(id x) {
     [self connect];
-    [[connectedToBroker filter:^BOOL(NSNumber *n) {
-      return n.boolValue;
-    }] subscribeNext:^(id x) {
-      [[_configReceived filter:^BOOL(NSNumber *received) {
-        return !received.boolValue;
-      }] subscribeNext:^(id x) {
-        [self registerAndFetchConfig];
-      }];
-    }];
+    return connectedToBroker;
+  }] filter:^BOOL(NSNumber *n) {
+    return n.boolValue;
+  }] flattenMap:^RACSignal*(id x) {
+    return _configReceived;
+  }] filter:^BOOL(NSNumber *received) {
+    return !received.boolValue;
+  }] subscribeNext:^(id x) {
+    [self registerAndFetchConfig];
   }];
 
   [failedAuth subscribeNext:^(id x) {
