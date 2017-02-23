@@ -42,6 +42,28 @@
 "default_layers":["spatialconnect:baseball_team"],
 "uri":"http://efc-dev.boundlessgeo.com:8080/geoserver/wfs",
 "id":"0f193979-b871-47cd-b60d-e271d6504359"
+},
+{
+"store_type": "geojson",
+"name": "earthquake feed",
+"default_layers": [],
+"style": [
+{
+"id": "default",
+"paint": {
+"fill-color": "#ff0000",
+"fill-opacity": 0.5,
+"line-color": "#ff0000",
+"line-opacity": 1,
+"icon-color": "#ff0000"
+}
+}
+],
+"id": "5d7ddb49-83f1-48a1-b1b6-e48767b30c48",
+"team_id": 1,
+"options": null,
+"uri": "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
+"version": "1"
 }
 ]
 }

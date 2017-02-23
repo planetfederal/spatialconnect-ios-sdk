@@ -27,8 +27,11 @@
 @property(nonatomic) float strokeOpacity;
 @property(nonatomic) float fillOpacity;
 @property(nonatomic) UIColor *fillColor;
+@property(nonatomic) UIColor *iconColor;
 
+- (id)initWithMapboxStyle:(NSArray *)mbstyle;
 - (void)addMissing:(SCStyle *)style;
 - (void)overwriteWith:(SCStyle *)style;
+- (NSDictionary *)dictionary;
 
 @end
