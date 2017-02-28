@@ -26,6 +26,7 @@
 @synthesize strokeWidth = _strokeWidth;
 @synthesize fillColor = _fillColor;
 @synthesize fillOpacity = _fillOpacity;
+@synthesize iconColor = _iconColor;
 
 
 - (id)initWithMapboxStyle:(NSArray *)mbstyle {
@@ -48,21 +49,21 @@
 
 - (UIColor *)strokeColor {
   if (!_strokeColor) {
-    return [UIColor blackColor];
+    return [UIColor redColor];
   }
   return _strokeColor;
 }
 
 - (int)strokeWidth {
   if (!_strokeWidth) {
-    return 3;
+    return 2;
   }
   return _strokeWidth;
 }
 
 - (float)strokeOpacity {
   if (!_strokeOpacity) {
-    return 0.5;
+    return 1;
   }
   return _strokeOpacity;
 }
@@ -76,9 +77,16 @@
 
 - (UIColor *)fillColor {
   if (!_fillColor) {
-    return [UIColor blackColor];
+    return [UIColor redColor];
   }
   return _fillColor;
+}
+
+- (UIColor *)iconColor {
+  if (!_iconColor) {
+    return [UIColor redColor];
+  }
+  return _iconColor;
 }
 
 - (void)addMissing:(SCStyle *)style {
@@ -92,6 +100,8 @@
     self.fillOpacity = style.fillOpacity;
   if (!_fillColor)
     self.fillColor = style.fillColor;
+  if (!_iconColor)
+    self.iconColor = style.iconColor;
 }
 
 - (void)overwriteWith:(SCStyle *)style {
@@ -105,6 +115,8 @@
     self.fillOpacity = style.fillOpacity;
   if (style.fillColor)
     self.fillColor = style.fillColor;
+  if (style.iconColor)
+    self.iconColor = style.iconColor;
 }
 
 - (NSDictionary *)dictionary {
@@ -113,7 +125,8 @@
            @"strokeWidth" : [@(self.strokeWidth) stringValue],
            @"strokeOpacity" : [@(self.strokeOpacity) stringValue],
            @"fillOpacity" : [@(self.fillOpacity) stringValue],
-           @"fillColor" : self.fillColor
+           @"fillColor" : self.fillColor,
+           @"iconColor" : self.iconColor
            };
 }
 
