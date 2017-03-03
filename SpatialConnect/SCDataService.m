@@ -315,7 +315,11 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   Class store =
       [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
                                                            c.version]];
-  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
+  
+  SCStyle *style = c.style ?
+    [[SCStyle alloc] initWithMapboxStyle:c.style] :
+    [[SCStyle alloc] init];
+  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c withStyle:style];
   if (!store) {
     DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
               @"implementation.\n Here is a list of supported stores:\n%@",
@@ -346,7 +350,10 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   Class store =
       [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
                                                            c.version]];
-  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c];
+  SCStyle *style = c.style ?
+  [[SCStyle alloc] initWithMapboxStyle:c.style] :
+  [[SCStyle alloc] init];
+  SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c withStyle:style];
   if (!store) {
     DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
               @"implementation.\n Here is a list of supported stores:\n%@",
@@ -445,6 +452,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   [store setObject:ds.storeType forKey:@"type"];
   [store setObject:[NSNumber numberWithInteger:ds.status] forKey:@"status"];
   [store setObject:ds.downloadProgress forKey:@"downloadProgress"];
+  if (ds.style) [store setObject:[ds.style dictionary] forKey:@"style"];
   if ([ds conformsToProtocol:@protocol(SCSpatialStore)]) {
     id<SCSpatialStore> ss = (id<SCSpatialStore>)ds;
     if (ss.vectorLayers != nil) {

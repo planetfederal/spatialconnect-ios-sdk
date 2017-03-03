@@ -13,6 +13,7 @@
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
 		548C840F1DF6002300068FE7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
 		548C84101DF6002300068FE7 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		54AC44A41E5F7DF20051504A /* SCStyleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44A31E5F7DF20051504A /* SCStyleTest.m */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
 		560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -465,6 +466,7 @@
 		547F3ED81D77688700AE354E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		547F3ED91D77688700AE354E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		54AC44A31E5F7DF20051504A /* SCStyleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStyleTest.m; sourceTree = "<group>"; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
 		560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgFeatureSource.h; sourceTree = "<group>"; };
@@ -883,6 +885,14 @@
 				5678FC891CF652ED00D502C3 /* ZipZap.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		54AC44A21E5F7DDA0051504A /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				54AC44A31E5F7DF20051504A /* SCStyleTest.m */,
+			);
+			name = Style;
 			sourceTree = "<group>";
 		};
 		560AFB231C7E26F9006A060F /* RasterSource */ = {
@@ -1436,6 +1446,7 @@
 		5649B4A11BE27C6A009947EF /* SpatialConnectUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				54AC44A21E5F7DDA0051504A /* Style */,
 				569921E01E3F83DB00DEA260 /* Services */,
 				56CC07981C6EA85700407D4A /* Storage */,
 				560E31C51BF15C90009DA680 /* TestingUtils */,
@@ -2331,6 +2342,7 @@
 				5649B4D01BE28079009947EF /* SCPolygonTest.m in Sources */,
 				5649B4CB1BE28079009947EF /* SCGeoJSONWriterTest.m in Sources */,
 				564925671D7764C400F7DB0C /* SCRasterTest.m in Sources */,
+				54AC44A41E5F7DF20051504A /* SCStyleTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
