@@ -139,7 +139,7 @@
         }];
 
   }];
-  [self waitForExpectationsWithTimeout:50.0 handler:nil];
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testDeleteFeature {

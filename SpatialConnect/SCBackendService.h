@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2016 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,12 @@
  * limitations under the License
  */
 
+#import "SCAuthService.h"
+#import "SCConfigService.h"
+#import "SCDataService.h"
 #import "SCNotification.h"
 #import "SCRemoteConfig.h"
+#import "SCSensorService.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
 #import "Scmessage.pbobjc.h"
@@ -34,19 +38,86 @@
   NSString *httpPort;
   MQTTSessionManager *sessionManager;
   RACSignal *multicast;
+  SCConfigService *configService;
+  SCAuthService *authService;
+  SCDataService *dataService;
+  SCSensorService *sensorService;
 }
 
+/*!
+ Endpoint running SpatialConnect Server
+ */
 @property(readonly, strong) NSString *backendUri;
+
+/*!
+ Observable emiting SCNotifications
+ */
 @property(readonly, strong) RACSignal *notifications;
+
+/*!
+ Behavior Observable emitting YES when the SpatialConnect SCConfig has been
+ received
+ */
 @property(readonly, strong) RACBehaviorSubject *configReceived;
+
+/*!
+ Behavior Observable emitting YES when Connected, NO when the Connection is down
+ */
 @property(readonly, strong) RACBehaviorSubject *connectedToBroker;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
+
+/*!
+ Publishes an SCMessage to the SpatialConnect Server
+
+ @param msg SCMessage to be sent
+ @param topic MQTT destination topic
+ */
 - (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
+
+/*!
+ Publishes an SCMessage to the SpatialConnect Server with At Most Once Delivery
+ QoS 0
+
+ @param msg SCMessage to be sent
+ @param topic MQTT destination topic
+ */
 - (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+
+/*!
+ Publishes an SCMessage to the SpatialConnect Server with At Least Once Delivery
+ QoS 1
+
+ @param msg SCMessage to be sent
+ @param topic MQTT destination topic
+ */
 - (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+
+/*!
+ Publishes an SCMessage to the SpatialConnect Server with Exactly Once Delivery
+ QoS 2
+
+ @param msg SCMessage to be sent
+ @param topic MQTT destination topic
+ */
 - (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+
+/*!
+ Publishes a message with a reply-to observable returned for creating a request
+ reply with the server.
+
+ @param msg SCMessage to be sent
+ @param topic MQTT destination topic
+ @return Observable the message will be received on
+ */
 - (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic;
+
+/*!
+ Subscribes to an MQTT Topic
+
+ @param topic to Listen on
+ @return Observable filtered to only receive messages from the stated topic
+ */
 - (RACSignal *)listenOnTopic:(NSString *)topic;
 
 @end

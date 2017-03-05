@@ -26,24 +26,44 @@
 @synthesize strokeWidth = _strokeWidth;
 @synthesize fillColor = _fillColor;
 @synthesize fillOpacity = _fillOpacity;
+@synthesize iconColor = _iconColor;
+
+
+- (id)initWithMapboxStyle:(NSArray *)mbstyle {
+  self = [self init];
+  if (!self) {
+    return nil;
+  }
+  for (NSDictionary *s in mbstyle) {
+    NSDictionary *paint = s[@"paint"];
+    if (paint) {
+      if (paint[@"line-color"]) _strokeColor = paint[@"line-color"];
+      if (paint[@"line-opacity"]) _strokeOpacity = [paint[@"line-opacity"] floatValue];
+      if (paint[@"fill-color"]) _fillColor = paint[@"fill-color"];
+      if (paint[@"fill-opacity"]) _fillOpacity = [paint[@"fill-opacity"] floatValue];
+      if (paint[@"icon-color"]) _iconColor = paint[@"icon-color"];
+    }
+  }
+  return self;
+}
 
 - (UIColor *)strokeColor {
   if (!_strokeColor) {
-    return [UIColor blackColor];
+    return [UIColor redColor];
   }
   return _strokeColor;
 }
 
 - (int)strokeWidth {
   if (!_strokeWidth) {
-    return 3;
+    return 2;
   }
   return _strokeWidth;
 }
 
 - (float)strokeOpacity {
   if (!_strokeOpacity) {
-    return 0.5;
+    return 1;
   }
   return _strokeOpacity;
 }
@@ -57,9 +77,16 @@
 
 - (UIColor *)fillColor {
   if (!_fillColor) {
-    return [UIColor blackColor];
+    return [UIColor redColor];
   }
   return _fillColor;
+}
+
+- (UIColor *)iconColor {
+  if (!_iconColor) {
+    return [UIColor redColor];
+  }
+  return _iconColor;
 }
 
 - (void)addMissing:(SCStyle *)style {
@@ -73,6 +100,8 @@
     self.fillOpacity = style.fillOpacity;
   if (!_fillColor)
     self.fillColor = style.fillColor;
+  if (!_iconColor)
+    self.iconColor = style.iconColor;
 }
 
 - (void)overwriteWith:(SCStyle *)style {
@@ -86,6 +115,19 @@
     self.fillOpacity = style.fillOpacity;
   if (style.fillColor)
     self.fillColor = style.fillColor;
+  if (style.iconColor)
+    self.iconColor = style.iconColor;
+}
+
+- (NSDictionary *)dictionary {
+  return @{
+           @"strokeColor" : self.strokeColor,
+           @"strokeWidth" : [@(self.strokeWidth) stringValue],
+           @"strokeOpacity" : [@(self.strokeOpacity) stringValue],
+           @"fillOpacity" : [@(self.fillOpacity) stringValue],
+           @"fillColor" : self.fillColor,
+           @"iconColor" : self.iconColor
+           };
 }
 
 @end

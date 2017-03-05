@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -20,17 +20,9 @@
 #import "SCServiceLifecycle.h"
 #import "SCServiceStatusEvent.h"
 
-typedef NS_ENUM(NSInteger, SCServiceStatus) {
-  SC_SERVICE_STARTED,
-  SC_SERVICE_PAUSED,
-  SC_SERVICE_RUNNING,
-  SC_SERVICE_STOPPED,
-  SC_SERVICE_ERROR
-};
-
 @interface SCService : NSObject <SCServiceLifecycle>
 
-@property(readonly, nonatomic) SCServiceStatus status;
+@property(atomic, readonly) SCServiceStatus status;
 
 + (NSString *)serviceId;
 

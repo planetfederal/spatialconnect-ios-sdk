@@ -91,21 +91,26 @@
 - (RACSignal *)download:(NSString *)url to:(NSString *)path {
   self.status = SC_DATASTORE_DOWNLOADINGDATA;
   NSURL *u = [[NSURL alloc] initWithString:url];
-  RACSignal *dload$ = [SCHttpUtils getRequestURLAsData:u];
   __block NSMutableData *data = nil;
-  [dload$ subscribeNext:^(RACTuple *t) {
-    data = t.first;
-    self.downloadProgress = t.second;
-  }
-      error:^(NSError *error) {
-        self.status = SC_DATASTORE_DOWNLOADFAIL;
-      }
-      completed:^{
-        [data writeToFile:path atomically:YES];
-        self.downloadProgress = @(1.0f);
-        self.status = SC_DATASTORE_RUNNING;
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SCHttpUtils getRequestURLAsData:u] subscribeNext:^(RACTuple *t) {
+          data = t.first;
+          self.downloadProgress = t.second;
+
+        }
+            error:^(NSError *error) {
+              self.status = SC_DATASTORE_DOWNLOADFAIL;
+            }
+            completed:^{
+              [data writeToFile:path atomically:YES];
+              self.downloadProgress = @(1.0f);
+              self.status = SC_DATASTORE_RUNNING;
+              [subscriber sendCompleted];
+            }];
+
+        return nil;
       }];
-  return dload$;
 }
 
 - (void)deleteFile:(NSString *)path {

@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -22,7 +22,7 @@
 
 typedef NS_ENUM(NSInteger, StoreStatusEvent) {
   SC_DATASTORE_EVT_STARTFAILED,
-  SC_DATASTORE_EVT_STARTED,
+  SC_DATASTORE_EVT_RUNNING,
   SC_DATASTORE_EVT_ALLSTARTED,
   SC_DATASTORE_EVT_STOPPED,
   SC_DATASTORE_EVT_STATUSCHANGE,

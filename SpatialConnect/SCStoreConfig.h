@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -27,6 +27,7 @@
 @property(nonatomic, readonly) NSString *uniqueid;
 @property(nonatomic, readonly) NSString *name;
 @property(nonatomic, readonly) NSArray *defaultLayers;
+@property(nonatomic, readonly) NSArray *style;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionary;

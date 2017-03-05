@@ -22,22 +22,30 @@
 
 @implementation SCGeopackageHelper
 
-NSString *storeId = @"f6dcc750-1349-46b9-a324-0223764d46d1";
+NSString *vectorStoreId = @"f6dcc750-1349-46b9-a324-0223764d46d1";
 NSString *rasterStoreId = @"ba293796-5026-46f7-a2ff-e5dec85heh6b";
 
 + (RACSignal *)loadGPKGDataStore:(SpatialConnect *)sc {
-  return [[sc.dataService storeStarted:storeId]
-      map:^SCDataStore *(SCStoreStatusEvent *evt) {
-        SCDataStore *ds = [sc.dataService storeByIdentifier:storeId];
-        return ds;
-      }];
+  return [[[[[sc serviceRunning:[SCConfigService serviceId]]
+      flattenMap:^RACStream *(id value) {
+        return [sc.dataService hasStores];
+      }] filter:^BOOL(NSNumber *store) {
+    return [store boolValue];
+  }] flattenMap:^RACStream *(id value) {
+    return [sc.dataService storeStarted:vectorStoreId];
+  }] map:^SCDataStore *(SCStoreStatusEvent *evt) {
+    SCDataStore *ds = [sc.dataService storeByIdentifier:vectorStoreId];
+    return ds;
+  }];
 }
 
 + (RACSignal *)loadGPKGRasterStore:(SpatialConnect *)sc {
-  return [[sc.dataService storeStarted:rasterStoreId]
-      map:^SCDataStore *(id value) {
-        return [sc.dataService storeByIdentifier:rasterStoreId];
-      }];
+  return [[[sc serviceRunning:[SCConfigService serviceId]]
+      flattenMap:^RACStream *(id value) {
+        return [sc.dataService storeStarted:rasterStoreId];
+      }] map:^SCDataStore *(id value) {
+    return [sc.dataService storeByIdentifier:rasterStoreId];
+  }];
 }
 
 + (RACSignal *)downloadGpkgFile {

@@ -26,6 +26,7 @@ static NSString *const IDENT = @"id";
 static NSString *const URI = @"uri";
 static NSString *const NAME = @"name";
 static NSString *const DEFAULT_LAYERS = @"default_layers";
+static NSString *const STYLE = @"style";
 
 @implementation SCStoreConfig
 
@@ -35,6 +36,7 @@ static NSString *const DEFAULT_LAYERS = @"default_layers";
 @synthesize uri = _uri;
 @synthesize defaultLayers = _defaultLayers;
 @synthesize name = _name;
+@synthesize style = _style;
 
 - (id)initWithDictionary:(NSDictionary *)dict {
   self = [super init];
@@ -48,6 +50,7 @@ static NSString *const DEFAULT_LAYERS = @"default_layers";
                          ? [NSArray new]
                          : dict[DEFAULT_LAYERS];
     _name = dict[NAME];
+    _style = dict[STYLE];
   }
   return self;
 }
@@ -59,7 +62,8 @@ static NSString *const DEFAULT_LAYERS = @"default_layers";
     IDENT : _uniqueid,
     URI : _uri,
     DEFAULT_LAYERS : _defaultLayers ? _defaultLayers : @[],
-    NAME : _name
+    NAME : _name,
+    STYLE: _style,
   };
 }
 

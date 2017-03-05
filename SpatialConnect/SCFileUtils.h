@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*!***************************************************************************
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -28,5 +28,12 @@
 + (NSString *)filePathFromMainBundle:(NSString *)fileName;
 + (NSString *)filePathFromNSHomeDirectory:(NSString *)fileName;
 + (NSURL *)applicationDocumentsDirectory;
+
+/*!
+ Checks for the testing mode. Usually used for Test targets
+
+ @return BOOL
+ */
 + (BOOL)isTesting;
+
 @end

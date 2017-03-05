@@ -43,7 +43,6 @@
   self.baseUri = config.uri;
   self.name = config.name;
   self.defaultLayers = config.defaultLayers;
-  self.vectorLayers = [self getLayers];
   return self;
 }
 
@@ -54,6 +53,12 @@
   }
   self.style = style;
   return self;
+}
+
+- (RACSignal *)start {
+  [super start];
+  self.vectorLayers = [self getLayers];
+  return [RACSignal empty];
 }
 
 - (NSArray *)layers {
@@ -90,6 +95,13 @@
 
 #pragma mark -
 #pragma mark SCSpatialStore
+
+/**
+ Queries the default layers unless the filter has an array of layerIds
+
+ @param filter
+ @return RACSignal returning SCGeometry's
+ */
 - (RACSignal *)query:(SCQueryFilter *)filter {
   NSArray *layers =
       filter.layerIds.count == 0 ? [self defaultLayers] : filter.layerIds;

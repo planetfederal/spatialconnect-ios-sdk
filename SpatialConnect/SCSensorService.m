@@ -62,31 +62,44 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   return self;
 }
 
-- (RACSignal *)start {
-  [super start];
+#pragma mark -
+#pragma mark SCServiceLifecyle methods
+
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
+  DDLogInfo(@"Starting Sensor Service...");
   if (!locationManager) {
-    locationManager = [CLLocationManager new];
-    locationManager.delegate = self;
-  }
-
-  if ([CLLocationManager locationServicesEnabled]) {
-    if ([CLLocationManager authorizationStatus] ==
-        kCLAuthorizationStatusNotDetermined) {
-      [locationManager requestAlwaysAuthorization];
-    }
-
-    if ([CLLocationManager authorizationStatus] !=
-            kCLAuthorizationStatusDenied &&
-        [CLLocationManager authorizationStatus] !=
-            kCLAuthorizationStatusRestricted) {
-      [self startLocationManager];
-    }
-  } else {
-    DDLogInfo(@"Please Enable Location Services");
+    dispatch_async(dispatch_get_main_queue(), ^{
+      locationManager = [CLLocationManager new];
+      locationManager.delegate = self;
+    });
   }
 
   [self setupSignals];
-  return [RACSignal empty];
+  DDLogInfo(@"Sensor Service Started");
+  return [super start:nil];
+}
+
+- (BOOL)stop {
+  if (locationManager) {
+    [self stopLocationManager];
+    locationManager = nil;
+    locationManager.delegate = nil;
+  }
+  return [super stop];
+}
+
+- (BOOL)resume {
+  [self shoudlEnableGPS];
+  return [super resume];
+}
+
+- (BOOL)pause {
+  [self stopLocationManager];
+  return [super pause];
+}
+
+- (NSArray *)requires {
+  return nil;
 }
 
 - (void)setupSignals {
@@ -135,39 +148,34 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   [reach startNotifier];
 }
 
-- (void)stop {
-  [super stop];
-  if (locationManager) {
-    [self stopLocationManager];
-    locationManager = nil;
-    locationManager.delegate = nil;
-  }
-}
-
-- (void)resume {
-  [super resume];
-  [self shoudlEnableGPS];
-}
-
-- (void)pause {
-  [super pause];
-  [self stopLocationManager];
-}
-
 - (void)enableGPS {
   if (self.status != SC_SERVICE_RUNNING) {
-    [self start];
+    DDLogInfo(@"SCSensorService not running");
+    return;
   }
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCCache *c = sc.cache;
   [c setValue:@(YES) forKey:GPS_ENABLED];
-  [self startLocationManager];
-
-  [[self.lastKnown flattenMap:^RACStream *(SCPoint *p) {
-    return [sc.dataService.locationStore create:p];
-  }] subscribeNext:^(id x) {
-    DDLogVerbose(@"Location sent to Location Store");
+  [[[[self rac_signalForSelector:@selector(locationManager:didChangeAuthorizationStatus:)
+                  fromProtocol:@protocol(CLLocationManagerDelegate)]
+    map:^id(RACTuple *arguments) {
+      return arguments.second;
+    }] filter:^BOOL(NSNumber *value) {
+      return [value intValue] == kCLAuthorizationStatusAuthorizedAlways;
+    }] subscribeNext:^(id x) {
+    [self startLocationManager];
   }];
+  
+  if ([CLLocationManager locationServicesEnabled]) {
+    if ([CLLocationManager authorizationStatus] ==
+        kCLAuthorizationStatusNotDetermined) {
+      [locationManager requestAlwaysAuthorization];
+    } else {
+      [self startLocationManager];
+    }
+  } else {
+    DDLogInfo(@"Please Enable Location Services");
+  }
 }
 
 - (void)disableGPS {
@@ -192,8 +200,10 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   locationManager.desiredAccuracy = self.accuracy;
   locationManager.distanceFilter = self.distance;
   if ([CLLocationManager locationServicesEnabled]) {
-    [locationManager startUpdatingLocation];
-    [locationManager startUpdatingHeading];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [locationManager startUpdatingLocation];
+      [locationManager startUpdatingHeading];
+    });
     self.isTracking = YES;
   }
 }
@@ -204,6 +214,7 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   self.isTracking = NO;
 }
 
+// TODO set CE error
 - (void)locationAccuracy:(CLLocationAccuracy)acc
             withDistance:(CLLocationDistance)dist {
   self.accuracy = accuracy;

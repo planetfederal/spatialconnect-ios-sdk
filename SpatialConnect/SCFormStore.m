@@ -96,9 +96,9 @@
 - (NSArray *)formsDictionaryArray {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms
-      enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
-        [arr addObject:[f dictionary]];
-      }];
+   enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
+     [arr addObject:[f dictionary]];
+   }];
   return [NSArray arrayWithArray:arr];
 }
 
@@ -106,10 +106,14 @@
 #pragma mark SCSpatialStore
 - (RACSignal *)queryById:(SCKeyTuple *)key {
   return
-      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [subscriber sendCompleted];
-        return nil;
-      }];
+  [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [subscriber sendCompleted];
+    return nil;
+  }];
+}
+
+- (NSNumber *)formIdForLayer:(NSString *)layer {
+  return [formIds objectForKey:layer];
 }
 
 - (RACSignal *)create:(SCSpatialFeature *)feature {
@@ -120,10 +124,10 @@
     if (sc.backendService.status == SC_SERVICE_RUNNING) {
       feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
       SCMessage *msg = [[SCMessage alloc] init];
-      NSString *formId = [formIds objectForKey:feature.layerId];
+      NSNumber *formId = [formIds objectForKey:feature.layerId];
       NSDictionary *submission =
-          @{ @"form_id" : formId,
-             @"feature" : feature.JSONDict };
+      @{ @"form_id" : formId,
+         @"feature" : feature.JSONDict };
       msg.payload = submission.JSONString;
       [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
     }

@@ -22,7 +22,7 @@
 #import "SCFormFeature.h"
 #import "SCGeopackageHelper.h"
 #import "SCNotification.h"
-#import "SCPoint.h"
+#import "SCPoint+GeoJSON.h"
 #import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 #import "SpatialConnectHelper.h"
@@ -48,7 +48,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *n) {
@@ -67,7 +67,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *n) {
@@ -92,32 +92,6 @@
                                }];
 }
 
-- (void)testTrackingNotification {
-  XCTestExpectation *expect =
-      [self expectationWithDescription:@"MQTTTrackingNotif"];
-
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-
-  [[[[sc.backendService configReceived] filter:^BOOL(NSNumber *n) {
-    return [n boolValue] == YES;
-  }] take:1] subscribeNext:^(id x) {
-    SCMessage *msg = [[SCMessage alloc] init];
-    msg.correlationId = 234;
-    SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-      @(-122.0396089553833), @(37.33529260332278)
-    ]];
-    msg.payload = [[p JSONDict] JSONString];
-    [[[sc.backendService notifications] take:1]
-        subscribeNext:^(SCNotification *n) {
-          XCTAssertNotNil(n);
-          XCTAssertNotNil([n dictionary]);
-          [expect fulfill];
-        }];
-    [sc.backendService publish:msg onTopic:@"/store/tracking"];
-  }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
-}
-
 - (void)testLocation {
   XCTestExpectation *expect = [self expectationWithDescription:@"Location"];
 
@@ -125,7 +99,7 @@
 
   SCPoint *p =
       [[SCPoint alloc] initWithCoordinateArray:@[ @(-32), @(arc4random()) ]];
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.backendService.configReceived;
       }] filter:^BOOL(NSNumber *cr) {
@@ -139,7 +113,7 @@
       [expect fulfill];
     }];
   }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
+  [self waitForExpectationsWithTimeout:100.0 handler:nil];
 }
 
 - (void)testReachability {
@@ -147,7 +121,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[sc serviceStarted:[SCSensorService serviceId]] subscribeNext:^(id value) {
+  [[sc serviceRunning:[SCSensorService serviceId]] subscribeNext:^(id value) {
     [sc.sensorService.isConnectedViaWifi subscribeNext:^(NSNumber *n) {
       XCTAssertNotNil(n);
       XCTAssertTrue([n boolValue]);
@@ -176,6 +150,21 @@
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+- (RACSignal *)formFromBackend {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  return [[[[[[[sc serviceRunning:[SCBackendService serviceId]] materialize] filter:^BOOL(RACEvent *e) {
+    return e.eventType == RACEventTypeCompleted;
+  }] flattenMap:^RACStream *(id value) {
+    return sc.backendService.configReceived;
+  }] filter:^BOOL(NSNumber *cfgRec) {
+    return cfgRec.boolValue;
+  }] flattenMap:^RACStream *(id value) {
+    return sc.dataService.formStore.hasForms;
+  }] filter:^BOOL(NSNumber *hasForms) {
+    return hasForms.boolValue;
+  }];
+}
+
 - (void)testFormSubmission {
   XCTestExpectation *expect = [self expectationWithDescription:@"FormSubmit"];
 
@@ -184,28 +173,38 @@
   NSArray *arr = [sc.dataService.formStore layers];
   XCTAssertNotNil(arr);
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-    @(-22.3 + arc4random()), @(56.2 + arc4random())
-  ]];
-  SCFormFeature *f = [[SCFormFeature alloc] init];
-  GeopackageStore *ds = sc.dataService.defaultStore;
-  f.layerId = @"test_form";
-  f.storeId = ds.storeId;
-  f.geometry = p;
-  [f.properties setObject:@"Baltimore Orioles" forKey:@"ab"];
-  [[[sc.dataService.formStore.hasForms filter:^BOOL(NSNumber *v) {
-    return [v boolValue];
-  }] take:1] subscribeNext:^(id x) {
+                                                          @(-22.3 + arc4random()), @(56.2 + arc4random())
+                                                          ]];
+
+  [[[[self formFromBackend] take:1] flattenMap:^RACStream *(id value) {
+    SpatialConnect *sc = [SpatialConnect sharedInstance];
+    NSString *at = [NSString stringWithFormat:@"Token %@",[[sc authService] xAccessToken]];
+    NSString *buri = [[sc backendService] backendUri];
+    SCDataStore *ds = sc.dataService.formStore;
+    NSNumber *fid = [sc.dataService.formStore formIdForLayer:ds.layers[0]];
+    NSString *req = [NSString stringWithFormat:@"%@/api/form/%@/sample",buri,fid];
+    NSURL *url = [NSURL URLWithString:req];
+    return [SCHttpUtils getRequestURLAsDict:url headers:@{@"Authorization" :at}];
+  }] subscribeNext:^(NSDictionary *dict) {
+    NSLog(@"%@",dict);
+    SCPoint *p = (SCPoint *)[SCGeoJSON parseDict:dict[@"result"][@"feature"]];
+    SCFormFeature *f = [[SCFormFeature alloc] init];
+    SCFormStore *ds = sc.dataService.formStore;
+    f.layerId = ds.layers[0];
+    f.storeId = ds.storeId;
+    f.geometry = p;
+    f.properties = p.properties;
     [[sc.dataService.formStore create:f] subscribeNext:^(id x) {
       [expect fulfill];
     }
-        error:^(NSError *error) {
-          DDLogError(@"%@", error.description);
-          [expect fulfill];
-        }
-        completed:^{
-          XCTAssert(YES);
-          [expect fulfill];
-        }];
+                                                 error:^(NSError *error) {
+                                                   DDLogError(@"%@", error.description);
+                                                   [expect fulfill];
+                                                 }
+                                             completed:^{
+                                               XCTAssert(YES);
+                                               [expect fulfill];
+                                             }];
   }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
@@ -215,7 +214,7 @@
 
   SpatialConnect *sc = [SpatialConnect sharedInstance];
 
-  [[[[[sc serviceStarted:[SCBackendService serviceId]]
+  [[[[[sc serviceRunning:[SCBackendService serviceId]]
       flattenMap:^RACStream *(id value) {
         return sc.dataService.formStore.hasForms;
       }] filter:^BOOL(NSNumber *o) {
