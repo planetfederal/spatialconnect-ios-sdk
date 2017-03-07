@@ -23,6 +23,7 @@
 #import "SCRasterStore.h"
 #import "SCSpatialStore.h"
 #import "SCStoreConfig.h"
+#import "SCSyncableStore.h"
 #import <Foundation/Foundation.h>
 
 extern NSString *const SCGeopackageErrorDomain;
@@ -33,7 +34,7 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
 };
 
 @interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle, SCRasterStore>
+    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle, SCRasterStore, SCSyncableStore>
 
 @property(readonly, nonatomic, strong) NSString *uri;
 @property(readonly, nonatomic, strong) NSString *filepath;

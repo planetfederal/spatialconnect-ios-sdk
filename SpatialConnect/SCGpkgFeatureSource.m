@@ -23,6 +23,7 @@
 
 @interface SCGpkgFeatureSource ()
 @property(strong, readwrite) NSString *name;
+@property(strong, readwrite) NSString *auditName;
 @property(strong, readwrite) FMDatabasePool *pool;
 @property(strong, readwrite) NSString *pkColName;
 @property(strong, readwrite) NSDictionary *colsTypes;
@@ -40,6 +41,7 @@
   self = [super init];
   if (self) {
     self.name = c.tableName;
+    self.auditName = [NSString stringWithFormat:@"%@_audit", c.tableName];
     self.crs = c.crs;
     self.pool = p;
     [self defineTable];
@@ -370,4 +372,37 @@
   f.layerId = self.name;
   return f;
 }
+
+- (RACSignal *)unSynced {
+  NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE synced = 0", self.auditName];
+  return
+  [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [self query:sql toSubscriber:subscriber];
+    return nil;
+  }];
+}
+
+- (RACSignal *)pushComplete:(SCSpatialFeature *)f {
+  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [self.pool inDatabase:^(FMDatabase *db) {
+      [db beginTransaction];
+      NSMutableString *createSql = [NSMutableString stringWithFormat:
+                                    @"UPDATE %@ SET synced=1 WHERE %@ = ?", self.auditName, self.pkColName];
+      NSError *err;
+      BOOL success = [db executeUpdate:createSql values:@[ @([f.identifier longLongValue]) ] error:&err];
+      if (success) {
+        [db commit];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+          [subscriber sendCompleted];
+        });
+      } else {
+        [db rollback];
+        DDLogError(@"%@", db.lastError);
+        [subscriber sendError:db.lastError];
+      }
+    }];
+    return nil;
+  }];
+}
+
 @end

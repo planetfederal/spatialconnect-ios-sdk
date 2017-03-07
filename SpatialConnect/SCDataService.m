@@ -531,6 +531,16 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
   return [store query:filter];
 }
 
+- (RACSignal *)syncStores {
+  [[[self storesByProtocol:@protocol(SCSyncableStore)]
+   flattenMap:^RACSignal *(id<SCSyncableStore> store) {
+     return [store unSynced];
+  }] flattenMap:^RACSignal *(id<SCSpatialFeature> feature) {
+    
+  }];
+  return [RACSignal empty];
+}
+
 + (NSString *)serviceId {
   return kSERVICENAME;
 }

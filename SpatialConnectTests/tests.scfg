@@ -25,7 +25,7 @@
 "store_type":"gpkg",
 "version":"1",
 "name":"Haiti",
-"uri":"https://s3.amazonaws.com/test.spacon/haiti4mobile.gpkg",
+"uri":"haiti4mobile.gpkg",
 "id":"f6dcc750-1349-46b9-a324-0223764d46d1"
 },
 {
@@ -65,5 +65,39 @@
 "uri": "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
 "version": "1"
 }
-]
+],
+"forms": [
+{
+"id": 30,
+"form_key": "potholes",
+"form_label": "potholes",
+"version": 2,
+"team_id": 2,
+"fields": [
+{
+"constraints": {
+"pattern": ""
+},
+"field_key": "street",
+"type": "string",
+"is_required": false,
+"field_label": "street",
+"id": 118,
+"position": 0
+}
+],
+"metadata": {
+"count": null,
+"lastActivity": null
+}
+}
+],
+"remote": {
+"http_protocol": "http",
+"http_host": "localhost",
+"http_port": 8085,
+"mqtt_protocol": "tcp",
+"mqtt_host": "localhost",
+"mqtt_port": 1883
+}
 }

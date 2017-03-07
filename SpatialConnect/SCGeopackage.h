@@ -66,11 +66,15 @@
  */
 - (NSArray *)featureContents;
 
+- (NSArray *)auditTables;
+
 - (SCGpkgFeatureSource *)featureSource:(NSString *)name;
 
 - (SCGpkgTileSource *)tileSource:(NSString *)name;
 
 - (RACSignal *)query:(SCQueryFilter *)filter;
+
+- (RACSignal *)unSynced;
 
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types;
 - (void)removeFeatureSource:(NSString *)name;

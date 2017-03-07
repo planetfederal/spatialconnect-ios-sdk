@@ -21,6 +21,8 @@
 #import "SCGpkgContent.h"
 #import "SCGpkgContentsTable.h"
 #import "SCGpkgExtensionsTable.h"
+#import "SCGpkgAuditedTables.h"
+#import "SCGpkgAuditTable.h"
 #import "SCGpkgTileSource.h"
 
 @implementation SCGeopackage
@@ -86,6 +88,13 @@
                                                  content:c
                                                isIndexed:YES];
       }] toArray];
+}
+
+- (RACSignal *)unSynced {
+  return [[[[self featureContents] rac_sequence] signal]
+          flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
+            return [fs unSynced];
+          }];
 }
 
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types {

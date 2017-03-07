@@ -69,7 +69,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   dataService = [deps objectForKey:[SCDataService serviceId]];
   DDLogInfo(@"Starting Backend Service...");
   [self listenForNetworkConnection];
-  [self registerForLocalNotifications];
+  //[self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
   return [super start:nil];
 }

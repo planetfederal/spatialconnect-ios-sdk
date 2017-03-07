@@ -19,6 +19,6 @@
 #import <Foundation/Foundation.h>
 
 @interface SCLocationStore
-    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore>
+    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore, SCSyncableStore>
 
 @end

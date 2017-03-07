@@ -284,4 +284,11 @@
  */
 - (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter;
 
+/*!
+ Call sync on all of the SCSyncableStores
+ 
+ @return RACSignal returning SCSpatialFeatures
+ */
+- (RACSignal *)syncStores;
+
 @end

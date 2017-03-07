@@ -14,6 +14,13 @@
 		548C840F1DF6002300068FE7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
 		548C84101DF6002300068FE7 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54AC44A41E5F7DF20051504A /* SCStyleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44A31E5F7DF20051504A /* SCStyleTest.m */; };
+		54AC44DC1E6DE2890051504A /* SCSyncableStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 54AC44DB1E6DE2890051504A /* SCSyncableStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54AC44E31E6DE2B90051504A /* SCSyncableStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44E21E6DE2B90051504A /* SCSyncableStoreTest.m */; };
+		54AC44E51E6DE2F30051504A /* haiti4mobile.gpkg in Resources */ = {isa = PBXBuildFile; fileRef = 54AC44E41E6DE2F30051504A /* haiti4mobile.gpkg */; };
+		54AC44E81E6E14370051504A /* SCGpkgAuditedTables.h in Headers */ = {isa = PBXBuildFile; fileRef = 54AC44E61E6E14370051504A /* SCGpkgAuditedTables.h */; };
+		54AC44E91E6E14370051504A /* SCGpkgAuditedTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44E71E6E14370051504A /* SCGpkgAuditedTables.m */; };
+		54AC44ED1E6E16060051504A /* SCGpkgAuditTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 54AC44EB1E6E16060051504A /* SCGpkgAuditTable.h */; };
+		54AC44EE1E6E16060051504A /* SCGpkgAuditTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44EC1E6E16060051504A /* SCGpkgAuditTable.m */; };
 		560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		560A71231BE8457C00CE473F /* SCStoreStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */; };
 		560AFB2A1C7E2750006A060F /* SCGpkgFeatureSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -467,6 +474,13 @@
 		547F3ED91D77688700AE354E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		54AC44A31E5F7DF20051504A /* SCStyleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStyleTest.m; sourceTree = "<group>"; };
+		54AC44DB1E6DE2890051504A /* SCSyncableStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSyncableStore.h; sourceTree = "<group>"; };
+		54AC44E21E6DE2B90051504A /* SCSyncableStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSyncableStoreTest.m; sourceTree = "<group>"; };
+		54AC44E41E6DE2F30051504A /* haiti4mobile.gpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = haiti4mobile.gpkg; sourceTree = "<group>"; };
+		54AC44E61E6E14370051504A /* SCGpkgAuditedTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgAuditedTables.h; sourceTree = "<group>"; };
+		54AC44E71E6E14370051504A /* SCGpkgAuditedTables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgAuditedTables.m; sourceTree = "<group>"; };
+		54AC44EB1E6E16060051504A /* SCGpkgAuditTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgAuditTable.h; sourceTree = "<group>"; };
+		54AC44EC1E6E16060051504A /* SCGpkgAuditTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGpkgAuditTable.m; sourceTree = "<group>"; };
 		560A71201BE8457C00CE473F /* SCStoreStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCStoreStatusEvent.h; sourceTree = "<group>"; };
 		560A71211BE8457C00CE473F /* SCStoreStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStoreStatusEvent.m; sourceTree = "<group>"; };
 		560AFB281C7E2750006A060F /* SCGpkgFeatureSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGpkgFeatureSource.h; sourceTree = "<group>"; };
@@ -895,6 +909,25 @@
 			name = Style;
 			sourceTree = "<group>";
 		};
+		54AC44E11E6DE2AC0051504A /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				54AC44E21E6DE2B90051504A /* SCSyncableStoreTest.m */,
+			);
+			name = Sync;
+			sourceTree = "<group>";
+		};
+		54AC44EA1E6E143E0051504A /* Audit */ = {
+			isa = PBXGroup;
+			children = (
+				54AC44E61E6E14370051504A /* SCGpkgAuditedTables.h */,
+				54AC44E71E6E14370051504A /* SCGpkgAuditedTables.m */,
+				54AC44EB1E6E16060051504A /* SCGpkgAuditTable.h */,
+				54AC44EC1E6E16060051504A /* SCGpkgAuditTable.m */,
+			);
+			name = Audit;
+			sourceTree = "<group>";
+		};
 		560AFB231C7E26F9006A060F /* RasterSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -1022,6 +1055,7 @@
 				5649B4EA1BE280D5009947EF /* SCDataService.m */,
 				5649B56C1BE280D6009947EF /* SCSpatialStore.h */,
 				5677D6DA1C3F046E00C1E0F2 /* SCRasterStore.h */,
+				54AC44DB1E6DE2890051504A /* SCSyncableStore.h */,
 				5649B4ED1BE280D5009947EF /* SCDataStoreLifeCycle.h */,
 				563BEC6A1BE52A4200778EDA /* Style */,
 				563BEC651BE528F400778EDA /* Stores */,
@@ -1446,6 +1480,7 @@
 		5649B4A11BE27C6A009947EF /* SpatialConnectUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				54AC44E11E6DE2AC0051504A /* Sync */,
 				54AC44A21E5F7DDA0051504A /* Style */,
 				569921E01E3F83DB00DEA260 /* Services */,
 				56CC07981C6EA85700407D4A /* Storage */,
@@ -1588,6 +1623,7 @@
 			isa = PBXGroup;
 			children = (
 				564B19621BE30C18000C7BAE /* gz_2010_us_500_11_20m.json */,
+				54AC44E41E6DE2F30051504A /* haiti4mobile.gpkg */,
 				5649B4AF1BE28079009947EF /* all.geojson */,
 				5649B4B01BE28079009947EF /* feature.json */,
 				5649B4B11BE28079009947EF /* gz_2010_us_050_00_500k.json */,
@@ -1615,6 +1651,7 @@
 		56CC07971C6E92EF00407D4A /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				54AC44EA1E6E143E0051504A /* Audit */,
 				560B10E31C77C15200BA15B8 /* Base */,
 				560AFB231C7E26F9006A060F /* RasterSource */,
 				561686141C752F4F00FC7FA6 /* FeatureSource */,
@@ -1785,6 +1822,7 @@
 				5645C4FA1BED9708006E4128 /* SCMultiPoint+GPKG.h in Headers */,
 				5649B5D01BE280D6009947EF /* SCLineString.h in Headers */,
 				5649B60C1BE280D6009947EF /* SCServiceLifecycle.h in Headers */,
+				54AC44E81E6E14370051504A /* SCGpkgAuditedTables.h in Headers */,
 				5649B5B61BE280D6009947EF /* SCGeoJSON.h in Headers */,
 				5649B6111BE280D6009947EF /* SCSpatialStore.h in Headers */,
 				561685F01C73DFE000FC7FA6 /* SCGpkgExtensionsTable.h in Headers */,
@@ -1858,6 +1896,7 @@
 				563F42711DB06233005022A7 /* WebViewJavascriptBridge.h in Headers */,
 				5632964C1E37EE47002D1F07 /* SCServiceNode.h in Headers */,
 				563296541E37EFD6002D1F07 /* SCServiceGraph.h in Headers */,
+				54AC44ED1E6E16060051504A /* SCGpkgAuditTable.h in Headers */,
 				56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */,
 				563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */,
 				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
@@ -1865,6 +1904,7 @@
 				563F42841DB06318005022A7 /* Commands.h in Headers */,
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
+				54AC44DC1E6DE2890051504A /* SCSyncableStore.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2085,6 +2125,7 @@
 				5649B4D31BE28079009947EF /* simple.json in Resources */,
 				5649B4C61BE28079009947EF /* gz_2010_us_050_00_500k.json in Resources */,
 				564B19631BE30C18000C7BAE /* gz_2010_us_500_11_20m.json in Resources */,
+				54AC44E51E6DE2F30051504A /* haiti4mobile.gpkg in Resources */,
 				5649B4D61BE28079009947EF /* tests.scfg in Resources */,
 				5649B4C41BE28079009947EF /* all.geojson in Resources */,
 			);
@@ -2263,6 +2304,7 @@
 				5649B58B1BE280D6009947EF /* SCCompoundPredicate.m in Sources */,
 				5649B5D71BE280D6009947EF /* SCLocalWebApp.m in Sources */,
 				5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */,
+				54AC44EE1E6E16060051504A /* SCGpkgAuditTable.m in Sources */,
 				561685ED1C73DB3300FC7FA6 /* SCGpkgSpatialRefSys.m in Sources */,
 				56FCFBCC1D6F6E16008A0B8C /* SCRemoteConfig.m in Sources */,
 				561685F51C74E3D800FC7FA6 /* SCGpkgExtension.m in Sources */,
@@ -2301,6 +2343,7 @@
 				56F437641CA0955200EA1344 /* FMDatabasePool.m in Sources */,
 				565CD2911D23115D00A3DB5C /* WFSDataStore.m in Sources */,
 				56FCFBD41D6FD6D5008A0B8C /* SCHttpUtils.m in Sources */,
+				54AC44E91E6E14370051504A /* SCGpkgAuditedTables.m in Sources */,
 				560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */,
 				56554E691D54EA03000D77E7 /* SCFormStore.m in Sources */,
 				5645C4EB1BED796D006E4128 /* SCPolygon+GPKG.m in Sources */,
@@ -2334,6 +2377,7 @@
 				5649B4CA1BE28079009947EF /* SCGeoJSONParserTest.m in Sources */,
 				5649B4D51BE28079009947EF /* SpatialConnectHelper.m in Sources */,
 				5649B4CC1BE28079009947EF /* SCGeometryHelper.m in Sources */,
+				54AC44E31E6DE2B90051504A /* SCSyncableStoreTest.m in Sources */,
 				5649B4CF1BE28079009947EF /* SCPointTest.m in Sources */,
 				5649B4CD1BE28079009947EF /* SCMultiPointTest.m in Sources */,
 				560E31C41BF1212B009DA680 /* SCGeopackageHelper.m in Sources */,

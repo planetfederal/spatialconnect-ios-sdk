@@ -26,6 +26,7 @@
 #import "SCKeyTuple.h"
 #import "SCPoint.h"
 #import "SCTileOverlay.h"
+#import "SpatialConnect.h"
 
 NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
@@ -33,6 +34,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 @property(readwrite, nonatomic, strong) NSString *uri;
 @property(readwrite, nonatomic, strong) NSString *filepath;
 @property(readwrite, nonatomic, strong) SCGeopackage *gpkg;
+@property(readwrite, nonatomic, strong) RACSubject *storeEditedSubject;
 @end
 
 @implementation GeopackageStore
@@ -46,6 +48,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 @synthesize storeType = _storeType;
 @synthesize storeVersion = _storeVersion;
+@synthesize storeEdited = _storeEdited;
 
 - (id)initWithStoreConfig:(SCStoreConfig *)config {
   self = [super initWithStoreConfig:config];
@@ -58,7 +61,8 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   self.uri = config.uri;
   _storeType = TYPE;
   _storeVersion = VERSION;
-
+  self.storeEditedSubject = [RACSubject new];
+  self.storeEdited = [self.storeEditedSubject publish];
   return self;
 }
 
@@ -100,18 +104,18 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     self.status = SC_DATASTORE_RUNNING;
     return [RACSignal empty];
   }
-  // The Database's name on disk is its store ID. This is to guaruntee
-  // uniqueness
-  // when being stored on disk.
   NSString *path = [self path];
-  BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-
-  if (b) {
-    self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
-    self.status = SC_DATASTORE_RUNNING;
-    return [RACSignal empty];
-  } else if ([self.uri.lowercaseString containsString:@"http"]) {
-
+  if (self.uri != nil && [self.uri.lowercaseString containsString:@"http"]) {
+    // The Database's name on disk is its store ID. This is to guaruntee
+    // uniqueness
+    // when being stored on disk.
+    BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    
+    if (b) {
+      self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
+      self.status = SC_DATASTORE_RUNNING;
+      return [RACSignal empty];
+    }
     return
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[[super download:self.uri to:path]
@@ -130,11 +134,34 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     // initialize empty geopackage
     self.gpkg = [[SCGeopackage alloc] initEmptyGeopackageWithFilename:path];
     return [RACSignal empty];
+  } else {
+    NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
+    NSString *documentsPath =
+    [SCFileUtils filePathFromDocumentsDirectory:self.uri];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+      self.filepath = bundlePath;
+    } else if ([[NSFileManager defaultManager]
+                fileExistsAtPath:documentsPath]) {
+      self.filepath = documentsPath;
+    }
+    return
+    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+      if (self.filepath != nil &&
+          [[NSFileManager defaultManager] fileExistsAtPath:self.filepath]) {
+        self.gpkg = [[SCGeopackage alloc] initWithFilename:self.filepath];
+        self.status = SC_DATASTORE_RUNNING;
+        [subscriber sendCompleted];
+      } else {
+        NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
+                                           code:SC_GEOPACKAGE_FILENOTFOUND
+                                       userInfo:nil];
+        self.status = SC_DATASTORE_STOPPED;
+        [subscriber sendError:err];
+      }
+      return nil;
+    }];
   }
-  NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
-                                     code:SC_GEOPACKAGE_FILENOTFOUND
-                                 userInfo:nil];
-  return [RACSignal error:err];
+  return [RACSignal empty];
 }
 
 - (void)stop {
@@ -201,7 +228,14 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   }
   SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
   if (fs) {
-    return [fs create:feature];
+//    return [[[fs create:feature] materialize] flattenMap:^RACSignal*(id x) {
+//      return [self upload:feature];
+//    }];
+    RACSignal *create = [fs create:feature];
+    [create subscribeCompleted:^{
+      [self.storeEditedSubject sendNext:@(YES)];
+    }];
+    return create;
   } else {
     NSDictionary *userInfo = @{
       NSLocalizedDescriptionKey :
@@ -247,6 +281,44 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 - (SCPolygon *)coverage:(NSString *)layer {
   SCGpkgTileSource *ts = [self.gpkg tileSource:layer];
   return [ts coveragePolygon];
+}
+
+- (RACSignal *)upload:(SCSpatialFeature *)feature {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  if (sc.backendService.status == SC_SERVICE_RUNNING) {
+    SCMessage *msg = [[SCMessage alloc] init];
+    msg.payload = [[feature JSONDict] JSONString];
+    return [[[sc.backendService publishReplyTo:msg onTopic:[self syncChannel]] filter:^BOOL(SCMessage *m) {
+      //TODO check response message to see if feature was successfully uploaded
+      return @(YES);
+    }] flattenMap:^RACSignal*(id x) {
+      return [self pushComplete:feature];
+    }];
+  } else {
+    return [RACSignal empty];
+  }
+}
+
+//TODO get all unsynced features based on upload flag
+- (RACSignal *)unSynced {
+  return [self.gpkg unSynced];
+}
+
+//TODO get all unsynced features based on upload flag
+- (RACSignal *)sync {
+  return [self.unSynced flattenMap:^RACSignal *(SCSpatialFeature *feature) {
+    return [self upload:feature];
+  }];
+}
+
+//TODO mark as uploaded
+- (RACSignal *)pushComplete:(SCSpatialFeature *)feature {
+  SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
+  return [fs pushComplete:feature];
+}
+
+- (NSString *)syncChannel {
+  return [NSString stringWithFormat:@"/store/%@", self.storeId];
 }
 
 #pragma mark -

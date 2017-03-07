@@ -116,31 +116,38 @@
   return [formIds objectForKey:layer];
 }
 
-- (RACSignal *)create:(SCSpatialFeature *)feature {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[super create:feature] materialize] filter:^BOOL(RACEvent *evt) {
-    return evt.eventType == RACEventTypeCompleted;
-  }] flattenMap:^RACStream *(id value) {
-    if (sc.backendService.status == SC_SERVICE_RUNNING) {
-      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-      SCMessage *msg = [[SCMessage alloc] init];
-      NSNumber *formId = [formIds objectForKey:feature.layerId];
-      NSDictionary *submission =
-      @{ @"form_id" : formId,
-         @"feature" : feature.JSONDict };
-      msg.payload = submission.JSONString;
-      [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
-    }
-    return [RACSignal empty];
-  }];
-}
-
 - (RACSignal *)update:(SCSpatialFeature *)feature {
   return nil;
 }
 
 - (RACSignal *) delete:(SCKeyTuple *)tuple {
   return nil;
+}
+
+- (RACSignal *)push:(SCSpatialFeature *)feature {
+  SpatialConnect *sc = [SpatialConnect sharedInstance];
+  if (sc.backendService.status == SC_SERVICE_RUNNING) {
+    feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
+    SCMessage *msg = [[SCMessage alloc] init];
+    NSNumber *formId = [formIds objectForKey:feature.layerId];
+    NSDictionary *submission =
+    @{ @"form_id" : formId,
+       @"feature" : feature.JSONDict };
+    msg.payload = submission.JSONString;
+    [[[sc.backendService publishReplyTo:msg onTopic:[self syncChannel]] filter:^BOOL(SCMessage *m) {
+      //check response message to see if feature was successfully uploaded
+      return YES;
+    }] flattenMap:^RACSignal*(id x) {
+      return [self pushComplete:feature];
+    }];
+    return [RACSignal empty];
+  } else {
+    return [RACSignal empty];
+  }
+}
+
+- (NSString *)syncChannel {
+  return @"/store/form";
 }
 
 @end
