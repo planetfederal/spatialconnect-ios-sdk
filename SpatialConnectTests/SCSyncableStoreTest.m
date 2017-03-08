@@ -31,13 +31,18 @@
 - (void)testFormStoreFlag {
   XCTestExpectation *expect =
   [self expectationWithDescription:@"Flag column inserted"];
-  [[SpatialConnectHelper loadGeopackageStore:[SpatialConnect sharedInstance]]
+  [[SpatialConnectHelper loadFormStore:[SpatialConnect sharedInstance]]
    subscribeNext:^(SCDataStore *ds) {
-     GeopackageStore *gs = (GeopackageStore *)ds;
-     SCGpkgFeatureSource *pointFeatures = [gs.gpkg featureSource:@"point_features"];
-     SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[ @(80), @(30) ]];
-     [[pointFeatures create:p] subscribeCompleted:^{
-       XCTAssertNotNil(p.identifier);
+     id<SCSpatialStore> s = (id<SCSpatialStore>)ds;
+     NSError *jsonError;
+     NSData *objectData = [@"{\"type\":\"Feature\",\"properties\":{\"street\":\"test\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[-104.4140625,42.032974332441405]}}" dataUsingEncoding:NSUTF8StringEncoding];
+     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                          options:NSJSONReadingMutableContainers
+                                                            error:&jsonError];
+     SCSpatialFeature *feat = [SCGeoJSON parseDict:json];
+     feat.layerId = @"potholes";
+     [[s create:feat] subscribeCompleted:^{
+       XCTAssertNotNil(feat.identifier);
        [expect fulfill];
      }];
    }

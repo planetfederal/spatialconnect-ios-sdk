@@ -69,6 +69,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   dataService = [deps objectForKey:[SCDataService serviceId]];
   DDLogInfo(@"Starting Backend Service...");
   [self listenForNetworkConnection];
+  [self listenForSyncEvents];
   //[self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
   return [super start:nil];
@@ -294,6 +295,24 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       [connectedToBroker sendNext:@(NO)];
       [self loadCachedConfig];
     }
+  }];
+}
+
+- (void)listenForSyncEvents {
+  RACSignal *connected = [connectedToBroker filter:^BOOL(NSNumber *v) {
+    return v.boolValue;
+  }];
+  
+  RACSignal *storeEditsConnected = [[[[dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:@(NO)]
+                                      map:^RACSignal *(SCDataStore *ds) {
+    id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+    RACMulticastConnection *rmcc = [ss storeEdited];
+    [rmcc connect];
+    return rmcc.signal;
+  }] flatten] combineLatestWith:connected];
+  
+  [[RACSignal merge:@[connected, storeEditsConnected]] subscribeNext:^(id x) {
+    [dataService syncStores];
   }];
 }
 

@@ -228,14 +228,15 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   }
   SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
   if (fs) {
-//    return [[[fs create:feature] materialize] flattenMap:^RACSignal*(id x) {
-//      return [self upload:feature];
-//    }];
-    RACSignal *create = [fs create:feature];
-    [create subscribeCompleted:^{
+    return [[[[fs create:feature] materialize] filter:^BOOL(RACEvent *evt) {
+      if (evt.eventType == RACEventTypeCompleted) {
+        return YES;
+      } else {
+        return NO;
+      }
+    }] doNext:^(id x) {
       [self.storeEditedSubject sendNext:@(YES)];
     }];
-    return create;
   } else {
     NSDictionary *userInfo = @{
       NSLocalizedDescriptionKey :

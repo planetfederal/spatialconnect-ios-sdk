@@ -21,8 +21,6 @@
 #import "SCGpkgContent.h"
 #import "SCGpkgContentsTable.h"
 #import "SCGpkgExtensionsTable.h"
-#import "SCGpkgAuditedTables.h"
-#import "SCGpkgAuditTable.h"
 #import "SCGpkgTileSource.h"
 
 @implementation SCGeopackage
@@ -181,6 +179,37 @@
       } else {
         [db rollback];
       }
+      //add audit table
+      [self addAuditTable:name withTypes:types];
+    }
+  }];
+}
+
+-(void)addAuditTable:(NSString *)name withTypes:(NSDictionary *)types {
+  [self.pool inDatabase:^(FMDatabase *db) {
+    [db beginTransaction];
+    NSString *auditTableName = [NSString stringWithFormat:@"%@_audit", name];
+    NSMutableString *createSql = [NSMutableString
+                                  stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
+                                  @"PRIMARY KEY AUTOINCREMENT",
+                                  auditTableName];
+    
+    [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
+                                               BOOL *stop) {
+      NSString *key = [k lowercaseString];
+      NSString *type = [t lowercaseString];
+      if (![key isEqualToString:@"geom"]) {
+        [createSql appendFormat:@",%@ %@", key, type];
+      }
+    }];
+    [createSql appendFormat:@",sent DATETIME"];
+    [createSql appendFormat:@",received DATETIME"];
+    [createSql appendString:@")"];
+    BOOL success = [db executeStatements:createSql];
+    if (!success) {
+      DDLogError(@"Error:%@", db.lastError.description);
+      [db rollback];
+      return;
     }
   }];
 }

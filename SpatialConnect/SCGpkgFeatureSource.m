@@ -389,7 +389,7 @@
       NSMutableString *createSql = [NSMutableString stringWithFormat:
                                     @"UPDATE %@ SET synced=1 WHERE %@ = ?", self.auditName, self.pkColName];
       NSError *err;
-      BOOL success = [db executeUpdate:createSql values:@[ @([f.identifier longLongValue]) ] error:&err];
+      BOOL success = [db executeUpdate:createSql values:@[@([f.identifier longLongValue])] error:&err];
       if (success) {
         [db commit];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
