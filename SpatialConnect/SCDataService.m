@@ -532,10 +532,11 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
 }
 
 - (RACSignal *)syncStores {
-  return [[self storesByProtocol:@protocol(SCSyncableStore)]
-   flattenMap:^RACSignal *(id<SCSyncableStore> store) {
-     return [store sync];
-   }];
+  RACSignal *syncableStores = [self storesByProtocol:@protocol(SCSyncableStore) onlyRunning:NO];
+  return [syncableStores flattenMap:^RACSignal *(id<SCSyncableStore> store) {
+    id<SCSyncableStore> s = (id<SCSyncableStore>)store;
+    return [s sync];
+  }];
 }
 
 + (NSString *)serviceId {

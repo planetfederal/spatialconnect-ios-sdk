@@ -124,7 +124,7 @@
   return nil;
 }
 
-- (RACSignal *)push:(SCSpatialFeature *)feature {
+- (RACSignal *)send:(SCSpatialFeature *)feature {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   if (sc.backendService.status == SC_SERVICE_RUNNING) {
     feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
@@ -138,9 +138,9 @@
       //check response message to see if feature was successfully uploaded
       return YES;
     }] flattenMap:^RACSignal*(id x) {
-      return [self pushComplete:feature];
+      return [self sendComplete:feature];
     }];
-    return [RACSignal empty];
+    return [self sendComplete:feature];
   } else {
     return [RACSignal empty];
   }

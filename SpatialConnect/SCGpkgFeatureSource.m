@@ -373,8 +373,8 @@
   return f;
 }
 
-- (RACSignal *)unSynced {
-  NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE synced = 0", self.auditName];
+- (RACSignal *)unSent {
+  NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE sent IS NULL", self.auditName];
   return
   [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
     [self query:sql toSubscriber:subscriber];
@@ -382,12 +382,12 @@
   }];
 }
 
-- (RACSignal *)pushComplete:(SCSpatialFeature *)f {
+- (RACSignal *)sendComplete:(SCSpatialFeature *)f {
   return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
     [self.pool inDatabase:^(FMDatabase *db) {
       [db beginTransaction];
       NSMutableString *createSql = [NSMutableString stringWithFormat:
-                                    @"UPDATE %@ SET synced=1 WHERE %@ = ?", self.auditName, self.pkColName];
+                                    @"UPDATE %@ SET synced=datetime() WHERE %@ = ?", self.auditName, self.pkColName];
       NSError *err;
       BOOL success = [db executeUpdate:createSql values:@[@([f.identifier longLongValue])] error:&err];
       if (success) {

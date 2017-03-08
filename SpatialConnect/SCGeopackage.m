@@ -88,10 +88,10 @@
       }] toArray];
 }
 
-- (RACSignal *)unSynced {
+- (RACSignal *)unSent {
   return [[[[self featureContents] rac_sequence] signal]
           flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
-            return [fs unSynced];
+            return [fs unSent];
           }];
 }
 
