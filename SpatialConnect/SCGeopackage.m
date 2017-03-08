@@ -194,7 +194,11 @@
                                   @"PRIMARY KEY AUTOINCREMENT",
                                   auditTableName];
     
-    [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
+    NSMutableDictionary *auditTypes = [types mutableCopy];
+    [auditTypes setObject:@"DATETIME" forKey:@"sent"];
+    [auditTypes setObject:@"DATETIME" forKey:@"received"];
+    
+    [auditTypes enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
                                                BOOL *stop) {
       NSString *key = [k lowercaseString];
       NSString *type = [t lowercaseString];
@@ -202,8 +206,6 @@
         [createSql appendFormat:@",%@ %@", key, type];
       }
     }];
-    [createSql appendFormat:@",sent DATETIME"];
-    [createSql appendFormat:@",received DATETIME"];
     [createSql appendString:@")"];
     BOOL success = [db executeStatements:createSql];
     if (!success) {
@@ -211,6 +213,39 @@
       [db rollback];
       return;
     }
+    NSString *addColSql =
+    [NSString stringWithFormat:@"SELECT "
+     @"AddGeometryColumn('%@','geom','"
+     @"Geometry',4326)",
+     auditTableName];
+    BOOL geomAdded = [db executeStatements:addColSql];
+    if (!geomAdded) {
+      DDLogError(@"Error:%@", db.lastError.description);
+      [db rollback];
+      return;
+    }
+    NSString *triggerName = [NSString stringWithFormat:@"%@_insert", auditTableName];
+    NSString *cols = [[auditTypes allKeys] componentsJoinedByString:@","];
+    NSString *vals = [[[[[[auditTypes allKeys] rac_sequence] signal]
+                        map:^NSString *(NSString *value) {
+                          if ([value isEqualToString:@"sent"] ||
+                              [value isEqualToString:@"received"]) {
+                            return @"NULL";
+                          }
+                          return [NSString stringWithFormat:@"NEW.'%@'", value];
+                        }] toArray] componentsJoinedByString:@","];
+
+    NSMutableString *triggerSql = [NSMutableString stringWithFormat:
+                            @"CREATE TRIGGER %@ AFTER INSERT ON %@ BEGIN "
+                            @"INSERT INTO %@ (id, geom, %@) VALUES (NEW.id, NEW.geom, %@); END", triggerName, name, auditTableName, cols, vals];
+    
+    success = [db executeStatements:triggerSql];
+    if (success) {
+      [db commit];
+    } else {
+      [db rollback];
+    }
+    
   }];
 }
 
