@@ -310,29 +310,19 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     RACMulticastConnection *rmcc = [ss storeEdited];
     [rmcc connect];
     return rmcc.signal;
-  }] combineLatestWith:connected] filter:^BOOL(RACTuple *t) {
-    return [[t second] boolValue];
-  }] subscribeNext:^(RACTuple *t) {
+  }] combineLatestWith:connected] flattenMap:^RACSignal *(RACTuple *t) {
     SCSpatialFeature *f = [t first];
     SCDataStore *ds = [dataService storeByIdentifier:[f storeId]];
     id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
-    [[ss sync] subscribeNext:^(id x) {
-      NSLog(@"sync next");
-    } error:^(NSError *error) {
-      NSLog(@"sync error");
-    } completed:^{
-      NSLog(@"sync completed");
-    }];
+    return [ss sync];
+  }] subscribeCompleted:^{
+    NSLog(@"store sync complete");
   }];
   
-  [connected subscribeNext:^(id x) {
-    [[dataService syncStores] subscribeNext:^(id x) {
-      NSLog(@"sync next");
-    } error:^(NSError *error) {
-      NSLog(@"sync error");
-    } completed:^{
-      NSLog(@"sync completed");
-    }];
+  [[connected flattenMap:^RACSignal *(id value) {
+    return [dataService syncStores];
+  }] subscribeCompleted:^{
+    NSLog(@"syncStores complete");
   }];
 }
 
