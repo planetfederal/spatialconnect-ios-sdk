@@ -387,7 +387,7 @@
     [self.pool inDatabase:^(FMDatabase *db) {
       [db beginTransaction];
       NSMutableString *createSql = [NSMutableString stringWithFormat:
-                                    @"UPDATE %@ SET synced=datetime() WHERE %@ = ?", self.auditName, self.pkColName];
+                                    @"UPDATE %@ SET sent=datetime() WHERE %@ = ?", self.auditName, self.pkColName];
       NSError *err;
       BOOL success = [db executeUpdate:createSql values:@[@([f.identifier longLongValue])] error:&err];
       if (success) {

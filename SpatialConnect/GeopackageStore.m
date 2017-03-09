@@ -235,7 +235,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
         return NO;
       }
     }] doNext:^(id x) {
-      [self.storeEditedSubject sendNext:@(YES)];
+      [self.storeEditedSubject sendNext:feature];
     }];
   } else {
     NSDictionary *userInfo = @{
@@ -302,19 +302,19 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   }
 }
 
-- (RACSignal *)unSent {
+- (NSArray *)unSent {
   return [self.gpkg unSent];
 }
 
 - (RACSignal *)sync {
-  return [self.unSent flattenMap:^RACSignal *(SCSpatialFeature *feature) {
+  return [[[self.unSent rac_sequence] signal] flattenMap:^RACSignal *(SCSpatialFeature *feature) {
     return [self send:feature];
   }];
 }
 
 - (RACSignal *)sendComplete:(SCSpatialFeature *)feature {
   SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
-  return [[fs sendComplete:feature] materialize];
+  return [fs sendComplete:feature];
 }
 
 - (NSString *)syncChannel {

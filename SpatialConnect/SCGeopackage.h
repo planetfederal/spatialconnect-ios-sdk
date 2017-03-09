@@ -74,7 +74,7 @@
 
 - (RACSignal *)query:(SCQueryFilter *)filter;
 
-- (RACSignal *)unSent;
+- (NSArray *)unSent;
 
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types;
 - (void)removeFeatureSource:(NSString *)name;

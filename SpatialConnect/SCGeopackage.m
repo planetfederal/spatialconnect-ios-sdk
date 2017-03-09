@@ -88,11 +88,12 @@
       }] toArray];
 }
 
-- (RACSignal *)unSent {
-  return [[[[self featureContents] rac_sequence] signal]
+- (NSArray *)unSent {
+  NSArray *fs = [[[[[self featureContents] rac_sequence] signal]
           flattenMap:^RACStream *(SCGpkgFeatureSource *fs) {
             return [fs unSent];
-          }];
+          }] toArray];
+  return fs;
 }
 
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types {
@@ -174,80 +175,73 @@
                         @"('%@','features','%@','%@',0,0,0,0,4326)",
                         name, name, name];
       success = [db executeStatements:addGpkgContentsSql];
+      if (!success) {
+        DDLogError(@"Error:%@", db.lastError.description);
+        [db rollback];
+        return;
+      }
+      //add audit table
+      NSString *auditTableName = [NSString stringWithFormat:@"%@_audit", name];
+      NSMutableString *createAuditSql = [NSMutableString
+                                    stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
+                                    @"PRIMARY KEY AUTOINCREMENT",
+                                    auditTableName];
+      
+      NSMutableDictionary *auditTypes = [types mutableCopy];
+      [auditTypes setObject:@"DATETIME" forKey:@"sent"];
+      [auditTypes setObject:@"DATETIME" forKey:@"received"];
+      
+      [auditTypes enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
+                                                      BOOL *stop) {
+        NSString *key = [k lowercaseString];
+        NSString *type = [t lowercaseString];
+        if (![key isEqualToString:@"geom"]) {
+          [createAuditSql appendFormat:@",%@ %@", key, type];
+        }
+      }];
+      [createAuditSql appendString:@")"];
+      success = [db executeStatements:createAuditSql];
+      if (!success) {
+        DDLogError(@"Error:%@", db.lastError.description);
+        [db rollback];
+        return;
+      }
+      NSString *addGeomSql =
+      [NSString stringWithFormat:@"SELECT "
+       @"AddGeometryColumn('%@','geom','"
+       @"Geometry',4326)",
+       auditTableName];
+      success = [db executeStatements:addGeomSql];
+      if (!success) {
+        DDLogError(@"Error:%@", db.lastError.description);
+        [db rollback];
+        return;
+      }
+      NSString *triggerName = [NSString stringWithFormat:@"%@_insert", auditTableName];
+      NSString *cols = [[auditTypes allKeys] componentsJoinedByString:@","];
+      NSString *vals = [[[[[[auditTypes allKeys] rac_sequence] signal]
+                          map:^NSString *(NSString *value) {
+                            if ([value isEqualToString:@"sent"] ||
+                                [value isEqualToString:@"received"]) {
+                              return @"NULL";
+                            }
+                            return [NSString stringWithFormat:@"NEW.'%@'", value];
+                          }] toArray] componentsJoinedByString:@","];
+      
+      NSMutableString *triggerSql = [NSMutableString stringWithFormat:
+                                     @"CREATE TRIGGER %@ AFTER INSERT ON %@ BEGIN "
+                                     @"INSERT INTO %@ (id, geom, %@) VALUES (NEW.id, NEW.geom, %@); END", triggerName, name, auditTableName, cols, vals];
+      
+      success = [db executeStatements:triggerSql];
       if (success) {
         [db commit];
       } else {
         [db rollback];
       }
-      //add audit table
-      [self addAuditTable:name withTypes:types];
     }
   }];
 }
 
--(void)addAuditTable:(NSString *)name withTypes:(NSDictionary *)types {
-  [self.pool inDatabase:^(FMDatabase *db) {
-    [db beginTransaction];
-    NSString *auditTableName = [NSString stringWithFormat:@"%@_audit", name];
-    NSMutableString *createSql = [NSMutableString
-                                  stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
-                                  @"PRIMARY KEY AUTOINCREMENT",
-                                  auditTableName];
-    
-    NSMutableDictionary *auditTypes = [types mutableCopy];
-    [auditTypes setObject:@"DATETIME" forKey:@"sent"];
-    [auditTypes setObject:@"DATETIME" forKey:@"received"];
-    
-    [auditTypes enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
-                                               BOOL *stop) {
-      NSString *key = [k lowercaseString];
-      NSString *type = [t lowercaseString];
-      if (![key isEqualToString:@"geom"]) {
-        [createSql appendFormat:@",%@ %@", key, type];
-      }
-    }];
-    [createSql appendString:@")"];
-    BOOL success = [db executeStatements:createSql];
-    if (!success) {
-      DDLogError(@"Error:%@", db.lastError.description);
-      [db rollback];
-      return;
-    }
-    NSString *addColSql =
-    [NSString stringWithFormat:@"SELECT "
-     @"AddGeometryColumn('%@','geom','"
-     @"Geometry',4326)",
-     auditTableName];
-    BOOL geomAdded = [db executeStatements:addColSql];
-    if (!geomAdded) {
-      DDLogError(@"Error:%@", db.lastError.description);
-      [db rollback];
-      return;
-    }
-    NSString *triggerName = [NSString stringWithFormat:@"%@_insert", auditTableName];
-    NSString *cols = [[auditTypes allKeys] componentsJoinedByString:@","];
-    NSString *vals = [[[[[[auditTypes allKeys] rac_sequence] signal]
-                        map:^NSString *(NSString *value) {
-                          if ([value isEqualToString:@"sent"] ||
-                              [value isEqualToString:@"received"]) {
-                            return @"NULL";
-                          }
-                          return [NSString stringWithFormat:@"NEW.'%@'", value];
-                        }] toArray] componentsJoinedByString:@","];
-
-    NSMutableString *triggerSql = [NSMutableString stringWithFormat:
-                            @"CREATE TRIGGER %@ AFTER INSERT ON %@ BEGIN "
-                            @"INSERT INTO %@ (id, geom, %@) VALUES (NEW.id, NEW.geom, %@); END", triggerName, name, auditTableName, cols, vals];
-    
-    success = [db executeStatements:triggerSql];
-    if (success) {
-      [db commit];
-    } else {
-      [db rollback];
-    }
-    
-  }];
-}
 
 - (void)removeFeatureSource:(NSString *)name {
   [self.pool inDatabase:^(FMDatabase *db) {

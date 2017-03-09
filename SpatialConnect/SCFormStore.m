@@ -134,6 +134,7 @@
     @{ @"form_id" : formId,
        @"feature" : feature.JSONDict };
     msg.payload = submission.JSONString;
+//    [sc.backendService publishExactlyOnce:msg onTopic:[self syncChannel]];
     [[[sc.backendService publishReplyTo:msg onTopic:[self syncChannel]] filter:^BOOL(SCMessage *m) {
       //check response message to see if feature was successfully uploaded
       return YES;

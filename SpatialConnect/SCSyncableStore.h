@@ -17,7 +17,7 @@
 
 - (RACSignal *)send:(SCSpatialFeature *)feature;
 - (RACSignal *)sendComplete:(SCSpatialFeature *)feature;
-- (RACSignal *)unSent;
+- (NSArray *)unSent;
 - (RACSignal *)sync;
 - (NSString *)syncChannel;
 
