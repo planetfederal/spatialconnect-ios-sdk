@@ -16,9 +16,9 @@
 @property(nonatomic) RACMulticastConnection *storeEdited;
 
 - (RACSignal *)send:(SCSpatialFeature *)feature;
-- (RACSignal *)sendComplete:(SCSpatialFeature *)feature;
-- (NSArray *)unSent;
-- (RACSignal *)sync;
+- (RACSignal *)updateAuditTable:(SCSpatialFeature *)feature;
+- (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f;
+- (RACSignal *)unSent;
 - (NSString *)syncChannel;
 
 @end

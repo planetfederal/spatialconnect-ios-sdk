@@ -124,27 +124,13 @@
   return nil;
 }
 
-- (RACSignal *)send:(SCSpatialFeature *)feature {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  if (sc.backendService.status == SC_SERVICE_RUNNING) {
-    feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-    SCMessage *msg = [[SCMessage alloc] init];
-    NSNumber *formId = [formIds objectForKey:feature.layerId];
-    NSDictionary *submission =
-    @{ @"form_id" : formId,
-       @"feature" : feature.JSONDict };
-    msg.payload = submission.JSONString;
-//    [sc.backendService publishExactlyOnce:msg onTopic:[self syncChannel]];
-    [[[sc.backendService publishReplyTo:msg onTopic:[self syncChannel]] filter:^BOOL(SCMessage *m) {
-      //check response message to see if feature was successfully uploaded
-      return YES;
-    }] flattenMap:^RACSignal*(id x) {
-      return [self sendComplete:feature];
-    }];
-    return [self sendComplete:feature];
-  } else {
-    return [RACSignal empty];
-  }
+- (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
+  NSNumber *formId = [formIds objectForKey:f.layerId];
+  NSDictionary *payload = @{
+    @"form_id" : formId,
+    @"feature" : f.JSONDict
+  };
+  return payload;
 }
 
 - (NSString *)syncChannel {

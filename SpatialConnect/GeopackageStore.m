@@ -284,37 +284,21 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [ts coveragePolygon];
 }
 
-- (RACSignal *)send:(SCSpatialFeature *)feature {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  if (sc.backendService.status == SC_SERVICE_RUNNING) {
-    SCMessage *msg = [[SCMessage alloc] init];
-    msg.payload = [[feature JSONDict] JSONString];
-    [[[sc.backendService publishReplyTo:msg onTopic:[self syncChannel]] filter:^BOOL(SCMessage *m) {
-      //TODO check response message to see if feature was successfully uploaded
-      return YES;
-    }] flattenMap:^RACSignal*(id x) {
-      return [self sendComplete:feature];
-    }];
-    //temporaily assume message has been sent
-    return [self sendComplete:feature];
-  } else {
-    return [RACSignal empty];
-  }
-}
-
-- (NSArray *)unSent {
-  return [self.gpkg unSent];
-}
-
-- (RACSignal *)sync {
-  return [[[self.unSent rac_sequence] signal] flattenMap:^RACSignal *(SCSpatialFeature *feature) {
-    return [self send:feature];
+- (RACSignal *)unSent {
+  RACSignal *unSentFeatures = [[[self.gpkg unSent] rac_sequence] signal];
+  return [unSentFeatures map:^SCSpatialFeature*(SCSpatialFeature *f) {
+    f.storeId = self.storeId;
+    return f;
   }];
 }
 
-- (RACSignal *)sendComplete:(SCSpatialFeature *)feature {
+- (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
+  return [f JSONDict];
+}
+
+- (RACSignal *)updateAuditTable:(SCSpatialFeature *)feature {
   SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
-  return [fs sendComplete:feature];
+  return [fs updateAuditTable:feature];
 }
 
 - (NSString *)syncChannel {

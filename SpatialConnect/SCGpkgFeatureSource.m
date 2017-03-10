@@ -382,7 +382,7 @@
   }];
 }
 
-- (RACSignal *)sendComplete:(SCSpatialFeature *)f {
+- (RACSignal *)updateAuditTable:(SCSpatialFeature *)f {
   return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
     [self.pool inDatabase:^(FMDatabase *db) {
       [db beginTransaction];

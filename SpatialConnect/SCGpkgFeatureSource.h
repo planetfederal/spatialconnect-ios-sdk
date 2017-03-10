@@ -49,6 +49,6 @@ typedef NS_ENUM(NSInteger, SCGpkgColType) {
 - (RACSignal *)update:(SCSpatialFeature *)f;
 - (RACSignal *)create:(SCSpatialFeature *)f;
 - (RACSignal *)unSent;
-- (RACSignal *)sendComplete:(SCSpatialFeature *)f;
+- (RACSignal *)updateAuditTable:(SCSpatialFeature *)f;
 
 @end

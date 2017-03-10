@@ -305,7 +305,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   
   RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:NO];
 
-  [[[[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
+  RACSignal *storeEditSync = [[[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
     id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
     RACMulticastConnection *rmcc = [ss storeEdited];
     [rmcc connect];
@@ -313,17 +313,44 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }] combineLatestWith:connected] flattenMap:^RACSignal *(RACTuple *t) {
     SCSpatialFeature *f = [t first];
     SCDataStore *ds = [dataService storeByIdentifier:[f storeId]];
-    id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
-    return [ss sync];
-  }] subscribeCompleted:^{
-    NSLog(@"store sync complete");
+    return [self syncStore:ds];
   }];
   
-  [[connected flattenMap:^RACSignal *(id value) {
-    return [dataService syncStores];
-  }] subscribeCompleted:^{
+  RACSignal *onlineSync = [connected flattenMap:^RACSignal *(id value) {
+    return [self syncStores];
+  }];
+                           
+  [[RACSignal merge:@[storeEditSync, onlineSync]] subscribeCompleted:^{
     NSLog(@"syncStores complete");
   }];
+}
+
+- (RACSignal *)syncStores {
+  RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:NO];
+  return [syncableStores flattenMap:^RACSignal *(id<SCSyncableStore> store) {
+    return [self syncStore:store];
+  }];
+}
+
+- (RACSignal *)syncStore:(SCDataStore *)ds {
+  id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+  return [ss.unSent flattenMap:^RACSignal *(SCSpatialFeature *f) {
+    return [self send:f];
+  }];
+}
+
+- (RACSignal *)send:(SCSpatialFeature *)feature {
+  SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
+  id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
+  SCMessage *msg = [[SCMessage alloc] init];
+  msg.payload = [[ss generateSendPayload:feature] JSONString];
+  [[self publishReplyTo:msg onTopic:[ss syncChannel]] filter:^BOOL(SCMessage *m) {
+    //TODO check response message to see if feature was successfully uploaded
+    return YES;
+  }];
+  //temporaily assume message has been sent
+  return [ss updateAuditTable:feature];
+  //return [RACSignal empty];
 }
 
 /**
