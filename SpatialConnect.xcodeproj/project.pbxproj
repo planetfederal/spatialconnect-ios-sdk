@@ -278,8 +278,6 @@
 		565CD2961D2344C300A3DB5C /* XMLDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 565CD2941D2344C300A3DB5C /* XMLDictionary.m */; };
 		565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 565E9ECC1DB7C49F00AEAB60 /* SCCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565E9ECF1DB7C49F00AEAB60 /* SCCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 565E9ECD1DB7C49F00AEAB60 /* SCCache.m */; };
-		5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 566617581CE14FA200874119 /* SCDefaultStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 566617591CE14FA200874119 /* SCDefaultStore.m */; };
 		566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBC91D6F6E16008A0B8C /* SCRemoteConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 565CD2931D2344C300A3DB5C /* XMLDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -744,8 +742,6 @@
 		565CD2941D2344C300A3DB5C /* XMLDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLDictionary.m; sourceTree = "<group>"; };
 		565E9ECC1DB7C49F00AEAB60 /* SCCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCCache.h; sourceTree = "<group>"; };
 		565E9ECD1DB7C49F00AEAB60 /* SCCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCCache.m; sourceTree = "<group>"; };
-		566617581CE14FA200874119 /* SCDefaultStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCDefaultStore.h; sourceTree = "<group>"; };
-		566617591CE14FA200874119 /* SCDefaultStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCDefaultStore.m; sourceTree = "<group>"; };
 		5667E1721D58EF490044F195 /* SpatialConnectFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialConnectFramework.h; sourceTree = "<group>"; };
 		566F5F971D9080B3001C6692 /* SpatialConnectIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpatialConnectIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SpatialConnectTests copy-Info.plist"; path = "/Users/wesr/Development/boundless/SC/spatialconnect-ios-sdk/SpatialConnectTests copy-Info.plist"; sourceTree = "<absolute>"; };
@@ -1274,7 +1270,6 @@
 		563BEC651BE528F400778EDA /* Stores */ = {
 			isa = PBXGroup;
 			children = (
-				56DBE25A1DDF5824003C58ED /* Default */,
 				563BEC541BE500D500778EDA /* GeoJSON */,
 				563BEC671BE5290A00778EDA /* Geopackage */,
 				56554E701D54EA0F000D77E7 /* LocationStore */,
@@ -1663,15 +1658,6 @@
 			name = BackendService;
 			sourceTree = "<group>";
 		};
-		56DBE25A1DDF5824003C58ED /* Default */ = {
-			isa = PBXGroup;
-			children = (
-				566617581CE14FA200874119 /* SCDefaultStore.h */,
-				566617591CE14FA200874119 /* SCDefaultStore.m */,
-			);
-			name = Default;
-			sourceTree = "<group>";
-		};
 		56DBF9FF1D2F0C3300FFE4FF /* AuthService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1841,7 +1827,6 @@
 				5649B5A91BE280D6009947EF /* SCFilterNotEqual.h in Headers */,
 				561686121C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.h in Headers */,
 				5649B5BB1BE280D6009947EF /* SCGeometry+GeoJSON.h in Headers */,
-				5666175A1CE14FA200874119 /* SCDefaultStore.h in Headers */,
 				5649B5E91BE280D6009947EF /* SCMultiPolygon+GeoJSON.h in Headers */,
 				560B10E21C77B28A00BA15B8 /* SCGpkgTableProtocol.h in Headers */,
 				5649B5AF1BE280D6009947EF /* SCFilterProtocol.h in Headers */,
@@ -2277,7 +2262,6 @@
 				5649B59A1BE280D6009947EF /* SCFilterEqual.m in Sources */,
 				5649B58B1BE280D6009947EF /* SCCompoundPredicate.m in Sources */,
 				5649B5D71BE280D6009947EF /* SCLocalWebApp.m in Sources */,
-				5666175B1CE14FA200874119 /* SCDefaultStore.m in Sources */,
 				561685ED1C73DB3300FC7FA6 /* SCGpkgSpatialRefSys.m in Sources */,
 				56FCFBCC1D6F6E16008A0B8C /* SCRemoteConfig.m in Sources */,
 				561685F51C74E3D800FC7FA6 /* SCGpkgExtension.m in Sources */,

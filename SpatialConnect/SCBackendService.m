@@ -299,12 +299,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 }
 
 - (void)listenForSyncEvents {
+  
   RACSignal *connected = [connectedToBroker filter:^BOOL(NSNumber *v) {
     return v.boolValue;
   }];
   
   RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:NO];
-
+  
   RACSignal *storeEditSync = [[[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
     id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
     RACMulticastConnection *rmcc = [ss storeEdited];
@@ -319,10 +320,16 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   RACSignal *onlineSync = [connected flattenMap:^RACSignal *(id value) {
     return [self syncStores];
   }];
-                           
-  [[RACSignal merge:@[storeEditSync, onlineSync]] subscribeCompleted:^{
-    NSLog(@"syncStores complete");
-  }];
+  
+  RACSignal *sync = [RACSignal merge:@[storeEditSync, onlineSync]];
+  
+  [[sync subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
+    subscribeError:^(NSError *error) {
+      DDLogError(@"Store syncing error %@", error.localizedFailureReason);
+    }
+    completed:^{
+      DDLogInfo(@"Store syncing complete");
+    }];
 }
 
 - (RACSignal *)syncStores {
@@ -344,13 +351,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
   SCMessage *msg = [[SCMessage alloc] init];
   msg.payload = [[ss generateSendPayload:feature] JSONString];
-  [[self publishReplyTo:msg onTopic:[ss syncChannel]] filter:^BOOL(SCMessage *m) {
-    //TODO check response message to see if feature was successfully uploaded
-    return YES;
-  }];
-  //temporaily assume message has been sent
+  [self publishExactlyOnce:msg onTopic:[ss syncChannel]];
   return [ss updateAuditTable:feature];
-  //return [RACSignal empty];
 }
 
 /**

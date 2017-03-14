@@ -33,6 +33,9 @@
 - (void)defineTable;
 @end
 
+NSString *const kSentColName = @"sent";
+NSString *const kReceivedColName = @"received";
+
 @implementation SCGpkgFeatureSource
 
 @synthesize name, pkColName, colsTypes;
@@ -368,6 +371,8 @@
   NSMutableDictionary *dict = [[rs resultDictionary] mutableCopy];
   [dict removeObjectForKey:self.pkColName];
   [dict removeObjectForKey:self.geomColName];
+  [dict removeObjectForKey:kSentColName];
+  [dict removeObjectForKey:kReceivedColName];
   f.properties = dict;
   f.layerId = self.name;
   return f;
