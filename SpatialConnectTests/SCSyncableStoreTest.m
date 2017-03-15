@@ -54,23 +54,5 @@
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
-- (void)testSync {
-  XCTestExpectation *expect =
-    [self expectationWithDescription:@"Form Store Sync"];
-  [[SpatialConnectHelper loadFormStore:[SpatialConnect sharedInstance]]
-   subscribeNext:^(SCDataStore *ds) {
-     id<SCSyncableStore> s = (id<SCSyncableStore>)ds;
-      [[s sync] subscribeNext:^(id x) {
-        NSLog(@"sync next");
-      } error:^(NSError *error) {
-        XCTAssert(NO, @"Error syncing stores");
-        [expect fulfill];
-      } completed:^{
-        XCTAssert(YES);
-        [expect fulfill];
-      }];
-   }];
-  [self waitForExpectationsWithTimeout:10.0 handler:nil];
-}
 
 @end
