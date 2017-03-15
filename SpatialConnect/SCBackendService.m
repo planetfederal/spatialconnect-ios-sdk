@@ -69,7 +69,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   dataService = [deps objectForKey:[SCDataService serviceId]];
   DDLogInfo(@"Starting Backend Service...");
   [self listenForNetworkConnection];
-  [self registerForLocalNotifications];
+  [self listenForSyncEvents];
+  //[self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
   return [super start:nil];
 }
@@ -295,6 +296,63 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       [self loadCachedConfig];
     }
   }];
+}
+
+- (void)listenForSyncEvents {
+  
+  RACSignal *connected = [connectedToBroker filter:^BOOL(NSNumber *v) {
+    return v.boolValue;
+  }];
+  
+  RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:NO];
+  
+  RACSignal *storeEditSync = [[[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
+    id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+    RACMulticastConnection *rmcc = [ss storeEdited];
+    [rmcc connect];
+    return rmcc.signal;
+  }] combineLatestWith:connected] flattenMap:^RACSignal *(RACTuple *t) {
+    SCSpatialFeature *f = [t first];
+    SCDataStore *ds = [dataService storeByIdentifier:[f storeId]];
+    return [self syncStore:ds];
+  }];
+  
+  RACSignal *onlineSync = [connected flattenMap:^RACSignal *(id value) {
+    return [self syncStores];
+  }];
+  
+  RACSignal *sync = [RACSignal merge:@[storeEditSync, onlineSync]];
+  
+  [[sync subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
+    subscribeError:^(NSError *error) {
+      DDLogError(@"Store syncing error %@", error.localizedFailureReason);
+    }
+    completed:^{
+      DDLogInfo(@"Store syncing complete");
+    }];
+}
+
+- (RACSignal *)syncStores {
+  RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:NO];
+  return [syncableStores flattenMap:^RACSignal *(id<SCSyncableStore> store) {
+    return [self syncStore:store];
+  }];
+}
+
+- (RACSignal *)syncStore:(SCDataStore *)ds {
+  id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+  return [ss.unSent flattenMap:^RACSignal *(SCSpatialFeature *f) {
+    return [self send:f];
+  }];
+}
+
+- (RACSignal *)send:(SCSpatialFeature *)feature {
+  SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
+  id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
+  SCMessage *msg = [[SCMessage alloc] init];
+  msg.payload = [[ss generateSendPayload:feature] JSONString];
+  [self publishExactlyOnce:msg onTopic:[ss syncChannel]];
+  return [ss updateAuditTable:feature];
 }
 
 /**

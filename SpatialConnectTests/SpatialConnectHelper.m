@@ -23,6 +23,7 @@
 
 NSString *wfsStore = @"71522e9b-3ec6-48c3-8d5c-57c8d14baf6a";
 NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
+NSString *gpkgStore = @"f6dcc750-1349-46b9-a324-0223764d46d1";
 
 + (SpatialConnect *)loadLocalConfig {
   [self moveTestBundleToDocsDir];
@@ -114,6 +115,20 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
       }];
 }
 
++ (RACSignal *)loadFormStore:(SpatialConnect *)sc {
+  return [[sc.dataService storeStarted:@"FORM_STORE"]
+          map:^SCDataStore *(SCStoreStatusEvent *evt) {
+            return [sc.dataService storeByIdentifier:@"FORM_STORE"];
+          }];
+}
+
++ (RACSignal *)loadGeopackageStore:(SpatialConnect *)sc {
+  return [[sc.dataService storeStarted:gpkgStore]
+          map:^SCDataStore *(SCStoreStatusEvent *evt) {
+            return [sc.dataService storeByIdentifier:gpkgStore];
+          }];
+}
+
 + (SpatialConnect *)loadRemoteConfigAndStartServices {
   SpatialConnect *sc = [SpatialConnectHelper loadRemoteConfig];
   return sc;
@@ -134,7 +149,8 @@ NSString *geojsonStore = @"a5d93796-5026-46f7-a2ff-e5dec85d116c";
                              NSString *fileName, NSUInteger idx, BOOL *stop) {
     if ([fileName containsString:@"scfg"] ||
         [fileName containsString:@"json"] ||
-        [fileName containsString:@"geojson"]) {
+        [fileName containsString:@"geojson"] ||
+        [fileName containsString:@"gpkg"]) {
       NSString *item = [NSString stringWithFormat:@"%@/%@", path, fileName];
       NSString *to =
           [NSString stringWithFormat:@"%@/%@", [documentsPath path], fileName];
