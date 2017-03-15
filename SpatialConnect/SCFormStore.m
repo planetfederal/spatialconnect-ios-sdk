@@ -116,31 +116,25 @@
   return [formIds objectForKey:layer];
 }
 
-- (RACSignal *)create:(SCSpatialFeature *)feature {
-  SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[super create:feature] materialize] filter:^BOOL(RACEvent *evt) {
-    return evt.eventType == RACEventTypeCompleted;
-  }] flattenMap:^RACStream *(id value) {
-    if (sc.backendService.status == SC_SERVICE_RUNNING) {
-      feature.layerId = [NSString stringWithFormat:@"%@", feature.layerId];
-      SCMessage *msg = [[SCMessage alloc] init];
-      NSNumber *formId = [formIds objectForKey:feature.layerId];
-      NSDictionary *submission =
-      @{ @"form_id" : formId,
-         @"feature" : feature.JSONDict };
-      msg.payload = submission.JSONString;
-      [sc.backendService publishExactlyOnce:msg onTopic:@"/store/form"];
-    }
-    return [RACSignal empty];
-  }];
-}
-
 - (RACSignal *)update:(SCSpatialFeature *)feature {
   return nil;
 }
 
 - (RACSignal *) delete:(SCKeyTuple *)tuple {
   return nil;
+}
+
+- (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
+  NSNumber *formId = [formIds objectForKey:f.layerId];
+  NSDictionary *payload = @{
+    @"form_id" : formId,
+    @"feature" : f.JSONDict
+  };
+  return payload;
+}
+
+- (NSString *)syncChannel {
+  return @"/store/form";
 }
 
 @end

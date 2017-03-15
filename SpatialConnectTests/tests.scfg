@@ -65,5 +65,31 @@
 "uri": "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
 "version": "1"
 }
+],
+"forms": [
+{
+"id": 30,
+"form_key": "potholes",
+"form_label": "potholes",
+"version": 2,
+"team_id": 2,
+"fields": [
+{
+"constraints": {
+"pattern": ""
+},
+"field_key": "street",
+"type": "string",
+"is_required": false,
+"field_label": "street",
+"id": 118,
+"position": 0
+}
+],
+"metadata": {
+"count": null,
+"lastActivity": null
+}
+}
 ]
 }

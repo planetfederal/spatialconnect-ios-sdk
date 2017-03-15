@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, SCGpkgColType) {
 @interface SCGpkgFeatureSource : NSObject
 
 @property(strong, readonly) NSString *name;
+@property(strong, readonly) NSString *auditName;
 @property(strong, readonly) FMDatabasePool *pool;
 @property(strong, readonly) NSString *pkColName;
 @property(strong, readonly) NSString *geomColName;
@@ -47,5 +48,7 @@ typedef NS_ENUM(NSInteger, SCGpkgColType) {
 - (RACSignal *)remove:(SCKeyTuple *)f;
 - (RACSignal *)update:(SCSpatialFeature *)f;
 - (RACSignal *)create:(SCSpatialFeature *)f;
+- (RACSignal *)unSent;
+- (RACSignal *)updateAuditTable:(SCSpatialFeature *)f;
 
 @end

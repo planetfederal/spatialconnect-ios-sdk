@@ -18,7 +18,6 @@
 ******************************************************************************/
 #import "GeopackageStore.h"
 #import "SCDataStore.h"
-#import "SCDefaultStore.h"
 #import "SCFormConfig.h"
 #import "SCFormStore.h"
 #import "SCLocationStore.h"
@@ -283,5 +282,12 @@
  @return RACSignal returning SCSpatialFeatures
  */
 - (RACSignal *)queryStores:(NSArray *)stores filter:(SCQueryFilter *)filter;
+
+/*!
+ Call sync on all of the SCSyncableStores
+ 
+ @return RACSignal returning SCSpatialFeatures
+ */
+- (RACSignal *)syncStores;
 
 @end

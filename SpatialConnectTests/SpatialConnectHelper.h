@@ -29,6 +29,8 @@
 + (SpatialConnect *)loadRemoteConfig;
 + (RACSignal *)loadWFSGDataStore:(SpatialConnect *)sc;
 + (RACSignal *)loadGeojsonDataStore:(SpatialConnect *)sc;
++ (RACSignal *)loadFormStore:(SpatialConnect *)sc;
++ (RACSignal *)loadGeopackageStore:(SpatialConnect *)sc;
 + (NSString *)filePathFromSelfBundle:(NSString *)fileName;
 
 @end
