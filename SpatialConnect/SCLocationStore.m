@@ -92,6 +92,15 @@
   return nil;
 }
 
+//only send the last unSent location record
+- (RACSignal *)unSent {
+  RACSignal *unSentFeatures = [[[[self.gpkg unSent] rac_sequence] signal] takeLast:1];
+  return [unSentFeatures map:^SCSpatialFeature*(SCSpatialFeature *f) {
+    f.storeId = self.storeId;
+    return f;
+  }];
+}
+
 - (NSString *)syncChannel {
   return @"/store/tracking";
 }
