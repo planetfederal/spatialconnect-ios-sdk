@@ -316,9 +316,9 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
       [self supportedStoreByKey:[NSString stringWithFormat:@"%@.%@", c.type,
                                                            c.version]];
   
-  SCStyle *style = c.style ?
-    [[SCStyle alloc] initWithMapboxStyle:c.style] :
-    [[SCStyle alloc] init];
+  SCStyle *style = [c.style isKindOfClass:[NSNull class]] || c.style == nil ?
+    [[SCStyle alloc] init] :
+  [[SCStyle alloc] initWithMapboxStyle:c.style];
   SCDataStore *gmStore = [[store alloc] initWithStoreConfig:c withStyle:style];
   if (!store) {
     DDLogWarn(@"The store you tried to start:%@.%@ doesn't have a support "
