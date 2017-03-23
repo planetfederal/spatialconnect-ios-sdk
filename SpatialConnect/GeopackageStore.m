@@ -228,13 +228,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   }
   SCGpkgFeatureSource *fs = [self.gpkg featureSource:feature.layerId];
   if (fs) {
-    return [[[[fs create:feature] materialize] filter:^BOOL(RACEvent *evt) {
-      if (evt.eventType == RACEventTypeCompleted) {
-        return YES;
-      } else {
-        return NO;
-      }
-    }] doNext:^(id x) {
+    return [[fs create:feature] doCompleted:^{
       [self.storeEditedSubject sendNext:feature];
     }];
   } else {
