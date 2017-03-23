@@ -35,6 +35,7 @@
 
 NSString *const kSentColName = @"sent";
 NSString *const kReceivedColName = @"received";
+NSString *const kAuditIdColName = @"audit_id";
 
 @implementation SCGpkgFeatureSource
 
@@ -373,6 +374,7 @@ NSString *const kReceivedColName = @"received";
   [dict removeObjectForKey:self.geomColName];
   [dict removeObjectForKey:kSentColName];
   [dict removeObjectForKey:kReceivedColName];
+  [dict removeObjectForKey:kAuditIdColName];
   f.properties = dict;
   f.layerId = self.name;
   return f;
