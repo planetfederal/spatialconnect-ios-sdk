@@ -14,12 +14,12 @@
  * limitations under the License
  */
 
+#import "ConnectMessage.pbobjc.h"
 #import "SCBackendService.h"
 #import "Commands.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCNotification.h"
-#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
@@ -117,7 +117,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   self.notifications = [[[self listenOnTopic:@"/notify"]
       merge:[self
                 listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
-      map:^id(SCMessage *m) {
+      map:^id(ConnectMessage *m) {
         return [[SCNotification alloc] initWithMessage:m];
       }];
 
@@ -125,10 +125,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     [self createNotification:notification];
   }];
 
-  [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
+  [[self listenOnTopic:@"/config/update"] subscribeNext:^(ConnectMessage *msg) {
     NSString *payload = msg.payload;
     SCConfig *cachedConfig = configService.cachedConfig;
-    switch (msg.action) {
+    switch (msg.command) {
     case CONFIG_ADD_STORE: {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
@@ -195,13 +195,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     @"device_info" : @{@"os" : @"ios"},
     @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
   };
-  SCMessage *regMsg = [[SCMessage alloc] init];
-  regMsg.action = CONFIG_REGISTER_DEVICE;
+  ConnectMessage *regMsg = [[ConnectMessage alloc] init];
+  regMsg.command = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
   [self publishExactlyOnce:regMsg onTopic:@"/config/register"];
-  SCMessage *cMsg = [SCMessage new];
-  cMsg.action = CONFIG_FULL;
-  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
+  ConnectMessage *cMsg = [ConnectMessage new];
+  cMsg.command = CONFIG_FULL;
+  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(ConnectMessage *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
@@ -347,7 +347,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     if (n.boolValue) {
       SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
-      SCMessage *msg = [[SCMessage alloc] init];
+      ConnectMessage *msg = [[ConnectMessage alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
       [self publishExactlyOnce:msg onTopic:[ss syncChannel]];
       return [ss updateAuditTable:feature];
@@ -432,7 +432,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publish:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publish:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
@@ -442,9 +442,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publishAtMostOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -453,9 +452,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publishAtLeastOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -464,9 +462,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publishExactlyOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -475,30 +472,29 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
+- (RACSignal *)publishReplyTo:(ConnectMessage *)msg onTopic:(NSString *)topic {
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
   msg.correlationId = @(ti * 1000).intValue;
-  msg.replyTo = [NSString
+  msg.to = [NSString
       stringWithFormat:@"/device/%@-replyTo",
                        [[SpatialConnect sharedInstance] deviceIdentifier]];
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    RACSignal *s = [[multicast map:^SCMessage *(RACTuple *t) {
+    RACSignal *s = [[multicast map:^ConnectMessage *(RACTuple *t) {
       NSData *d = (NSData *)t.first;
       NSError *err;
-      SCMessage *m = [[SCMessage alloc] initWithData:d error:&err];
+      ConnectMessage *m = [[ConnectMessage alloc] initWithData:d error:&err];
       if (err) {
         DDLogError(@"%@", err.description);
       }
       return m;
-    }] filter:^BOOL(SCMessage *m) {
+    }] filter:^BOOL(ConnectMessage *m) {
       if (m.correlationId == msg.correlationId) {
         return YES;
       }
       return NO;
     }];
-    [self subscribeToTopic:msg.replyTo];
+    [self subscribeToTopic:msg.to];
     [self publish:msg onTopic:topic];
     return s;
   }
@@ -515,10 +511,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (RACSignal *)listenOnTopic:(NSString *)topic {
   RACSignal *s = [[multicast filter:^BOOL(RACTuple *t) {
     return [[t second] isEqualToString:topic];
-  }] map:^SCMessage *(RACTuple *t) {
+  }] map:^ConnectMessage *(RACTuple *t) {
     NSData *d = (NSData *)[t first];
     NSError *err;
-    SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
+    ConnectMessage *msg = [[ConnectMessage alloc] initWithData:d error:&err];
     if (err) {
       DDLogError(@"%@", err.description);
     }

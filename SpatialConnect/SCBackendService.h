@@ -14,6 +14,7 @@
  * limitations under the License
  */
 
+#import "ConnectMessage.pbobjc.h"
 #import "SCAuthService.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
@@ -22,7 +23,6 @@
 #import "SCSensorService.h"
 #import "SCService.h"
 #import "SCServiceLifecycle.h"
-#import "Scmessage.pbobjc.h"
 #import <MQTTFramework/MQTTFramework.h>
 #import <MQTTFramework/MQTTSessionManager.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -68,49 +68,49 @@
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 /*!
- Publishes an SCMessage to the SpatialConnect Server
+ Publishes an ConnectMessage to the SpatialConnect Server
 
- @param msg SCMessage to be sent
+ @param msg ConnectMessage to be sent
  @param topic MQTT destination topic
  */
-- (void)publish:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publish:(ConnectMessage *)msg onTopic:(NSString *)topic;
 
 /*!
- Publishes an SCMessage to the SpatialConnect Server with At Most Once Delivery
+ Publishes an ConnectMessage to the SpatialConnect Server with At Most Once Delivery
  QoS 0
 
- @param msg SCMessage to be sent
+ @param msg ConnectMessage to be sent
  @param topic MQTT destination topic
  */
-- (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtMostOnce:(ConnectMessage *)msg onTopic:(NSString *)topic;
 
 /*!
- Publishes an SCMessage to the SpatialConnect Server with At Least Once Delivery
+ Publishes an ConnectMessage to the SpatialConnect Server with At Least Once Delivery
  QoS 1
 
- @param msg SCMessage to be sent
+ @param msg ConnectMessage to be sent
  @param topic MQTT destination topic
  */
-- (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtLeastOnce:(ConnectMessage *)msg onTopic:(NSString *)topic;
 
 /*!
- Publishes an SCMessage to the SpatialConnect Server with Exactly Once Delivery
+ Publishes an ConnectMessage to the SpatialConnect Server with Exactly Once Delivery
  QoS 2
 
- @param msg SCMessage to be sent
+ @param msg ConnectMessage to be sent
  @param topic MQTT destination topic
  */
-- (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic;
+- (void)publishExactlyOnce:(ConnectMessage *)msg onTopic:(NSString *)topic;
 
 /*!
  Publishes a message with a reply-to observable returned for creating a request
  reply with the server.
 
- @param msg SCMessage to be sent
+ @param msg ConnectMessage to be sent
  @param topic MQTT destination topic
  @return Observable the message will be received on
  */
-- (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic;
+- (RACSignal *)publishReplyTo:(ConnectMessage *)msg onTopic:(NSString *)topic;
 
 /*!
  Subscribes to an MQTT Topic

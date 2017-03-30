@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44697D901E8C8A63008D69CB /* ConnectMessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 44697D881E8C896F008D69CB /* ConnectMessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		44697D921E8C8A76008D69CB /* ConnectMessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 44697D911E8C8A76008D69CB /* ConnectMessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		547F3EDB1D77688700AE354E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 547F3ED91D77688700AE354E /* Reachability.m */; };
@@ -67,8 +69,6 @@
 		563683D11DB56165001F636B /* ca.crt in Resources */ = {isa = PBXBuildFile; fileRef = 563683CA1DB560AA001F636B /* ca.crt */; };
 		563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 563BEC6C1BE6F42800778EDA /* GeopackageStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563BEC6F1BE6F42800778EDA /* GeopackageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 563BEC6D1BE6F42800778EDA /* GeopackageStore.m */; };
-		563F42621DB060E6005022A7 /* Scmessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		563F42631DB060E6005022A7 /* Scmessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42611DB060E6005022A7 /* Scmessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		563F42691DB0622B005022A7 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 563F42651DB0622B005022A7 /* CHANGELOG.md */; };
 		563F426A1DB0622B005022A7 /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 563F42661DB0622B005022A7 /* JSONKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		563F426B1DB0622B005022A7 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 563F42671DB0622B005022A7 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -461,6 +461,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		44697D881E8C896F008D69CB /* ConnectMessage.pbobjc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ConnectMessage.pbobjc.m; path = "Vendor/spatialconnect-schema/ConnectMessage.pbobjc.m"; sourceTree = "<group>"; };
+		44697D911E8C8A76008D69CB /* ConnectMessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConnectMessage.pbobjc.h; path = "Vendor/spatialconnect-schema/ConnectMessage.pbobjc.h"; sourceTree = "<group>"; };
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
 		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeoJSONStoreTest.m; path = SpatialConnectTests/SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
 		547F3ED81D77688700AE354E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -521,8 +523,6 @@
 		563683CA1DB560AA001F636B /* ca.crt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ca.crt; sourceTree = "<group>"; };
 		563BEC6C1BE6F42800778EDA /* GeopackageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeopackageStore.h; sourceTree = "<group>"; };
 		563BEC6D1BE6F42800778EDA /* GeopackageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeopackageStore.m; sourceTree = "<group>"; };
-		563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scmessage.pbobjc.h; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.h"; sourceTree = "<group>"; };
-		563F42611DB060E6005022A7 /* Scmessage.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Scmessage.pbobjc.m; path = "Vendor/spatialconnect-schema/Scmessage.pbobjc.m"; sourceTree = "<group>"; };
 		563F42651DB0622B005022A7 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		563F42661DB0622B005022A7 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		563F42671DB0622B005022A7 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
@@ -1673,8 +1673,8 @@
 		56E257E01D4D145F00CA7ED8 /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				563F42601DB060E6005022A7 /* Scmessage.pbobjc.h */,
-				563F42611DB060E6005022A7 /* Scmessage.pbobjc.m */,
+				44697D911E8C8A76008D69CB /* ConnectMessage.pbobjc.h */,
+				44697D881E8C896F008D69CB /* ConnectMessage.pbobjc.m */,
 			);
 			name = Protobuf;
 			sourceTree = "<group>";
@@ -1720,7 +1720,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				563F42621DB060E6005022A7 /* Scmessage.pbobjc.h in Headers */,
 				563F426A1DB0622B005022A7 /* JSONKit.h in Headers */,
 				56554E681D54EA03000D77E7 /* SCLocationStore.h in Headers */,
 				56554E671D54EA03000D77E7 /* SCFormStore.h in Headers */,
@@ -1865,6 +1864,7 @@
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
 				54AC44DC1E6DE2890051504A /* SCSyncableStore.h in Headers */,
+				44697D921E8C8A76008D69CB /* ConnectMessage.pbobjc.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2188,6 +2188,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44697D901E8C8A63008D69CB /* ConnectMessage.pbobjc.m in Sources */,
 				5649B5FE1BE280D6009947EF /* SCPredicate.m in Sources */,
 				5649B6191BE280D6009947EF /* SCTileOverlay.m in Sources */,
 				56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */,
@@ -2277,7 +2278,6 @@
 				5649B5981BE280D6009947EF /* SCFilterBetween.m in Sources */,
 				5649B5A21BE280D6009947EF /* SCFilterLessThan.m in Sources */,
 				5649B6201BE280D6009947EF /* SpatialConnect.m in Sources */,
-				563F42631DB060E6005022A7 /* Scmessage.pbobjc.m in Sources */,
 				5649B5A81BE280D6009947EF /* SCFilterNotBetween.m in Sources */,
 				5649B5EA1BE280D6009947EF /* SCMultiPolygon+GeoJSON.m in Sources */,
 				565CD2961D2344C300A3DB5C /* XMLDictionary.m in Sources */,

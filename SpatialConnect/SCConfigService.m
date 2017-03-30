@@ -22,7 +22,6 @@
 #import "SCFormConfig.h"
 #import "SCServerAuthMethod.h"
 #import "SCStoreConfig.h"
-#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
