@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-#import "Scmessage.pbobjc.h"
+#import "ConnectMessage.pbobjc.h"
 
 @interface SCNotification : NSObject
 
@@ -24,7 +24,7 @@
 @property(nonatomic, readonly) NSString *body;
 @property(nonatomic, readonly) NSDictionary *payload;
 
-- (id)initWithMessage:(SCMessage *)m;
+- (id)initWithMessage:(ConnectMessage *)m;
 - (NSDictionary *)dictionary;
 
 @end
