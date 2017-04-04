@@ -14,7 +14,7 @@
  * limitations under the License
  */
 #import "SCConfigService.h"
-#import "Commands.h"
+#import "Actions.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCDataService.h"

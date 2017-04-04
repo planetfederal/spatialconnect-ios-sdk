@@ -28,36 +28,37 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - ConnectMessageRoot
 
-/**
- * Exposes the extension registry for this file.
- *
- * The base class provides:
- * @code
- *   + (GPBExtensionRegistry *)extensionRegistry;
- * @endcode
- * which is a @c GPBExtensionRegistry that includes all the extensions defined by
- * this file and all files that it depends on.
- **/
+/// Exposes the extension registry for this file.
+///
+/// The base class provides:
+/// @code
+///   + (GPBExtensionRegistry *)extensionRegistry;
+/// @endcode
+/// which is a @c GPBExtensionRegistry that includes all the extensions defined by
+/// this file and all files that it depends on.
 @interface ConnectMessageRoot : GPBRootObject
 @end
 
 #pragma mark - ConnectMessage
 
 typedef GPB_ENUM(ConnectMessage_FieldNumber) {
-  ConnectMessage_FieldNumber_CorrelationId = 1,
-  ConnectMessage_FieldNumber_To = 2,
-  ConnectMessage_FieldNumber_Command = 3,
-  ConnectMessage_FieldNumber_Payload = 4,
-  ConnectMessage_FieldNumber_Jwt = 5,
+  ConnectMessage_FieldNumber_Context = 1,
+  ConnectMessage_FieldNumber_CorrelationId = 2,
+  ConnectMessage_FieldNumber_To = 3,
+  ConnectMessage_FieldNumber_Action = 4,
+  ConnectMessage_FieldNumber_Payload = 5,
+  ConnectMessage_FieldNumber_Jwt = 6,
 };
 
 @interface ConnectMessage : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *context;
 
 @property(nonatomic, readwrite) int32_t correlationId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *to;
 
-@property(nonatomic, readwrite) int32_t command;
+@property(nonatomic, readwrite, copy, null_resettable) NSString *action;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *payload;
 

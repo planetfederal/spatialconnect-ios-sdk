@@ -43,17 +43,19 @@ static GPBFileDescriptor *ConnectMessageRoot_FileDescriptor(void) {
 
 @implementation ConnectMessage
 
+@dynamic context;
 @dynamic correlationId;
 @dynamic to;
-@dynamic command;
+@dynamic action;
 @dynamic payload;
 @dynamic jwt;
 
 typedef struct ConnectMessage__storage_ {
   uint32_t _has_storage_[1];
   int32_t correlationId;
-  int32_t command;
+  NSString *context;
   NSString *to;
+  NSString *action;
   NSString *payload;
   NSString *jwt;
 } ConnectMessage__storage_;
@@ -65,10 +67,19 @@ typedef struct ConnectMessage__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
+        .name = "context",
+        .dataTypeSpecific.className = NULL,
+        .number = ConnectMessage_FieldNumber_Context,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ConnectMessage__storage_, context),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "correlationId",
         .dataTypeSpecific.className = NULL,
         .number = ConnectMessage_FieldNumber_CorrelationId,
-        .hasIndex = 0,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(ConnectMessage__storage_, correlationId),
         .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
         .dataType = GPBDataTypeInt32,
@@ -77,25 +88,25 @@ typedef struct ConnectMessage__storage_ {
         .name = "to",
         .dataTypeSpecific.className = NULL,
         .number = ConnectMessage_FieldNumber_To,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(ConnectMessage__storage_, to),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "command",
+        .name = "action",
         .dataTypeSpecific.className = NULL,
-        .number = ConnectMessage_FieldNumber_Command,
-        .hasIndex = 2,
-        .offset = (uint32_t)offsetof(ConnectMessage__storage_, command),
+        .number = ConnectMessage_FieldNumber_Action,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(ConnectMessage__storage_, action),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeInt32,
+        .dataType = GPBDataTypeString,
       },
       {
         .name = "payload",
         .dataTypeSpecific.className = NULL,
         .number = ConnectMessage_FieldNumber_Payload,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ConnectMessage__storage_, payload),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
@@ -104,7 +115,7 @@ typedef struct ConnectMessage__storage_ {
         .name = "jwt",
         .dataTypeSpecific.className = NULL,
         .number = ConnectMessage_FieldNumber_Jwt,
-        .hasIndex = 4,
+        .hasIndex = 5,
         .offset = (uint32_t)offsetof(ConnectMessage__storage_, jwt),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeString,
@@ -120,7 +131,7 @@ typedef struct ConnectMessage__storage_ {
                                          flags:0];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\001\001\r\000";
+        "\001\002\r\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

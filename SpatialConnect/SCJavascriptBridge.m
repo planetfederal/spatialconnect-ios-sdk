@@ -18,7 +18,7 @@
 ******************************************************************************/
 
 #import "SCJavascriptBridge.h"
-#import "Commands.h"
+#import "Actions.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCJavascriptBridgeAPI.h"
@@ -96,10 +96,10 @@ NSString *const SCJavascriptBridgeErrorDomain =
   [[self.spatialConnect.authService loginStatus] subscribeNext:^(
                                                      NSNumber *authStatus) {
     NSDictionary *action = @{
-      @"type" : [@(AUTHSERVICE_LOGIN_STATUS) stringValue],
+      @"type" : AUTHSERVICE_LOGIN_STATUS,
       @"payload" : authStatus
     };
-    [_bridge callHandler:[@(AUTHSERVICE_LOGIN_STATUS) stringValue] data:action];
+    [_bridge callHandler:AUTHSERVICE_LOGIN_STATUS data:action];
   }];
 
   [[self.spatialConnect.backendService notifications]

@@ -16,7 +16,7 @@
 
 #import "ConnectMessage.pbobjc.h"
 #import "SCBackendService.h"
-#import "Commands.h"
+#import "Actions.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCNotification.h"
@@ -128,56 +128,41 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(ConnectMessage *msg) {
     NSString *payload = msg.payload;
     SCConfig *cachedConfig = configService.cachedConfig;
-    switch (msg.command) {
-    case CONFIG_ADD_STORE: {
+    if ([msg.action isEqualToString:CONFIG_ADD_STORE]) {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig addStore:config];
       [dataService registerAndStartStoreByConfig:config];
-      break;
-    }
-    case CONFIG_UPDATE_STORE: {
+    } else if ([msg.action isEqualToString:CONFIG_UPDATE_STORE]) {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig updateStore:config];
       [dataService updateStoreByConfig:config];
-      break;
-    }
-    case CONFIG_REMOVE_STORE: {
+    } else if ([msg.action isEqualToString:CONFIG_REMOVE_STORE]) {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *storeid = [json objectForKey:@"id"];
       SCDataStore *ds = [dataService storeByIdentifier:storeid];
       [cachedConfig removeStore:storeid];
       [dataService unregisterStore:ds];
-      break;
-    }
-    case CONFIG_ADD_FORM: {
+    } else if ([msg.action isEqualToString:CONFIG_ADD_FORM]) {
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig addForm:f];
         [dataService.formStore registerFormByConfig:f];
       }
-      break;
-    }
-    case CONFIG_UPDATE_FORM: {
+    } else if ([msg.action isEqualToString:CONFIG_UPDATE_FORM]) {
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig updateForm:f];
         [dataService.formStore updateFormByConfig:f];
       }
-      break;
-    }
-    case CONFIG_REMOVE_FORM: {
+    } else if ([msg.action isEqualToString:CONFIG_REMOVE_FORM]) {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *formKey = [json objectForKey:@"form_key"];
       [cachedConfig removeForm:formKey];
       [dataService.formStore unregisterFormByKey:formKey];
-      break;
-    }
-    default:
-      break;
     }
     [configService setCachedConfig:cachedConfig];
   }];
@@ -196,11 +181,11 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
   };
   ConnectMessage *regMsg = [[ConnectMessage alloc] init];
-  regMsg.command = CONFIG_REGISTER_DEVICE;
+  regMsg.action = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
   [self publishExactlyOnce:regMsg onTopic:@"/config/register"];
   ConnectMessage *cMsg = [ConnectMessage new];
-  cMsg.command = CONFIG_FULL;
+  cMsg.action = CONFIG_FULL;
   [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(ConnectMessage *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
@@ -434,6 +419,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (void)publish:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -444,6 +430,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (void)publishAtMostOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -454,6 +441,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (void)publishAtLeastOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -464,6 +452,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (void)publishExactlyOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -479,6 +468,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       stringWithFormat:@"/device/%@-replyTo",
                        [[SpatialConnect sharedInstance] deviceIdentifier]];
   msg.jwt = self.jwt;
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     RACSignal *s = [[multicast map:^ConnectMessage *(RACTuple *t) {
       NSData *d = (NSData *)t.first;
