@@ -1,8 +1,5 @@
 {
-  "build":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect build",
-  "install":"carthage update",
-  "unit_test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6 Plus' ONLY_ACTIVE_ARCH=NO test",
-  "integration_test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test",
-  "run":"",
-  "release":"carthage build --no-skip-current; carthage archive SpatialConnect"
+  "build":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect build; carthage update",
+  "unit_test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6 Plus' ONLY_ACTIVE_ARCH=NO test; xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect test",
+  "deploy":"carthage build --no-skip-current; carthage archive SpatialConnect"
 }
