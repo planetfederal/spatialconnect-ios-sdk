@@ -1,5 +1,5 @@
 {
   "build":"carthage build --no-skip-current --platform iOS",
-  "test":"xcodebuild -project SpatialConnect.xcodeproj -scheme SpatialConnect -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6 Plus' ONLY_ACTIVE_ARCH=NO test",
+  "test":"sh test.sh",
   "deploy":"carthage build --no-skip-current; carthage archive SpatialConnect"
 }
