@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44697D901E8C8A63008D69CB /* ConnectMessage.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 44697D881E8C896F008D69CB /* ConnectMessage.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		44697D921E8C8A76008D69CB /* ConnectMessage.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 44697D911E8C8A76008D69CB /* ConnectMessage.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		547F3EDB1D77688700AE354E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 547F3ED91D77688700AE354E /* Reachability.m */; };
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
 		548C840F1DF6002300068FE7 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
 		548C84101DF6002300068FE7 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		54ABD18F1ECA269C00503EB9 /* Msg.pbobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = 54ABD18D1ECA269C00503EB9 /* Msg.pbobjc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54ABD1901ECA269C00503EB9 /* Msg.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 54ABD18E1ECA269C00503EB9 /* Msg.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		54AC44A41E5F7DF20051504A /* SCStyleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44A31E5F7DF20051504A /* SCStyleTest.m */; };
 		54AC44DC1E6DE2890051504A /* SCSyncableStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 54AC44DB1E6DE2890051504A /* SCSyncableStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54AC44E31E6DE2B90051504A /* SCSyncableStoreTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 54AC44E21E6DE2B90051504A /* SCSyncableStoreTest.m */; };
@@ -58,7 +58,7 @@
 		5624289A1CAC60740087756C /* SCConfigService.m in Sources */ = {isa = PBXBuildFile; fileRef = 562428981CAC60740087756C /* SCConfigService.m */; };
 		56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 56285CE01E36BC13002D9934 /* SCServerAuthMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56285CE31E36BC13002D9934 /* SCServerAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 56285CE11E36BC13002D9934 /* SCServerAuthMethod.m */; };
-		562EC6581E901B8B003D9F2C /* Actions.h in Headers */ = {isa = PBXBuildFile; fileRef = 562EC6561E901B8B003D9F2C /* Actions.h */; };
+		562EC6581E901B8B003D9F2C /* Actions.h in Headers */ = {isa = PBXBuildFile; fileRef = 562EC6561E901B8B003D9F2C /* Actions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		562EC6591E901B8B003D9F2C /* Actions.m in Sources */ = {isa = PBXBuildFile; fileRef = 562EC6571E901B8B003D9F2C /* Actions.m */; };
 		563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 563090661D0646D0001FE1B5 /* libgpkgios.framework */; };
 		563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 563296441E37B40F002D1F07 /* SCAuthProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -462,13 +462,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		44697D881E8C896F008D69CB /* ConnectMessage.pbobjc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ConnectMessage.pbobjc.m; path = "Vendor/spatialconnect-schema/ConnectMessage.pbobjc.m"; sourceTree = "<group>"; };
-		44697D911E8C8A76008D69CB /* ConnectMessage.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConnectMessage.pbobjc.h; path = "Vendor/spatialconnect-schema/ConnectMessage.pbobjc.h"; sourceTree = "<group>"; };
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
 		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeoJSONStoreTest.m; path = SpatialConnectTests/SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
 		547F3ED81D77688700AE354E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		547F3ED91D77688700AE354E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		54ABD18D1ECA269C00503EB9 /* Msg.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Msg.pbobjc.h; path = "Vendor/spatialconnect-schema/Msg.pbobjc.h"; sourceTree = "<group>"; };
+		54ABD18E1ECA269C00503EB9 /* Msg.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Msg.pbobjc.m; path = "Vendor/spatialconnect-schema/Msg.pbobjc.m"; sourceTree = "<group>"; };
 		54AC44A31E5F7DF20051504A /* SCStyleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCStyleTest.m; sourceTree = "<group>"; };
 		54AC44DB1E6DE2890051504A /* SCSyncableStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSyncableStore.h; sourceTree = "<group>"; };
 		54AC44E21E6DE2B90051504A /* SCSyncableStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSyncableStoreTest.m; sourceTree = "<group>"; };
@@ -1676,8 +1676,8 @@
 		56E257E01D4D145F00CA7ED8 /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				44697D911E8C8A76008D69CB /* ConnectMessage.pbobjc.h */,
-				44697D881E8C896F008D69CB /* ConnectMessage.pbobjc.m */,
+				54ABD18D1ECA269C00503EB9 /* Msg.pbobjc.h */,
+				54ABD18E1ECA269C00503EB9 /* Msg.pbobjc.m */,
 			);
 			name = Protobuf;
 			sourceTree = "<group>";
@@ -1750,7 +1750,6 @@
 				5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */,
 				563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */,
 				56F4375A1CA0955200EA1344 /* FMDB.h in Headers */,
-				562EC6581E901B8B003D9F2C /* Actions.h in Headers */,
 				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
 				5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */,
 				5649B5951BE280D6009947EF /* SCFilter.h in Headers */,
@@ -1866,8 +1865,9 @@
 				56A23B0D1D7B1BB300AB258B /* SCMapkitTileGridSource.h in Headers */,
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
+				54ABD18F1ECA269C00503EB9 /* Msg.pbobjc.h in Headers */,
+				562EC6581E901B8B003D9F2C /* Actions.h in Headers */,
 				54AC44DC1E6DE2890051504A /* SCSyncableStore.h in Headers */,
-				44697D921E8C8A76008D69CB /* ConnectMessage.pbobjc.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2191,7 +2191,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44697D901E8C8A63008D69CB /* ConnectMessage.pbobjc.m in Sources */,
 				5649B5FE1BE280D6009947EF /* SCPredicate.m in Sources */,
 				5649B6191BE280D6009947EF /* SCTileOverlay.m in Sources */,
 				56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */,
@@ -2215,6 +2214,7 @@
 				5649B61B1BE280D6009947EF /* SCTileOverlayRenderer.m in Sources */,
 				560AFB2F1C7E2762006A060F /* SCGpkgTileSource.m in Sources */,
 				563296551E37EFD6002D1F07 /* SCServiceGraph.m in Sources */,
+				54ABD1901ECA269C00503EB9 /* Msg.pbobjc.m in Sources */,
 				5649B5D11BE280D6009947EF /* SCLineString.m in Sources */,
 				5649B59C1BE280D6009947EF /* SCFilterGreaterThan.m in Sources */,
 				5649B5891BE280D6009947EF /* SCComparisonPredicate.m in Sources */,

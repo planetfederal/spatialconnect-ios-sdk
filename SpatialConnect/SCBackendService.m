@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-#import "ConnectMessage.pbobjc.h"
+#import "Msg.pbobjc.h"
 #import "SCBackendService.h"
 #import "Actions.h"
 #import "JSONKit.h"
@@ -117,7 +117,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   self.notifications = [[[self listenOnTopic:@"/notify"]
       merge:[self
                 listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
-      map:^id(ConnectMessage *m) {
+      map:^id(Msg *m) {
         return [[SCNotification alloc] initWithMessage:m];
       }];
 
@@ -125,7 +125,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     [self createNotification:notification];
   }];
 
-  [[self listenOnTopic:@"/config/update"] subscribeNext:^(ConnectMessage *msg) {
+  [[self listenOnTopic:@"/config/update"] subscribeNext:^(Msg *msg) {
     NSString *payload = msg.payload;
     SCConfig *cachedConfig = configService.cachedConfig;
     if ([msg.action isEqualToString:CONFIG_ADD_STORE]) {
@@ -180,13 +180,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     @"device_info" : @{@"os" : @"ios"},
     @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
   };
-  ConnectMessage *regMsg = [[ConnectMessage alloc] init];
+  Msg *regMsg = [[Msg alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
   [self publishExactlyOnce:regMsg onTopic:@"/config/register"];
-  ConnectMessage *cMsg = [ConnectMessage new];
+  Msg *cMsg = [Msg new];
   cMsg.action = CONFIG_FULL;
-  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(ConnectMessage *m) {
+  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(Msg *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
@@ -332,7 +332,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     if (n.boolValue) {
       SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
-      ConnectMessage *msg = [[ConnectMessage alloc] init];
+      Msg *msg = [[Msg alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
       [self publishExactlyOnce:msg onTopic:[ss syncChannel]];
       return [ss updateAuditTable:feature];
@@ -417,7 +417,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publish:(ConnectMessage *)msg onTopic:(NSString *)topic {
+- (void)publish:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
   msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
@@ -428,7 +428,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishAtMostOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
+- (void)publishAtMostOnce:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
   msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
@@ -439,7 +439,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishAtLeastOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
+- (void)publishAtLeastOnce:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
   msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
@@ -450,7 +450,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishExactlyOnce:(ConnectMessage *)msg onTopic:(NSString *)topic {
+- (void)publishExactlyOnce:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
   msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
@@ -461,7 +461,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (RACSignal *)publishReplyTo:(ConnectMessage *)msg onTopic:(NSString *)topic {
+- (RACSignal *)publishReplyTo:(Msg *)msg onTopic:(NSString *)topic {
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
   msg.correlationId = @(ti * 1000).intValue;
   msg.to = [NSString
@@ -470,15 +470,15 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   msg.jwt = self.jwt;
   msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    RACSignal *s = [[multicast map:^ConnectMessage *(RACTuple *t) {
+    RACSignal *s = [[multicast map:^Msg *(RACTuple *t) {
       NSData *d = (NSData *)t.first;
       NSError *err;
-      ConnectMessage *m = [[ConnectMessage alloc] initWithData:d error:&err];
+      Msg *m = [[Msg alloc] initWithData:d error:&err];
       if (err) {
         DDLogError(@"%@", err.description);
       }
       return m;
-    }] filter:^BOOL(ConnectMessage *m) {
+    }] filter:^BOOL(Msg *m) {
       if (m.correlationId == msg.correlationId) {
         return YES;
       }
@@ -501,10 +501,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (RACSignal *)listenOnTopic:(NSString *)topic {
   RACSignal *s = [[multicast filter:^BOOL(RACTuple *t) {
     return [[t second] isEqualToString:topic];
-  }] map:^ConnectMessage *(RACTuple *t) {
+  }] map:^Msg *(RACTuple *t) {
     NSData *d = (NSData *)[t first];
     NSError *err;
-    ConnectMessage *msg = [[ConnectMessage alloc] initWithData:d error:&err];
+    Msg *msg = [[Msg alloc] initWithData:d error:&err];
     if (err) {
       DDLogError(@"%@", err.description);
     }

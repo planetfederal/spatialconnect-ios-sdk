@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-#import "ConnectMessage.pbobjc.h"
+#import "Msg.pbobjc.h"
 #import "SCAuthService.h"
 #import "SCConfigService.h"
 #import "SCDataService.h"
@@ -68,49 +68,49 @@
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 /*!
- Publishes an ConnectMessage to the SpatialConnect Server
+ Publishes an Msg to the SpatialConnect Server
 
- @param msg ConnectMessage to be sent
+ @param msg Msg to be sent
  @param topic MQTT destination topic
  */
-- (void)publish:(ConnectMessage *)msg onTopic:(NSString *)topic;
+- (void)publish:(Msg *)msg onTopic:(NSString *)topic;
 
 /*!
- Publishes an ConnectMessage to the SpatialConnect Server with At Most Once Delivery
+ Publishes an Msg to the SpatialConnect Server with At Most Once Delivery
  QoS 0
 
- @param msg ConnectMessage to be sent
+ @param msg Msg to be sent
  @param topic MQTT destination topic
  */
-- (void)publishAtMostOnce:(ConnectMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtMostOnce:(Msg *)msg onTopic:(NSString *)topic;
 
 /*!
- Publishes an ConnectMessage to the SpatialConnect Server with At Least Once Delivery
+ Publishes an Msg to the SpatialConnect Server with At Least Once Delivery
  QoS 1
 
- @param msg ConnectMessage to be sent
+ @param msg Msg to be sent
  @param topic MQTT destination topic
  */
-- (void)publishAtLeastOnce:(ConnectMessage *)msg onTopic:(NSString *)topic;
+- (void)publishAtLeastOnce:(Msg *)msg onTopic:(NSString *)topic;
 
 /*!
- Publishes an ConnectMessage to the SpatialConnect Server with Exactly Once Delivery
+ Publishes an Msg to the SpatialConnect Server with Exactly Once Delivery
  QoS 2
 
- @param msg ConnectMessage to be sent
+ @param msg Msg to be sent
  @param topic MQTT destination topic
  */
-- (void)publishExactlyOnce:(ConnectMessage *)msg onTopic:(NSString *)topic;
+- (void)publishExactlyOnce:(Msg *)msg onTopic:(NSString *)topic;
 
 /*!
  Publishes a message with a reply-to observable returned for creating a request
  reply with the server.
 
- @param msg ConnectMessage to be sent
+ @param msg Msg to be sent
  @param topic MQTT destination topic
  @return Observable the message will be received on
  */
-- (RACSignal *)publishReplyTo:(ConnectMessage *)msg onTopic:(NSString *)topic;
+- (RACSignal *)publishReplyTo:(Msg *)msg onTopic:(NSString *)topic;
 
 /*!
  Subscribes to an MQTT Topic

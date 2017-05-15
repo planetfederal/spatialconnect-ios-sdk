@@ -73,7 +73,7 @@
       }] filter:^BOOL(NSNumber *n) {
     return [n boolValue] == YES;
   }] take:1] subscribeNext:^(id x) {
-    ConnectMessage *msg = [[ConnectMessage alloc] init];
+    Msg *msg = [[Msg alloc] init];
     msg.action = 456;
     [[sc.backendService publishReplyTo:msg onTopic:@"/ping"]
         subscribeNext:^(id x) {
