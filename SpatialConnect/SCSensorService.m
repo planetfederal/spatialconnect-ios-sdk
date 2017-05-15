@@ -21,7 +21,6 @@
 #import "JSONKit.h"
 #import "Reachability.h"
 #import "SCPoint.h"
-#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
