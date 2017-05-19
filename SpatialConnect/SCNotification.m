@@ -31,7 +31,7 @@
 @synthesize to = _to, priority = _priority, title = _title, body = _body,
             payload = _payload;
 
-- (id)initWithMessage:(SCMessage *)m {
+- (id)initWithMessage:(Msg *)m {
   self = [super init];
   if (self) {
     NSDictionary *d = [m.payload objectFromJSONString];

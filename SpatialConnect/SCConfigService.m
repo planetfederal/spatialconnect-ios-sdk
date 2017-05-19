@@ -14,7 +14,7 @@
  * limitations under the License
  */
 #import "SCConfigService.h"
-#import "Commands.h"
+#import "Actions.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCDataService.h"
@@ -22,7 +22,6 @@
 #import "SCFormConfig.h"
 #import "SCServerAuthMethod.h"
 #import "SCStoreConfig.h"
-#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";

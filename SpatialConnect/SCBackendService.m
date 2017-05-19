@@ -14,12 +14,12 @@
  * limitations under the License
  */
 
+#import "Msg.pbobjc.h"
 #import "SCBackendService.h"
-#import "Commands.h"
+#import "Actions.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
 #import "SCNotification.h"
-#import "Scmessage.pbobjc.h"
 #import "SpatialConnect.h"
 
 static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
@@ -117,7 +117,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   self.notifications = [[[self listenOnTopic:@"/notify"]
       merge:[self
                 listenOnTopic:[NSString stringWithFormat:@"/notify/%@", ident]]]
-      map:^id(SCMessage *m) {
+      map:^id(Msg *m) {
         return [[SCNotification alloc] initWithMessage:m];
       }];
 
@@ -125,59 +125,44 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     [self createNotification:notification];
   }];
 
-  [[self listenOnTopic:@"/config/update"] subscribeNext:^(SCMessage *msg) {
+  [[self listenOnTopic:@"/config/update"] subscribeNext:^(Msg *msg) {
     NSString *payload = msg.payload;
     SCConfig *cachedConfig = configService.cachedConfig;
-    switch (msg.action) {
-    case CONFIG_ADD_STORE: {
+    if ([msg.action isEqualToString:CONFIG_ADD_STORE]) {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig addStore:config];
       [dataService registerAndStartStoreByConfig:config];
-      break;
-    }
-    case CONFIG_UPDATE_STORE: {
+    } else if ([msg.action isEqualToString:CONFIG_UPDATE_STORE]) {
       NSDictionary *json = [payload objectFromJSONString];
       SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:json];
       [cachedConfig updateStore:config];
       [dataService updateStoreByConfig:config];
-      break;
-    }
-    case CONFIG_REMOVE_STORE: {
+    } else if ([msg.action isEqualToString:CONFIG_REMOVE_STORE]) {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *storeid = [json objectForKey:@"id"];
       SCDataStore *ds = [dataService storeByIdentifier:storeid];
       [cachedConfig removeStore:storeid];
       [dataService unregisterStore:ds];
-      break;
-    }
-    case CONFIG_ADD_FORM: {
+    } else if ([msg.action isEqualToString:CONFIG_ADD_FORM]) {
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig addForm:f];
         [dataService.formStore registerFormByConfig:f];
       }
-      break;
-    }
-    case CONFIG_UPDATE_FORM: {
+    } else if ([msg.action isEqualToString:CONFIG_UPDATE_FORM]) {
       SCFormConfig *f =
           [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
         [cachedConfig updateForm:f];
         [dataService.formStore updateFormByConfig:f];
       }
-      break;
-    }
-    case CONFIG_REMOVE_FORM: {
+    } else if ([msg.action isEqualToString:CONFIG_REMOVE_FORM]) {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *formKey = [json objectForKey:@"form_key"];
       [cachedConfig removeForm:formKey];
       [dataService.formStore unregisterFormByKey:formKey];
-      break;
-    }
-    default:
-      break;
     }
     [configService setCachedConfig:cachedConfig];
   }];
@@ -195,13 +180,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     @"device_info" : @{@"os" : @"ios"},
     @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
   };
-  SCMessage *regMsg = [[SCMessage alloc] init];
+  Msg *regMsg = [[Msg alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
   [self publishExactlyOnce:regMsg onTopic:@"/config/register"];
-  SCMessage *cMsg = [SCMessage new];
+  Msg *cMsg = [Msg new];
   cMsg.action = CONFIG_FULL;
-  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(SCMessage *m) {
+  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(Msg *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
@@ -347,7 +332,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     if (n.boolValue) {
       SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
-      SCMessage *msg = [[SCMessage alloc] init];
+      Msg *msg = [[Msg alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
       [self publishExactlyOnce:msg onTopic:[ss syncChannel]];
       return [ss updateAuditTable:feature];
@@ -432,8 +417,9 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publish:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publish:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -442,9 +428,9 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishAtMostOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publishAtMostOnce:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -453,9 +439,9 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishAtLeastOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publishAtLeastOnce:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -464,9 +450,9 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (void)publishExactlyOnce:(SCMessage *)msg onTopic:(NSString *)topic {
+- (void)publishExactlyOnce:(Msg *)msg onTopic:(NSString *)topic {
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
     [sessionManager sendData:[msg data]
                        topic:topic
@@ -475,30 +461,30 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   }
 }
 
-- (RACSignal *)publishReplyTo:(SCMessage *)msg onTopic:(NSString *)topic {
+- (RACSignal *)publishReplyTo:(Msg *)msg onTopic:(NSString *)topic {
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
   msg.correlationId = @(ti * 1000).intValue;
-  msg.replyTo = [NSString
+  msg.to = [NSString
       stringWithFormat:@"/device/%@-replyTo",
                        [[SpatialConnect sharedInstance] deviceIdentifier]];
   msg.jwt = self.jwt;
-  msg.time.seconds = time(NULL);
+  msg.context = @"MOBILE";
   if (sessionManager.state == MQTTSessionManagerStateConnected) {
-    RACSignal *s = [[multicast map:^SCMessage *(RACTuple *t) {
+    RACSignal *s = [[multicast map:^Msg *(RACTuple *t) {
       NSData *d = (NSData *)t.first;
       NSError *err;
-      SCMessage *m = [[SCMessage alloc] initWithData:d error:&err];
+      Msg *m = [[Msg alloc] initWithData:d error:&err];
       if (err) {
         DDLogError(@"%@", err.description);
       }
       return m;
-    }] filter:^BOOL(SCMessage *m) {
+    }] filter:^BOOL(Msg *m) {
       if (m.correlationId == msg.correlationId) {
         return YES;
       }
       return NO;
     }];
-    [self subscribeToTopic:msg.replyTo];
+    [self subscribeToTopic:msg.to];
     [self publish:msg onTopic:topic];
     return s;
   }
@@ -515,10 +501,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (RACSignal *)listenOnTopic:(NSString *)topic {
   RACSignal *s = [[multicast filter:^BOOL(RACTuple *t) {
     return [[t second] isEqualToString:topic];
-  }] map:^SCMessage *(RACTuple *t) {
+  }] map:^Msg *(RACTuple *t) {
     NSData *d = (NSData *)[t first];
     NSError *err;
-    SCMessage *msg = [[SCMessage alloc] initWithData:d error:&err];
+    Msg *msg = [[Msg alloc] initWithData:d error:&err];
     if (err) {
       DDLogError(@"%@", err.description);
     }
