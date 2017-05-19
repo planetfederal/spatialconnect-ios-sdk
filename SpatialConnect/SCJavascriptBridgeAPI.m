@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #import "SCJavascriptBridgeAPI.h"
-#import "Commands.h"
+#import "Actions.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCHttpUtils.h"
@@ -49,78 +49,52 @@
       [subscriber sendCompleted];
       return nil;
     }
-    NSInteger actionType = [action[@"type"] integerValue];
-    switch (actionType) {
-    case START_ALL_SERVICES:
+    NSString *actionType = action[@"type"];
+    if ([actionType isEqualToString:START_ALL_SERVICES])
       [self startAllServices];
-      break;
-    case DATASERVICE_ACTIVESTORESLIST:
+    else if ([actionType isEqualToString:DATASERVICE_ACTIVESTORESLIST])
       [self activeStoreList:subscriber];
-      break;
-    case DATASERVICE_ACTIVESTOREBYID:
+    else if ([actionType isEqualToString:DATASERVICE_ACTIVESTOREBYID])
       [self activeStoreById:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_STORELIST:
+    else if ([actionType isEqualToString:DATASERVICE_STORELIST])
       [self storeList:subscriber];
-      break;
-    case DATASERVICE_QUERY:
+    else if ([actionType isEqualToString:DATASERVICE_QUERYALL])
       [self queryStoresByIds:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_QUERYALL:
+    else if ([actionType isEqualToString:DATASERVICE_QUERYALL])
       [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_SPATIALQUERY:
-      [self queryGeoStoresByIds:action[@"payload"]
-             responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_SPATIALQUERYALL:
+    else if ([actionType isEqualToString:DATASERVICE_SPATIALQUERY])
+      [self queryGeoStoresByIds:action[@"payload"] responseSubscriber:subscriber];
+    else if ([actionType isEqualToString:DATASERVICE_SPATIALQUERYALL])
       [self queryAllGeoStores:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_CREATEFEATURE:
+    else if ([actionType isEqualToString:DATASERVICE_CREATEFEATURE])
       [self createFeature:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_UPDATEFEATURE:
+    else if ([actionType isEqualToString:DATASERVICE_UPDATEFEATURE])
       [self updateFeature:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_DELETEFEATURE:
+    else if ([actionType isEqualToString:DATASERVICE_DELETEFEATURE])
       [self deleteFeature:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case DATASERVICE_FORMLIST:
+    else if ([actionType isEqualToString:DATASERVICE_FORMLIST])
       [self formList:subscriber];
-      break;
-    case SENSORSERVICE_GPS:
+    else if ([actionType isEqualToString:SENSORSERVICE_GPS])
       [self spatialConnectGPS:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case AUTHSERVICE_AUTHENTICATE:
+    else if ([actionType isEqualToString:AUTHSERVICE_AUTHENTICATE])
       [self authenticate:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case AUTHSERVICE_LOGOUT:
+    else if ([actionType isEqualToString:AUTHSERVICE_LOGOUT])
       [self logout:subscriber];
-      break;
-    case AUTHSERVICE_ACCESS_TOKEN:
+    else if ([actionType isEqualToString:AUTHSERVICE_ACCESS_TOKEN])
       [self authXAccessToken:subscriber];
-      break;
-    case AUTHSERVICE_LOGIN_STATUS:
+    else if ([actionType isEqualToString:AUTHSERVICE_LOGIN_STATUS])
       [self loginStatus:subscriber];
-      break;
-    case NOTIFICATIONS:
+    else if ([actionType isEqualToString:NOTIFICATIONS])
       [self listenForNotifications:subscriber];
-      break;
-    case NETWORKSERVICE_GET_REQUEST:
+    else if ([actionType isEqualToString:NETWORKSERVICE_GET_REQUEST])
       [self getRequest:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case NETWORKSERVICE_POST_REQUEST:
+    else if ([actionType isEqualToString:NETWORKSERVICE_POST_REQUEST])
       [self postRequest:action[@"payload"] responseSubscriber:subscriber];
-      break;
-    case BACKENDSERVICE_HTTP_URI:
+    else if ([actionType isEqualToString:BACKENDSERVICE_HTTP_URI])
       [self getBackendUri:subscriber];
-      break;
-    case BACKENDSERVICE_MQTT_CONNECTED:
+    else if ([actionType isEqualToString:BACKENDSERVICE_MQTT_CONNECTED])
       [self mqttConnected:subscriber];
-      break;
-    default:
-      break;
-    }
+
     return nil;
   }];
 }
