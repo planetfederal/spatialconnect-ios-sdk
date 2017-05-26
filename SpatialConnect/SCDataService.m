@@ -59,7 +59,7 @@ static NSString *const kSERVICENAME = @"SC_DATA_SERVICE";
     [self addDefaultStoreImpls];
     _stores = [NSMutableDictionary new];
     _timer =
-        [RACSignal interval:2 onScheduler:[RACScheduler mainThreadScheduler]];
+        [RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]];
     self.storesStarted = NO;
     self.storeEventSubject = [RACSubject new];
     self.storeEvents = [self.storeEventSubject publish];
