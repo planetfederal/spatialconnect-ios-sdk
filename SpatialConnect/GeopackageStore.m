@@ -120,7 +120,10 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
         [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
           [[[super download:self.uri to:path]
               subscribeOn:[RACScheduler mainThreadScheduler]]
-              subscribeError:^(NSError *error) {
+              subscribeNext:^(id x) {
+                [subscriber sendNext:x];
+              }
+              error:^(NSError *error) {
                 [subscriber sendError:error];
               }
               completed:^{
