@@ -285,7 +285,7 @@
 
 /*!
  Call sync on all of the SCSyncableStores
- 
+
  @return RACSignal returning SCSpatialFeatures
  */
 - (RACSignal *)syncStores;

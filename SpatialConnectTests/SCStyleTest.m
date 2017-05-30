@@ -45,23 +45,20 @@
 
 - (void)testDataService {
   XCTestExpectation *expect =
-  [self expectationWithDescription:@"Data Service Start"];
+      [self expectationWithDescription:@"Data Service Start"];
   [[self.sc serviceRunning:[SCDataService serviceId]]
-   subscribeError:^(NSError *error) {
-     DDLogError(@"Error:%@", error.description);
-     [expect fulfill];
-   }
-   completed:^{
-     XCTAssertNotNil(self.sc.dataService);
-     SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:@"5d7ddb49-83f1-48a1-b1b6-e48767b30c48"];
-     XCTAssertNotNil(ds.style);
-     [expect fulfill];
-   }];
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Error:%@", error.description);
+        [expect fulfill];
+      }
+      completed:^{
+        XCTAssertNotNil(self.sc.dataService);
+        SCDataStore *ds = [[[SpatialConnect sharedInstance] dataService]
+            storeByIdentifier:@"5d7ddb49-83f1-48a1-b1b6-e48767b30c48"];
+        XCTAssertNotNil(ds.style);
+        [expect fulfill];
+      }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
-
-
-
-
 
 @end

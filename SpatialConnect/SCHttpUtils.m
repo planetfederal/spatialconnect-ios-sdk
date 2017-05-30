@@ -22,27 +22,29 @@
   return [SCHttpUtils getRequestURLAsDict:url headers:nil];
 }
 
-+ (RACSignal *)getRequestURLAsDict:(NSURL *)url headers:(NSDictionary<NSString*,NSString*> *)header {
++ (RACSignal *)getRequestURLAsDict:(NSURL *)url
+                           headers:
+                               (NSDictionary<NSString *, NSString *> *)header {
   return
-  [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [[[SCHttpUtils getRequestURLAsData:url headers:header] takeLast:1]
-     subscribeNext:^(RACTuple *t) {
-       NSError *err;
-       NSDictionary *dict =
-       [[JSONDecoder decoder] objectWithData:t.first error:&err];
-       if (err) {
-         [subscriber sendError:err];
-       }
-       [subscriber sendNext:dict];
-     }
-     error:^(NSError *error) {
-       [subscriber sendError:error];
-     }
-     completed:^{
-       [subscriber sendCompleted];
-     }];
-    return nil;
-  }];
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[[SCHttpUtils getRequestURLAsData:url headers:header] takeLast:1]
+            subscribeNext:^(RACTuple *t) {
+              NSError *err;
+              NSDictionary *dict =
+                  [[JSONDecoder decoder] objectWithData:t.first error:&err];
+              if (err) {
+                [subscriber sendError:err];
+              }
+              [subscriber sendNext:dict];
+            }
+            error:^(NSError *error) {
+              [subscriber sendError:error];
+            }
+            completed:^{
+              [subscriber sendCompleted];
+            }];
+        return nil;
+      }];
 }
 
 + (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url {
@@ -68,70 +70,74 @@
   return [SCHttpUtils getRequestURLAsData:url headers:nil];
 }
 
-+ (RACSignal *)getRequestURLAsData:(NSURL *)url headers:(NSDictionary<NSString*,NSString *> *)header {
++ (RACSignal *)getRequestURLAsData:(NSURL *)url
+                           headers:
+                               (NSDictionary<NSString *, NSString *> *)header {
   return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    NSMutableURLRequest *request =
+        [[NSMutableURLRequest alloc] initWithURL:url];
     if (header) {
-      [header enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *val, BOOL * _Nonnull stop) {
+      [header enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *val,
+                                                  BOOL *_Nonnull stop) {
         [request setValue:val forHTTPHeaderField:key];
       }];
     }
     NSObject<NSURLConnectionDataDelegate> *dataDelegate =
-    (NSObject<NSURLConnectionDataDelegate> *)[[NSObject alloc] init];
+        (NSObject<NSURLConnectionDataDelegate> *)[[NSObject alloc] init];
     __block NSMutableData *data = nil;
     __block NSNumber *expectedLength = nil;
     Protocol *protocol = @protocol(NSURLConnectionDataDelegate);
 
     RACCompoundDisposable *disposable =
-    [RACCompoundDisposable compoundDisposable];
+        [RACCompoundDisposable compoundDisposable];
     [disposable
-     addDisposable:[[dataDelegate
-                     rac_signalForSelector:@selector(connection:
-                                                     didReceiveResponse:)
-                     fromProtocol:protocol]
-                    subscribeNext:^(RACTuple *arguments) {
-                      expectedLength = [NSNumber
-                                        numberWithFloat:[arguments.second
-                                                         expectedContentLength]];
-                      data = [NSMutableData data];
-                    }]];
+        addDisposable:[[dataDelegate
+                          rac_signalForSelector:@selector(connection:
+                                                    didReceiveResponse:)
+                                   fromProtocol:protocol]
+                          subscribeNext:^(RACTuple *arguments) {
+                            expectedLength = [NSNumber
+                                numberWithFloat:[arguments.second
+                                                        expectedContentLength]];
+                            data = [NSMutableData data];
+                          }]];
 
     [disposable
-     addDisposable:[[dataDelegate
-                     rac_signalForSelector:@selector(connection:
-                                                     didReceiveData:)
-                     fromProtocol:protocol]
-                    subscribeNext:^(RACTuple *arguments) {
-                      [data appendData:arguments.second];
-                      NSNumber *progress = [NSNumber
-                                            numberWithFloat:(float)[data length] /
-                                            [expectedLength floatValue]];
-                      [subscriber sendNext:RACTuplePack(data, progress)];
-                    }]];
+        addDisposable:[[dataDelegate
+                          rac_signalForSelector:@selector(connection:
+                                                      didReceiveData:)
+                                   fromProtocol:protocol]
+                          subscribeNext:^(RACTuple *arguments) {
+                            [data appendData:arguments.second];
+                            NSNumber *progress = [NSNumber
+                                numberWithFloat:(float)[data length] /
+                                                [expectedLength floatValue]];
+                            [subscriber sendNext:RACTuplePack(data, progress)];
+                          }]];
 
     [disposable addDisposable:[[dataDelegate
-                                rac_signalForSelector:@selector(connection:
-                                                                didFailWithError:)
-                                fromProtocol:protocol]
-                               subscribeNext:^(RACTuple *arguments) {
-                                 [subscriber sendError:arguments.second];
-                               }]];
+                                  rac_signalForSelector:@selector(connection:
+                                                            didFailWithError:)
+                                           fromProtocol:protocol]
+                                  subscribeNext:^(RACTuple *arguments) {
+                                    [subscriber sendError:arguments.second];
+                                  }]];
 
     [disposable
-     addDisposable:[[dataDelegate
-                     rac_signalForSelector:@selector(
-                                                     connectionDidFinishLoading:)
-                     fromProtocol:protocol]
-                    subscribeNext:^(id x) {
-                      [subscriber sendNext:RACTuplePack(data, @(1.0f))];
-                      [subscriber sendCompleted];
-                    }]];
+        addDisposable:[[dataDelegate
+                          rac_signalForSelector:@selector(
+                                                    connectionDidFinishLoading:)
+                                   fromProtocol:protocol]
+                          subscribeNext:^(id x) {
+                            [subscriber sendNext:RACTuplePack(data, @(1.0f))];
+                            [subscriber sendCompleted];
+                          }]];
 
     NSURLConnection *connection =
-    [[NSURLConnection alloc] initWithRequest:request delegate:dataDelegate];
+        [[NSURLConnection alloc] initWithRequest:request delegate:dataDelegate];
     [disposable addDisposable:[RACDisposable disposableWithBlock:^{
-      [connection cancel];
-    }]];
+                  [connection cancel];
+                }]];
     [connection start];
 
     return disposable;
@@ -156,9 +162,9 @@
   request.HTTPMethod = @"POST";
   request.HTTPBody = data;
   return [[NSURLConnection rac_sendAsynchronousRequest:request]
-          reduceEach:^id(NSURLResponse *response, NSData *data) {
-            return data;
-          }];
+      reduceEach:^id(NSURLResponse *response, NSData *data) {
+        return data;
+      }];
 }
 
 + (RACSignal *)postDictRequestAsDict:(NSURL *)url body:(NSDictionary *)dict {
@@ -173,9 +179,9 @@
   }
 
   return [[NSURLConnection rac_sendAsynchronousRequest:request]
-          reduceEach:^id(NSURLResponse *response, NSData *data) {
-            return data;
-          }];
+      reduceEach:^id(NSURLResponse *response, NSData *data) {
+        return data;
+      }];
 }
 
 + (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict {

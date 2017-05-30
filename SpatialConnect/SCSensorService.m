@@ -155,16 +155,17 @@ static NSString *const kSERVICENAME = @"SC_SENSOR_SERVICE";
   SpatialConnect *sc = [SpatialConnect sharedInstance];
   SCCache *c = sc.cache;
   [c setValue:@(YES) forKey:GPS_ENABLED];
-  [[[[self rac_signalForSelector:@selector(locationManager:didChangeAuthorizationStatus:)
-                  fromProtocol:@protocol(CLLocationManagerDelegate)]
-    map:^id(RACTuple *arguments) {
-      return arguments.second;
-    }] filter:^BOOL(NSNumber *value) {
-      return [value intValue] == kCLAuthorizationStatusAuthorizedAlways;
-    }] subscribeNext:^(id x) {
+  [[[[self rac_signalForSelector:@selector(locationManager:
+                                     didChangeAuthorizationStatus:)
+                    fromProtocol:@protocol(CLLocationManagerDelegate)]
+      map:^id(RACTuple *arguments) {
+        return arguments.second;
+      }] filter:^BOOL(NSNumber *value) {
+    return [value intValue] == kCLAuthorizationStatusAuthorizedAlways;
+  }] subscribeNext:^(id x) {
     [self startLocationManager];
   }];
-  
+
   if ([CLLocationManager locationServicesEnabled]) {
     if ([CLLocationManager authorizationStatus] ==
         kCLAuthorizationStatusNotDetermined) {

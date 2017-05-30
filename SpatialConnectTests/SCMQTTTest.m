@@ -152,9 +152,10 @@
 
 - (RACSignal *)formFromBackend {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  return [[[[[[[sc serviceRunning:[SCBackendService serviceId]] materialize] filter:^BOOL(RACEvent *e) {
-    return e.eventType == RACEventTypeCompleted;
-  }] flattenMap:^RACStream *(id value) {
+  return [[[[[[[sc serviceRunning:[SCBackendService serviceId]] materialize]
+      filter:^BOOL(RACEvent *e) {
+        return e.eventType == RACEventTypeCompleted;
+      }] flattenMap:^RACStream *(id value) {
     return sc.backendService.configReceived;
   }] filter:^BOOL(NSNumber *cfgRec) {
     return cfgRec.boolValue;
@@ -173,20 +174,25 @@
   NSArray *arr = [sc.dataService.formStore layers];
   XCTAssertNotNil(arr);
   SCPoint *p = [[SCPoint alloc] initWithCoordinateArray:@[
-                                                          @(-22.3 + arc4random()), @(56.2 + arc4random())
-                                                          ]];
+    @(-22.3 + arc4random()), @(56.2 + arc4random())
+  ]];
 
   [[[[self formFromBackend] take:1] flattenMap:^RACStream *(id value) {
     SpatialConnect *sc = [SpatialConnect sharedInstance];
-    NSString *at = [NSString stringWithFormat:@"Token %@",[[sc authService] xAccessToken]];
+    NSString *at = [NSString
+        stringWithFormat:@"Token %@", [[sc authService] xAccessToken]];
     NSString *buri = [[sc backendService] backendUri];
     SCDataStore *ds = sc.dataService.formStore;
     NSNumber *fid = [sc.dataService.formStore formIdForLayer:ds.layers[0]];
-    NSString *req = [NSString stringWithFormat:@"%@/api/form/%@/sample",buri,fid];
+    NSString *req =
+        [NSString stringWithFormat:@"%@/api/form/%@/sample", buri, fid];
     NSURL *url = [NSURL URLWithString:req];
-    return [SCHttpUtils getRequestURLAsDict:url headers:@{@"Authorization" :at}];
+    return [SCHttpUtils getRequestURLAsDict:url
+                                    headers:@{
+                                      @"Authorization" : at
+                                    }];
   }] subscribeNext:^(NSDictionary *dict) {
-    NSLog(@"%@",dict);
+    NSLog(@"%@", dict);
     SCPoint *p = (SCPoint *)[SCGeoJSON parseDict:dict[@"result"][@"feature"]];
     SCFormFeature *f = [[SCFormFeature alloc] init];
     SCFormStore *ds = sc.dataService.formStore;
@@ -197,14 +203,14 @@
     [[sc.dataService.formStore create:f] subscribeNext:^(id x) {
       [expect fulfill];
     }
-                                                 error:^(NSError *error) {
-                                                   DDLogError(@"%@", error.description);
-                                                   [expect fulfill];
-                                                 }
-                                             completed:^{
-                                               XCTAssert(YES);
-                                               [expect fulfill];
-                                             }];
+        error:^(NSError *error) {
+          DDLogError(@"%@", error.description);
+          [expect fulfill];
+        }
+        completed:^{
+          XCTAssert(YES);
+          [expect fulfill];
+        }];
   }];
   [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }

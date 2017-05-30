@@ -14,10 +14,10 @@
  * limitations under the License
  */
 
-#import "Msg.pbobjc.h"
 #import "SCBackendService.h"
 #import "Actions.h"
 #import "JSONKit.h"
+#import "Msg.pbobjc.h"
 #import "SCConfig.h"
 #import "SCNotification.h"
 #import "SpatialConnect.h"
@@ -97,7 +97,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
                                              UNAuthorizationOptionAlert |
                                              UNAuthorizationOptionBadge)
                           completionHandler:^(BOOL granted,
-                                              NSError *_Nullable error) {
+                                              NSError *_Nullable error){
 
                           }];
   } else {
@@ -283,38 +283,42 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 }
 
 - (void)listenForSyncEvents {
-  
-  RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:YES];
-  
-  RACSignal *storeEditSync = [[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
-    id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
-    RACMulticastConnection *rmcc = [ss storeEdited];
-    [rmcc connect];
-    return rmcc.signal;
-  }] flattenMap:^RACSignal *(SCSpatialFeature *f) {
-    SCDataStore *store = [dataService storeByIdentifier:[f storeId]];
-    return [self syncStore:store];
-  }];
-  
+
+  RACSignal *syncableStores =
+      [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:YES];
+
+  RACSignal *storeEditSync =
+      [[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
+        id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+        RACMulticastConnection *rmcc = [ss storeEdited];
+        [rmcc connect];
+        return rmcc.signal;
+      }] flattenMap:^RACSignal *(SCSpatialFeature *f) {
+        SCDataStore *store = [dataService storeByIdentifier:[f storeId]];
+        return [self syncStore:store];
+      }];
+
   RACSignal *onlineSync = [[connectedToBroker filter:^BOOL(NSNumber *v) {
     return v.boolValue;
   }] flattenMap:^RACSignal *(id value) {
     return [self syncStores];
   }];
-  
-  RACSignal *sync = [RACSignal merge:@[storeEditSync, onlineSync]];
-  
-  [[sync subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
-    subscribeError:^(NSError *error) {
-      DDLogError(@"Store syncing error %@", error.localizedFailureReason);
-    }
-    completed:^{
-      DDLogInfo(@"Store syncing complete");
-    }];
+
+  RACSignal *sync = [RACSignal merge:@[ storeEditSync, onlineSync ]];
+
+  [[sync subscribeOn:[RACScheduler
+                         schedulerWithPriority:RACSchedulerPriorityBackground]]
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Store syncing error %@", error.localizedFailureReason);
+      }
+      completed:^{
+        DDLogInfo(@"Store syncing complete");
+      }];
 }
 
 - (RACSignal *)syncStores {
-  RACSignal *syncableStores = [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:YES];
+  RACSignal *syncableStores =
+      [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:YES];
   return [syncableStores flattenMap:^RACSignal *(id<SCSyncableStore> store) {
     return [self syncStore:store];
   }];
@@ -367,12 +371,12 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
         return s == SCAUTH_AUTHENTICATION_FAILED;
       }] take:1];
 
-  [[[[[authed flattenMap:^RACSignal*(id x) {
+  [[[[[authed flattenMap:^RACSignal *(id x) {
     [self connect];
     return connectedToBroker;
   }] filter:^BOOL(NSNumber *n) {
     return n.boolValue;
-  }] flattenMap:^RACSignal*(id x) {
+  }] flattenMap:^RACSignal *(id x) {
     return _configReceived;
   }] filter:^BOOL(NSNumber *received) {
     return !received.boolValue;

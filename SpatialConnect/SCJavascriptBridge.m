@@ -93,14 +93,13 @@ NSString *const SCJavascriptBridgeErrorDomain =
         };
         [_bridge callHandler:@"lastKnownLocation" data:action];
       }];
-  [[self.spatialConnect.authService loginStatus] subscribeNext:^(
-                                                     NSNumber *authStatus) {
-    NSDictionary *action = @{
-      @"type" : AUTHSERVICE_LOGIN_STATUS,
-      @"payload" : authStatus
-    };
-    [_bridge callHandler:AUTHSERVICE_LOGIN_STATUS data:action];
-  }];
+  [[self.spatialConnect.authService loginStatus]
+      subscribeNext:^(NSNumber *authStatus) {
+        NSDictionary *action =
+            @{ @"type" : AUTHSERVICE_LOGIN_STATUS,
+               @"payload" : authStatus };
+        [_bridge callHandler:AUTHSERVICE_LOGIN_STATUS data:action];
+      }];
 
   [[self.spatialConnect.backendService notifications]
       subscribeNext:^(Msg *msg) {

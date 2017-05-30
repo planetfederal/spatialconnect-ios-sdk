@@ -381,35 +381,42 @@ NSString *const kAuditIdColName = @"audit_id";
 }
 
 - (RACSignal *)unSent {
-  NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE sent IS NULL", self.auditName];
+  NSString *sql = [NSString
+      stringWithFormat:@"SELECT * FROM %@ WHERE sent IS NULL", self.auditName];
   return
-  [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [self query:sql toSubscriber:subscriber];
-    return nil;
-  }];
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self query:sql toSubscriber:subscriber];
+        return nil;
+      }];
 }
 
 - (RACSignal *)updateAuditTable:(SCSpatialFeature *)f {
-  return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [self.pool inDatabase:^(FMDatabase *db) {
-      [db beginTransaction];
-      NSMutableString *createSql = [NSMutableString stringWithFormat:
-                                    @"UPDATE %@ SET sent=datetime() WHERE %@ = ?", self.auditName, self.pkColName];
-      NSError *err;
-      BOOL success = [db executeUpdate:createSql values:@[@([f.identifier longLongValue])] error:&err];
-      if (success) {
-        [db commit];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-          [subscriber sendCompleted];
-        });
-      } else {
-        [db rollback];
-        DDLogError(@"%@", db.lastError);
-        [subscriber sendError:db.lastError];
-      }
-    }];
-    return nil;
-  }];
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.pool inDatabase:^(FMDatabase *db) {
+          [db beginTransaction];
+          NSMutableString *createSql = [NSMutableString
+              stringWithFormat:@"UPDATE %@ SET sent=datetime() WHERE %@ = ?",
+                               self.auditName, self.pkColName];
+          NSError *err;
+          BOOL success = [db executeUpdate:createSql
+                                    values:@[ @([f.identifier longLongValue]) ]
+                                     error:&err];
+          if (success) {
+            [db commit];
+            dispatch_async(
+                dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                ^{
+                  [subscriber sendCompleted];
+                });
+          } else {
+            [db rollback];
+            DDLogError(@"%@", db.lastError);
+            [subscriber sendError:db.lastError];
+          }
+        }];
+        return nil;
+      }];
 }
 
 @end

@@ -95,9 +95,9 @@
 - (NSArray *)formsDictionaryArray {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms
-   enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
-     [arr addObject:[f dictionary]];
-   }];
+      enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
+        [arr addObject:[f dictionary]];
+      }];
   return [NSArray arrayWithArray:arr];
 }
 
@@ -105,10 +105,10 @@
 #pragma mark SCSpatialStore
 - (RACSignal *)queryById:(SCKeyTuple *)key {
   return
-  [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-    [subscriber sendCompleted];
-    return nil;
-  }];
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendCompleted];
+        return nil;
+      }];
 }
 
 - (NSNumber *)formIdForLayer:(NSString *)layer {
@@ -125,10 +125,7 @@
 
 - (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
   NSNumber *formId = [formIds objectForKey:f.layerId];
-  NSDictionary *payload = @{
-    @"form_id" : formId,
-    @"feature" : f.JSONDict
-  };
+  NSDictionary *payload = @{ @"form_id" : formId, @"feature" : f.JSONDict };
   return payload;
 }
 
