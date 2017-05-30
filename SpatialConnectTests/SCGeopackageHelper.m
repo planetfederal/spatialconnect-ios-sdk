@@ -50,16 +50,16 @@ NSString *rasterStoreId = @"ba293796-5026-46f7-a2ff-e5dec85heh6b";
 
 + (RACSignal *)loadFormStore:(SpatialConnect *)sc {
   return [[[[[sc serviceRunning:[SCConfigService serviceId]]
-             flattenMap:^RACStream *(id value) {
-               return [sc.dataService hasStores];
-             }] filter:^BOOL(NSNumber *store) {
-               return [store boolValue];
-             }] flattenMap:^RACStream *(id value) {
-               return [sc.dataService storeStarted:@"FORM_STORE"];
-             }] map:^SCDataStore *(SCStoreStatusEvent *evt) {
-               SCDataStore *ds = [sc.dataService storeByIdentifier:@"FORM_STORE"];
-               return ds;
-             }];
+      flattenMap:^RACStream *(id value) {
+        return [sc.dataService hasStores];
+      }] filter:^BOOL(NSNumber *store) {
+    return [store boolValue];
+  }] flattenMap:^RACStream *(id value) {
+    return [sc.dataService storeStarted:@"FORM_STORE"];
+  }] map:^SCDataStore *(SCStoreStatusEvent *evt) {
+    SCDataStore *ds = [sc.dataService storeByIdentifier:@"FORM_STORE"];
+    return ds;
+  }];
 }
 
 + (RACSignal *)downloadGpkgFile {

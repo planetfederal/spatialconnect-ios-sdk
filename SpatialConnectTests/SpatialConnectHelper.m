@@ -117,16 +117,16 @@ NSString *gpkgStore = @"f6dcc750-1349-46b9-a324-0223764d46d1";
 
 + (RACSignal *)loadFormStore:(SpatialConnect *)sc {
   return [[sc.dataService storeStarted:@"FORM_STORE"]
-          map:^SCDataStore *(SCStoreStatusEvent *evt) {
-            return [sc.dataService storeByIdentifier:@"FORM_STORE"];
-          }];
+      map:^SCDataStore *(SCStoreStatusEvent *evt) {
+        return [sc.dataService storeByIdentifier:@"FORM_STORE"];
+      }];
 }
 
 + (RACSignal *)loadGeopackageStore:(SpatialConnect *)sc {
   return [[sc.dataService storeStarted:gpkgStore]
-          map:^SCDataStore *(SCStoreStatusEvent *evt) {
-            return [sc.dataService storeByIdentifier:gpkgStore];
-          }];
+      map:^SCDataStore *(SCStoreStatusEvent *evt) {
+        return [sc.dataService storeByIdentifier:gpkgStore];
+      }];
 }
 
 + (SpatialConnect *)loadRemoteConfigAndStartServices {

@@ -28,7 +28,6 @@
 @synthesize fillOpacity = _fillOpacity;
 @synthesize iconColor = _iconColor;
 
-
 - (id)initWithMapboxStyle:(NSArray *)mbstyle {
   self = [self init];
   if (!self) {
@@ -37,11 +36,16 @@
   for (NSDictionary *s in mbstyle) {
     NSDictionary *paint = s[@"paint"];
     if (paint) {
-      if (paint[@"line-color"]) _strokeColor = paint[@"line-color"];
-      if (paint[@"line-opacity"]) _strokeOpacity = [paint[@"line-opacity"] floatValue];
-      if (paint[@"fill-color"]) _fillColor = paint[@"fill-color"];
-      if (paint[@"fill-opacity"]) _fillOpacity = [paint[@"fill-opacity"] floatValue];
-      if (paint[@"icon-color"]) _iconColor = paint[@"icon-color"];
+      if (paint[@"line-color"])
+        _strokeColor = paint[@"line-color"];
+      if (paint[@"line-opacity"])
+        _strokeOpacity = [paint[@"line-opacity"] floatValue];
+      if (paint[@"fill-color"])
+        _fillColor = paint[@"fill-color"];
+      if (paint[@"fill-opacity"])
+        _fillOpacity = [paint[@"fill-opacity"] floatValue];
+      if (paint[@"icon-color"])
+        _iconColor = paint[@"icon-color"];
     }
   }
   return self;
@@ -121,13 +125,13 @@
 
 - (NSDictionary *)dictionary {
   return @{
-           @"strokeColor" : self.strokeColor,
-           @"strokeWidth" : [@(self.strokeWidth) stringValue],
-           @"strokeOpacity" : [@(self.strokeOpacity) stringValue],
-           @"fillOpacity" : [@(self.fillOpacity) stringValue],
-           @"fillColor" : self.fillColor,
-           @"iconColor" : self.iconColor
-           };
+    @"strokeColor" : self.strokeColor,
+    @"strokeWidth" : [@(self.strokeWidth) stringValue],
+    @"strokeOpacity" : [@(self.strokeOpacity) stringValue],
+    @"fillOpacity" : [@(self.fillOpacity) stringValue],
+    @"fillColor" : self.fillColor,
+    @"iconColor" : self.iconColor
+  };
 }
 
 @end

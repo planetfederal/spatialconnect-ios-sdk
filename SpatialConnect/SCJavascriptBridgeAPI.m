@@ -63,7 +63,8 @@
     else if ([actionType isEqualToString:DATASERVICE_QUERYALL])
       [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
     else if ([actionType isEqualToString:DATASERVICE_SPATIALQUERY])
-      [self queryGeoStoresByIds:action[@"payload"] responseSubscriber:subscriber];
+      [self queryGeoStoresByIds:action[@"payload"]
+             responseSubscriber:subscriber];
     else if ([actionType isEqualToString:DATASERVICE_SPATIALQUERYALL])
       [self queryAllGeoStores:action[@"payload"] responseSubscriber:subscriber];
     else if ([actionType isEqualToString:DATASERVICE_CREATEFEATURE])
@@ -208,24 +209,24 @@
        responseSubscriber:(id<RACSubscriber>)subscriber {
   BOOL enable = [value boolValue];
   [[[SpatialConnect sharedInstance] serviceRunning:[SCSensorService serviceId]]
-    subscribeNext:^(id value) {
-      SCSensorService *ss = [[SpatialConnect sharedInstance] sensorService];
-      if (enable) {
-        [ss enableGPS];
-        [[ss lastKnown] subscribeNext:^(CLLocation *loc) {
-          CLLocationDistance alt = loc.altitude;
-          float lat = loc.coordinate.latitude;
-          float lon = loc.coordinate.longitude;
-          [subscriber sendNext:@{
-            @"latitude" : [NSNumber numberWithFloat:lat],
-            @"longitude" : [NSNumber numberWithFloat:lon],
-            @"altitude" : [NSNumber numberWithFloat:alt]
+      subscribeNext:^(id value) {
+        SCSensorService *ss = [[SpatialConnect sharedInstance] sensorService];
+        if (enable) {
+          [ss enableGPS];
+          [[ss lastKnown] subscribeNext:^(CLLocation *loc) {
+            CLLocationDistance alt = loc.altitude;
+            float lat = loc.coordinate.latitude;
+            float lon = loc.coordinate.longitude;
+            [subscriber sendNext:@{
+              @"latitude" : [NSNumber numberWithFloat:lat],
+              @"longitude" : [NSNumber numberWithFloat:lon],
+              @"altitude" : [NSNumber numberWithFloat:alt]
+            }];
           }];
-        }];
-      } else {
-        [ss disableGPS];
-      }
-  }];
+        } else {
+          [ss disableGPS];
+        }
+      }];
 }
 
 - (void)createFeature:(NSDictionary *)value
