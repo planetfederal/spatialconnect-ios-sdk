@@ -110,7 +110,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
     // uniqueness
     // when being stored on disk.
     BOOL b = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    
+
     if (b) {
       self.gpkg = [[SCGeopackage alloc] initWithFilename:path];
       self.status = SC_DATASTORE_RUNNING;
@@ -140,29 +140,29 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   } else {
     NSString *bundlePath = [SCFileUtils filePathFromMainBundle:self.uri];
     NSString *documentsPath =
-    [SCFileUtils filePathFromDocumentsDirectory:self.uri];
+        [SCFileUtils filePathFromDocumentsDirectory:self.uri];
     if ([[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
       self.filepath = bundlePath;
     } else if ([[NSFileManager defaultManager]
-                fileExistsAtPath:documentsPath]) {
+                   fileExistsAtPath:documentsPath]) {
       self.filepath = documentsPath;
     }
     return
-    [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-      if (self.filepath != nil &&
-          [[NSFileManager defaultManager] fileExistsAtPath:self.filepath]) {
-        self.gpkg = [[SCGeopackage alloc] initWithFilename:self.filepath];
-        self.status = SC_DATASTORE_RUNNING;
-        [subscriber sendCompleted];
-      } else {
-        NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
-                                           code:SC_GEOPACKAGE_FILENOTFOUND
-                                       userInfo:nil];
-        self.status = SC_DATASTORE_STOPPED;
-        [subscriber sendError:err];
-      }
-      return nil;
-    }];
+        [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+          if (self.filepath != nil &&
+              [[NSFileManager defaultManager] fileExistsAtPath:self.filepath]) {
+            self.gpkg = [[SCGeopackage alloc] initWithFilename:self.filepath];
+            self.status = SC_DATASTORE_RUNNING;
+            [subscriber sendCompleted];
+          } else {
+            NSError *err = [NSError errorWithDomain:SCGeopackageErrorDomain
+                                               code:SC_GEOPACKAGE_FILENOTFOUND
+                                           userInfo:nil];
+            self.status = SC_DATASTORE_STOPPED;
+            [subscriber sendError:err];
+          }
+          return nil;
+        }];
   }
   return [RACSignal empty];
 }
@@ -283,7 +283,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (RACSignal *)unSent {
   RACSignal *unSentFeatures = [[[self.gpkg unSent] rac_sequence] signal];
-  return [unSentFeatures map:^SCSpatialFeature*(SCSpatialFeature *f) {
+  return [unSentFeatures map:^SCSpatialFeature *(SCSpatialFeature *f) {
     f.storeId = self.storeId;
     return f;
   }];

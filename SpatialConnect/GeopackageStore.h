@@ -33,8 +33,8 @@ typedef NS_ENUM(NSInteger, SCGeopackageError) {
   SC_GEOPACKAGE_ERRORDOWNLOADING = 2
 };
 
-@interface GeopackageStore
-    : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle, SCRasterStore, SCSyncableStore>
+@interface GeopackageStore : SCDataStore <SCSpatialStore, SCDataStoreLifeCycle,
+                                          SCRasterStore, SCSyncableStore>
 
 @property(readonly, nonatomic, strong) NSString *uri;
 @property(readonly, nonatomic, strong) NSString *filepath;

@@ -63,7 +63,8 @@ static NSString *const STYLE = @"style";
     URI : _uri,
     DEFAULT_LAYERS : _defaultLayers ? _defaultLayers : @[],
     NAME : _name,
-    STYLE: _style == nil || [_style isKindOfClass:[NSNull class]] ? @{} : _style
+    STYLE :
+        _style == nil || [_style isKindOfClass:[NSNull class]] ? @{} : _style
   };
 }
 

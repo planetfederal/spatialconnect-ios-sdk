@@ -20,8 +20,9 @@
 #import "SCSyncableStore.h"
 #import <Foundation/Foundation.h>
 
-@interface SCFormStore : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore, SCSyncableStore> {
-  NSMutableDictionary<NSString *,NSNumber *> *formIds;
+@interface SCFormStore
+    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore, SCSyncableStore> {
+  NSMutableDictionary<NSString *, NSNumber *> *formIds;
   NSMutableDictionary *storeForms;
 }
 
