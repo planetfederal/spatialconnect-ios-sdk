@@ -338,8 +338,15 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       Msg *msg = [[Msg alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
-      [self publishExactlyOnce:msg onTopic:[ss syncChannel]];
-      return [ss updateAuditTable:feature];
+      return [[self publishReplyTo:msg onTopic:[ss syncChannel]] flattenMap:^RACSignal *(Msg *m) {
+        NSString *json = m.payload;
+        NSDictionary *dict = [json objectFromJSONString];
+        if (dict[@"result"]) {
+          return [ss updateAuditTable:feature];
+        } else {
+          return [RACSignal empty];
+        }
+      }];
     } else {
       return [RACSignal empty];
     }
