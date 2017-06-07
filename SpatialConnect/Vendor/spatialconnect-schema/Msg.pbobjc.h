@@ -4,13 +4,13 @@
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
-#define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
+ #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
-#import <Protobuf/GPBProtocolBuffers.h>
+ #import <Protobuf/GPBProtocolBuffers.h>
 #else
-#import "GPBProtocolBuffers.h"
+ #import "GPBProtocolBuffers.h"
 #endif
 
 #if GOOGLE_PROTOBUF_OBJC_GEN_VERSION != 30001
@@ -28,16 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - MsgRoot
 
-/**
- * Exposes the extension registry for this file.
- *
- * The base class provides:
- * @code
- *   + (GPBExtensionRegistry *)extensionRegistry;
- * @endcode
- * which is a @c GPBExtensionRegistry that includes all the extensions defined by
- * this file and all files that it depends on.
- **/
+/// Exposes the extension registry for this file.
+///
+/// The base class provides:
+/// @code
+///   + (GPBExtensionRegistry *)extensionRegistry;
+/// @endcode
+/// which is a @c GPBExtensionRegistry that includes all the extensions defined by
+/// this file and all files that it depends on.
 @interface MsgRoot : GPBRootObject
 @end
 
@@ -56,7 +54,7 @@ typedef GPB_ENUM(Msg_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *context;
 
-@property(nonatomic, readwrite) int32_t correlationId;
+@property(nonatomic, readwrite) int64_t correlationId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *to;
 
