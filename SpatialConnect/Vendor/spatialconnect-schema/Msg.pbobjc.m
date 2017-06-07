@@ -4,16 +4,16 @@
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
-#define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
+ #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
-#import <Protobuf/GPBProtocolBuffers_RuntimeSupport.h>
+ #import <Protobuf/GPBProtocolBuffers_RuntimeSupport.h>
 #else
-#import "GPBProtocolBuffers_RuntimeSupport.h"
+ #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
-#import "Msg.pbobjc.h"
+ #import "Msg.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -52,12 +52,12 @@ static GPBFileDescriptor *MsgRoot_FileDescriptor(void) {
 
 typedef struct Msg__storage_ {
   uint32_t _has_storage_[1];
-  int32_t correlationId;
   NSString *context;
   NSString *to;
   NSString *action;
   NSString *payload;
   NSString *jwt;
+  int64_t correlationId;
 } Msg__storage_;
 
 // This method is threadsafe because it is initially called
@@ -82,7 +82,7 @@ typedef struct Msg__storage_ {
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(Msg__storage_, correlationId),
         .flags = GPBFieldOptional | GPBFieldTextFormatNameCustom,
-        .dataType = GPBDataTypeInt32,
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "to",
@@ -122,16 +122,16 @@ typedef struct Msg__storage_ {
       },
     };
     GPBDescriptor *localDescriptor =
-    [GPBDescriptor allocDescriptorForClass:[Msg class]
-                                 rootClass:[MsgRoot class]
-                                      file:MsgRoot_FileDescriptor()
-                                    fields:fields
-                                fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                               storageSize:sizeof(Msg__storage_)
-                                     flags:0];
+        [GPBDescriptor allocDescriptorForClass:[Msg class]
+                                     rootClass:[MsgRoot class]
+                                          file:MsgRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Msg__storage_)
+                                         flags:0];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-    "\001\002\r\000";
+        "\001\002\r\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
