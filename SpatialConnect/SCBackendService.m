@@ -474,7 +474,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (RACSignal *)publishReplyTo:(Msg *)msg onTopic:(NSString *)topic {
   NSTimeInterval ti = [[NSDate date] timeIntervalSince1970];
-  msg.correlationId = @(ti * 1000).intValue;
+  msg.correlationId = @(ti * 1000).longValue;
   msg.to = [NSString
       stringWithFormat:@"/device/%@-replyTo",
                        [[SpatialConnect sharedInstance] deviceIdentifier]];
