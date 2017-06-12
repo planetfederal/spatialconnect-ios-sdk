@@ -125,6 +125,12 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     [self createNotification:notification];
   }];
 
+  [[connectedToBroker filter:^BOOL(NSNumber *n) {
+    return n.boolValue;
+  }] subscribeNext:^(id x) {
+    [self fetchConfig];
+  }];
+
   [[self listenOnTopic:@"/config/update"] subscribeNext:^(Msg *msg) {
     NSString *payload = msg.payload;
     SCConfig *cachedConfig = configService.cachedConfig;
@@ -184,6 +190,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   regMsg.action = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
   [self publishExactlyOnce:regMsg onTopic:@"/config/register"];
+  [self fetchConfig];
+}
+
+- (void)fetchConfig {
   Msg *cMsg = [Msg new];
   cMsg.action = CONFIG_FULL;
   [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(Msg *m) {
@@ -240,12 +250,11 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     multicast = [[d publish] autoconnect];
     sessionManager.delegate = (id<MQTTSessionManagerDelegate>)self;
 
-    [[[connectedToBroker filter:^BOOL(NSNumber *v) {
+    [[connectedToBroker filter:^BOOL(NSNumber *v) {
       return v.boolValue;
-    }] take:1] subscribeNext:^(id x) {
+    }] subscribeNext:^(id x) {
       [self setupSubscriptions];
     }];
-
   } else {
     RACSignal *notConnected =
         [[connectedToBroker take:1] filter:^BOOL(NSNumber *value) {
@@ -255,7 +264,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       [sessionManager connectToLast];
     }];
   }
-
   [sessionManager addObserver:self
                    forKeyPath:@"state"
                       options:NSKeyValueObservingOptionInitial |
@@ -395,6 +403,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   [failedAuth subscribeNext:^(id x) {
     [self loadCachedConfig];
   }];
+  
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
