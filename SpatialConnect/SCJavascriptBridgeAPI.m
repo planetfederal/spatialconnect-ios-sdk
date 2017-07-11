@@ -126,6 +126,9 @@
         NSArray *arr = [[[SpatialConnect sharedInstance] dataService]
             activeStoreListDictionary];
         [subscriber sendNext:@{ @"stores" : arr }];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
       }];
 }
 
@@ -135,6 +138,9 @@
         NSArray *arr = [[[[SpatialConnect sharedInstance] dataService]
             formStore] formsDictionaryArray];
         [subscriber sendNext:@{ @"forms" : arr }];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
       }];
 }
 
@@ -153,8 +159,11 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-    [subscriber sendNext:d];
-  }
+        [subscriber sendNext:d];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
       completed:^{
         [subscriber sendCompleted];
       }];
@@ -169,6 +178,9 @@
       subscribeNext:^(SCSpatialFeature *value) {
         [subscriber sendNext:[value JSONDict]];
       }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
       completed:^{
         [subscriber sendCompleted];
       }];
@@ -182,11 +194,14 @@
   [[[ds queryAllStores:filter] map:^NSDictionary *(SCSpatialFeature *value) {
     return [value JSONDict];
   }] subscribeNext:^(NSDictionary *d) {
-    [subscriber sendNext:d];
-  }
-      completed:^{
-        [subscriber sendCompleted];
-      }];
+      [subscriber sendNext:d];
+    }
+    error:^(NSError *error) {
+      [subscriber sendError:error];
+    }
+    completed:^{
+      [subscriber sendCompleted];
+    }];
 }
 
 - (void)queryGeoStoresByIds:(NSDictionary *)value
@@ -198,8 +213,11 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-    [subscriber sendNext:d];
-  }
+        [subscriber sendNext:d];
+      }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
       completed:^{
         [subscriber sendCompleted];
       }];
@@ -246,10 +264,11 @@
     feat.layerId = layerId;
     [[s create:feat] subscribeError:^(NSError *error) {
       DDLogError(@"Error creating Feature");
+      [subscriber sendError:error];
     }
-        completed:^{
-          [subscriber sendNext:[feat JSONDict]];
-        }];
+    completed:^{
+      [subscriber sendNext:[feat JSONDict]];
+    }];
 
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
@@ -278,10 +297,10 @@
                           userInfo:nil];
       [subscriber sendError:err];
     }
-        completed:^{
-          [subscriber sendNext:[feat JSONDict]];
-          [subscriber sendCompleted];
-        }];
+    completed:^{
+      [subscriber sendNext:[feat JSONDict]];
+      [subscriber sendCompleted];
+    }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_UPDATEFEATURE
@@ -304,9 +323,9 @@
                           userInfo:nil];
       [subscriber sendError:err];
     }
-        completed:^{
-          [subscriber sendCompleted];
-        }];
+    completed:^{
+      [subscriber sendCompleted];
+    }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_DELETEFEATURE
