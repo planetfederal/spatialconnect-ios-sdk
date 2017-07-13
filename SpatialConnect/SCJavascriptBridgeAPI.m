@@ -58,7 +58,7 @@
       [self activeStoreById:action[@"payload"] responseSubscriber:subscriber];
     else if ([actionType isEqualToString:DATASERVICE_STORELIST])
       [self storeList:subscriber];
-    else if ([actionType isEqualToString:DATASERVICE_QUERYALL])
+    else if ([actionType isEqualToString:DATASERVICE_QUERY])
       [self queryStoresByIds:action[@"payload"] responseSubscriber:subscriber];
     else if ([actionType isEqualToString:DATASERVICE_QUERYALL])
       [self queryAllStores:action[@"payload"] responseSubscriber:subscriber];
