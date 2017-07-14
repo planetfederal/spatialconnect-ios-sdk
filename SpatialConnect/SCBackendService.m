@@ -231,7 +231,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
                keepalive:60
                    clean:true
                     auth:true
-                    user:token
+                    user:token //TODO can this be nil?
                     pass:@"anypass"
                     will:true
                willTopic:[NSString stringWithFormat:@"/device/%@-will", ident]
