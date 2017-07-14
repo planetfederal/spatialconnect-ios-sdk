@@ -24,6 +24,7 @@
 @property(nonatomic, readonly) NSString *mqttProtocol;
 @property(nonatomic, readonly) NSString *mqttHost;
 @property(nonatomic, readonly) NSString *mqttPort;
+@property(nonatomic, readonly) NSString *auth;
 
 - (id)initWithDict:(NSDictionary *)d;
 - (NSString *)httpUri;

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
+		5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5415E5441F19600D00F59008 /* SCNoAuthMethod.h */; };
+		5415E5471F19600D00F59008 /* SCNoAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5415E5451F19600D00F59008 /* SCNoAuthMethod.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		547F3EDB1D77688700AE354E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 547F3ED91D77688700AE354E /* Reachability.m */; };
 		547F3EDD1D776F6400AE354E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 547F3EDC1D776F6400AE354E /* SystemConfiguration.framework */; };
@@ -463,6 +465,8 @@
 
 /* Begin PBXFileReference section */
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
+		5415E5441F19600D00F59008 /* SCNoAuthMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNoAuthMethod.h; sourceTree = "<group>"; };
+		5415E5451F19600D00F59008 /* SCNoAuthMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNoAuthMethod.m; sourceTree = "<group>"; };
 		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeoJSONStoreTest.m; path = SpatialConnectTests/SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
 		547F3ED81D77688700AE354E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		547F3ED91D77688700AE354E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -1669,6 +1673,8 @@
 				56285CE01E36BC13002D9934 /* SCServerAuthMethod.h */,
 				56285CE11E36BC13002D9934 /* SCServerAuthMethod.m */,
 				563296441E37B40F002D1F07 /* SCAuthProtocol.h */,
+				5415E5441F19600D00F59008 /* SCNoAuthMethod.h */,
+				5415E5451F19600D00F59008 /* SCNoAuthMethod.m */,
 			);
 			name = AuthService;
 			sourceTree = "<group>";
@@ -1836,6 +1842,7 @@
 				5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */,
 				561685FC1C74E69D00FC7FA6 /* SCGpkgGeometryColumnsTable.h in Headers */,
 				5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */,
+				5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */,
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				561685F41C74E3D800FC7FA6 /* SCGpkgExtension.h in Headers */,
@@ -2249,6 +2256,7 @@
 				56CC079E1C6ED59000407D4A /* SCGpkgContentsTable.m in Sources */,
 				5649B59E1BE280D6009947EF /* SCFilterGreaterThanEqual.m in Sources */,
 				5649B5C61BE280D6009947EF /* SCJavascriptBridge.m in Sources */,
+				5415E5471F19600D00F59008 /* SCNoAuthMethod.m in Sources */,
 				5649B5C41BE280D6009947EF /* SCGeometryCollection+MapKit.m in Sources */,
 				5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */,
 				5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */,
