@@ -254,6 +254,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       return v.boolValue;
     }] subscribeNext:^(id x) {
       [self setupSubscriptions];
+      [self registerAndFetchConfig];
+      [self listenForSyncEvents];
     }];
   } else {
     RACSignal *notConnected =
@@ -373,37 +375,15 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 }
 
 - (void)authListener {
-  // You have the url to the server. Wait for someone to properly
-  // authenticate before fetching the config
-  RACSignal *authed = [[[authService loginStatus] filter:^BOOL(NSNumber *n) {
+  [[authService loginStatus] subscribeNext:^(NSNumber *n) {
     SCAuthStatus s = [n integerValue];
-    return s == SCAUTH_AUTHENTICATED;
-  }] take:1];
-
-  RACSignal *failedAuth =
-      [[[authService loginStatus] filter:^BOOL(NSNumber *n) {
-        SCAuthStatus s = [n integerValue];
-        return s == SCAUTH_AUTHENTICATION_FAILED;
-      }] take:1];
-
-  [[[[[authed flattenMap:^RACSignal *(id x) {
-    [self connect];
-    return connectedToBroker;
-  }] filter:^BOOL(NSNumber *n) {
-    return n.boolValue;
-  }] flattenMap:^RACSignal *(id x) {
-    return _configReceived;
-  }] filter:^BOOL(NSNumber *received) {
-    return !received.boolValue;
-  }] subscribeNext:^(id x) {
-    [self registerAndFetchConfig];
-    [self listenForSyncEvents];
+    if (s == SCAUTH_AUTHENTICATED) {
+      [self connect];
+    }
+    if (s == SCAUTH_AUTHENTICATION_FAILED) {
+      [self loadCachedConfig];
+    }
   }];
-
-  [failedAuth subscribeNext:^(id x) {
-    [self loadCachedConfig];
-  }];
-  
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
