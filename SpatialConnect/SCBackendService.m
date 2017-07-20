@@ -230,7 +230,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
                      tls:[mqttProtocol isEqualToString:@"tls"]
                keepalive:60
                    clean:true
-                    auth:true
+                    auth:token != nil
                     user:token
                     pass:@"anypass"
                     will:true

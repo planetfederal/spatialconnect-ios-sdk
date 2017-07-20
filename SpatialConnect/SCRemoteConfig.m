@@ -22,6 +22,7 @@ static NSString *const HTTP_PORT = @"http_port";
 static NSString *const MQTT_PROTOCOL = @"mqtt_protocol";
 static NSString *const MQTT_HOST = @"mqtt_host";
 static NSString *const MQTT_PORT = @"mqtt_port";
+static NSString *const AUTH_METHOD = @"auth";
 
 @implementation SCRemoteConfig
 
@@ -31,6 +32,7 @@ static NSString *const MQTT_PORT = @"mqtt_port";
 @synthesize mqttProtocol = _mqttProtocol;
 @synthesize mqttHost = _mqttHost;
 @synthesize mqttPort = _mqttPort;
+@synthesize auth = _auth;
 
 - (id)initWithDict:(NSDictionary *)d {
   self = [super init];
@@ -41,6 +43,7 @@ static NSString *const MQTT_PORT = @"mqtt_port";
     _mqttProtocol = d[MQTT_PROTOCOL];
     _mqttHost = d[MQTT_HOST];
     _mqttPort = d[MQTT_PORT];
+    _auth = d[AUTH_METHOD];
   }
   return self;
 }
@@ -57,7 +60,8 @@ static NSString *const MQTT_PORT = @"mqtt_port";
     HTTP_PORT : _httpPort,
     MQTT_PROTOCOL : _mqttProtocol,
     MQTT_HOST : _mqttHost,
-    MQTT_PORT : _mqttPort
+    MQTT_PORT : _mqttPort,
+    AUTH_METHOD: _auth
   };
 }
 
