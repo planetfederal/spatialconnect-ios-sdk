@@ -348,6 +348,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       Msg *msg = [[Msg alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
+      msg.action = DATASERVICE_CREATEFEATURE;
       return [[self publishReplyTo:msg onTopic:[ss syncChannel]] flattenMap:^RACSignal *(Msg *m) {
         NSString *json = m.payload;
         NSDictionary *dict = [json objectFromJSONString];
