@@ -29,6 +29,7 @@ extern NSString *const CONFIG_ADD_FORM;
 extern NSString *const CONFIG_REMOVE_FORM;
 extern NSString *const CONFIG_UPDATE_FORM;
 extern NSString *const CONFIG_REGISTER_DEVICE;
+extern NSString *const DEVICE_INFO;
 extern NSString *const NOTIFICATIONS;
 extern NSString *const NOTIFICATION_ALERT;
 extern NSString *const NOTIFICATION_INFO;

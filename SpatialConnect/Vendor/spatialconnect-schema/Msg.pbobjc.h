@@ -28,16 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - MsgRoot
 
-/**
- * Exposes the extension registry for this file.
- *
- * The base class provides:
- * @code
- *   + (GPBExtensionRegistry *)extensionRegistry;
- * @endcode
- * which is a @c GPBExtensionRegistry that includes all the extensions defined by
- * this file and all files that it depends on.
- **/
+/// Exposes the extension registry for this file.
+///
+/// The base class provides:
+/// @code
+///   + (GPBExtensionRegistry *)extensionRegistry;
+/// @endcode
+/// which is a @c GPBExtensionRegistry that includes all the extensions defined by
+/// this file and all files that it depends on.
 @interface MsgRoot : GPBRootObject
 @end
 
