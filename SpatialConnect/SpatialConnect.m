@@ -157,6 +157,12 @@
   }
 }
 
+- (void)updateDeviceToken:(NSString *)token {
+  [[self serviceRunning:[SCBackendService serviceId]] subscribeNext:^(id value) {
+    [_backendService updateDeviceToken:token];
+  }];
+}
+
 - (NSString *)deviceIdentifier {
   NSString *ident = [[NSUserDefaults standardUserDefaults]
       stringForKey:@"SPATIALCONNECT_UNIQUE_ID"];

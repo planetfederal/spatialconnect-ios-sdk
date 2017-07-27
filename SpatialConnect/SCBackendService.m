@@ -180,12 +180,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
  configuration specific to this user/device.
  */
 - (void)registerAndFetchConfig {
-
-  NSDictionary *regDict = @{
-    @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
-    @"device_info" : @{@"os" : @"ios"},
-    @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
-  };
+  NSDictionary *regDict = [self buildDeviceInfo:@""];
   Msg *regMsg = [[Msg alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
@@ -204,6 +199,31 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     [configService setCachedConfig:cfg];
     [_configReceived sendNext:@(YES)];
   }];
+}
+
+- (void)updateDeviceToken:(NSString *)token {
+  [[[[[[authService loginStatus] filter:^BOOL(NSNumber *n) {
+    return [n integerValue];
+  }] flattenMap:^RACSignal *(id x) {
+    return _configReceived;
+  }] filter:^BOOL(NSNumber *received) {
+    return received.boolValue;
+  }] take:1] subscribeNext:^(id x) {
+    NSDictionary *regDict = [self buildDeviceInfo:token];
+    Msg *msg = [[Msg alloc] init];
+    msg.action = DEVICE_INFO;
+    msg.payload = [regDict JSONString];
+    [self publishExactlyOnce:msg onTopic:@"/device/info"];
+  }];
+}
+
+- (NSDictionary *)buildDeviceInfo:(NSString *)token {
+  NSDictionary *dict = @{
+                         @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
+                         @"device_info" : @{@"os" : @"ios", @"token": token},
+                         @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
+                         };
+  return dict;
 }
 
 - (NSString *)jwt {
