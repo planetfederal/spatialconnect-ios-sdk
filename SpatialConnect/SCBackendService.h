@@ -120,4 +120,6 @@
  */
 - (RACSignal *)listenOnTopic:(NSString *)topic;
 
+- (void)updateDeviceToken:(NSString *)token;
+
 @end
