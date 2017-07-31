@@ -40,4 +40,5 @@ typedef NS_ENUM(NSInteger, SCFormItemType) {
 - (NSDictionary *)dictionary;
 - (NSDictionary *)sqlTypes;
 - (NSDictionary *)JSONDict;
+- (BOOL)isValid;
 @end

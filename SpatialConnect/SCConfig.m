@@ -15,7 +15,7 @@
  */
 
 #import "SCConfig.h"
-#import "SCFormConfig.h"
+#import "SCLayerConfig.h"
 #import "SCStoreConfig.h"
 
 @implementation SCConfig
@@ -29,13 +29,13 @@
                                              BOOL *stop) {
       [stores addObject:[[SCStoreConfig alloc] initWithDictionary:d]];
     }];
-    forms = [NSMutableArray new];
-    NSArray *formDicts = d[@"forms"];
-    [formDicts enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
+    layers = [NSMutableArray new];
+    NSArray *layerDicts = d[@"layers"];
+    [layerDicts enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx,
                                             BOOL *stop) {
-      SCFormConfig *f = [[SCFormConfig alloc] initWithDict:d];
-      if (f) {
-        [forms addObject:f];
+      SCLayerConfig *l = [[SCLayerConfig alloc] initWithDict:d];
+      if (l) {
+        [layers addObject:l];
       }
     }];
     NSDictionary *rd = d[@"remote"];
@@ -48,17 +48,17 @@
 
 - (NSDictionary *)dictionary {
   NSMutableDictionary *dict = [NSMutableDictionary new];
-  NSArray *fs =
-      [[forms.rac_sequence.signal map:^NSDictionary *(SCFormConfig *fc) {
-        return fc.dictionary;
-      }] toArray];
-  if (fs) {
-    dict[@"forms"] = fs;
+  NSArray *ls =
+  [[layers.rac_sequence.signal map:^NSDictionary *(SCLayerConfig *lc) {
+    return lc.dictionary;
+  }] toArray];
+  if (ls) {
+    dict[@"layers"] = ls;
   }
   NSArray *ss =
-      [[stores.rac_sequence.signal map:^NSDictionary *(SCStoreConfig *sc) {
-        return sc.dictionary;
-      }] toArray];
+  [[stores.rac_sequence.signal map:^NSDictionary *(SCStoreConfig *sc) {
+    return sc.dictionary;
+  }] toArray];
   if (ss) {
     dict[@"stores"] = ss;
   }
@@ -68,8 +68,8 @@
   return [NSDictionary dictionaryWithDictionary:dict];
 }
 
-- (NSArray *)forms {
-  return [NSArray arrayWithArray:forms];
+- (NSArray *)layers {
+  return [NSArray arrayWithArray:layers];
 }
 
 - (NSArray *)stores {
@@ -80,25 +80,25 @@
   return r;
 }
 
-- (void)addForm:(SCFormConfig *)fc {
-  [forms addObject:fc];
+- (void)addLayer:(SCLayerConfig *)lc {
+  [layers addObject:lc];
 }
 
-- (void)updateForm:(SCFormConfig *)fc {
-  [forms enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx,
+- (void)updateLayer:(SCLayerConfig *)lc {
+  [layers enumerateObjectsUsingBlock:^(SCLayerConfig *c, NSUInteger idx,
                                       BOOL *stop) {
-    if (c.identifier == fc.identifier) {
-      [forms setObject:fc atIndexedSubscript:idx];
+    if (c.identifier == lc.identifier) {
+      [layers setObject:lc atIndexedSubscript:idx];
       *stop = YES;
     }
   }];
 }
 
-- (void)removeForm:(NSString *)key {
-  [forms enumerateObjectsUsingBlock:^(SCFormConfig *c, NSUInteger idx,
+- (void)removeLayer:(NSString *)key {
+  [layers enumerateObjectsUsingBlock:^(SCLayerConfig *c, NSUInteger idx,
                                       BOOL *stop) {
     if (c.key == key) {
-      [forms removeObjectAtIndex:idx];
+      [layers removeObjectAtIndex:idx];
       *stop = YES;
     }
   }];

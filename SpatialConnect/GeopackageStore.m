@@ -298,10 +298,6 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
   return [fs updateAuditTable:feature];
 }
 
-- (NSString *)syncChannel {
-  return [NSString stringWithFormat:@"/store/%@", self.storeId];
-}
-
 #pragma mark -
 #pragma mark Override Parent
 - (NSString *)key {

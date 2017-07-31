@@ -101,8 +101,5 @@
   }];
 }
 
-- (NSString *)syncChannel {
-  return @"/store/tracking";
-}
 
 @end

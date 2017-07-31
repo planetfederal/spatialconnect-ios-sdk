@@ -23,6 +23,8 @@
 #import "SpatialConnect.h"
 
 static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
+static NSString *const COMMAND_TOPIC = @"command";
+static NSString *const QUERY_TOPIC = @"query";
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)                             \
   ([[[UIDevice currentDevice] systemVersion]                                   \
        compare:v                                                               \
@@ -151,23 +153,23 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       [cachedConfig removeStore:storeid];
       [dataService unregisterStore:ds];
     } else if ([msg.action isEqualToString:CONFIG_ADD_FORM]) {
-      SCFormConfig *f =
-          [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
+      SCLayerConfig *f =
+          [[SCLayerConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
-        [cachedConfig addForm:f];
+        [cachedConfig addLayer:f];
         [dataService.formStore registerFormByConfig:f];
       }
     } else if ([msg.action isEqualToString:CONFIG_UPDATE_FORM]) {
-      SCFormConfig *f =
-          [[SCFormConfig alloc] initWithDict:[payload objectFromJSONString]];
+      SCLayerConfig *f =
+          [[SCLayerConfig alloc] initWithDict:[payload objectFromJSONString]];
       if (f) {
-        [cachedConfig updateForm:f];
+        [cachedConfig updateLayer:f];
         [dataService.formStore updateFormByConfig:f];
       }
     } else if ([msg.action isEqualToString:CONFIG_REMOVE_FORM]) {
       NSDictionary *json = [payload objectFromJSONString];
       NSString *formKey = [json objectForKey:@"form_key"];
-      [cachedConfig removeForm:formKey];
+      [cachedConfig removeLayer:formKey];
       [dataService.formStore unregisterFormByKey:formKey];
     }
     [configService setCachedConfig:cachedConfig];
@@ -184,14 +186,14 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   Msg *regMsg = [[Msg alloc] init];
   regMsg.action = CONFIG_REGISTER_DEVICE;
   regMsg.payload = [regDict JSONString];
-  [self publishExactlyOnce:regMsg onTopic:@"/config/register"];
+  [self publishExactlyOnce:regMsg onTopic:COMMAND_TOPIC];
   [self fetchConfig];
 }
 
 - (void)fetchConfig {
   Msg *cMsg = [Msg new];
-  cMsg.action = CONFIG_FULL;
-  [[self publishReplyTo:cMsg onTopic:@"/config"] subscribeNext:^(Msg *m) {
+  cMsg.action = FETCH_LAYERS;
+  [[self publishReplyTo:cMsg onTopic:QUERY_TOPIC] subscribeNext:^(Msg *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
     SCConfig *cfg = [[SCConfig alloc] initWithDictionary:dict];
@@ -368,8 +370,8 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       Msg *msg = [[Msg alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
-      msg.action = DATASERVICE_CREATEFEATURE;
-      return [[self publishReplyTo:msg onTopic:[ss syncChannel]] flattenMap:^RACSignal *(Msg *m) {
+      msg.action = CREATE_FEATURE;
+      return [[self publishReplyTo:msg onTopic:COMMAND_TOPIC] flattenMap:^RACSignal *(Msg *m) {
         NSString *json = m.payload;
         NSDictionary *dict = [json objectFromJSONString];
         if (dict[@"result"]) {
