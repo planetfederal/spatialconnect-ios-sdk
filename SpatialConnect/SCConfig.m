@@ -87,7 +87,7 @@
 - (void)updateLayer:(SCLayerConfig *)lc {
   [layers enumerateObjectsUsingBlock:^(SCLayerConfig *c, NSUInteger idx,
                                       BOOL *stop) {
-    if (c.identifier == lc.identifier) {
+    if ([c.identifier isEqualToString:lc.identifier]) {
       [layers setObject:lc atIndexedSubscript:idx];
       *stop = YES;
     }
@@ -97,7 +97,7 @@
 - (void)removeLayer:(NSString *)key {
   [layers enumerateObjectsUsingBlock:^(SCLayerConfig *c, NSUInteger idx,
                                       BOOL *stop) {
-    if (c.key == key) {
+    if ([c.key isEqualToString: key]) {
       [layers removeObjectAtIndex:idx];
       *stop = YES;
     }

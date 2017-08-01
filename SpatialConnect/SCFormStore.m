@@ -68,14 +68,14 @@
 
 - (void)registerFormByConfig:(SCLayerConfig *)f {
   [storeForms setObject:f forKey:f.key];
-  [formIds setObject:@(f.identifier) forKey:f.key];
+  [formIds setObject:f.identifier forKey:f.key];
   [super addLayer:f.key withDef:[f sqlTypes]];
   [_hasForms sendNext:@(YES)];
 }
 
 - (void)updateFormByConfig:(SCLayerConfig *)f {
   [storeForms setObject:f forKey:f.key];
-  [formIds setObject:@(f.identifier) forKey:f.key];
+  [formIds setObject:f.identifier forKey:f.key];
   [super addLayer:f.key withDef:[f sqlTypes]];
   [_hasForms sendNext:@(YES)];
 }

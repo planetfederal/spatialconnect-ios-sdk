@@ -31,7 +31,7 @@ static NSString *const FIELDS = @"fields";
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.identifier = [dict[IDENT] integerValue];
+    self.identifier = dict[IDENT];
     self.key = dict[LAYER_KEY];
     self.label = dict[LAYER_LABEL];
     self.version = [dict[VERSION] integerValue];
@@ -50,8 +50,8 @@ static NSString *const FIELDS = @"fields";
  */
 - (BOOL)isValid {
   __block BOOL isValid = YES;
-  if (self.identifier <= 0) {
-    DDLogError(@"Identifier is invalid:%ld", (long)self.identifier);
+  if (!self.identifier || self.identifier.length <= 0) {
+    DDLogError(@"Identifier is invalid:%@", self.identifier);
     isValid = NO;
   }
   if (!self.key || self.key.length <= 0) {
@@ -227,7 +227,7 @@ static NSString *const FIELDS = @"fields";
            LAYER_LABEL : self.label,
            VERSION : @(self.version),
            FIELDS : self.fields,
-           IDENT : @(self.identifier)
+           IDENT : self.identifier
            };
 }
 
