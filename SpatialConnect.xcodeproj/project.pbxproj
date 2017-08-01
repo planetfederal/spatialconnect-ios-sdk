@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
-		5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5415E5441F19600D00F59008 /* SCNoAuthMethod.h */; };
+		5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5415E5441F19600D00F59008 /* SCNoAuthMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5415E5471F19600D00F59008 /* SCNoAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5415E5451F19600D00F59008 /* SCNoAuthMethod.m */; };
-		5440DC601F2F73FC008434F4 /* SCLayerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5440DC5E1F2F73FC008434F4 /* SCLayerConfig.h */; };
+		5440DC601F2F73FC008434F4 /* SCLayerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 5440DC5E1F2F73FC008434F4 /* SCLayerConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5440DC611F2F73FC008434F4 /* SCLayerConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 5440DC5F1F2F73FC008434F4 /* SCLayerConfig.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		547F3EDB1D77688700AE354E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 547F3ED91D77688700AE354E /* Reachability.m */; };
@@ -1809,7 +1809,6 @@
 				5677D6DB1C3F046E00C1E0F2 /* SCRasterStore.h in Headers */,
 				5649B5D61BE280D6009947EF /* SCLocalWebApp.h in Headers */,
 				560A71221BE8457C00CE473F /* SCStoreStatusEvent.h in Headers */,
-				5440DC601F2F73FC008434F4 /* SCLayerConfig.h in Headers */,
 				561686091C75025100FC7FA6 /* SCGpkgDataColumn.h in Headers */,
 				5649B6091BE280D6009947EF /* SCService.h in Headers */,
 				5649B5E11BE280D6009947EF /* SCMultiPoint.h in Headers */,
@@ -1849,7 +1848,6 @@
 				5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */,
 				561685FC1C74E69D00FC7FA6 /* SCGpkgGeometryColumnsTable.h in Headers */,
 				5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */,
-				5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */,
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
 				5649B5DF1BE280D6009947EF /* SCMultiLineString+MapKit.h in Headers */,
 				561685F41C74E3D800FC7FA6 /* SCGpkgExtension.h in Headers */,
@@ -1881,7 +1879,9 @@
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
 				54ABD18F1ECA269C00503EB9 /* Msg.pbobjc.h in Headers */,
 				562EC6581E901B8B003D9F2C /* Actions.h in Headers */,
+				5440DC601F2F73FC008434F4 /* SCLayerConfig.h in Headers */,
 				54AC44DC1E6DE2890051504A /* SCSyncableStore.h in Headers */,
+				5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */,
 				5649B58E1BE280D6009947EF /* SCDataService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
