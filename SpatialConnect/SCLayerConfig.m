@@ -21,6 +21,7 @@ static NSString *const IDENT = @"id";
 static NSString *const LAYER_KEY = @"layer_key";
 static NSString *const LAYER_LABEL = @"layer_label";
 static NSString *const VERSION = @"version";
+static NSString *const SCHEMA = @"schema";
 static NSString *const FIELDS = @"fields";
 
 @implementation SCLayerConfig
@@ -34,7 +35,7 @@ static NSString *const FIELDS = @"fields";
     self.key = dict[LAYER_KEY];
     self.label = dict[LAYER_LABEL];
     self.version = [dict[VERSION] integerValue];
-    self.fields = dict[FIELDS];
+    self.fields = dict[SCHEMA][FIELDS];
     if (![self isValid]) {
       return nil;
     }
