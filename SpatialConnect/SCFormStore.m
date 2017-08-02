@@ -124,8 +124,8 @@
 }
 
 - (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
-  NSNumber *formId = [formIds objectForKey:f.layerId];
-  NSDictionary *payload = @{ @"layer_id" : formId, @"feature" : f.GeoJSONDict };
+  NSString *layerId = [formIds objectForKey:f.layerId];
+  NSDictionary *payload = @{ @"layer_id" : layerId == nil ? [NSNull null] : layerId, @"feature" : f.GeoJSONDict };
   return payload;
 }
 
