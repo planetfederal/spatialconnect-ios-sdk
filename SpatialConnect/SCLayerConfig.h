@@ -14,25 +14,31 @@
  * limitations under the License
  */
 
-#import "GeopackageStore.h"
-#import "SCLayerConfig.h"
-#import "SCSpatialStore.h"
-#import "SCSyncableStore.h"
 #import <Foundation/Foundation.h>
 
-@interface SCFormStore
-    : GeopackageStore <SCDataStoreLifeCycle, SCSpatialStore, SCSyncableStore> {
-  NSMutableDictionary<NSString *, NSNumber *> *formIds;
-  NSMutableDictionary *storeForms;
-}
+typedef NS_ENUM(NSInteger, SCFormItemType) {
+  SCFORM_TYPE_INTEGER,
+  SCFORM_TYPE_STRING,
+  SCFORM_TYPE_BOOLEAN,
+  SCFORM_TYPE_NUMBER,
+  SCFORM_TYPE_DATE,
+  SCFORM_TYPE_SLIDER,
+  SCFORM_TYPE_COUNTER,
+  SCFORM_TYPE_SELECT,
+  SCFORM_TYPE_PHOTO
+};
 
-@property(readonly, strong) RACBehaviorSubject *hasForms;
+@interface SCLayerConfig : NSObject
 
-- (void)registerFormByConfig:(SCLayerConfig *)f;
-- (void)updateFormByConfig:(SCLayerConfig *)f;
-- (void)unregisterFormByConfig:(SCLayerConfig *)f;
-- (void)unregisterFormByKey:(NSString *)k;
-- (NSArray *)formsDictionaryArray;
-- (NSNumber *)formIdForLayer:(NSString *)layer;
+@property(nonatomic) NSString *identifier;
+@property(nonatomic, strong) NSString *key;
+@property(nonatomic, strong) NSString *label;
+@property(nonatomic) NSInteger version;
+@property(nonatomic, strong) NSArray *fields;
 
+- (id)initWithDict:(NSDictionary *)d;
+- (NSDictionary *)dictionary;
+- (NSDictionary *)sqlTypes;
+- (NSDictionary *)JSONDict;
+- (BOOL)isValid;
 @end

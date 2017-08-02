@@ -18,7 +18,6 @@
 ******************************************************************************/
 #import "GeopackageStore.h"
 #import "SCDataStore.h"
-#import "SCFormConfig.h"
 #import "SCFormStore.h"
 #import "SCLocationStore.h"
 #import "SCQueryFilter.h"

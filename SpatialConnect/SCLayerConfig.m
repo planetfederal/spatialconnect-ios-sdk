@@ -14,27 +14,28 @@
  * limitations under the License
  */
 
-#import "SCFormConfig.h"
+#import "SCLayerConfig.h"
 #import "JSONKit.h"
 
 static NSString *const IDENT = @"id";
-static NSString *const FORM_KEY = @"form_key";
-static NSString *const FORM_LABEL = @"form_label";
+static NSString *const LAYER_KEY = @"layer_key";
+static NSString *const LAYER_LABEL = @"layer_label";
 static NSString *const VERSION = @"version";
+static NSString *const SCHEMA = @"schema";
 static NSString *const FIELDS = @"fields";
 
-@implementation SCFormConfig
+@implementation SCLayerConfig
 
 @synthesize key, label, version, fields, identifier;
 
 - (id)initWithDict:(NSDictionary *)dict {
   self = [super init];
   if (self) {
-    self.identifier = [dict[IDENT] integerValue];
-    self.key = dict[FORM_KEY];
-    self.label = dict[FORM_LABEL];
+    self.identifier = dict[IDENT];
+    self.key = dict[LAYER_KEY];
+    self.label = dict[LAYER_LABEL];
     self.version = [dict[VERSION] integerValue];
-    self.fields = dict[FIELDS];
+    self.fields = dict[SCHEMA][FIELDS];
     if (![self isValid]) {
       return nil;
     }
@@ -44,13 +45,13 @@ static NSString *const FIELDS = @"fields";
 
 /**
  Validates form fields as valid
-
+ 
  @return BOOL YES if valid, NO if not
  */
 - (BOOL)isValid {
   __block BOOL isValid = YES;
-  if (self.identifier <= 0) {
-    DDLogError(@"Identifier is invalid:%ld", (long)self.identifier);
+  if (!self.identifier || self.identifier.length <= 0) {
+    DDLogError(@"Identifier is invalid:%@", self.identifier);
     isValid = NO;
   }
   if (!self.key || self.key.length <= 0) {
@@ -65,22 +66,22 @@ static NSString *const FIELDS = @"fields";
     DDLogError(@"Invalid Version number");
     isValid = NO;
   }
-
+  
   if (self.fields.count == 0) {
     DDLogError(@"No Fields Present");
     isValid = NO;
   }
-
+  
   [self.fields enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx,
                                             BOOL *stop) {
     NSString *fieldKey = obj[@"field_key"];
     NSString *fieldLabel = obj[@"field_label"];
-
+    
     if (!fieldKey || fieldKey.length == 0) {
       DDLogError(@"field_key is invalid for form:%@", key);
       isValid = NO;
     }
-
+    
     if (!fieldLabel || fieldLabel.length == 0) {
       NSLog(@"field_label is invalid for form:%@", key);
       isValid = NO;
@@ -91,7 +92,7 @@ static NSString *const FIELDS = @"fields";
 
 /**
  T-Comb type to SCFormItemType
-
+ 
  @param s
  @return NSInteger as SCFormItemType
  */
@@ -120,7 +121,7 @@ static NSString *const FIELDS = @"fields";
 
 /**
  @(SCFormItemType) to T-Comb
-
+ 
  @param n SCFormItemType
  @return T-Comb type
  */
@@ -150,7 +151,7 @@ static NSString *const FIELDS = @"fields";
 
 /**
  SCFormItemType to SQLType
-
+ 
  @param t SCFormItemType
  @return NSString of SQL column type
  */
@@ -179,7 +180,7 @@ static NSString *const FIELDS = @"fields";
 
 /**
  Maps a t-comb type to a SQL Type
-
+ 
  @param t T-Comb type
  @return SQL Column Type
  */
@@ -206,7 +207,7 @@ static NSString *const FIELDS = @"fields";
 
 /**
  Maps over fields and creates a Dictionary of <field_key,SQL Type>
-
+ 
  @return NSDictionary of <field key,type>
  */
 - (NSDictionary *)sqlTypes {
@@ -222,12 +223,12 @@ static NSString *const FIELDS = @"fields";
 
 - (NSDictionary *)dictionary {
   return @{
-    FORM_KEY : self.key,
-    FORM_LABEL : self.label,
-    VERSION : @(self.version),
-    FIELDS : self.fields,
-    IDENT : @(self.identifier)
-  };
+           LAYER_KEY : self.key,
+           LAYER_LABEL : self.label,
+           VERSION : @(self.version),
+           FIELDS : self.fields,
+           IDENT : self.identifier
+           };
 }
 
 - (NSDictionary *)JSONDict {

@@ -36,3 +36,6 @@ extern NSString *const NOTIFICATION_INFO;
 extern NSString *const NOTIFICATION_CONTENT_AVAILABLE;
 extern NSString *const BACKENDSERVICE_HTTP_URI;
 extern NSString *const BACKENDSERVICE_MQTT_CONNECTED;
+extern NSString *const SPATIALIO_IMPORT;
+extern NSString *const FETCH_LAYERS;
+extern NSString *const CREATE_FEATURE;

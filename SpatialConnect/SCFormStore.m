@@ -66,21 +66,21 @@
   [super destroy];
 }
 
-- (void)registerFormByConfig:(SCFormConfig *)f {
+- (void)registerFormByConfig:(SCLayerConfig *)f {
   [storeForms setObject:f forKey:f.key];
-  [formIds setObject:@(f.identifier) forKey:f.key];
+  [formIds setObject:f.identifier forKey:f.key];
   [super addLayer:f.key withDef:[f sqlTypes]];
   [_hasForms sendNext:@(YES)];
 }
 
-- (void)updateFormByConfig:(SCFormConfig *)f {
+- (void)updateFormByConfig:(SCLayerConfig *)f {
   [storeForms setObject:f forKey:f.key];
-  [formIds setObject:@(f.identifier) forKey:f.key];
+  [formIds setObject:f.identifier forKey:f.key];
   [super addLayer:f.key withDef:[f sqlTypes]];
   [_hasForms sendNext:@(YES)];
 }
 
-- (void)unregisterFormByConfig:(SCFormConfig *)f {
+- (void)unregisterFormByConfig:(SCLayerConfig *)f {
   [storeForms removeObjectForKey:f.key];
   [formIds removeObjectForKey:f.key];
   [_hasForms sendNext:@(storeForms.count > 0)];
@@ -95,7 +95,7 @@
 - (NSArray *)formsDictionaryArray {
   NSMutableArray *arr = [[NSMutableArray alloc] init];
   [storeForms
-      enumerateKeysAndObjectsUsingBlock:^(id key, SCFormConfig *f, BOOL *stop) {
+      enumerateKeysAndObjectsUsingBlock:^(id key, SCLayerConfig *f, BOOL *stop) {
         [arr addObject:[f dictionary]];
       }];
   return [NSArray arrayWithArray:arr];
@@ -129,8 +129,5 @@
   return payload;
 }
 
-- (NSString *)syncChannel {
-  return @"/store/form";
-}
 
 @end
