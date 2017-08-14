@@ -369,8 +369,13 @@ static NSString *const QUERY_TOPIC = @"query";
       SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       Msg *msg = [[Msg alloc] init];
-      msg.payload = [[ss generateSendPayload:feature] JSONString];
       msg.action = CREATE_FEATURE;
+      NSDictionary *payload = [ss generateSendPayload:feature];
+      if ([[payload allKeys] count] == 0) {
+        return [RACSignal empty];
+      } else {
+        msg.payload = [payload JSONString];
+      }
       return [[self publishReplyTo:msg onTopic:COMMAND_TOPIC] flattenMap:^RACSignal *(Msg *m) {
         NSString *json = m.payload;
         NSDictionary *dict = [json objectFromJSONString];
