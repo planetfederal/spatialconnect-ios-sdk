@@ -192,7 +192,7 @@ static NSString *const QUERY_TOPIC = @"query";
 
 - (void)fetchConfig {
   Msg *cMsg = [Msg new];
-  cMsg.action = FETCH_LAYERS;
+  cMsg.action = API_FETCH_LAYERS;
   [[self publishReplyTo:cMsg onTopic:QUERY_TOPIC] subscribeNext:^(Msg *m) {
     NSString *json = m.payload;
     NSDictionary *dict = [json objectFromJSONString];
@@ -369,7 +369,7 @@ static NSString *const QUERY_TOPIC = @"query";
       SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       Msg *msg = [[Msg alloc] init];
-      msg.action = CREATE_FEATURE;
+      msg.action = API_CREATE_FEATURE;
       NSDictionary *payload = [ss generateSendPayload:feature];
       if ([[payload allKeys] count] == 0) {
         return [RACSignal empty];
