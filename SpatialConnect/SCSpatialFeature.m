@@ -101,12 +101,6 @@
       [[SpatialConnect sharedInstance] deviceIdentifier];
   dict[@"metadata"][@"storeId"] = self.storeId;
   dict[@"metadata"][@"layerId"] = self.layerId;
-  return [NSDictionary dictionaryWithDictionary:dict];
-}
-
-// return valid geojson for an unlocated feature
-- (NSDictionary *)GeoJSONDict {
-  NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[self JSONDict]];
   dict[@"geometry"] = [NSNull null];
   return [NSDictionary dictionaryWithDictionary:dict];
 }
