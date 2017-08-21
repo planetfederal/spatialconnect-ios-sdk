@@ -126,7 +126,7 @@
 - (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
   NSString *layerId = [formIds objectForKey:f.layerId];
   if (layerId != nil) {
-    return @{ @"layer_id" : layerId, @"feature" : f.GeoJSONDict };
+    return @{ @"layer_id" : layerId, @"feature" : f.JSONDict };
   } else {
     DDLogWarn(@"Did not send feature b/c layer id was null for layer key: %@", f.layerId);
     return @{};

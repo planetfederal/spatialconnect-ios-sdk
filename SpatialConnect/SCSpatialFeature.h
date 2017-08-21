@@ -36,5 +36,4 @@
 
 - (SCKeyTuple *)key;
 - (NSDictionary *)JSONDict;
-- (NSDictionary *)GeoJSONDict;
 @end

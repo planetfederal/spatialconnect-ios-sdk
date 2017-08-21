@@ -290,7 +290,7 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 }
 
 - (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f {
-  return [f GeoJSONDict];
+  return [f JSONDict];
 }
 
 - (RACSignal *)updateAuditTable:(SCSpatialFeature *)feature {
