@@ -68,6 +68,7 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   sensorService = [deps objectForKey:[SCSensorService serviceId]];
   dataService = [deps objectForKey:[SCDataService serviceId]];
   DDLogInfo(@"Starting Backend Service...");
+  [self loadCachedConfig];
   [self listenForNetworkConnection];
   //[self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
@@ -307,7 +308,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       [self authListener];
     } else {
       [connectedToBroker sendNext:@(NO)];
-      [self loadCachedConfig];
     }
   }];
 }
@@ -400,9 +400,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     SCAuthStatus s = [n integerValue];
     if (s == SCAUTH_AUTHENTICATED) {
       [self connect];
-    }
-    if (s == SCAUTH_AUTHENTICATION_FAILED) {
-      [self loadCachedConfig];
     }
   }];
 }
