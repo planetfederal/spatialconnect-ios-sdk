@@ -70,6 +70,7 @@ static NSString *const QUERY_TOPIC = @"query";
   sensorService = [deps objectForKey:[SCSensorService serviceId]];
   dataService = [deps objectForKey:[SCDataService serviceId]];
   DDLogInfo(@"Starting Backend Service...");
+  [self loadCachedConfig];
   [self listenForNetworkConnection];
   //[self registerForLocalNotifications];
   DDLogInfo(@"Backend Service Started");
@@ -309,7 +310,6 @@ static NSString *const QUERY_TOPIC = @"query";
       [self authListener];
     } else {
       [connectedToBroker sendNext:@(NO)];
-      [self loadCachedConfig];
     }
   }];
 }
@@ -407,9 +407,6 @@ static NSString *const QUERY_TOPIC = @"query";
     SCAuthStatus s = [n integerValue];
     if (s == SCAUTH_AUTHENTICATED) {
       [self connect];
-    }
-    if (s == SCAUTH_AUTHENTICATION_FAILED) {
-      [self loadCachedConfig];
     }
   }];
 }
