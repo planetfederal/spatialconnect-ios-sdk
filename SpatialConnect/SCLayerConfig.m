@@ -226,7 +226,7 @@ static NSString *const FIELDS = @"fields";
            LAYER_KEY : self.key,
            LAYER_LABEL : self.label,
            VERSION : @(self.version),
-           FIELDS : self.fields,
+           SCHEMA: @{ FIELDS: self.fields },
            IDENT : self.identifier
            };
 }
