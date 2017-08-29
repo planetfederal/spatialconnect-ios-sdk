@@ -271,9 +271,9 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
     multicast = [[d publish] autoconnect];
     sessionManager.delegate = (id<MQTTSessionManagerDelegate>)self;
 
-    [[connectedToBroker filter:^BOOL(NSNumber *v) {
+    [[[connectedToBroker filter:^BOOL(NSNumber *v) {
       return v.boolValue;
-    }] subscribeNext:^(id x) {
+    }] take:1] subscribeNext:^(id x) {
       [self setupSubscriptions];
       [self registerAndFetchConfig];
       [self listenForSyncEvents];
