@@ -164,10 +164,9 @@
 
         [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
                                                    BOOL *stop) {
-          NSString *key = [k lowercaseString];
           NSString *type = [t lowercaseString];
-          if (![key isEqualToString:@"geom"]) {
-            [createSql appendFormat:@",%@ %@", key, type];
+          if (![[k lowercaseString] isEqualToString:@"geom"]) {
+            [createSql appendFormat:@",%@ %@", k, type];
           }
         }];
         [createSql appendString:@")"];
@@ -289,10 +288,9 @@
 
         [auditTypes enumerateKeysAndObjectsUsingBlock:^(
                         NSString *k, NSString *t, BOOL *stop) {
-          NSString *key = [k lowercaseString];
           NSString *type = [t lowercaseString];
-          if (![key isEqualToString:@"geom"]) {
-            [createAuditSql appendFormat:@",%@ %@", key, type];
+          if (![[k lowercaseString] isEqualToString:@"geom"]) {
+            [createAuditSql appendFormat:@",%@ %@", k, type];
           }
         }];
         [createAuditSql appendString:@")"];
