@@ -61,7 +61,7 @@ static NSString *const AUTH_METHOD = @"auth";
     MQTT_PROTOCOL : _mqttProtocol,
     MQTT_HOST : _mqttHost,
     MQTT_PORT : _mqttPort,
-    AUTH_METHOD: _auth
+    AUTH_METHOD : _auth
   };
 }
 

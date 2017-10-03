@@ -159,8 +159,8 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-        [subscriber sendNext:d];
-      }
+    [subscriber sendNext:d];
+  }
       error:^(NSError *error) {
         [subscriber sendError:error];
       }
@@ -194,14 +194,14 @@
   [[[ds queryAllStores:filter] map:^NSDictionary *(SCSpatialFeature *value) {
     return [value JSONDict];
   }] subscribeNext:^(NSDictionary *d) {
-      [subscriber sendNext:d];
-    }
-    error:^(NSError *error) {
-      [subscriber sendError:error];
-    }
-    completed:^{
-      [subscriber sendCompleted];
-    }];
+    [subscriber sendNext:d];
+  }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
+      completed:^{
+        [subscriber sendCompleted];
+      }];
 }
 
 - (void)queryGeoStoresByIds:(NSDictionary *)value
@@ -213,8 +213,8 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-        [subscriber sendNext:d];
-      }
+    [subscriber sendNext:d];
+  }
       error:^(NSError *error) {
         [subscriber sendError:error];
       }
@@ -266,9 +266,9 @@
       DDLogError(@"Error creating Feature");
       [subscriber sendError:error];
     }
-    completed:^{
-      [subscriber sendNext:[feat JSONDict]];
-    }];
+        completed:^{
+          [subscriber sendNext:[feat JSONDict]];
+        }];
 
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
@@ -297,10 +297,10 @@
                           userInfo:nil];
       [subscriber sendError:err];
     }
-    completed:^{
-      [subscriber sendNext:[feat JSONDict]];
-      [subscriber sendCompleted];
-    }];
+        completed:^{
+          [subscriber sendNext:[feat JSONDict]];
+          [subscriber sendCompleted];
+        }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_UPDATEFEATURE
@@ -323,9 +323,9 @@
                           userInfo:nil];
       [subscriber sendError:err];
     }
-    completed:^{
-      [subscriber sendCompleted];
-    }];
+        completed:^{
+          [subscriber sendCompleted];
+        }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_DELETEFEATURE

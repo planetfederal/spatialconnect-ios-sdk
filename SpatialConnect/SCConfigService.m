@@ -20,8 +20,8 @@
 #import "SCDataService.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
-#import "SCServerAuthMethod.h"
 #import "SCNoAuthMethod.h"
+#import "SCServerAuthMethod.h"
 #import "SCStoreConfig.h"
 #import "SpatialConnect.h"
 
@@ -114,8 +114,8 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
       [sc connectAuth:[[SCNoAuthMethod alloc] init]];
     } else {
       [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{
-                                                                       @"server_url" : c.remote.httpUri
-                                                                       }]];
+            @"server_url" : c.remote.httpUri
+          }]];
     }
     [sc connectBackend:c.remote];
   }

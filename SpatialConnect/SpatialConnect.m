@@ -158,9 +158,10 @@
 }
 
 - (void)updateDeviceToken:(NSString *)token {
-  [[self serviceRunning:[SCBackendService serviceId]] subscribeNext:^(id value) {
-    [_backendService updateDeviceToken:token];
-  }];
+  [[self serviceRunning:[SCBackendService serviceId]]
+      subscribeNext:^(id value) {
+        [_backendService updateDeviceToken:token];
+      }];
 }
 
 - (NSString *)deviceIdentifier {
