@@ -312,7 +312,6 @@
 		56789C411C32C0AC001B5ABE /* SCSimplePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 56789C3F1C32C0AC001B5ABE /* SCSimplePoint.m */; };
 		5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC871CF652ED00D502C3 /* ReactiveCocoa.framework */; };
 		5678FC8C1CF652ED00D502C3 /* wkb_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC881CF652ED00D502C3 /* wkb_ios.framework */; };
-		5678FC8D1CF652ED00D502C3 /* ZipZap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5678FC891CF652ED00D502C3 /* ZipZap.framework */; };
 		567CCF701DAEDAAF00481769 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567CCF6F1DAEDAAF00481769 /* CocoaLumberjack.framework */; };
 		567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 567D7A031D6380FF00BDC3CC /* SCNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		567D7A061D6380FF00BDC3CC /* SCNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 567D7A041D6380FF00BDC3CC /* SCNotification.m */; };
@@ -825,7 +824,6 @@
 				5678FC8B1CF652ED00D502C3 /* ReactiveCocoa.framework in Frameworks */,
 				563090671D0646D0001FE1B5 /* libgpkgios.framework in Frameworks */,
 				5678FC8C1CF652ED00D502C3 /* wkb_ios.framework in Frameworks */,
-				5678FC8D1CF652ED00D502C3 /* ZipZap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -942,6 +940,14 @@
 				5649B4C21BE28079009947EF /* SpatialConnectHelper.m */,
 			);
 			name = TestingUtils;
+			sourceTree = "<group>";
+		};
+		560EE52D1F83F88800A287F9 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				5649B4AD1BE28011009947EF /* Vendor */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		561685F61C74E5FF00FC7FA6 /* Contents */ = {
@@ -1403,6 +1409,7 @@
 				5649B4941BE27C6A009947EF /* Products */,
 				0B5FE958508C82B8D8FF4D5C /* Frameworks */,
 				566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */,
+				560EE52D1F83F88800A287F9 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
