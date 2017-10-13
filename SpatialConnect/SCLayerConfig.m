@@ -35,7 +35,9 @@ static NSString *const FIELDS = @"fields";
     self.key = dict[LAYER_KEY];
     self.label = dict[LAYER_LABEL];
     self.version = [dict[VERSION] integerValue];
-    self.fields = dict[SCHEMA][FIELDS];
+    if (![dict[SCHEMA] isKindOfClass:[NSNull class]]) {
+      self.fields = dict[SCHEMA][FIELDS];
+    }
     if (![self isValid]) {
       return nil;
     }
