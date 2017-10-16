@@ -19,6 +19,5 @@
 - (RACSignal *)updateAuditTable:(SCSpatialFeature *)feature;
 - (NSDictionary *)generateSendPayload:(SCSpatialFeature *)f;
 - (RACSignal *)unSent;
-- (NSString *)syncChannel;
 
 @end

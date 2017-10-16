@@ -16,9 +16,8 @@
 
 #import "SCConfig.h"
 #import "SCDataService.h"
-#import "SCFormConfig.h"
+#import "SCLayerConfig.h"
 #import "SCService.h"
-#import "SCStoreConfig.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 typedef NS_ENUM(NSInteger, SCConfigEvent) {
@@ -68,14 +67,14 @@ typedef NS_ENUM(NSInteger, SCConfigEvent) {
 
  @param c Instance of Form Config
  */
-- (void)addForm:(SCFormConfig *)c;
+- (void)addForm:(SCLayerConfig *)c;
 
 /*!
  Remove form from SpatialConnect using a config
 
  @param c Instance of Form Config
  */
-- (void)removeForm:(SCFormConfig *)c;
+- (void)removeForm:(SCLayerConfig *)c;
 
 /*!
  This will overwrite the current cached config and will be used to configure the

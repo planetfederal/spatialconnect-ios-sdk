@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-#import "SCFormConfig.h"
+#import "SCLayerConfig.h"
 #import "SCRemoteConfig.h"
 #import "SCStoreConfig.h"
 #import <Foundation/Foundation.h>
@@ -25,20 +25,20 @@
  */
 @interface SCConfig : NSObject {
   NSMutableArray *stores;
-  NSMutableArray *forms;
+  NSMutableArray *layers;
   SCRemoteConfig *r;
 }
 
 - (id)initWithDictionary:(NSDictionary *)d;
 - (NSDictionary *)dictionary;
-- (NSArray *)forms;
+- (NSArray *)layers;
 - (NSArray *)stores;
 - (SCRemoteConfig *)remote;
 - (void)addStore:(SCStoreConfig *)sc;
 - (void)updateStore:(SCStoreConfig *)sc;
 - (void)removeStore:(NSString *)uniqueid;
-- (void)addForm:(SCFormConfig *)fc;
-- (void)updateForm:(SCFormConfig *)fc;
-- (void)removeForm:(NSString *)identifier;
+- (void)addLayer:(SCLayerConfig *)fc;
+- (void)updateLayer:(SCLayerConfig *)fc;
+- (void)removeLayer:(NSString *)identifier;
 
 @end

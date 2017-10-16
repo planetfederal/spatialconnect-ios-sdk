@@ -19,10 +19,9 @@
 #import "SCConfig.h"
 #import "SCDataService.h"
 #import "SCFileUtils.h"
-#import "SCFormConfig.h"
 #import "SCServerAuthMethod.h"
 #import "SCNoAuthMethod.h"
-#import "SCStoreConfig.h"
+#import "SCLayerConfig.h"
 #import "SpatialConnect.h"
 
 static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
@@ -101,9 +100,9 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
 
 - (void)loadConfig:(SCConfig *)c {
   SpatialConnect *sc = [SpatialConnect sharedInstance];
-  [c.forms enumerateObjectsUsingBlock:^(SCFormConfig *f, NSUInteger idx,
-                                        BOOL *stop) {
-    [dataService.formStore registerFormByConfig:f];
+  [c.layers enumerateObjectsUsingBlock:^(SCLayerConfig *lc, NSUInteger idx,
+                                         BOOL *stop) {
+    [dataService.formStore registerFormByConfig:lc];
   }];
   [c.stores enumerateObjectsUsingBlock:^(SCStoreConfig *scfg, NSUInteger idx,
                                          BOOL *stop) {
@@ -125,11 +124,11 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   return kSERVICENAME;
 }
 
-- (void)addForm:(SCFormConfig *)c {
+- (void)addForm:(SCLayerConfig *)c {
   [dataService.formStore registerFormByConfig:c];
 }
 
-- (void)removeForm:(SCFormConfig *)c {
+- (void)removeForm:(SCLayerConfig *)c {
   [dataService.formStore unregisterFormByConfig:c];
 }
 
