@@ -97,12 +97,24 @@
                                            body:(NSDictionary *)dict;
 
 /*!
+ POST JSON Object as NSDictionary returns an NSDictionary with Auth
+ @warning BLOCKING request
+ @param url url to request
+ @param dict HTTP Body JSON Params
+ @param auth HTTP Basic Auth
+ @return JSON Response as NSDictionary
+ */
++ (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
+                                           body:(NSDictionary *)dict
+                                           auth:(NSString *)auth;
+
+/*!
  POST JSON Object as NSDictionary returns NSData
  @warning BLOCKING request
  @param url url to request
  @param dict HTTP Body JSON Params
  @return NSData
  */
-+ (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict;
++ (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict auth:(NSString *)auth;
 
 @end

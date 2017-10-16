@@ -112,6 +112,12 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
   if (c.remote) {
     if ([c.remote.auth isEqualToString:@"no-auth"]) {
       [sc connectAuth:[[SCNoAuthMethod alloc] init]];
+    } else if ([c.remote.auth isEqualToString:@"exchange"]) {
+      [sc connectAuth:[[SCExchangeAuthMethod alloc] initWithDictionary:@{
+                                                                       @"server_url" : c.remote.httpUri,
+                                                                       @"client_id": c.remote.client_id,
+                                                                       @"client_secret": c.remote.client_secret,
+                                                                       }]];
     } else {
       [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{
                                                                        @"server_url" : c.remote.httpUri
