@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
+		5406C9CE1F94F1FA00B076F3 /* SCExchangeAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */; };
+		5406C9CF1F94F1FA00B076F3 /* SCExchangeAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */; };
 		5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5415E5441F19600D00F59008 /* SCNoAuthMethod.h */; };
 		5415E5471F19600D00F59008 /* SCNoAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5415E5451F19600D00F59008 /* SCNoAuthMethod.m */; };
 		547F3EDA1D77688700AE354E /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 547F3ED81D77688700AE354E /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -465,6 +467,8 @@
 
 /* Begin PBXFileReference section */
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
+		5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCExchangeAuthMethod.h; sourceTree = "<group>"; };
+		5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCExchangeAuthMethod.m; sourceTree = "<group>"; };
 		5415E5441F19600D00F59008 /* SCNoAuthMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCNoAuthMethod.h; sourceTree = "<group>"; };
 		5415E5451F19600D00F59008 /* SCNoAuthMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCNoAuthMethod.m; sourceTree = "<group>"; };
 		542E9B921D6F4442007AB0ED /* SCGeoJSONStoreTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCGeoJSONStoreTest.m; path = SpatialConnectTests/SCGeoJSONStoreTest.m; sourceTree = "<group>"; };
@@ -891,6 +895,14 @@
 				5678FC891CF652ED00D502C3 /* ZipZap.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5406C9C71F94F08700B076F3 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				5649B4AD1BE28011009947EF /* Vendor */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		54AC44A21E5F7DDA0051504A /* Style */ = {
@@ -1403,6 +1415,7 @@
 				5649B4941BE27C6A009947EF /* Products */,
 				0B5FE958508C82B8D8FF4D5C /* Frameworks */,
 				566F5F981D9080B3001C6692 /* SpatialConnectTests copy-Info.plist */,
+				5406C9C71F94F08700B076F3 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1675,6 +1688,8 @@
 				563296441E37B40F002D1F07 /* SCAuthProtocol.h */,
 				5415E5441F19600D00F59008 /* SCNoAuthMethod.h */,
 				5415E5451F19600D00F59008 /* SCNoAuthMethod.m */,
+				5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */,
+				5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */,
 			);
 			name = AuthService;
 			sourceTree = "<group>";
@@ -1841,6 +1856,7 @@
 				5649B6221BE283EC009947EF /* SpatialConnect.h in Headers */,
 				5649B5F91BE280D6009947EF /* SCPolygon+GeoJSON.h in Headers */,
 				561685FC1C74E69D00FC7FA6 /* SCGpkgGeometryColumnsTable.h in Headers */,
+				5406C9CE1F94F1FA00B076F3 /* SCExchangeAuthMethod.h in Headers */,
 				5649B6181BE280D6009947EF /* SCTileOverlay.h in Headers */,
 				5415E5461F19600D00F59008 /* SCNoAuthMethod.h in Headers */,
 				5649B5AD1BE280D6009947EF /* SCFilterNotLike.h in Headers */,
@@ -2315,6 +2331,7 @@
 				560E31D01BF23F83009DA680 /* SCKeyTuple.m in Sources */,
 				56554E691D54EA03000D77E7 /* SCFormStore.m in Sources */,
 				5645C4EB1BED796D006E4128 /* SCPolygon+GPKG.m in Sources */,
+				5406C9CF1F94F1FA00B076F3 /* SCExchangeAuthMethod.m in Sources */,
 				56285CE31E36BC13002D9934 /* SCServerAuthMethod.m in Sources */,
 				5649B5DC1BE280D6009947EF /* SCMultiLineString.m in Sources */,
 				560B10E71C77C16000BA15B8 /* SCGpkgTable.m in Sources */,
