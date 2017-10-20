@@ -184,10 +184,13 @@
       }];
 }
 
-+ (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict {
++ (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict auth:(NSString *)auth {
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   request.HTTPMethod = @"POST";
   [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+  if (auth) {
+    [request addValue:auth forHTTPHeaderField:@"Authorization"];
+  }
   NSError *err;
   NSURLResponse *response;
   request.HTTPBody = dict.JSONData;
@@ -204,7 +207,18 @@
 + (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
                                            body:(NSDictionary *)dict {
   NSDictionary *result = nil;
-  NSData *data = [self postDictRequestBLOCKING:url body:dict];
+  NSData *data = [self postDictRequestBLOCKING:url body:dict auth:nil];
+  if (data) {
+    result = [[JSONDecoder decoder] objectWithData:data];
+  }
+  return result;
+}
+
++ (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
+                                           body:(NSDictionary *)dict
+                                           auth:(NSString *)auth {
+  NSDictionary *result = nil;
+  NSData *data = [self postDictRequestBLOCKING:url body:dict auth:auth];
   if (data) {
     result = [[JSONDecoder decoder] objectWithData:data];
   }
