@@ -24,10 +24,9 @@
   if (self) {
     serverUrl = d[@"server_url"];
     clientId = d[@"client_id"];
-    clientSecret = d[@"client_secret"];
     keychainItem =
-    [[KeychainItemWrapper alloc] initWithIdentifier:@"SpatialConnect"
-                                        accessGroup:nil];
+        [[KeychainItemWrapper alloc] initWithIdentifier:@"SpatialConnect"
+                                            accessGroup:nil];
   }
   return self;
 }
@@ -44,24 +43,57 @@
 
 - (BOOL)authenticate:(NSString *)u password:(NSString *)p {
   username = u;
-  NSURL *url =
-  [NSURL URLWithString:[NSString stringWithFormat:@"%@/o/token",
-                        serverUrl]];
-  NSDictionary *authDict = @{ @"grant_type": @"password", @"username" : u, @"password" : p };
-  NSString *oauthCreds = [NSString stringWithFormat:@"%@:%@", clientId, clientSecret];
+  NSURL *url = [NSURL
+      URLWithString:[NSString stringWithFormat:@"%@/o/token/", serverUrl]];
+  NSString *auth = [NSString
+      stringWithFormat:@"grant_type=password&username=%@&password=%@", u, p];
+  NSData *authBody = [auth dataUsingEncoding:NSUTF8StringEncoding];
+
+  NSString *oauthCreds = [NSString stringWithFormat:@"%@:", clientId];
   NSData *nsdata = [oauthCreds dataUsingEncoding:NSUTF8StringEncoding];
   NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
-  NSString *auth = [NSString stringWithFormat:@"Basic %@", base64Encoded];
-  NSDictionary *res =
-  [SCHttpUtils postDictRequestAsDictBLOCKING:url body:authDict auth:auth];
-  if (res && (jwt = res[@"result"][@"token"])) {
+  NSString *authHeader = [NSString stringWithFormat:@"Basic %@", base64Encoded];
+  NSDictionary *res = [SCHttpUtils postDataRequestAsDictBLOCKING:url
+                                                            body:authBody
+                                                            auth:authHeader
+                                                     contentType:XML];
+
+  if (res && (jwt = res[@"access_token"])) {
     [keychainItem setObject:p forKey:(__bridge id)kSecValueData];
     [keychainItem setObject:username forKey:(__bridge id)kSecAttrAccount];
+    [keychainItem setObject:jwt forKey:(__bridge id)kSecAttrGeneric];
     return true;
   } else {
     [self logout];
     return false;
   }
+}
+
+- (BOOL)refreshToken {
+  NSString *oldToken = [keychainItem objectForKey:(__bridge id)kSecAttrGeneric];
+  NSURL *url = [NSURL
+      URLWithString:[NSString stringWithFormat:@"%@/o/token/", serverUrl]];
+  NSString *auth = [NSString
+      stringWithFormat:@"grant_type=refresh_token&refresh_token=%@", oldToken];
+  NSData *authBody = [auth dataUsingEncoding:NSUTF8StringEncoding];
+
+  NSString *oauthCreds = [NSString stringWithFormat:@"%@:", clientId];
+  NSData *nsdata = [oauthCreds dataUsingEncoding:NSUTF8StringEncoding];
+  NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+  NSString *authHeader = [NSString stringWithFormat:@"Basic %@", base64Encoded];
+  NSDictionary *res = [SCHttpUtils postDataRequestAsDictBLOCKING:url
+                                                            body:authBody
+                                                            auth:authHeader
+                                                     contentType:XML];
+
+  if (res && (jwt = res[@"access_token"])) {
+    [keychainItem setObject:jwt forKey:(__bridge id)kSecAttrGeneric];
+    return true;
+  } else {
+    [self logout];
+    return false;
+  }
+  return false;
 }
 
 - (NSString *)xAccessToken {
@@ -76,4 +108,3 @@
 }
 
 @end
-

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Boundless Spatial. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "SCAuthProtocol.h"
+#import <Foundation/Foundation.h>
 
 @interface SCNoAuthMethod : NSObject <SCAuthProtocol>
 

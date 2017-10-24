@@ -7,12 +7,11 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
 #import "EXTCoroutine.h"
+#import <XCTest/XCTest.h>
 
 @interface EXTCoroutineTest : XCTestCase {
 @private
-    
 }
 
 @end

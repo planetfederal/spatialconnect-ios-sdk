@@ -7,8 +7,8 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
 #import "EXTSelectorChecking.h"
+#import <XCTest/XCTest.h>
 
 @interface EXTSelectorCheckingTest : XCTestCase
 

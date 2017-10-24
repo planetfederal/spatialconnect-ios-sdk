@@ -7,8 +7,8 @@
 //  Released under the MIT license.
 //
 
-#import "metamacros.h"
 #import "EXTRuntimeExtensions.h"
+#import "metamacros.h"
 
 /**
  * Creates an algebraic data type with the given name and one or more data
@@ -31,7 +31,8 @@
  *  equal. For the purposes of the check, object parameters are compared with \c
  *  isEqual:.
  *  - And, for each constructor Cons:
- *      - An enum value Cons, which can be used to refer to that data constructor.
+ *      - An enum value Cons, which can be used to refer to that data
+constructor.
  *      - A function Name.Cons(...), which accepts the parameters of the
  *      constructor and returns a new NameT structure.
  *      - Members (properties) for each of the constructor's named parameters,
@@ -96,86 +97,83 @@ ColorT Color.Other (double r, double g, double b);
  * when printed out with the generated NSStringFrom… function. All other data
  * will behave correctly.
  */
-#define ADT(NAME, ...) \
-    /* a type (NameT) for values defined by this ADT */ \
-    typedef struct ADT_CURRENT_T NAME ## T; \
-    \
-    /* create typedefs for all of the parameters types used with any constructor */ \
-    /* this will append ADT_typedef_ to each constructor() call, thus invoking
-     * ADT_typedef_constructor() instead */ \
-    metamacro_foreach_concat(ADT_typedef_,, __VA_ARGS__) \
-    \
-    struct ADT_CURRENT_T { \
-        /* an enum listing all the constructor names for this ADT */ \
-        /* this will also be how we know the type of this value */ \
-        const enum { \
-            metamacro_foreach_concat(ADT_enum_,, __VA_ARGS__) \
-        } tag; \
-        \
-        /* overlapping storage for all the possible constructors */ \
-        /* the tag above determines which parts of this union are in use */ \
-        union { \
-            metamacro_foreach_concat(ADT_payload_,, __VA_ARGS__) \
-        }; \
-    }; \
-    \
-    /* defines the actual constructor functions for this type */ \
-    metamacro_foreach_concat(ADT_,, __VA_ARGS__) \
-    \
-    /* this structure is used like a simple namespace for the constructors: */ \
-    /* ColorT c = Color.Red(); */ \
-    const struct { \
-        /* as the structure definition, list the function pointers and names of the constructors */ \
-        metamacro_foreach_concat(ADT_fptrs_,, __VA_ARGS__) \
-    } NAME = { \
-        /* then fill them in with the actual function addresses */ \
-        metamacro_foreach_concat(ADT_fptrinit_,, __VA_ARGS__) \
-    }; \
-    \
-    /* implements NSStringFromName(), to describe an ADT value */ \
-    static inline NSString *NSStringFrom ## NAME (NAME ## T s) { \
-        NSMutableString *str = [[NSMutableString alloc] init]; \
-        \
-        /* only values with parameters will have braces added */ \
-        BOOL addedBraces = NO; \
-        \
-        /* construct the description differently depending on the constructor used */ \
-        switch (s.tag) { \
-            metamacro_foreach_concat(ADT_tostring_,, __VA_ARGS__) \
-            default: \
-                return nil; \
-        } \
-        \
-        if (addedBraces) \
-            [str appendString:@" }"]; \
-        \
-        return str; \
-    } \
-    \
-    /* implements NameEqualToName(), to compare ADT values for equality */ \
-    static inline BOOL NAME ## EqualTo ## NAME (NAME ## T a, NAME ## T b) { \
-        if (a.tag != b.tag) \
-            return NO; \
-        \
-        /* construct the check differently depending on the constructor used */ \
-        switch (a.tag) { \
-            metamacro_foreach_concat(ADT_equalto_,, __VA_ARGS__) \
-            default: \
-                ; \
-        } \
-        \
-        return YES; \
-    }
+#define ADT(NAME, ...)                                                         \
+  /* a type (NameT) for values defined by this ADT */                          \
+  typedef struct ADT_CURRENT_T NAME##T;                                        \
+                                                                               \
+  /* create typedefs for all of the parameters types used with any constructor \
+   */                                                                          \
+  /* this will append ADT_typedef_ to each constructor() call, thus invoking   \
+   * ADT_typedef_constructor() instead */                                      \
+  metamacro_foreach_concat(ADT_typedef_, , __VA_ARGS__)                        \
+                                                                               \
+      struct ADT_CURRENT_T {                                                   \
+    /* an enum listing all the constructor names for this ADT */               \
+    /* this will also be how we know the type of this value */                 \
+    const enum { metamacro_foreach_concat(ADT_enum_, , __VA_ARGS__) } tag;     \
+                                                                               \
+    /* overlapping storage for all the possible constructors */                \
+    /* the tag above determines which parts of this union are in use */        \
+    union {                                                                    \
+      metamacro_foreach_concat(ADT_payload_, , __VA_ARGS__)                    \
+    };                                                                         \
+  };                                                                           \
+                                                                               \
+  /* defines the actual constructor functions for this type */                 \
+  metamacro_foreach_concat(ADT_, , __VA_ARGS__)                                \
+                                                                               \
+      /* this structure is used like a simple namespace for the constructors:  \
+       */ /* ColorT c = Color.Red(); */                                        \
+      const struct {                                                           \
+    /* as the structure definition, list the function pointers and names of    \
+     * the constructors */                                                     \
+    metamacro_foreach_concat(ADT_fptrs_, , __VA_ARGS__)                        \
+  } NAME = {/* then fill them in with the actual function addresses */         \
+            metamacro_foreach_concat(ADT_fptrinit_, , __VA_ARGS__)};           \
+                                                                               \
+  /* implements NSStringFromName(), to describe an ADT value */                \
+  static inline NSString *NSStringFrom##NAME(NAME##T s) {                      \
+    NSMutableString *str = [[NSMutableString alloc] init];                     \
+                                                                               \
+    /* only values with parameters will have braces added */                   \
+    BOOL addedBraces = NO;                                                     \
+                                                                               \
+    /* construct the description differently depending on the constructor used \
+     */                                                                        \
+    switch (s.tag) {                                                           \
+      metamacro_foreach_concat(ADT_tostring_, , __VA_ARGS__) default           \
+          : return nil;                                                        \
+    }                                                                          \
+                                                                               \
+    if (addedBraces)                                                           \
+      [str appendString:@" }"];                                                \
+                                                                               \
+    return str;                                                                \
+  }                                                                            \
+                                                                               \
+  /* implements NameEqualToName(), to compare ADT values for equality */       \
+  static inline BOOL NAME##EqualTo##NAME(NAME##T a, NAME##T b) {               \
+    if (a.tag != b.tag)                                                        \
+      return NO;                                                               \
+                                                                               \
+    /* construct the check differently depending on the constructor used */    \
+    switch (a.tag) {                                                           \
+      metamacro_foreach_concat(ADT_equalto_, , __VA_ARGS__) default:;          \
+    }                                                                          \
+                                                                               \
+    return YES;                                                                \
+  }
 
 /*** implementation details follow ***/
 
 /*
  * This macro simply creates an enum entry for the given constructor name.
  */
-#define ADT_enum_constructor(...) \
-    /* pop off the first variadic argument instead of using a named argument */ \
-    /* (necessary because the ... in the argument list needs to match at least one argument) */ \
-    metamacro_head(__VA_ARGS__),
+#define ADT_enum_constructor(...)                                              \
+  /* pop off the first variadic argument instead of using a named argument */  \
+  /* (necessary because the ... in the argument list needs to match at least   \
+   * one argument) */                                                          \
+  metamacro_head(__VA_ARGS__),
 
 /*
  * The "payload" terminology here refers to the data actually stored in an ADT
@@ -245,23 +243,29 @@ typedef struct {
  * 'color.alpha', instead of 'color.Gray.alpha'), but does prevent two
  * parameters -- even for different constructors -- from having the same name.
  */
-#define ADT_payload_constructor(...) \
-    /* our first argument will always be the constructor name, so if we only
-     * have one argument, we only have a constructor */ \
-    metamacro_if_eq(1, metamacro_argcount(__VA_ARGS__)) \
-        (/* this constructor has only a name, don't add any structures */)\
-        ( \
-            /* create structures for the parameters that exist */ \
-            ADT_payload_constructor_(__VA_ARGS__) \
-        )
+#define ADT_payload_constructor(...)                                                              \
+  /* our first argument will always be the constructor name, so if we only                        \
+   * have one argument, we only have a constructor */                                             \
+  metamacro_if_eq(1, metamacro_argcount(__VA_ARGS__))(                                            \
+      /* this constructor has only a name, don't add any structures */)(/* create                 \
+                                                                           structures             \
+                                                                           for                    \
+                                                                           the                    \
+                                                                           parameters             \
+                                                                           that                   \
+                                                                           exist                  \
+                                                                         */                       \
+                                                                        ADT_payload_constructor_( \
+                                                                            __VA_ARGS__))
 
-#define ADT_payload_constructor_(CONS, ...) \
-    struct { \
-        metamacro_foreach_cxt_recursive(ADT_payload_entry_iter,, CONS, __VA_ARGS__) \
-    };
+#define ADT_payload_constructor_(CONS, ...)                                    \
+  struct {                                                                     \
+    metamacro_foreach_cxt_recursive(ADT_payload_entry_iter, , CONS,            \
+                                    __VA_ARGS__)                               \
+  };
 
-#define ADT_payload_entry_iter(INDEX, CONS, PARAM) \
-    ADT_CURRENT_CONS_UNION_T(CONS, INDEX, PARAM);
+#define ADT_payload_entry_iter(INDEX, CONS, PARAM)                             \
+  ADT_CURRENT_CONS_UNION_T(CONS, INDEX, PARAM);
 
 /*
  * The next few macros create type definitions for the unions used for each
@@ -275,22 +279,22 @@ typedef struct {
  * The type definitions are later used for function parameters created by
  * ADT_prototype_iter().
  */
-#define ADT_typedef_constructor(...) \
-    /* our first argument will always be the constructor name, so if we only
-     * have one argument, we only have a constructor */ \
-    metamacro_if_eq(1, metamacro_argcount(__VA_ARGS__)) \
-        (/* no parameters, don't add any typedefs */) \
-        ( \
-            /* there are actually parameters */ \
-            ADT_typedef_constructor_(__VA_ARGS__) \
-        )
+#define ADT_typedef_constructor(...)                                           \
+  /* our first argument will always be the constructor name, so if we only     \
+   * have one argument, we only have a constructor */                          \
+  metamacro_if_eq(1, metamacro_argcount(__VA_ARGS__))(                         \
+      /* no parameters, don't add any typedefs */)(/* there are actually       \
+                                                      parameters */            \
+                                                   ADT_typedef_constructor_(   \
+                                                       __VA_ARGS__))
 
-#define ADT_typedef_constructor_(CONS, ...) \
-    metamacro_foreach_cxt_recursive(ADT_typedef_iter,, CONS, __VA_ARGS__)
+#define ADT_typedef_constructor_(CONS, ...)                                    \
+  metamacro_foreach_cxt_recursive(ADT_typedef_iter, , CONS, __VA_ARGS__)
 
-#define ADT_typedef_iter(INDEX, CONS, PARAM) \
-    typedef ADT_CURRENT_CONS_UNION_T(CONS, INDEX, PARAM) __attribute__((transparent_union)) \
-        ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX);
+#define ADT_typedef_iter(INDEX, CONS, PARAM)                                   \
+  typedef ADT_CURRENT_CONS_UNION_T(CONS, INDEX, PARAM)                         \
+      __attribute__((transparent_union))                                       \
+          ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX);
 
 /*
  * This macro generates an inline function corresponding to one of the data
@@ -304,20 +308,22 @@ typedef struct {
  * needs to always match at least one argument. Instead, metamacro_head() is
  * used to get the constructor name.
  */
-#define ADT_constructor(...) \
-    static inline struct ADT_CURRENT_T \
-    \
-    /* the function name (e.g., 'Red_init_') */ \
-    metamacro_concat(metamacro_head(__VA_ARGS__), _init_) \
-    \
-    /* the parameter list for this function */ \
-    (metamacro_foreach_cxt_recursive(ADT_prototype_iter,, metamacro_head(__VA_ARGS__), __VA_ARGS__)) \
-    { \
-        /* the actual work of initializing the structure */ \
-        /* the local variables for this function are defined in the first iteration of the loop */ \
-        metamacro_foreach_cxt_recursive(ADT_initialize_iter,, metamacro_head(__VA_ARGS__), __VA_ARGS__) \
-        return s; \
-    }
+#define ADT_constructor(...)                                                   \
+  static inline struct ADT_CURRENT_T                                           \
+                                                                               \
+  /* the function name (e.g., 'Red_init_') */                                  \
+  metamacro_concat(metamacro_head(__VA_ARGS__), _init_)                        \
+                                                                               \
+      /* the parameter list for this function */                               \
+      (metamacro_foreach_cxt_recursive(                                        \
+          ADT_prototype_iter, , metamacro_head(__VA_ARGS__), __VA_ARGS__)) {   \
+    /* the actual work of initializing the structure */                        \
+    /* the local variables for this function are defined in the first          \
+     * iteration of the loop */                                                \
+    metamacro_foreach_cxt_recursive(ADT_initialize_iter, ,                     \
+                                    metamacro_head(__VA_ARGS__),               \
+                                    __VA_ARGS__) return s;                     \
+  }
 
 /*
  * The macros below define each parameter to the constructor function.
@@ -330,21 +336,25 @@ typedef struct {
  * constructor name, our parameters actually need to be shifted down --
  * index 1 actually corresponds to v0, our first parameter.
  */
-#define ADT_prototype_iter(INDEX, CONS, PARAM) \
-    metamacro_if_eq(0, INDEX) \
-        (/* the constructor name itself is passed as the first argument (again to
+#define ADT_prototype_iter(INDEX, CONS, PARAM)                                 \
+  metamacro_if_eq(0, INDEX)(                                                   \
+      /* the constructor name itself is passed as the first argument (again to
          * work around the caveat with variadic arguments), but we don't want it in
-         * the parameter list, so we do nothing */) \
-        ( \
-            /* insert a comma for every argument after index 1 */ \
-            metamacro_if_eq_recursive(1, INDEX)()(,) \
-            \
-            /* parameter type */ \
-            ADT_CURRENT_CONS_ALIAS_T(CONS, metamacro_dec(INDEX)) \
-            \
-            /* parameter name */ \
-            metamacro_concat(v, metamacro_dec(INDEX)) \
-        )
+         * the parameter list, so we do nothing */)(/* insert a comma for      \
+                                                       every argument after    \
+                                                       index 1 */              \
+                                                    metamacro_if_eq_recursive( \
+                                                        1, INDEX)()(, )        \
+                                                                               \
+                                                    /* parameter type */       \
+                                                    ADT_CURRENT_CONS_ALIAS_T(  \
+                                                        CONS,                  \
+                                                        metamacro_dec(INDEX))  \
+                                                                               \
+                                                    /* parameter name */       \
+                                                    metamacro_concat(          \
+                                                        v,                     \
+                                                        metamacro_dec(INDEX)))
 
 /*
  * The macros below generate the initialization code that is actually executed
@@ -358,17 +368,16 @@ typedef struct {
  * As with ADT_prototype*(), our parameter numbers need to be shifted down to
  * correspond to the values in the structure.
  */
-#define ADT_initialize_iter(INDEX, CONS, PARAM) \
-    metamacro_if_eq(0, INDEX) \
-        ( \
-            /* initialize the tag when the structure is created, because it cannot change later */ \
-            struct ADT_CURRENT_T s = { .tag = CONS } \
-        ) \
-        (ADT_initialize_memcpy(ADT_CURRENT_CONS_PAYLOAD_T(CONS, metamacro_dec(INDEX)), s, metamacro_concat(v, metamacro_dec(INDEX)))) \
-    ;
+#define ADT_initialize_iter(INDEX, CONS, PARAM)                                \
+  metamacro_if_eq(0, INDEX)(/* initialize the tag when the structure is        \
+                               created, because it cannot change later */      \
+                            struct ADT_CURRENT_T s = {.tag = CONS})(           \
+      ADT_initialize_memcpy(                                                   \
+          ADT_CURRENT_CONS_PAYLOAD_T(CONS, metamacro_dec(INDEX)), s,           \
+          metamacro_concat(v, metamacro_dec(INDEX))));
 
-#define ADT_initialize_memcpy(UNION_NAME, ADT, ARG) \
-    memcpy(&ADT.UNION_NAME, &ARG.UNION_NAME, sizeof(ADT.UNION_NAME));
+#define ADT_initialize_memcpy(UNION_NAME, ADT, ARG)                            \
+  memcpy(&ADT.UNION_NAME, &ARG.UNION_NAME, sizeof(ADT.UNION_NAME));
 
 /*
  * The macros below declare and initialize the function pointers used to
@@ -397,19 +406,23 @@ const struct {
  * Thanks goes out to Jon Sterling and his CADT project for this idea:
  * http://www.jonmsterling.com/CADT/
  */
-#define ADT_fptrs_constructor(...) \
-    struct ADT_CURRENT_T \
-    \
-    /* the function pointer name (matches that of the constructor) */ \
-    (*metamacro_head(__VA_ARGS__)) \
-    \
-    /* the parameter list for the function -- we just reuse ADT_prototype_iter() for this */ \
-    (metamacro_foreach_cxt_recursive(ADT_prototype_iter,, metamacro_head(__VA_ARGS__), __VA_ARGS__));
+#define ADT_fptrs_constructor(...)                                             \
+  struct ADT_CURRENT_T                                                         \
+                                                                               \
+      /* the function pointer name (matches that of the constructor) */        \
+      (*metamacro_head(__VA_ARGS__))                                           \
+                                                                               \
+      /* the parameter list for the function -- we just reuse                  \
+         ADT_prototype_iter() for this */                                      \
+      (metamacro_foreach_cxt_recursive(                                        \
+          ADT_prototype_iter, , metamacro_head(__VA_ARGS__), __VA_ARGS__));
 
-#define ADT_fptrinit_constructor(...) \
-    /* this uses designated initializer syntax to fill in the function pointers
-     * with the actual addresses of the inline functions created by ADT_constructor() */ \
-    .metamacro_head(__VA_ARGS__) = &metamacro_concat(metamacro_head(__VA_ARGS__), _init_),
+#define ADT_fptrinit_constructor(...)                                          \
+  /* this uses designated initializer syntax to fill in the function pointers  \
+   * with the actual addresses of the inline functions created by              \
+   * ADT_constructor() */                                                      \
+  .metamacro_head(__VA_ARGS__) =                                               \
+      &metamacro_concat(metamacro_head(__VA_ARGS__), _init_),
 
 /*
  * The following macros are used to generate the code for the
@@ -423,36 +436,36 @@ const struct {
  * As with ADT_prototype*(), our parameter numbers need to be shifted down to
  * correspond to the values in the structure.
  */
-#define ADT_tostring_constructor(...) \
-        /* try to match each constructor against the value's tag */ \
-        case metamacro_head(__VA_ARGS__): { \
-            /* now create a description from the constructor name and any parameters */ \
-            metamacro_foreach_cxt_recursive(ADT_tostring_iter,, metamacro_head(__VA_ARGS__), __VA_ARGS__) \
-            break; \
-        }
+#define ADT_tostring_constructor(...)                                          \
+  /* try to match each constructor against the value's tag */                  \
+  case metamacro_head(__VA_ARGS__): {                                          \
+    /* now create a description from the constructor name and any parameters   \
+     */                                                                        \
+    metamacro_foreach_cxt_recursive(                                           \
+        ADT_tostring_iter, , metamacro_head(__VA_ARGS__), __VA_ARGS__) break;  \
+  }
 
-#define ADT_tostring_iter(INDEX, CONS, PARAM) \
-    /* dispatches to one of the case macros below, based on the INDEX */ \
-    metamacro_if_eq(0, INDEX) \
-        (ADT_tostring_case0(CONS, PARAM)) \
-        (metamacro_if_eq_recursive(1, INDEX) \
-            (ADT_tostring_case1(CONS, PARAM)) \
-            (ADT_tostring_defaultcase(INDEX, CONS, PARAM)) \
-        )
+#define ADT_tostring_iter(INDEX, CONS, PARAM)                                  \
+  /* dispatches to one of the case macros below, based on the INDEX */         \
+  metamacro_if_eq(0, INDEX)(ADT_tostring_case0(CONS, PARAM))(                  \
+      metamacro_if_eq_recursive(1, INDEX)(ADT_tostring_case1(CONS, PARAM))(    \
+          ADT_tostring_defaultcase(INDEX, CONS, PARAM)))
 
-#define ADT_tostring_case0(CONS, PARAM) \
-    /* this is the first (and possibly) only part of the description: the name
-     * of the data constructor */ \
-    [str appendString:@ # CONS];
+#define ADT_tostring_case0(CONS, PARAM)                                        \
+  /* this is the first (and possibly) only part of the description: the name   \
+   * of the data constructor */                                                \
+  [str appendString:@ #CONS];
 
-#define ADT_tostring_case1(CONS, PARAM) \
-    /* we know now that we have arguments, so we insert a brace (and flip the
-     * corresponding flag), then begin by describing the first argument */ \
-    [str appendFormat:@" { %@", ADT_CURRENT_PARAMETER_DESCRIPTION(CONS, PARAM, s, 0)]; \
-    addedBraces = YES;
+#define ADT_tostring_case1(CONS, PARAM)                                        \
+  /* we know now that we have arguments, so we insert a brace (and flip the    \
+   * corresponding flag), then begin by describing the first argument */       \
+  [str appendFormat:@" { %@",                                                  \
+                    ADT_CURRENT_PARAMETER_DESCRIPTION(CONS, PARAM, s, 0)];     \
+  addedBraces = YES;
 
-#define ADT_tostring_defaultcase(INDEX, CONS, PARAM) \
-    [str appendFormat: @", %@", ADT_CURRENT_PARAMETER_DESCRIPTION(CONS, PARAM, s, metamacro_dec(INDEX))];
+#define ADT_tostring_defaultcase(INDEX, CONS, PARAM)                           \
+  [str appendFormat:@", %@", ADT_CURRENT_PARAMETER_DESCRIPTION(                \
+                                 CONS, PARAM, s, metamacro_dec(INDEX))];
 
 /*
  * The following macros are used to generate the code for the
@@ -466,18 +479,18 @@ const struct {
  * As with ADT_prototype*(), our parameter numbers need to be shifted down to
  * correspond to the values in the structure.
  */
-#define ADT_equalto_constructor(...) \
-        /* try to match each constructor against the value's tag */ \
-        case metamacro_head(__VA_ARGS__): { \
-            metamacro_if_eq(1, metamacro_argcount(...)) \
-                (/* no parameters, so we're equal merely if the tags are the same */) \
-                (metamacro_foreach_cxt_recursive(ADT_equalto_iter,, __VA_ARGS__)) \
-            \
-            break; \
-        }
+#define ADT_equalto_constructor(...)                                           \
+  /* try to match each constructor against the value's tag */                  \
+  case metamacro_head(__VA_ARGS__): {                                          \
+    metamacro_if_eq(1, metamacro_argcount(...))(                               \
+        /* no parameters, so we're equal merely if the tags are the same */)(  \
+        metamacro_foreach_cxt_recursive(ADT_equalto_iter, , __VA_ARGS__))      \
+                                                                               \
+        break;                                                                 \
+  }
 
-#define ADT_equalto_iter(INDEX, CONS, PARAM) \
-    { \
+#define ADT_equalto_iter(INDEX, CONS, PARAM)                                                                        \
+  {                                                                                                                 \
         const char *paramEncoding = ext_trimADTJunkFromTypeEncoding(@encode(ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX)); \
         \
         /* use isEqual: for objects (including class objects) */ \
@@ -497,8 +510,8 @@ const struct {
              * bits that would cause false negatives with the latter */ \
             if (a.ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX) != b.ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX)) \
                 return NO; \
-        } \
-    }
+        }                                                                                                           \
+  }
 
 /*
  * The structure tag for the ADT currently being defined. This takes advantage
@@ -508,8 +521,7 @@ const struct {
  * This does prevent multiple ADT() definitions from being provided on the same
  * line, however.
  */
-#define ADT_CURRENT_T \
-    metamacro_concat(_ADT_, __LINE__)
+#define ADT_CURRENT_T metamacro_concat(_ADT_, __LINE__)
 
 /*
  * This generates an alias name that can be used to refer to the type of
@@ -522,8 +534,9 @@ const struct {
  * a function or method argument and appear to be the actual parameter type
  * given by the user.
  */
-#define ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX) \
-    metamacro_concat(metamacro_concat(ADT_CURRENT_T, _), metamacro_concat(CONS ## _alias, INDEX))
+#define ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX)                                  \
+  metamacro_concat(metamacro_concat(ADT_CURRENT_T, _),                         \
+                   metamacro_concat(CONS##_alias, INDEX))
 
 /**
  * Creates an anonymous union that contains the user's parameter declaration as
@@ -532,37 +545,44 @@ const struct {
  *
  * See ADT_payload_constructor() for more information.
  */
-#define ADT_CURRENT_CONS_UNION_T(CONS, INDEX, PARAM) \
-    /* create unions upon unions (oh my!) so that we can treat the user's
-     * parameter as a typedef, without needing to split apart the type and name
-     * inside it (which is probably not possible) */ \
-    union { \
-        union { \
-            PARAM; \
-        } ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX); \
-        \
-        PARAM; \
-    }
+#define ADT_CURRENT_CONS_UNION_T(CONS, INDEX, PARAM)                           \
+  /* create unions upon unions (oh my!) so that we can treat the user's        \
+   * parameter as a typedef, without needing to split apart the type and name  \
+   * inside it (which is probably not possible) */                             \
+  union {                                                                      \
+    union {                                                                    \
+      PARAM;                                                                   \
+    } ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX);                                 \
+                                                                               \
+    PARAM;                                                                     \
+  }
 
-#define ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX) \
-    metamacro_concat(CONS ## _payload_, INDEX)
+#define ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX)                                \
+  metamacro_concat(CONS##_payload_, INDEX)
 
 /*
  * Expands to an NSString with a human-readable description of the current value
  * at INDEX, for constructor CONS, in the internal value structure of ADT. PARAM
  * is the parameter declaration originally given by the user.
  */
-#define ADT_CURRENT_PARAMETER_DESCRIPTION(CONS, PARAM, ADT, INDEX) \
-    [NSString stringWithFormat:@"%@ = %@", \
-        /* this is the only place where we actually parse a parameter declaration */ \
-        /* we do it here to remove the type from the description, keeping only the name */ \
-        ext_parameterNameFromDeclaration(@ # PARAM), \
-        /* convert the parameter type into an Objective-C type encoding, which,
-         * along with a pointer to the data, can be used to generate
-         * a human-readable description of the actual value */ \
-        ext_stringFromTypedBytes(&(ADT).ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX), \
-            ext_trimADTJunkFromTypeEncoding(@encode(ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX)))) \
-    ]
+#define ADT_CURRENT_PARAMETER_DESCRIPTION(CONS, PARAM, ADT, INDEX)             \
+  [NSString                                                                    \
+      stringWithFormat:                                                        \
+          @"%@ = %@",                                                          \
+          /* this is the only place where we actually parse a      \
+                         parameter declaration */ /* we do it here to remove   \
+                                                     the type from the         \
+                                                     description, keeping only \
+                                                     the name */               \
+          ext_parameterNameFromDeclaration(                                    \
+              @ #PARAM), /* convert the parameter type into an Objective-C     \
+                          * type encoding, which, along with a pointer to the  \
+                          * data, can be used to generate a human-readable     \
+                          * description of the actual value */                 \
+          ext_stringFromTypedBytes(                                            \
+              &(ADT).ADT_CURRENT_CONS_PAYLOAD_T(CONS, INDEX),                  \
+              ext_trimADTJunkFromTypeEncoding(                                 \
+                  @encode(ADT_CURRENT_CONS_ALIAS_T(CONS, INDEX))))]
 
-const char *ext_trimADTJunkFromTypeEncoding (const char *encoding);
-NSString *ext_parameterNameFromDeclaration (NSString *declaration);
+const char *ext_trimADTJunkFromTypeEncoding(const char *encoding);
+NSString *ext_parameterNameFromDeclaration(NSString *declaration);

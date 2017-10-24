@@ -91,10 +91,9 @@
     RACCompoundDisposable *disposable =
         [RACCompoundDisposable compoundDisposable];
     [disposable
-        addDisposable:[[dataDelegate
-                          rac_signalForSelector:@selector(connection:
-                                                    didReceiveResponse:)
-                                   fromProtocol:protocol]
+        addDisposable:[[dataDelegate rac_signalForSelector:@selector
+                                     (connection:didReceiveResponse:)
+                                              fromProtocol:protocol]
                           subscribeNext:^(RACTuple *arguments) {
                             expectedLength = [NSNumber
                                 numberWithFloat:[arguments.second
@@ -103,10 +102,9 @@
                           }]];
 
     [disposable
-        addDisposable:[[dataDelegate
-                          rac_signalForSelector:@selector(connection:
-                                                      didReceiveData:)
-                                   fromProtocol:protocol]
+        addDisposable:[[dataDelegate rac_signalForSelector:@selector
+                                     (connection:didReceiveData:)
+                                              fromProtocol:protocol]
                           subscribeNext:^(RACTuple *arguments) {
                             [data appendData:arguments.second];
                             NSNumber *progress = [NSNumber
@@ -115,23 +113,21 @@
                             [subscriber sendNext:RACTuplePack(data, progress)];
                           }]];
 
-    [disposable addDisposable:[[dataDelegate
-                                  rac_signalForSelector:@selector(connection:
-                                                            didFailWithError:)
-                                           fromProtocol:protocol]
+    [disposable addDisposable:[[dataDelegate rac_signalForSelector:@selector
+                                             (connection:didFailWithError:)
+                                                      fromProtocol:protocol]
                                   subscribeNext:^(RACTuple *arguments) {
                                     [subscriber sendError:arguments.second];
                                   }]];
 
-    [disposable
-        addDisposable:[[dataDelegate
-                          rac_signalForSelector:@selector(
-                                                    connectionDidFinishLoading:)
-                                   fromProtocol:protocol]
-                          subscribeNext:^(id x) {
-                            [subscriber sendNext:RACTuplePack(data, @(1.0f))];
-                            [subscriber sendCompleted];
-                          }]];
+    [disposable addDisposable:[[dataDelegate rac_signalForSelector:@selector
+                                             (connectionDidFinishLoading:)
+                                                      fromProtocol:protocol]
+                                  subscribeNext:^(id x) {
+                                    [subscriber
+                                        sendNext:RACTuplePack(data, @(1.0f))];
+                                    [subscriber sendCompleted];
+                                  }]];
 
     NSURLConnection *connection =
         [[NSURLConnection alloc] initWithRequest:request delegate:dataDelegate];
@@ -184,16 +180,52 @@
       }];
 }
 
-+ (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict auth:(NSString *)auth {
++ (NSData *)postDictRequestBLOCKING:(NSURL *)url
+                               body:(NSDictionary *)dict
+                               auth:(NSString *)auth {
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   request.HTTPMethod = @"POST";
-  [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+  [request addValue:@"application/x-www-form-urlencoded"
+      forHTTPHeaderField:@"Content-Type"];
+  if (auth) {
+    DDLogError(@"%@", @"adding auth");
+    [request addValue:auth forHTTPHeaderField:@"Authorization"];
+  }
+  NSError *err;
+  NSURLResponse *response;
+  //  request.HTTPBody = dict.JSONData;
+  NSString *a =
+      [NSString stringWithFormat:@"grant_type=password&username=%@&password=%@",
+                                 @"fieldc1", @"fieldc1"];
+  NSData *d = [a dataUsingEncoding:NSUTF8StringEncoding];
+  request.HTTPBody = d;
+
+  NSData *data = [NSURLConnection sendSynchronousRequest:request
+                                       returningResponse:&response
+                                                   error:&err];
+  if (err) {
+    DDLogError(@"%@", [err description]);
+    return nil;
+  } else {
+    DDLogError(@"%@", @"No err");
+  }
+  return data;
+}
+
++ (NSData *)postDataRequestBLOCKING:(NSURL *)url
+                               body:(NSData *)body
+                               auth:(NSString *)auth
+                        contentType:(NSString *)contentType {
+  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+  request.HTTPMethod = @"POST";
+  [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
   if (auth) {
     [request addValue:auth forHTTPHeaderField:@"Authorization"];
   }
   NSError *err;
   NSURLResponse *response;
-  request.HTTPBody = dict.JSONData;
+  request.HTTPBody = body;
+
   NSData *data = [NSURLConnection sendSynchronousRequest:request
                                        returningResponse:&response
                                                    error:&err];
@@ -214,11 +246,15 @@
   return result;
 }
 
-+ (NSDictionary *)postDictRequestAsDictBLOCKING:(NSURL *)url
-                                           body:(NSDictionary *)dict
-                                           auth:(NSString *)auth {
++ (NSDictionary *)postDataRequestAsDictBLOCKING:(NSURL *)url
+                                           body:(NSData *)dict
+                                           auth:(NSString *)auth
+                                    contentType:(NSString *)contentType {
   NSDictionary *result = nil;
-  NSData *data = [self postDictRequestBLOCKING:url body:dict auth:auth];
+  NSData *data = [self postDataRequestBLOCKING:url
+                                          body:dict
+                                          auth:auth
+                                   contentType:contentType];
   if (data) {
     result = [[JSONDecoder decoder] objectWithData:data];
   }

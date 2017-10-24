@@ -18,10 +18,10 @@
  * Returns \c NO if an error occurs (such as being unable to retrieve an
  * argument for a certain type).
  *
- * @warning Due to the mechanics behind variable argument lists, this method cannot
- * be used with method signatures that involve \c struct or \c union parameters.
- * Blocks and function pointers may or may not also cause problems. Such
- * arguments must be set individually.
+ * @warning Due to the mechanics behind variable argument lists, this method
+ * cannot be used with method signatures that involve \c struct or \c union
+ * parameters. Blocks and function pointers may or may not also cause problems.
+ * Such arguments must be set individually.
  */
 - (BOOL)setArgumentsFromArgumentList:(va_list)args;
 @end

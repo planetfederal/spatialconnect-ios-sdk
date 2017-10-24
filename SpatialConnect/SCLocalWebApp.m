@@ -78,9 +78,8 @@
 - (BOOL)webView:(UIWebView *)webView
     shouldStartLoadWithRequest:(NSURLRequest *)request
                 navigationType:(UIWebViewNavigationType)navigationType {
-  if ([webviewDelegate respondsToSelector:@selector(webView:
-                                              shouldStartLoadWithRequest:
-                                                          navigationType:)]) {
+  if ([webviewDelegate respondsToSelector:@selector
+                       (webView:shouldStartLoadWithRequest:navigationType:)]) {
     return [webviewDelegate webView:webView
          shouldStartLoadWithRequest:request
                      navigationType:navigationType];

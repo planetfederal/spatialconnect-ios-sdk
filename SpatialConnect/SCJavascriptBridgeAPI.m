@@ -22,7 +22,6 @@
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCHttpUtils.h"
-#import "SCHttpUtils.h"
 #import "SCJavascriptBridge.h"
 #import "SCJavascriptCommands.h"
 #import "SCNotification.h"
@@ -108,7 +107,7 @@
 - (void)storeList:(id<RACSubscriber>)subscriber {
   NSArray *arr =
       [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
-  [subscriber sendNext:@{ @"stores" : arr }];
+  [subscriber sendNext:@{@"stores" : arr}];
   RACMulticastConnection *rmcc =
       [[[SpatialConnect sharedInstance] dataService] storeEvents];
   [rmcc connect];
@@ -116,7 +115,7 @@
     NSArray *arr =
         [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
 
-    [subscriber sendNext:@{ @"stores" : arr }];
+    [subscriber sendNext:@{@"stores" : arr}];
   }];
 }
 
@@ -125,7 +124,7 @@
       subscribeNext:^(NSNumber *status) {
         NSArray *arr = [[[SpatialConnect sharedInstance] dataService]
             activeStoreListDictionary];
-        [subscriber sendNext:@{ @"stores" : arr }];
+        [subscriber sendNext:@{@"stores" : arr}];
       }
       error:^(NSError *error) {
         [subscriber sendError:error];
@@ -137,7 +136,7 @@
       subscribeNext:^(NSNumber *status) {
         NSArray *arr = [[[[SpatialConnect sharedInstance] dataService]
             formStore] formsDictionaryArray];
-        [subscriber sendNext:@{ @"forms" : arr }];
+        [subscriber sendNext:@{@"forms" : arr}];
       }
       error:^(NSError *error) {
         [subscriber sendError:error];
@@ -148,7 +147,7 @@
      responseSubscriber:(id<RACSubscriber>)subscriber {
   NSDictionary *dict = [[[SpatialConnect sharedInstance] dataService]
       storeByIdAsDictionary:value[@"storeId"]];
-  [subscriber sendNext:@{ @"store" : dict }];
+  [subscriber sendNext:@{@"store" : dict}];
   [subscriber sendCompleted];
 }
 
@@ -159,8 +158,8 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-        [subscriber sendNext:d];
-      }
+    [subscriber sendNext:d];
+  }
       error:^(NSError *error) {
         [subscriber sendError:error];
       }
@@ -194,14 +193,14 @@
   [[[ds queryAllStores:filter] map:^NSDictionary *(SCSpatialFeature *value) {
     return [value JSONDict];
   }] subscribeNext:^(NSDictionary *d) {
-      [subscriber sendNext:d];
-    }
-    error:^(NSError *error) {
-      [subscriber sendError:error];
-    }
-    completed:^{
-      [subscriber sendCompleted];
-    }];
+    [subscriber sendNext:d];
+  }
+      error:^(NSError *error) {
+        [subscriber sendError:error];
+      }
+      completed:^{
+        [subscriber sendCompleted];
+      }];
 }
 
 - (void)queryGeoStoresByIds:(NSDictionary *)value
@@ -213,8 +212,8 @@
       map:^NSDictionary *(SCSpatialFeature *value) {
         return [value JSONDict];
       }] subscribeNext:^(NSDictionary *d) {
-        [subscriber sendNext:d];
-      }
+    [subscriber sendNext:d];
+  }
       error:^(NSError *error) {
         [subscriber sendError:error];
       }
@@ -266,9 +265,9 @@
       DDLogError(@"Error creating Feature");
       [subscriber sendError:error];
     }
-    completed:^{
-      [subscriber sendNext:[feat JSONDict]];
-    }];
+        completed:^{
+          [subscriber sendNext:[feat JSONDict]];
+        }];
 
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
@@ -297,10 +296,10 @@
                           userInfo:nil];
       [subscriber sendError:err];
     }
-    completed:^{
-      [subscriber sendNext:[feat JSONDict]];
-      [subscriber sendCompleted];
-    }];
+        completed:^{
+          [subscriber sendNext:[feat JSONDict]];
+          [subscriber sendCompleted];
+        }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_UPDATEFEATURE
@@ -323,9 +322,9 @@
                           userInfo:nil];
       [subscriber sendError:err];
     }
-    completed:^{
-      [subscriber sendCompleted];
-    }];
+        completed:^{
+          [subscriber sendCompleted];
+        }];
   } else {
     NSError *err = [NSError errorWithDomain:SCJavascriptBridgeErrorDomain
                                        code:SCJSERROR_DATASERVICE_DELETEFEATURE
@@ -428,7 +427,7 @@
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
         [[bs connectedToBroker] subscribeNext:^(id x) {
-          [subscriber sendNext:@{ @"connected" : x }];
+          [subscriber sendNext:@{@"connected" : x}];
         }];
       }];
 }

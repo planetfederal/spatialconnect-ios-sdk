@@ -7,13 +7,12 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
-#import <Foundation/Foundation.h>
 #import "EXTScope.h"
+#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 @interface EXTScopeTest : XCTestCase {
 @private
-    
 }
 
 @end

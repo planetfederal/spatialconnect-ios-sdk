@@ -7,12 +7,11 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
-#import <Foundation/Foundation.h>
 #import "EXTRuntimeExtensions.h"
+#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 @interface EXTRuntimeExtensionsTest : XCTestCase {
-    
 }
 
 @end
