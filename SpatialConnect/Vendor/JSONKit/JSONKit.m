@@ -2073,8 +2073,9 @@ static int jk_parse_string(JKParseState *parseState) {
           if ((tokenBuffer =
                    jk_managedBuffer_resize(&parseState->token.tokenBuffer,
                                            tokenBufferIdx + 1024UL)) == NULL) {
-            jk_error(parseState, @"Internal error: Unable to resize temporary "
-                                 @"buffer. %@ line #%ld",
+            jk_error(parseState,
+                     @"Internal error: Unable to resize temporary "
+                     @"buffer. %@ line #%ld",
                      [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
             stringState = JSONStringStateError;
             goto finishedParsing;
@@ -2163,10 +2164,11 @@ slowMatch:
             }
             if (jk_string_add_unicodeCodePoint(parseState, u32ch,
                                                &tokenBufferIdx, &stringHash)) {
-              jk_error(
-                  parseState, @"Internal error: Unable to add UTF8 sequence to "
-                              @"internal string buffer. %@ line #%ld",
-                  [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
+              jk_error(parseState,
+                       @"Internal error: Unable to add UTF8 sequence to "
+                       @"internal string buffer. %@ line #%ld",
+                       [NSString stringWithUTF8String:__FILE__],
+                       (long)__LINE__);
               stringState = JSONStringStateError;
               goto finishedParsing;
             }
@@ -2319,10 +2321,11 @@ slowMatch:
             if (jk_string_add_unicodeCodePoint(parseState,
                                                escapedUnicodeCodePoint,
                                                &tokenBufferIdx, &stringHash)) {
-              jk_error(
-                  parseState, @"Internal error: Unable to add UTF8 sequence to "
-                              @"internal string buffer. %@ line #%ld",
-                  [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
+              jk_error(parseState,
+                       @"Internal error: Unable to add UTF8 sequence to "
+                       @"internal string buffer. %@ line #%ld",
+                       [NSString stringWithUTF8String:__FILE__],
+                       (long)__LINE__);
               stringState = JSONStringStateError;
               goto finishedParsing;
             }
@@ -2358,10 +2361,11 @@ slowMatch:
             atStringCharacter--;
             if (jk_string_add_unicodeCodePoint(parseState, UNI_REPLACEMENT_CHAR,
                                                &tokenBufferIdx, &stringHash)) {
-              jk_error(
-                  parseState, @"Internal error: Unable to add UTF8 sequence to "
-                              @"internal string buffer. %@ line #%ld",
-                  [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
+              jk_error(parseState,
+                       @"Internal error: Unable to add UTF8 sequence to "
+                       @"internal string buffer. %@ line #%ld",
+                       [NSString stringWithUTF8String:__FILE__],
+                       (long)__LINE__);
               stringState = JSONStringStateError;
               goto finishedParsing;
             }
@@ -2384,10 +2388,11 @@ slowMatch:
             atStringCharacter -= 2;
             if (jk_string_add_unicodeCodePoint(parseState, UNI_REPLACEMENT_CHAR,
                                                &tokenBufferIdx, &stringHash)) {
-              jk_error(
-                  parseState, @"Internal error: Unable to add UTF8 sequence to "
-                              @"internal string buffer. %@ line #%ld",
-                  [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
+              jk_error(parseState,
+                       @"Internal error: Unable to add UTF8 sequence to "
+                       @"internal string buffer. %@ line #%ld",
+                       [NSString stringWithUTF8String:__FILE__],
+                       (long)__LINE__);
               stringState = JSONStringStateError;
               goto finishedParsing;
             }
@@ -2596,21 +2601,24 @@ static int jk_parse_number(JKParseState *parseState) {
       if (errno == ERANGE) {
         switch (parseState->token.value.type) {
         case JKValueTypeDouble:
-          jk_error(parseState, @"The value '%s' could not be represented as a "
-                               @"'double' due to %s.",
+          jk_error(parseState,
+                   @"The value '%s' could not be represented as a "
+                   @"'double' due to %s.",
                    numberTempBuf,
                    (parseState->token.value.number.doubleValue == 0.0)
                        ? "underflow"
                        : "overflow");
           break; // see above for == 0.0.
         case JKValueTypeLongLong:
-          jk_error(parseState, @"The value '%s' exceeded the minimum value "
-                               @"that could be represented: %lld.",
+          jk_error(parseState,
+                   @"The value '%s' exceeded the minimum value "
+                   @"that could be represented: %lld.",
                    numberTempBuf, parseState->token.value.number.longLongValue);
           break;
         case JKValueTypeUnsignedLongLong:
-          jk_error(parseState, @"The value '%s' exceeded the maximum value "
-                               @"that could be represented: %llu.",
+          jk_error(parseState,
+                   @"The value '%s' exceeded the maximum value "
+                   @"that could be represented: %llu.",
                    numberTempBuf,
                    parseState->token.value.number.unsignedLongLongValue);
           break;
@@ -2908,8 +2916,9 @@ static void *jk_parse_array(JKParseState *parseState) {
                     (parseState->objectStack.count - 4UL))) {
       if (jk_objectStack_resize(&parseState->objectStack,
                                 parseState->objectStack.count + 128UL)) {
-        jk_error(parseState, @"Internal error: [array] objectsIndex > %zu, "
-                             @"resize failed? %@ line %#ld",
+        jk_error(parseState,
+                 @"Internal error: [array] objectsIndex > %zu, "
+                 @"resize failed? %@ line %#ld",
                  (parseState->objectStack.count - 4UL),
                  [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
         break;
@@ -3032,8 +3041,9 @@ static void *jk_parse_dictionary(JKParseState *parseState) {
                     (parseState->objectStack.count - 4UL))) {
       if (jk_objectStack_resize(&parseState->objectStack,
                                 parseState->objectStack.count + 128UL)) {
-        jk_error(parseState, @"Internal error: [dictionary] objectsIndex > "
-                             @"%zu, resize failed? %@ line #%ld",
+        jk_error(parseState,
+                 @"Internal error: [dictionary] objectsIndex > "
+                 @"%zu, resize failed? %@ line #%ld",
                  (parseState->objectStack.count - 4UL),
                  [NSString stringWithUTF8String:__FILE__], (long)__LINE__);
         break;
@@ -3864,9 +3874,9 @@ exitNow:
                                    error:(NSError **)error {
   JSONDecoder *decoder = NULL;
   id returnObject =
-      [(decoder = [JSONDecoder
-            decoderWithParseOptions:parseOptionFlags]) objectWithData:self
-                                                                error:error];
+      [(decoder = [JSONDecoder decoderWithParseOptions:parseOptionFlags])
+          objectWithData:self
+                   error:error];
   if (decoder != NULL) {
     _JSONDecoderCleanup(decoder);
   }
@@ -4916,8 +4926,9 @@ rerunAfterClassFormatter:;
   if (((encodeOption & JKEncodeOptionCollectionObj) != 0UL) &&
       (([object isKindOfClass:[NSArray class]] == NO) &&
        ([object isKindOfClass:[NSDictionary class]] == NO))) {
-    jk_encode_error(encodeState, @"Unable to serialize object class %@, "
-                                 @"expected a NSArray or NSDictionary.",
+    jk_encode_error(encodeState,
+                    @"Unable to serialize object class %@, "
+                    @"expected a NSArray or NSDictionary.",
                     NSStringFromClass([object class]));
     goto errorExit;
   }

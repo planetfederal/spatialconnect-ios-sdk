@@ -7,8 +7,8 @@
 //  Released under the MIT license.
 //
 
-#import <objc/runtime.h>
 #import <Foundation/Foundation.h>
+#import <objc/runtime.h>
 
 /**
  * A callback indicating that the given method failed to be added to the given
@@ -20,142 +20,144 @@ typedef void (*ext_failedMethodCallback)(Class, Method);
  * Used with #ext_injectMethods to determine injection behavior.
  */
 typedef NS_OPTIONS(NSUInteger, ext_methodInjectionBehavior) {
-    /**
-     * Indicates that any existing methods on the destination class should be
-     * overwritten.
-     */
-    ext_methodInjectionReplace                  = 0x00,
+  /**
+   * Indicates that any existing methods on the destination class should be
+   * overwritten.
+   */
+  ext_methodInjectionReplace = 0x00,
 
-    /**
-     * Avoid overwriting methods on the immediate destination class.
-     */
-    ext_methodInjectionFailOnExisting           = 0x01,
-    
-    /**
-     * Avoid overriding methods implemented in any superclass of the destination
-     * class.
-     */
-    ext_methodInjectionFailOnSuperclassExisting = 0x02,
+  /**
+   * Avoid overwriting methods on the immediate destination class.
+   */
+  ext_methodInjectionFailOnExisting = 0x01,
 
-    /**
-     * Avoid overwriting methods implemented in the immediate destination class
-     * or any superclass. This is equivalent to
-     * <tt>ext_methodInjectionFailOnExisting | ext_methodInjectionFailOnSuperclassExisting</tt>.
-     */
-    ext_methodInjectionFailOnAnyExisting        = 0x03,
+  /**
+   * Avoid overriding methods implemented in any superclass of the destination
+   * class.
+   */
+  ext_methodInjectionFailOnSuperclassExisting = 0x02,
 
-    /**
-     * Ignore the \c +load class method. This does not affect instance method
-     * injection.
-     */
-    ext_methodInjectionIgnoreLoad = 1U << 2,
+  /**
+   * Avoid overwriting methods implemented in the immediate destination class
+   * or any superclass. This is equivalent to
+   * <tt>ext_methodInjectionFailOnExisting |
+   * ext_methodInjectionFailOnSuperclassExisting</tt>.
+   */
+  ext_methodInjectionFailOnAnyExisting = 0x03,
 
-    /**
-     * Ignore the \c +initialize class method. This does not affect instance method
-     * injection.
-     */
-    ext_methodInjectionIgnoreInitialize = 1U << 3
+  /**
+   * Ignore the \c +load class method. This does not affect instance method
+   * injection.
+   */
+  ext_methodInjectionIgnoreLoad = 1U << 2,
+
+  /**
+   * Ignore the \c +initialize class method. This does not affect instance
+   * method injection.
+   */
+  ext_methodInjectionIgnoreInitialize = 1U << 3
 };
 
 /**
  * A mask for the overwriting behavior flags of #ext_methodInjectionBehavior.
  */
-static const ext_methodInjectionBehavior ext_methodInjectionOverwriteBehaviorMask = 0x3;
+static const ext_methodInjectionBehavior
+    ext_methodInjectionOverwriteBehaviorMask = 0x3;
 
 /**
  * Describes the memory management policy of a property.
  */
 typedef enum {
-    /**
-     * The value is assigned.
-     */
-    ext_propertyMemoryManagementPolicyAssign = 0,
+  /**
+   * The value is assigned.
+   */
+  ext_propertyMemoryManagementPolicyAssign = 0,
 
-    /**
-     * The value is retained.
-     */
-    ext_propertyMemoryManagementPolicyRetain,
+  /**
+   * The value is retained.
+   */
+  ext_propertyMemoryManagementPolicyRetain,
 
-    /**
-     * The value is copied.
-     */
-    ext_propertyMemoryManagementPolicyCopy
+  /**
+   * The value is copied.
+   */
+  ext_propertyMemoryManagementPolicyCopy
 } ext_propertyMemoryManagementPolicy;
 
 /**
  * Describes the attributes and type information of a property.
  */
 typedef struct {
-    /**
-     * Whether this property was declared with the \c readonly attribute.
-     */
-    BOOL readonly;
+  /**
+   * Whether this property was declared with the \c readonly attribute.
+   */
+  BOOL readonly;
 
-    /**
-     * Whether this property was declared with the \c nonatomic attribute.
-     */
-    BOOL nonatomic;
+  /**
+   * Whether this property was declared with the \c nonatomic attribute.
+   */
+  BOOL nonatomic;
 
-    /**
-     * Whether the property is a weak reference.
-     */
-    BOOL weak;
+  /**
+   * Whether the property is a weak reference.
+   */
+  BOOL weak;
 
-    /**
-     * Whether the property is eligible for garbage collection.
-     */
-    BOOL canBeCollected;
+  /**
+   * Whether the property is eligible for garbage collection.
+   */
+  BOOL canBeCollected;
 
-    /**
-     * Whether this property is defined with \c \@dynamic.
-     */
-    BOOL dynamic;
+  /**
+   * Whether this property is defined with \c \@dynamic.
+   */
+  BOOL dynamic;
 
-    /**
-     * The memory management policy for this property. This will always be
-     * #ext_propertyMemoryManagementPolicyAssign if #readonly is \c YES.
-     */
-    ext_propertyMemoryManagementPolicy memoryManagementPolicy;
+  /**
+   * The memory management policy for this property. This will always be
+   * #ext_propertyMemoryManagementPolicyAssign if #readonly is \c YES.
+   */
+  ext_propertyMemoryManagementPolicy memoryManagementPolicy;
 
-    /**
-     * The selector for the getter of this property. This will reflect any
-     * custom \c getter= attribute provided in the property declaration, or the
-     * inferred getter name otherwise.
-     */
-    SEL getter;
+  /**
+   * The selector for the getter of this property. This will reflect any
+   * custom \c getter= attribute provided in the property declaration, or the
+   * inferred getter name otherwise.
+   */
+  SEL getter;
 
-    /**
-     * The selector for the setter of this property. This will reflect any
-     * custom \c setter= attribute provided in the property declaration, or the
-     * inferred setter name otherwise.
-     *
-     * @note If #readonly is \c YES, this value will represent what the setter
-     * \e would be, if the property were writable.
-     */
-    SEL setter;
+  /**
+   * The selector for the setter of this property. This will reflect any
+   * custom \c setter= attribute provided in the property declaration, or the
+   * inferred setter name otherwise.
+   *
+   * @note If #readonly is \c YES, this value will represent what the setter
+   * \e would be, if the property were writable.
+   */
+  SEL setter;
 
-    /**
-     * The backing instance variable for this property, or \c NULL if \c
-     * \c @synthesize was not used, and therefore no instance variable exists. This
-     * would also be the case if the property is implemented dynamically.
-     */
-    const char *ivar;
+  /**
+   * The backing instance variable for this property, or \c NULL if \c
+   * \c @synthesize was not used, and therefore no instance variable exists.
+   * This would also be the case if the property is implemented dynamically.
+   */
+  const char *ivar;
 
-    /**
-     * If this property is defined as being an instance of a specific class,
-     * this will be the class object representing it.
-     *
-     * This will be \c nil if the property was defined as type \c id, if the
-     * property is not of an object type, or if the class could not be found at
-     * runtime.
-     */
-    Class objectClass;
+  /**
+   * If this property is defined as being an instance of a specific class,
+   * this will be the class object representing it.
+   *
+   * This will be \c nil if the property was defined as type \c id, if the
+   * property is not of an object type, or if the class could not be found at
+   * runtime.
+   */
+  Class objectClass;
 
-    /**
-     * The type encoding for the value of this property. This is the type as it
-     * would be returned by the \c \@encode() directive.
-     */
-    char type[];
+  /**
+   * The type encoding for the value of this property. This is the type as it
+   * would be returned by the \c \@encode() directive.
+   */
+  char type[];
 } ext_propertyAttributes;
 
 /**
@@ -168,7 +170,9 @@ typedef struct {
  * Returns the number of methods added successfully. For each method that fails
  * to be added, \a failedToAddCallback (if provided) is invoked.
  */
-unsigned ext_addMethods (Class aClass, Method *methods, unsigned count, BOOL checkSuperclasses, ext_failedMethodCallback failedToAddCallback);
+unsigned ext_addMethods(Class aClass, Method *methods, unsigned count,
+                        BOOL checkSuperclasses,
+                        ext_failedMethodCallback failedToAddCallback);
 
 /**
  * Iterates through all instance and class methods of \a srcClass and attempts
@@ -177,49 +181,52 @@ unsigned ext_addMethods (Class aClass, Method *methods, unsigned count, BOOL che
  * a method by the same name already exists on any superclass of \a aClass, it
  * is not overridden.
  *
- * Returns whether all methods were added successfully. For each method that fails
- * to be added, \a failedToAddCallback (if provided) is invoked.
+ * Returns whether all methods were added successfully. For each method that
+ * fails to be added, \a failedToAddCallback (if provided) is invoked.
  *
  * @note This ignores any \c +load method on \a srcClass. \a srcClass and \a
  * dstClass must not be metaclasses.
  */
-BOOL ext_addMethodsFromClass (Class srcClass, Class dstClass, BOOL checkSuperclasses, ext_failedMethodCallback failedToAddCallback);
+BOOL ext_addMethodsFromClass(Class srcClass, Class dstClass,
+                             BOOL checkSuperclasses,
+                             ext_failedMethodCallback failedToAddCallback);
 
 /**
  * Returns the superclass of \a receiver which immediately descends from \a
  * superclass. If \a superclass is not in the hierarchy of \a receiver, or is
  * equal to \a receiver, \c nil is returned.
  */
-Class ext_classBeforeSuperclass (Class receiver, Class superclass);
+Class ext_classBeforeSuperclass(Class receiver, Class superclass);
 
 /**
  * Returns whether \a receiver is \a aClass, or inherits directly from it.
  */
-BOOL ext_classIsKindOfClass (Class receiver, Class aClass);
+BOOL ext_classIsKindOfClass(Class receiver, Class aClass);
 
 /**
  * Returns the full list of classes registered with the runtime, terminated with
  * \c NULL. If \a count is not \c NULL, it is filled in with the total number of
  * classes returned. You must \c free() the returned array.
  */
-Class *ext_copyClassList (unsigned *count);
+Class *ext_copyClassList(unsigned *count);
 
 /**
  * Looks through the complete list of classes registered with the runtime and
  * finds all classes which conform to \a protocol. Returns \c *count classes
- * terminated by a \c NULL. You must \c free() the returned array. If there are no
- * classes conforming to \a protocol, \c NULL is returned.
+ * terminated by a \c NULL. You must \c free() the returned array. If there are
+ * no classes conforming to \a protocol, \c NULL is returned.
  *
  * @note \a count may be \c NULL.
  */
-Class *ext_copyClassListConformingToProtocol (Protocol *protocol, unsigned *count);
+Class *ext_copyClassListConformingToProtocol(Protocol *protocol,
+                                             unsigned *count);
 
 /**
  * Returns a pointer to a structure containing information about \a property.
  * You must \c free() the returned pointer. Returns \c NULL if there is an error
  * obtaining information from \a property.
  */
-ext_propertyAttributes *ext_copyPropertyAttributes (objc_property_t property);
+ext_propertyAttributes *ext_copyPropertyAttributes(objc_property_t property);
 
 /**
  * Looks through the complete list of classes registered with the runtime and
@@ -231,7 +238,7 @@ ext_propertyAttributes *ext_copyPropertyAttributes (objc_property_t property);
  * @note \a subclassCount may be \c NULL. \a aClass may be a metaclass to get
  * all subclass metaclass objects.
  */
-Class *ext_copySubclassList (Class aClass, unsigned *subclassCount);
+Class *ext_copySubclassList(Class aClass, unsigned *subclassCount);
 
 /**
  * Finds the instance method named \a aSelector on \a aClass and returns it, or
@@ -240,7 +247,7 @@ Class *ext_copySubclassList (Class aClass, unsigned *subclassCount);
  *
  * @note To get class methods in this manner, use a metaclass for \a aClass.
  */
-Method ext_getImmediateInstanceMethod (Class aClass, SEL aSelector);
+Method ext_getImmediateInstanceMethod(Class aClass, SEL aSelector);
 
 /**
  * Returns the value of \c Ivar \a IVAR from instance \a OBJ. The instance
@@ -249,8 +256,8 @@ Method ext_getImmediateInstanceMethod (Class aClass, SEL aSelector);
  * @warning Depending on the platform, this may or may not work with aggregate
  * or floating-point types.
  */
-#define ext_getIvar(OBJ, IVAR, TYPE) \
-    ((TYPE (*)(id, Ivar)object_getIvar)((OBJ), (IVAR)))
+#define ext_getIvar(OBJ, IVAR, TYPE)                                           \
+  ((TYPE(*)(id, Ivar) object_getIvar)((OBJ), (IVAR)))
 
 /**
  * Returns the value of the instance variable identified by the string \a NAME
@@ -262,8 +269,9 @@ Method ext_getImmediateInstanceMethod (Class aClass, SEL aSelector);
  * @warning Depending on the platform, this may or may not work with aggregate
  * or floating-point types.
  */
-#define ext_getIvarByName(OBJ, NAME, TYPE) \
-    ext_getIvar((OBJ), class_getInstanceVariable(object_getClass((OBJ)), (NAME)), TYPE)
+#define ext_getIvarByName(OBJ, NAME, TYPE)                                     \
+  ext_getIvar((OBJ),                                                           \
+              class_getInstanceVariable(object_getClass((OBJ)), (NAME)), TYPE)
 
 /**
  * Returns the accessor methods for \a property, as implemented in \a aClass or
@@ -275,7 +283,8 @@ Method ext_getImmediateInstanceMethod (Class aClass, SEL aSelector);
  * Returns \c YES if a valid accessor was found, or \c NO if \a aClass and its
  * superclasses do not implement \a property or if an error occurs.
  */
-BOOL ext_getPropertyAccessorsForClass (objc_property_t property, Class aClass, Method *getter, Method *setter);
+BOOL ext_getPropertyAccessorsForClass(objc_property_t property, Class aClass,
+                                      Method *getter, Method *setter);
 
 /**
  * For all classes registered with the runtime, invokes \c
@@ -284,7 +293,7 @@ BOOL ext_getPropertyAccessorsForClass (objc_property_t property, Class aClass, M
  * signatures is found, the first one is returned. If no valid signatures were
  * found, \c nil is returned.
  */
-NSMethodSignature *ext_globalMethodSignatureForSelector (SEL aSelector);
+NSMethodSignature *ext_globalMethodSignatureForSelector(SEL aSelector);
 
 /**
  * Highly-configurable method injection. Adds the first \a count entries from \a
@@ -296,20 +305,24 @@ NSMethodSignature *ext_globalMethodSignatureForSelector (SEL aSelector);
  * @note \c +load and \c +initialize methods are included in the number of
  * successful methods when ignored for injection.
  */
-unsigned ext_injectMethods (Class aClass, Method *methods, unsigned count, ext_methodInjectionBehavior behavior, ext_failedMethodCallback failedToAddCallback);
+unsigned ext_injectMethods(Class aClass, Method *methods, unsigned count,
+                           ext_methodInjectionBehavior behavior,
+                           ext_failedMethodCallback failedToAddCallback);
 
 /**
  * Invokes #ext_injectMethods with the instance methods and class methods from
  * \a srcClass. #ext_methodInjectionIgnoreLoad is added to #behavior for class
  * method injection.
  *
- * Returns whether all methods were added successfully. For each method that fails
- * to be added, \a failedToAddCallback (if provided) is invoked.
+ * Returns whether all methods were added successfully. For each method that
+ * fails to be added, \a failedToAddCallback (if provided) is invoked.
  *
  * @note \c +load and \c +initialize methods are considered to be added
  * successfully when ignored for injection.
  */
-BOOL ext_injectMethodsFromClass (Class srcClass, Class dstClass, ext_methodInjectionBehavior behavior, ext_failedMethodCallback failedToAddCallback);
+BOOL ext_injectMethodsFromClass(Class srcClass, Class dstClass,
+                                ext_methodInjectionBehavior behavior,
+                                ext_failedMethodCallback failedToAddCallback);
 
 /**
  * Loads a "special protocol" into an internal list. A special protocol is any
@@ -332,7 +345,8 @@ BOOL ext_injectMethodsFromClass (Class srcClass, Class dstClass, ext_methodInjec
  * @note A special protocol X which conforms to another special protocol Y is
  * always injected \e after Y.
  */
-BOOL ext_loadSpecialProtocol (Protocol *protocol, void (^injectionBehavior)(Class destinationClass));
+BOOL ext_loadSpecialProtocol(Protocol *protocol,
+                             void (^injectionBehavior)(Class destinationClass));
 
 /**
  * Marks a special protocol as being ready for injection. Injection is actually
@@ -340,7 +354,7 @@ BOOL ext_loadSpecialProtocol (Protocol *protocol, void (^injectionBehavior)(Clas
  *
  * @sa ext_loadSpecialProtocol
  */
-void ext_specialProtocolReadyForInjection (Protocol *protocol);
+void ext_specialProtocolReadyForInjection(Protocol *protocol);
 
 /**
  * Creates a human-readable description of the data in \a bytes, interpreting it
@@ -349,7 +363,7 @@ void ext_specialProtocolReadyForInjection (Protocol *protocol);
  * This is intended for use with debugging, and code should not depend upon the
  * format of the returned string (just like a call to \c -description).
  */
-NSString *ext_stringFromTypedBytes (const void *bytes, const char *encoding);
+NSString *ext_stringFromTypedBytes(const void *bytes, const char *encoding);
 
 /**
  * "Removes" any instance method matching \a methodName from \a aClass. This
@@ -364,13 +378,13 @@ NSString *ext_stringFromTypedBytes (const void *bytes, const char *encoding);
  * @warning Adding a method by the same name into a superclass of \a aClass \e
  * after using this function may obscure it from the subclass.
  */
-void ext_removeMethod (Class aClass, SEL methodName);
+void ext_removeMethod(Class aClass, SEL methodName);
 
 /**
  * Iterates through the first \a count entries in \a methods and adds each one
  * to \a aClass, replacing any existing implementation.
  */
-void ext_replaceMethods (Class aClass, Method *methods, unsigned count);
+void ext_replaceMethods(Class aClass, Method *methods, unsigned count);
 
 /**
  * Iterates through all instance and class methods of \a srcClass and adds each
@@ -379,5 +393,4 @@ void ext_replaceMethods (Class aClass, Method *methods, unsigned count);
  * @note This ignores any \c +load method on \a srcClass. \a srcClass and \a
  * dstClass must not be metaclasses.
  */
-void ext_replaceMethodsFromClass (Class srcClass, Class dstClass);
-
+void ext_replaceMethodsFromClass(Class srcClass, Class dstClass);

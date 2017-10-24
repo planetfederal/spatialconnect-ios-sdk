@@ -28,9 +28,10 @@
  * (like a one line \c if). In practice, this is not an issue, since \@onExit is
  * a useless construct in such a case anyways.
  */
-#define onExit \
-    ext_keywordify \
-    __strong ext_cleanupBlock_t metamacro_concat(ext_exitBlock_, __LINE__) __attribute__((cleanup(ext_executeCleanupBlock), unused)) = ^
+#define onExit                                                                 \
+  ext_keywordify __strong ext_cleanupBlock_t metamacro_concat(ext_exitBlock_,  \
+                                                              __LINE__)        \
+      __attribute__((cleanup(ext_executeCleanupBlock), unused)) = ^
 
 /**
  * Creates \c __weak shadow variables for each of the variables provided as
@@ -42,17 +43,16 @@
  *
  * See #strongify for an example of usage.
  */
-#define weakify(...) \
-    ext_keywordify \
-    metamacro_foreach_cxt(ext_weakify_,, __weak, __VA_ARGS__)
+#define weakify(...)                                                           \
+  ext_keywordify metamacro_foreach_cxt(ext_weakify_, , __weak, __VA_ARGS__)
 
 /**
  * Like #weakify, but uses \c __unsafe_unretained instead, for targets or
  * classes that do not support weak references.
  */
-#define unsafeify(...) \
-    ext_keywordify \
-    metamacro_foreach_cxt(ext_weakify_,, __unsafe_unretained, __VA_ARGS__)
+#define unsafeify(...)                                                         \
+  ext_keywordify metamacro_foreach_cxt(ext_weakify_, , __unsafe_unretained,    \
+                                       __VA_ARGS__)
 
 /**
  * Strongly references each of the variables provided as arguments, which must
@@ -71,7 +71,8 @@
 
     // this block will not keep 'foo' or 'bar' alive
     BOOL (^matchesFooOrBar)(id) = ^ BOOL (id obj){
-        // but now, upon entry, 'foo' and 'bar' will stay alive until the block has
+        // but now, upon entry, 'foo' and 'bar' will stay alive until the block
+ has
         // finished executing
         @strongify(foo, bar);
 
@@ -80,23 +81,22 @@
 
  * @endcode
  */
-#define strongify(...) \
-    ext_keywordify \
-    _Pragma("clang diagnostic push") \
-    _Pragma("clang diagnostic ignored \"-Wshadow\"") \
-    metamacro_foreach(ext_strongify_,, __VA_ARGS__) \
-    _Pragma("clang diagnostic pop")
+#define strongify(...)                                                         \
+  ext_keywordify _Pragma("clang diagnostic push")                              \
+      _Pragma("clang diagnostic ignored \"-Wshadow\"")                         \
+          metamacro_foreach(ext_strongify_, , __VA_ARGS__)                     \
+              _Pragma("clang diagnostic pop")
 
 /*** implementation details follow ***/
 typedef void (^ext_cleanupBlock_t)();
 
-void ext_executeCleanupBlock (__strong ext_cleanupBlock_t *block);
+void ext_executeCleanupBlock(__strong ext_cleanupBlock_t *block);
 
-#define ext_weakify_(INDEX, CONTEXT, VAR) \
-    CONTEXT __typeof__(VAR) metamacro_concat(VAR, _weak_) = (VAR);
+#define ext_weakify_(INDEX, CONTEXT, VAR)                                      \
+  CONTEXT __typeof__(VAR) metamacro_concat(VAR, _weak_) = (VAR);
 
-#define ext_strongify_(INDEX, VAR) \
-    __strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);
+#define ext_strongify_(INDEX, VAR)                                             \
+  __strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);
 
 // Details about the choice of backing keyword:
 //
@@ -110,7 +110,11 @@ void ext_executeCleanupBlock (__strong ext_cleanupBlock_t *block);
 // analysis, and to use @try/@catch otherwise to avoid insertion of unnecessary
 // autorelease pools.
 #if defined(DEBUG) && !defined(NDEBUG)
-#define ext_keywordify autoreleasepool {}
+#define ext_keywordify                                                         \
+  autoreleasepool {}
 #else
-#define ext_keywordify try {} @catch (...) {}
+#define ext_keywordify                                                         \
+  try {                                                                        \
+  } @catch (...) {                                                             \
+  }
 #endif

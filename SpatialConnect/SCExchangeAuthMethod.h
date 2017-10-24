@@ -21,7 +21,6 @@
 @interface SCExchangeAuthMethod : NSObject <SCAuthProtocol> {
   NSString *username;
   NSString *clientId;
-  NSString *clientSecret;
   NSString *jwt;
   NSString *serverUrl;
   KeychainItemWrapper *keychainItem;
@@ -30,4 +29,3 @@
 - (id)initWithDictionary:(NSDictionary *)d;
 
 @end
-

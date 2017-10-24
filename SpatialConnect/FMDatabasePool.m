@@ -142,8 +142,8 @@
     BOOL success = [db open];
 #endif
     if (success) {
-      if ([self->_delegate respondsToSelector:@selector(databasePool:
-                                                  shouldAddDatabaseToPool:)] &&
+      if ([self->_delegate respondsToSelector:@selector
+                           (databasePool:shouldAddDatabaseToPool:)] &&
           ![self->_delegate databasePool:self shouldAddDatabaseToPool:db]) {
         [db close];
         db = 0x00;

@@ -29,7 +29,7 @@ double (^myCoroutine)(int, double) = coroutine(int n, double x)({
 
 double x = myCoroutine(42, 1.5);
 double y = myCoroutine(42, 2.0);
- 
+
  * @endcode
  *
  * @note In typical usage, the arguments to a coroutine would not change until
@@ -49,8 +49,7 @@ double y = myCoroutine(42, 2.0);
  * synchronize a coroutine to ensure that it only executes on a single thread at
  * any given time.
  */
-#define coroutine(...) \
-    ^{ \
+#define coroutine(...) ^{ \
         __block unsigned long ext_coroutine_line_ = 0; \
         \
         return [ \
@@ -65,20 +64,19 @@ double y = myCoroutine(42, 2.0);
  * This macro can be used identically to the \c return keyword, with or without
  * parentheses.
  */
-#define yield \
-    if ((ext_coroutine_line_ = __LINE__) == 0) \
-        case __LINE__: \
-            ; \
-    else \
-        return
+#define yield                                                                  \
+  if ((ext_coroutine_line_ = __LINE__) == 0)                                   \
+  case __LINE__:;                                                              \
+    else return
 
 /*** implementation details follow ***/
-#define coroutine_body(STATEMENT) \
-            { \
-                for (;; ext_coroutine_line_ = 0) \
-                    switch (ext_coroutine_line_) \
-                        default: \
-                            STATEMENT \
-            } \
-        copy]; \
-    }()
+#define coroutine_body(STATEMENT)                                              \
+  {                                                                            \
+    for (;; ext_coroutine_line_ = 0)                                           \
+      switch (ext_coroutine_line_)                                             \
+      default:                                                                 \
+        STATEMENT                                                              \
+  }                                                                            \
+        copy];                                                                 \
+  }                                                                            \
+  ()

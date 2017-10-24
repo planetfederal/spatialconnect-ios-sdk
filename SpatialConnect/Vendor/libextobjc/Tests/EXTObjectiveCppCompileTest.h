@@ -6,8 +6,8 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
 #import "extobjc.h"
+#import <XCTest/XCTest.h>
 
 @interface EXTObjectiveCppCompileTest : XCTestCase
 

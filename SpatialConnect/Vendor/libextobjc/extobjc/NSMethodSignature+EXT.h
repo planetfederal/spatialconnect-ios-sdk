@@ -15,7 +15,8 @@
  * an additional argument of the given type at \a index. If \a index is greater
  * than the current number of arguments, the behavior is undefined.
  */
-- (NSMethodSignature *)methodSignatureByInsertingType:(const char *)type atArgumentIndex:(NSUInteger)index;
+- (NSMethodSignature *)methodSignatureByInsertingType:(const char *)type
+                                      atArgumentIndex:(NSUInteger)index;
 
 /**
  * Returns the Objective-C type encoding for this method signature, which

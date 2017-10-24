@@ -7,23 +7,20 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
-#import <Foundation/Foundation.h>
 #import "EXTConcreteProtocol.h"
+#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 @protocol MyProtocol <NSObject>
-@concrete
-+ (NSUInteger)meaningfulNumber;
+@concrete + (NSUInteger)meaningfulNumber;
 - (NSString *)getSomeString;
 @end
 
 @protocol SubProtocol <MyProtocol>
-@concrete
-- (void)additionalMethod;
+@concrete - (void)additionalMethod;
 @end
 
 @interface EXTConcreteProtocolTest : XCTestCase {
-
 }
 
 - (void)testImplementations;

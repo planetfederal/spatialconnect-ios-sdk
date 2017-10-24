@@ -30,6 +30,12 @@
 - (BOOL)authenticate:(NSString *)u password:(NSString *)p;
 
 /*!
+ *  @brief refreshes a valid token after expiration
+ *
+ */
+- (BOOL)refreshToken;
+
+/*!
  *  @brief this will void the x-access-token
  */
 - (void)logout;

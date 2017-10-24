@@ -11,7 +11,7 @@
 
 @implementation NSString (EXTCheckedSelectorAdditions)
 - (SEL)ext_toSelector {
-    return NSSelectorFromString(self);
+  return NSSelectorFromString(self);
 }
 
 @end

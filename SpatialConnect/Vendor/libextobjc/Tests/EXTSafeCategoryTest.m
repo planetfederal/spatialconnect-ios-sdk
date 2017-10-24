@@ -26,25 +26,32 @@
 @end
 
 /*** category implementation ***/
-@safecategory(NSObject, TestExtensions)
-- (NSString *)description {
-    return [self customDescription];
+@safecategory(NSObject, TestExtensions) - (NSString *)description {
+  return [self customDescription];
 }
 
 - (NSString *)customDescription {
-    return @"NSObject(TestExtensions)";
+  return @"NSObject(TestExtensions)";
 }
 
 @end
 
-/*** logic test code ***/
-@implementation EXTSafeCategoryTest
-- (void)testSafeCategory {
-    NSObject *obj = [[NSObject alloc] init];
-    XCTAssertNotNil(obj, @"could not allocate object of safe category'd class");
-    XCTAssertTrue([obj respondsToSelector:@selector(description)], @"category'd object should respond to pre-existing method selector");
-    XCTAssertTrue([obj respondsToSelector:@selector(customDescription)], @"category'd object should respond to added method selector");
-    XCTAssertFalse([[obj description] isEqualToString:@"NSObject(TestExtensions)"], @"expected -description method to be original implementation, not overriden");
-    XCTAssertEqualObjects([obj customDescription], @"NSObject(TestExtensions)", @"expected -customDescription method to be implemented, and return custom value");
+    /*** logic test code ***/
+    @implementation EXTSafeCategoryTest -
+    (void)testSafeCategory {
+  NSObject *obj = [[NSObject alloc] init];
+  XCTAssertNotNil(obj, @"could not allocate object of safe category'd class");
+  XCTAssertTrue(
+      [obj respondsToSelector:@selector(description)],
+      @"category'd object should respond to pre-existing method selector");
+  XCTAssertTrue([obj respondsToSelector:@selector(customDescription)],
+                @"category'd object should respond to added method selector");
+  XCTAssertFalse(
+      [[obj description] isEqualToString:@"NSObject(TestExtensions)"],
+      @"expected -description method to be original implementation, not "
+      @"overriden");
+  XCTAssertEqualObjects([obj customDescription], @"NSObject(TestExtensions)",
+                        @"expected -customDescription method to be "
+                        @"implemented, and return custom value");
 }
 @end

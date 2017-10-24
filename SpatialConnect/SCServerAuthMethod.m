@@ -45,7 +45,7 @@
   NSURL *url =
       [NSURL URLWithString:[NSString stringWithFormat:@"%@/api/authenticate",
                                                       serverUrl]];
-  NSDictionary *authDict = @{ @"email" : u, @"password" : p };
+  NSDictionary *authDict = @{@"email" : u, @"password" : p};
   NSDictionary *res =
       [SCHttpUtils postDictRequestAsDictBLOCKING:url body:authDict];
   if (res && (jwt = res[@"result"][@"token"])) {
@@ -56,6 +56,10 @@
     [self logout];
     return false;
   }
+}
+
+- (BOOL)refreshToken {
+  return false;
 }
 
 - (NSString *)xAccessToken {
