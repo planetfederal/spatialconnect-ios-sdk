@@ -22,7 +22,6 @@
 #define REFRESH_TOKEN @"service.auth.refresh.token"
 #define TOKEN_EXPIRATION @"service.auth.token.expire"
 #define TOKEN_TIMESTAMP @"service.auth.token.timestamp"
-#define EXPIRE_INTERVAL 3600 // seconds
 
 @implementation SCExchangeAuthMethod
 
