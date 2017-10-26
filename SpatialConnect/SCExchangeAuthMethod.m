@@ -111,45 +111,38 @@
 
 - (BOOL)refreshToken {
 
-  @try {
-    SCCache *c = [[SpatialConnect sharedInstance] cache];
-    NSString *refreshToken = [c valueForKey:REFRESH_TOKEN];
-    NSURL *url = [NSURL
-        URLWithString:[NSString stringWithFormat:@"%@/o/token/", serverUrl]];
-    NSString *auth =
-        [NSString stringWithFormat:@"grant_type=refresh_token&refresh_token=%@",
-                                   refreshToken];
-    NSData *authBody = [auth dataUsingEncoding:NSUTF8StringEncoding];
+  SCCache *c = [[SpatialConnect sharedInstance] cache];
+  NSString *refreshToken = [c valueForKey:REFRESH_TOKEN];
+  NSURL *url = [NSURL
+      URLWithString:[NSString stringWithFormat:@"%@/o/token/", serverUrl]];
+  NSString *auth =
+      [NSString stringWithFormat:@"grant_type=refresh_token&refresh_token=%@",
+                                 refreshToken];
+  NSData *authBody = [auth dataUsingEncoding:NSUTF8StringEncoding];
 
-    NSString *oauthCreds = [NSString stringWithFormat:@"%@:", clientId];
-    NSData *nsdata = [oauthCreds dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
-    NSString *authHeader =
-        [NSString stringWithFormat:@"Basic %@", base64Encoded];
-    NSDictionary *res = [SCHttpUtils postDataRequestAsDictBLOCKING:url
-                                                              body:authBody
-                                                              auth:authHeader
-                                                       contentType:XML];
-    if (res && (jwt = res[@"access_token"])) {
-      SpatialConnect *sc = [SpatialConnect sharedInstance];
-      SCCache *c = sc.cache;
-      [c setValue:jwt forKey:TOKEN];
-      [c setValue:res[@"refresh_token"] forKey:REFRESH_TOKEN];
-      [c setValue:res[@"expires_in"] forKey:TOKEN_EXPIRATION];
-      [c setValue:[NSDate date] forKey:TOKEN_TIMESTAMP];
-      return true;
-    } else {
-      if (res[@"error"]) {
-        NSString *e = res[@"error"];
-        DDLogInfo(@"error trying to refresh token: %@", e);
-      }
-      [self logout];
-      return false;
+  NSString *oauthCreds = [NSString stringWithFormat:@"%@:", clientId];
+  NSData *nsdata = [oauthCreds dataUsingEncoding:NSUTF8StringEncoding];
+  NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+  NSString *authHeader = [NSString stringWithFormat:@"Basic %@", base64Encoded];
+  NSDictionary *res = [SCHttpUtils postDataRequestAsDictBLOCKING:url
+                                                            body:authBody
+                                                            auth:authHeader
+                                                     contentType:XML];
+  if (res && (jwt = res[@"access_token"])) {
+    SpatialConnect *sc = [SpatialConnect sharedInstance];
+    SCCache *c = sc.cache;
+    [c setValue:jwt forKey:TOKEN];
+    [c setValue:res[@"refresh_token"] forKey:REFRESH_TOKEN];
+    [c setValue:res[@"expires_in"] forKey:TOKEN_EXPIRATION];
+    [c setValue:[NSDate date] forKey:TOKEN_TIMESTAMP];
+    return true;
+  } else {
+    if (res[@"error"]) {
+      NSString *e = res[@"error"];
+      DDLogInfo(@"error trying to refresh token: %@", e);
     }
+    [self logout];
     return false;
-  } @catch (NSException *e) {
-    // deal with the exception
-    DDLogInfo(@"ERROR %@", e.reason);
   }
 }
 
