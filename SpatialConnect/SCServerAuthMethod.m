@@ -58,10 +58,6 @@
   }
 }
 
-- (BOOL)refreshToken {
-  return false;
-}
-
 - (NSString *)xAccessToken {
   return jwt;
 }
