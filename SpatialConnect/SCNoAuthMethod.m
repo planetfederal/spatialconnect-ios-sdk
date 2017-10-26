@@ -18,10 +18,6 @@
   return YES;
 }
 
-- (BOOL)refreshToken {
-  return false;
-}
-
 - (NSString *)xAccessToken {
   return nil;
 }
