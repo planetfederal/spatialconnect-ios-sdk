@@ -1,21 +1,21 @@
 /*****************************************************************************
-* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-******************************************************************************/
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ ******************************************************************************/
 
 #import "WebViewJavascriptBridge.h"
 
@@ -225,8 +225,7 @@ static bool logging = false;
           }
 
           WVJBMessage *msg =
-              @{ @"responseId" : callbackId,
-                 @"responseData" : responseData };
+              @{@"responseId" : callbackId, @"responseData" : responseData};
           [self _queueMessage:msg];
         };
       } else {
@@ -332,9 +331,8 @@ static bool logging = false;
     _startupMessageQueue = nil;
   }
 
-  if (_webViewDelegate &&
-      [_webViewDelegate
-          respondsToSelector:@selector(webView:didFinishLoadForFrame:)]) {
+  if (_webViewDelegate && [_webViewDelegate respondsToSelector:@selector
+                                            (webView:didFinishLoadForFrame:)]) {
     [_webViewDelegate webView:webView didFinishLoadForFrame:frame];
   }
 }
@@ -347,9 +345,8 @@ static bool logging = false;
   }
 
   if (_webViewDelegate &&
-      [_webViewDelegate respondsToSelector:@selector(webView:
-                                               didFailLoadWithError:
-                                                           forFrame:)]) {
+      [_webViewDelegate respondsToSelector:@selector
+                        (webView:didFailLoadWithError:forFrame:)]) {
     [_webViewDelegate webView:webView
          didFailLoadWithError:error
                      forFrame:frame];
@@ -376,12 +373,9 @@ static bool logging = false;
     }
     [listener ignore];
   } else if (_webViewDelegate &&
-             [_webViewDelegate
-                 respondsToSelector:@selector(webView:
-                                        decidePolicyForNavigationAction:
-                                                                request:
-                                                                  frame:
-                                                       decisionListener:)]) {
+             [_webViewDelegate respondsToSelector:@selector
+                               (webView:decidePolicyForNavigationAction:request
+                                          :frame:decisionListener:)]) {
     [_webViewDelegate webView:webView
         decidePolicyForNavigationAction:actionInformation
                                 request:request
@@ -397,9 +391,8 @@ static bool logging = false;
     return;
   }
 
-  if (_webViewDelegate &&
-      [_webViewDelegate
-          respondsToSelector:@selector(webView:didCommitLoadForFrame:)]) {
+  if (_webViewDelegate && [_webViewDelegate respondsToSelector:@selector
+                                            (webView:didCommitLoadForFrame:)]) {
     [_webViewDelegate webView:webView didCommitLoadForFrame:frame];
   }
 }
@@ -414,11 +407,9 @@ static bool logging = false;
   }
 
   if (_webViewDelegate &&
-      [_webViewDelegate respondsToSelector:@selector(webView:
-                                                       resource:
-                                                willSendRequest:
-                                               redirectResponse:
-                                                 fromDataSource:)]) {
+      [_webViewDelegate respondsToSelector:@selector
+                        (webView:resource:willSendRequest:redirectResponse
+                                   :fromDataSource:)]) {
     return [_webViewDelegate webView:webView
                             resource:identifier
                      willSendRequest:request
@@ -492,9 +483,8 @@ static bool logging = false;
   _numRequestsLoading--;
 
   __strong WVJB_WEBVIEW_DELEGATE_TYPE *strongDelegate = _webViewDelegate;
-  if (strongDelegate &&
-      [strongDelegate
-          respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
+  if (strongDelegate && [strongDelegate respondsToSelector:@selector
+                                        (webView:didFailLoadWithError:)]) {
     [strongDelegate webView:webView didFailLoadWithError:error];
   }
 }
@@ -518,9 +508,8 @@ static bool logging = false;
     return NO;
   } else if (strongDelegate &&
              [strongDelegate
-                 respondsToSelector:@selector(webView:
-                                        shouldStartLoadWithRequest:
-                                                    navigationType:)]) {
+                 respondsToSelector:@selector
+                 (webView:shouldStartLoadWithRequest:navigationType:)]) {
     return [strongDelegate webView:webView
         shouldStartLoadWithRequest:request
                     navigationType:navigationType];

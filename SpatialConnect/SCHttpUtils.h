@@ -18,6 +18,9 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
+static NSString *const XML = @"application/x-www-form-urlencoded";
+static NSString *const JSON = @"application/json; charset=utf-8";
+
 @interface SCHttpUtils : NSObject
 
 /*!
@@ -97,12 +100,40 @@
                                            body:(NSDictionary *)dict;
 
 /*!
+ POST request body as NSData returns an NSDictionary with Auth
+ @warning BLOCKING request
+ @param url url to request
+ @param dict HTTP Body JSON Params
+ @param auth HTTP Basic Auth
+ @param contentType HTTP content-type
+ @return JSON Response as NSDictionary
+ */
++ (NSDictionary *)postDataRequestAsDictBLOCKING:(NSURL *)url
+                                           body:(NSData *)dict
+                                           auth:(NSString *)auth
+                                    contentType:(NSString *)contentType;
+
+/*!
  POST JSON Object as NSDictionary returns NSData
  @warning BLOCKING request
  @param url url to request
  @param dict HTTP Body JSON Params
  @return NSData
  */
-+ (NSData *)postDictRequestBLOCKING:(NSURL *)url body:(NSDictionary *)dict;
++ (NSData *)postDictRequestBLOCKING:(NSURL *)url
+                               body:(NSDictionary *)dict
+                               auth:(NSString *)auth;
+
+/*!
+ POST request body as NSData returns NSData
+ @warning BLOCKING request
+ @param url url to request
+ @param dict HTTP Body JSON Params
+ @return NSData
+ */
++ (NSData *)postDataRequestBLOCKING:(NSURL *)url
+                               body:(NSData *)dict
+                               auth:(NSString *)auth
+                        contentType:(NSString *)contentType;
 
 @end

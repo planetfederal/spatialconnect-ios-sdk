@@ -6,8 +6,8 @@
 //
 //
 
-#import <XCTest/XCTest.h>
 #import "EXTKeyPathCoding.h"
+#import <XCTest/XCTest.h>
 
 @interface EXTKeypathWeakWarningTest : XCTestCase
 

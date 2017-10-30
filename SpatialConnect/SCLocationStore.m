@@ -46,7 +46,7 @@
 }
 
 - (RACSignal *)start {
-  NSDictionary *d = @{ @"accuracy" : @"TEXT", @"timestamp" : @"INTEGER" };
+  NSDictionary *d = @{@"accuracy" : @"TEXT", @"timestamp" : @"INTEGER"};
   [super addLayer:@"last_known_location" withDef:d];
   return [super start];
 }

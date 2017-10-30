@@ -25,7 +25,6 @@
  * object would not.
  */
 @interface EXTNil : NSProxy {
-    
 }
 
 /**

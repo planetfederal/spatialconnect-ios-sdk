@@ -7,11 +7,10 @@
 //  Released under the MIT license.
 //
 
-#import <XCTest/XCTest.h>
 #import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 
 @interface EXTSafeCategoryTest : XCTestCase {
-
 }
 
 - (void)testSafeCategory;

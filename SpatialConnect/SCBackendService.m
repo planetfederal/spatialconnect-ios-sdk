@@ -220,10 +220,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (NSDictionary *)buildDeviceInfo:(NSString *)token {
   NSDictionary *dict = @{
-                         @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
-                         @"device_info" : @{@"os" : @"ios", @"token": token},
-                         @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
-                         };
+    @"identifier" : [[SpatialConnect sharedInstance] deviceIdentifier],
+    @"device_info" : @{@"os" : @"ios", @"token" : token},
+    @"name" : [NSString stringWithFormat:@"mobile:%@", [authService username]]
+  };
   return dict;
 }
 
@@ -369,15 +369,16 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
       Msg *msg = [[Msg alloc] init];
       msg.payload = [[ss generateSendPayload:feature] JSONString];
       msg.action = DATASERVICE_CREATEFEATURE;
-      return [[self publishReplyTo:msg onTopic:[ss syncChannel]] flattenMap:^RACSignal *(Msg *m) {
-        NSString *json = m.payload;
-        NSDictionary *dict = [json objectFromJSONString];
-        if (dict[@"result"]) {
-          return [ss updateAuditTable:feature];
-        } else {
-          return [RACSignal empty];
-        }
-      }];
+      return [[self publishReplyTo:msg onTopic:[ss syncChannel]]
+          flattenMap:^RACSignal *(Msg *m) {
+            NSString *json = m.payload;
+            NSDictionary *dict = [json objectFromJSONString];
+            if (dict[@"result"]) {
+              return [ss updateAuditTable:feature];
+            } else {
+              return [RACSignal empty];
+            }
+          }];
     } else {
       return [RACSignal empty];
     }

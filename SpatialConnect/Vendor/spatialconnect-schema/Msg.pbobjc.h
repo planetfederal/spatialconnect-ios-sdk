@@ -4,13 +4,13 @@
 // This CPP symbol can be defined to use imports that match up to the framework
 // imports needed when using CocoaPods.
 #if !defined(GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS)
- #define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
+#define GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS 0
 #endif
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <Protobuf/GPBProtocolBuffers.h>
+#import <Protobuf/GPBProtocolBuffers.h>
 #else
- #import "GPBProtocolBuffers.h"
+#import "GPBProtocolBuffers.h"
 #endif
 
 #if GOOGLE_PROTOBUF_OBJC_GEN_VERSION != 30001
@@ -34,20 +34,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// @code
 ///   + (GPBExtensionRegistry *)extensionRegistry;
 /// @endcode
-/// which is a @c GPBExtensionRegistry that includes all the extensions defined by
-/// this file and all files that it depends on.
+/// which is a @c GPBExtensionRegistry that includes all the extensions defined
+/// by this file and all files that it depends on.
 @interface MsgRoot : GPBRootObject
 @end
 
 #pragma mark - Msg
 
-typedef GPB_ENUM(Msg_FieldNumber) {
-  Msg_FieldNumber_Context = 1,
-  Msg_FieldNumber_CorrelationId = 2,
-  Msg_FieldNumber_To = 3,
-  Msg_FieldNumber_Action = 4,
-  Msg_FieldNumber_Payload = 5,
-  Msg_FieldNumber_Jwt = 6,
+typedef GPB_ENUM(Msg_FieldNumber){
+    Msg_FieldNumber_Context = 1, Msg_FieldNumber_CorrelationId = 2,
+    Msg_FieldNumber_To = 3,      Msg_FieldNumber_Action = 4,
+    Msg_FieldNumber_Payload = 5, Msg_FieldNumber_Jwt = 6,
 };
 
 @interface Msg : GPBMessage

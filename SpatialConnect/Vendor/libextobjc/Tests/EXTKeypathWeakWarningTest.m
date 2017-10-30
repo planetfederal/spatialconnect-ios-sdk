@@ -13,7 +13,7 @@
 
 @interface EXTClassWithWeakProperty : NSObject
 
-@property (nonatomic, weak) NSString *property;
+@property(nonatomic, weak) NSString *property;
 
 @end
 
@@ -24,8 +24,9 @@
 @implementation EXTKeypathWeakWarningTest
 
 - (void)testWarningIsNotEmitted {
-    __unused NSString *keypath = @keypath(EXTClassWithWeakProperty.new, property);
-    __unused NSString *keypath2 = @keypath(EXTClassWithWeakProperty.new, property);
+  __unused NSString *keypath = @keypath(EXTClassWithWeakProperty.new, property);
+  __unused NSString *keypath2 =
+      @keypath(EXTClassWithWeakProperty.new, property);
 }
 
 @end
