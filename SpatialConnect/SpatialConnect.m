@@ -137,16 +137,6 @@
   [_serviceGraph restartAllServices];
 }
 
-//- (void)connectBackend:(SCRemoteConfig *)r {
-//  if (![_serviceGraph nodeById:[SCBackendService serviceId]]) {
-//    _backendService = [[SCBackendService alloc] initWithRemoteConfig:r];
-//    [self addService:_backendService];
-//    [self startService:[SCBackendService serviceId]];
-//  } else {
-//    DDLogWarn(@"SCBackendService Already Connected");
-//  }
-//}
-
 - (void)connectBackend:(id<SCBackendProtocol>)bp {
     if (![_serviceGraph nodeById:[SCBackendService serviceId]]) {
         _backendService = [[SCBackendService alloc] initWithBackend:bp];

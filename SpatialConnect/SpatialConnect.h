@@ -134,16 +134,6 @@
  */
 - (void)restartService:(NSString *)serviceId;
 
-/*!
- @discussion If you have an instance of SpatialConnect Server, this is how you
- would register it. Passing in a remote configuration object will use the info
- to start the connection to the backend.
-
- @brief Connects to SpatialConnect Server
-
- @param r remote configuration
- */
-- (void)connectBackend:(SCRemoteConfig *)r;
 
 /*!
  @discussion Regier backend. Passing in a remote configuration object and backend type will use the info
@@ -151,10 +141,9 @@
  
  @brief Connects to a backend server
  
- @param r remote configuration
  @param bp backend protocol
  */
-- (void)connectBackend:(id<SCBackendProtocol>)bp remote:(SCRemoteConfig *)r;
+- (void)connectBackend:(id<SCBackendProtocol>)bp;
 
 /*
 
