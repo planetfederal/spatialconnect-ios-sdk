@@ -366,17 +366,17 @@
 }
 
 - (void)listenForNotifications:(id<RACSubscriber>)subscriber {
-  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
-      subscribeNext:^(id value) {
-        [[[[bs configReceived] filter:^BOOL(NSNumber *received) {
-          return received.boolValue;
-        }] take:1] subscribeNext:^(id x) {
-          [[bs notifications] subscribeNext:^(SCNotification *n) {
-            [subscriber sendNext:[n dictionary]];
-          }];
-        }];
-      }];
+//  SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+//  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
+//      subscribeNext:^(id value) {
+//        [[[[bs configReceived] filter:^BOOL(NSNumber *received) {
+//          return received.boolValue;
+//        }] take:1] subscribeNext:^(id x) {
+//          [[bs notifications] subscribeNext:^(SCNotification *n) {
+//            [subscriber sendNext:[n dictionary]];
+//          }];
+//        }];
+//      }];
 }
 
 - (void)getRequest:(NSDictionary *)value
@@ -423,13 +423,13 @@
 }
 
 - (void)mqttConnected:(id<RACSubscriber>)subscriber {
-  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
-      subscribeNext:^(id value) {
-        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-        [[bs connectedToBroker] subscribeNext:^(id x) {
-          [subscriber sendNext:@{@"connected" : x}];
-        }];
-      }];
+//  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
+//      subscribeNext:^(id value) {
+//        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+//        [[bs connectedToBroker] subscribeNext:^(id x) {
+//          [subscriber sendNext:@{@"connected" : x}];
+//        }];
+//      }];
 }
 
 @end

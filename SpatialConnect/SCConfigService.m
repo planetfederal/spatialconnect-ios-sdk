@@ -17,12 +17,15 @@
 #import "Actions.h"
 #import "JSONKit.h"
 #import "SCConfig.h"
+#import "SCBackendProtocol.h"
 #import "SCDataService.h"
 #import "SCExchangeAuthMethod.h"
+#import "SCExchangeBackend.h"
 #import "SCFileUtils.h"
 #import "SCFormConfig.h"
 #import "SCNoAuthMethod.h"
 #import "SCServerAuthMethod.h"
+#import "SCSpaconBackend.h"
 #import "SCStoreConfig.h"
 #import "SpatialConnect.h"
 
@@ -118,12 +121,14 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
             @"server_url" : c.remote.httpUri,
             @"client_id" : c.remote.clientId
           }]];
+        [sc connectBackend:[[SCExchangeBackend alloc] initWithRemote:c.remote]];
     } else {
       [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{
             @"server_url" : c.remote.httpUri
           }]];
+        [sc connectBackend:[[SCSpaconBackend alloc] initWithRemote:c.remote]];
     }
-    [sc connectBackend:c.remote];
+//    [sc connectBackend:c.remote];
   }
 }
 

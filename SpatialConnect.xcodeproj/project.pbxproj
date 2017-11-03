@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */; };
+		44B5E6121FAB5A0000BC49DD /* SCSpaconBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */; };
+		44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */; };
+		44C2C63D1FA812D600A4CEBC /* SCExchangeBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */; };
+		44C2C63F1FA813D900A4CEBC /* SCExchangeBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */; };
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
 		5406C9CE1F94F1FA00B076F3 /* SCExchangeAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */; };
 		5406C9CF1F94F1FA00B076F3 /* SCExchangeAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */; };
@@ -466,6 +471,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCSpaconBackend.h; sourceTree = "<group>"; };
+		44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCSpaconBackend.m; sourceTree = "<group>"; };
+		44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCBackendProtocol.h; sourceTree = "<group>"; };
+		44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCExchangeBackend.h; sourceTree = "<group>"; };
+		44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCExchangeBackend.m; sourceTree = "<group>"; };
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
 		5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCExchangeAuthMethod.h; sourceTree = "<group>"; };
 		5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCExchangeAuthMethod.m; sourceTree = "<group>"; };
@@ -1674,6 +1684,11 @@
 			children = (
 				56D5AD371D5D037800597300 /* SCBackendService.h */,
 				56D5AD381D5D037800597300 /* SCBackendService.m */,
+				44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */,
+				44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */,
+				44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */,
+				44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */,
+				44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */,
 			);
 			name = BackendService;
 			sourceTree = "<group>";
@@ -1770,6 +1785,7 @@
 				560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */,
 				5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */,
 				563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */,
+				44C2C63D1FA812D600A4CEBC /* SCExchangeBackend.h in Headers */,
 				56F4375A1CA0955200EA1344 /* FMDB.h in Headers */,
 				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
 				5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */,
@@ -1839,8 +1855,10 @@
 				5649B5EF1BE280D6009947EF /* SCOpenStreetMapSource.h in Headers */,
 				5649B6121BE280D6009947EF /* SCStoreConfig.h in Headers */,
 				5649B5CE1BE280D6009947EF /* SCLinearRing+MapKit.h in Headers */,
+				44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */,
 				5645C4E41BED5BA1006E4128 /* SCPoint+GPKG.h in Headers */,
 				5649B5C31BE280D6009947EF /* SCGeometryCollection+MapKit.h in Headers */,
+				44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */,
 				5649B5D81BE280D6009947EF /* SCLoggingAssertionHandler.h in Headers */,
 				56F4375D1CA0955200EA1344 /* FMResultSet.h in Headers */,
 				5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */,
@@ -2275,11 +2293,13 @@
 				5415E5471F19600D00F59008 /* SCNoAuthMethod.m in Sources */,
 				5649B5C41BE280D6009947EF /* SCGeometryCollection+MapKit.m in Sources */,
 				5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */,
+				44B5E6121FAB5A0000BC49DD /* SCSpaconBackend.m in Sources */,
 				5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */,
 				5649B5F01BE280D6009947EF /* SCOpenStreetMapSource.m in Sources */,
 				56F4375C1CA0955200EA1344 /* FMDatabase.m in Sources */,
 				56F4375E1CA0955200EA1344 /* FMResultSet.m in Sources */,
 				5649B5FA1BE280D6009947EF /* SCPolygon+GeoJSON.m in Sources */,
+				44C2C63F1FA813D900A4CEBC /* SCExchangeBackend.m in Sources */,
 				56A23B0E1D7B1BB300AB258B /* SCMapkitTileGridSource.m in Sources */,
 				563F42691DB0622B005022A7 /* CHANGELOG.md in Sources */,
 				561686011C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.m in Sources */,

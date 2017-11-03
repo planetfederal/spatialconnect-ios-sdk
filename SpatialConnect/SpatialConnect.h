@@ -145,6 +145,17 @@
  */
 - (void)connectBackend:(SCRemoteConfig *)r;
 
+/*!
+ @discussion Regier backend. Passing in a remote configuration object and backend type will use the info
+ to start the connection to the backend.
+ 
+ @brief Connects to a backend server
+ 
+ @param r remote configuration
+ @param bp backend protocol
+ */
+- (void)connectBackend:(id<SCBackendProtocol>)bp remote:(SCRemoteConfig *)r;
+
 /*
 
  */

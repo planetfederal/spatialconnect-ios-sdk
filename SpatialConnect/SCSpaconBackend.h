@@ -29,34 +29,34 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <UserNotifications/UserNotifications.h>
 
-@interface SCBackendService : SCService <SCServiceLifecycle> {
+
+@interface SCSpaconBackend
+: SCService <SCBackendProtocol, UNUserNotificationCenterDelegate> {
+    NSString *mqttEndpoint;
+    NSString *mqttPort;
+    NSString *mqttProtocol;
+    NSString *httpProtocol;
+    NSString *httpEndpoint;
+    NSString *httpPort;
+    MQTTSessionManager *sessionManager;
+    RACSignal *multicast;
     SCConfigService *configService;
     SCAuthService *authService;
     SCDataService *dataService;
     SCSensorService *sensorService;
-    id<SCBackendProtocol> backendProtocol;
+    SCRemoteConfig *remoteConfig;
+    NSString *backendUri;
 }
 
 
-/*!
- Upon initialization you will inject the server type to use for your
- application
- 
- @param bp any banckend server that implements the SCBackendServiceProtocol
- @return id Instance of SCBackendService
- */
-- (id)initWithBackend:(id<SCBackendProtocol>)bp;
+@property(readonly, strong) RACBehaviorSubject *configReceived;
 
 /*!
- Endpoint running SpatialConnect Server
+ Behavior Observable emitting YES when Connected, NO when the Connection is down
  */
-@property(readonly, strong) NSString *backendUri;
+@property(readonly, strong) RACBehaviorSubject *connectedToBroker;
 
-/*!
- Observable emiting SCNotifications
- */
-@property(readonly, strong) RACSignal *notifications;
+- (id)initWithRemote:(SCRemoteConfig *)cfg;
 
-- (void)updateDeviceToken:(NSString *)token;
 
 @end
