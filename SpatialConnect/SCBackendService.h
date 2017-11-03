@@ -34,7 +34,7 @@
     SCAuthService *authService;
     SCDataService *dataService;
     SCSensorService *sensorService;
-    id<SCBackendProtocol> backendProtocol;
+    id<SCBackendProtocol> backend;
 }
 
 

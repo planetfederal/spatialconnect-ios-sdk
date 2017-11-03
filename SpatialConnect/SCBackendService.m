@@ -29,13 +29,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 - (id)initWithBackend:(id<SCBackendProtocol>)bp {
     if (self = [super init]) {
-        backendProtocol = bp;
+        backend = bp;
     }
     return self;
 }
 
 - (void)updateDeviceToken:(NSString *)token {
-    [backendProtocol updateDeviceToken:token];
+    [backend updateDeviceToken:token];
 }
 
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
@@ -44,23 +44,23 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   sensorService = [deps objectForKey:[SCSensorService serviceId]];
   dataService = [deps objectForKey:[SCDataService serviceId]];
   DDLogInfo(@"Starting Backend Service...");
-    [backendProtocol start:deps];
+  [backend start:deps];
   DDLogInfo(@"Backend Service Started");
   return [super start:nil];
 }
 
 - (BOOL)stop {
-  [backendProtocol stop];
+  [backend stop];
   return [super stop];
 }
 
 - (BOOL)pause {
-    [backendProtocol pause];
+    [backend pause];
     return [super pause];
 }
 
 - (BOOL)resume {
-    [backendProtocol resume];
+    [backend resume];
     return [super resume];
 }
 
