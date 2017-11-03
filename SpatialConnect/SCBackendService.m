@@ -54,16 +54,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   return [super stop];
 }
 
-- (BOOL)pause {
-    [backend pause];
-    return [super pause];
-}
-
-- (BOOL)resume {
-    [backend resume];
-    return [super resume];
-}
-
 - (NSArray *)requires {
   return @[
     [SCAuthService serviceId], [SCConfigService serviceId],

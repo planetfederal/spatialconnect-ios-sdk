@@ -21,13 +21,7 @@
 
 @protocol SCBackendProtocol <NSObject>
 
-- (void)initWithRemoteConfig:(SCRemoteConfig *)remoteConfig;
-
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)svcs;
-
-- (BOOL)pause;
-
-- (BOOL)resume;
 
 - (BOOL)stop;
 

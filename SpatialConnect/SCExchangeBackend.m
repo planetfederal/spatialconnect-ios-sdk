@@ -29,19 +29,7 @@
     return self;
 }
 
-- (void)connect {
-    
-}
-
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)svcs {
-    return YES;
-}
-
-- (BOOL)pause {
-    return YES;
-}
-
-- (BOOL)resume {
     return YES;
 }
 
