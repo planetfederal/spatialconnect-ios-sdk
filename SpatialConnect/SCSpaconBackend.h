@@ -56,7 +56,7 @@
  */
 @property(readonly, strong) RACBehaviorSubject *connectedToBroker;
 
-- (id)initWithRemote:(SCRemoteConfig *)cfg;
+- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 
 @end

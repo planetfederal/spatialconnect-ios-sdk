@@ -25,7 +25,7 @@
     SCRemoteConfig *remoteConfig;
 }
 
-- (id)initWithRemote:(SCRemoteConfig *)cfg;
+- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 @end
 

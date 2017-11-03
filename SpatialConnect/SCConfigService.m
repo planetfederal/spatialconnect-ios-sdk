@@ -121,14 +121,13 @@ static NSString *const kSERVICENAME = @"SC_CONFIG_SERVICE";
             @"server_url" : c.remote.httpUri,
             @"client_id" : c.remote.clientId
           }]];
-        [sc connectBackend:[[SCExchangeBackend alloc] initWithRemote:c.remote]];
+      [sc connectBackend:[[SCExchangeBackend alloc] initWithRemoteConfig:c.remote]];
     } else {
       [sc connectAuth:[[SCServerAuthMethod alloc] initWithDictionary:@{
             @"server_url" : c.remote.httpUri
           }]];
-        [sc connectBackend:[[SCSpaconBackend alloc] initWithRemote:c.remote]];
+      [sc connectBackend:[[SCSpaconBackend alloc] initWithRemoteConfig:c.remote]];
     }
-//    [sc connectBackend:c.remote];
   }
 }
 

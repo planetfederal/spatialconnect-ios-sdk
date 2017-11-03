@@ -21,7 +21,7 @@
 @implementation SCExchangeBackend
 
 
-- (id)initWithRemote:(SCRemoteConfig *)cfg {
+- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg {
     self = [super init];
     if (self){
         remoteConfig = cfg;
