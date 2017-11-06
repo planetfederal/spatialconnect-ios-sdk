@@ -30,6 +30,7 @@
 }
 
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)svcs {
+    sensorService = [svcs objectForKey:[SCSensorService serviceId]];
     return YES;
 }
 
@@ -38,7 +39,7 @@
 }
 
 - (NSString *)backendUri {
-    return nil;
+    return remoteConfig.httpUri;
 }
 
 - (RACSignal *)notifications {
@@ -48,5 +49,10 @@
 - (void)updateDeviceToken:(NSString *)token {
     
 }
+
+- (RACBehaviorSubject *)isConnected {
+    return sensorService.isConnected;
+}
+
 
 @end

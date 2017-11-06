@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */; };
 		44B5E6121FAB5A0000BC49DD /* SCSpaconBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */; };
-		44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */; };
+		44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		44C2C63D1FA812D600A4CEBC /* SCExchangeBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */; };
 		44C2C63F1FA813D900A4CEBC /* SCExchangeBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */; };
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
@@ -1760,6 +1760,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				563F426A1DB0622B005022A7 /* JSONKit.h in Headers */,
+				44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */,
 				56554E681D54EA03000D77E7 /* SCLocationStore.h in Headers */,
 				56554E671D54EA03000D77E7 /* SCFormStore.h in Headers */,
 				567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */,
@@ -1855,7 +1856,6 @@
 				5649B5EF1BE280D6009947EF /* SCOpenStreetMapSource.h in Headers */,
 				5649B6121BE280D6009947EF /* SCStoreConfig.h in Headers */,
 				5649B5CE1BE280D6009947EF /* SCLinearRing+MapKit.h in Headers */,
-				44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */,
 				5645C4E41BED5BA1006E4128 /* SCPoint+GPKG.h in Headers */,
 				5649B5C31BE280D6009947EF /* SCGeometryCollection+MapKit.h in Headers */,
 				44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */,

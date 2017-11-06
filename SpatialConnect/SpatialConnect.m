@@ -53,13 +53,22 @@
 
 - (id)init {
   if (self = [super init]) {
-    _cache = [SCCache new];
-    _serviceGraph = [SCServiceGraph new];
-    _sensorService = [SCSensorService new];
-    _dataService = [SCDataService new];
-    _configService = [SCConfigService new];
-    [self addDefaultServices];
-    [self setupLogger];
+      DDLogInfo(@"Initialzing sdk......");
+      @try {
+          _cache = [SCCache new];
+          _serviceGraph = [SCServiceGraph new];
+          _sensorService = [SCSensorService new];
+          _dataService = [SCDataService new];
+          _configService = [SCConfigService new];
+          [self addDefaultServices];
+          [self setupLogger];
+      }
+      @catch (NSException *e) {
+          // deal with the exception
+          DDLogInfo(@"ERROR %@", e.reason);
+      }
+      
+
   }
   return self;
 }

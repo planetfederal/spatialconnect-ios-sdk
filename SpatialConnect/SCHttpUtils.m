@@ -185,29 +185,19 @@
                                auth:(NSString *)auth {
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   request.HTTPMethod = @"POST";
-  [request addValue:@"application/x-www-form-urlencoded"
-      forHTTPHeaderField:@"Content-Type"];
+  [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
   if (auth) {
-    DDLogError(@"%@", @"adding auth");
     [request addValue:auth forHTTPHeaderField:@"Authorization"];
   }
   NSError *err;
   NSURLResponse *response;
-  //  request.HTTPBody = dict.JSONData;
-  NSString *a =
-      [NSString stringWithFormat:@"grant_type=password&username=%@&password=%@",
-                                 @"fieldc1", @"fieldc1"];
-  NSData *d = [a dataUsingEncoding:NSUTF8StringEncoding];
-  request.HTTPBody = d;
-
+  request.HTTPBody = dict.JSONData;
   NSData *data = [NSURLConnection sendSynchronousRequest:request
                                        returningResponse:&response
                                                    error:&err];
   if (err) {
     DDLogError(@"%@", [err description]);
     return nil;
-  } else {
-    DDLogError(@"%@", @"No err");
   }
   return data;
 }

@@ -27,11 +27,15 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 @implementation SCBackendService
 
+@synthesize backendUri = _backendUri;
+
 - (id)initWithBackend:(id<SCBackendProtocol>)bp {
     if (self = [super init]) {
         backend = bp;
+        _backendUri = backend.backendUri;
     }
     return self;
+    
 }
 
 - (void)updateDeviceToken:(NSString *)token {
@@ -52,6 +56,10 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (BOOL)stop {
   [backend stop];
   return [super stop];
+}
+
+- (RACBehaviorSubject *)isConnected {
+    return [backend isConnected];
 }
 
 - (NSArray *)requires {

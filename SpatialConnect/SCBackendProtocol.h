@@ -31,5 +31,7 @@
 
 - (void)updateDeviceToken:(NSString *)token;
 
+- (RACBehaviorSubject *) isConnected;
+
 @end
 

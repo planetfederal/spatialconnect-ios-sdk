@@ -15,6 +15,7 @@
  */
 
 #import "SCBackendProtocol.h"
+#import "SCSensorService.h"
 #import "SCServiceLifecycle.h"
 #import "SCRemoteConfig.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
@@ -23,6 +24,7 @@
 
 @interface SCExchangeBackend : NSObject <SCBackendProtocol> {
     SCRemoteConfig *remoteConfig;
+    SCSensorService *sensorService;
 }
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
