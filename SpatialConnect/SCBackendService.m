@@ -28,11 +28,13 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 @implementation SCBackendService
 
 @synthesize backendUri = _backendUri;
+@synthesize isConnected = _isConnected;
 
 - (id)initWithBackend:(id<SCBackendProtocol>)bp {
     if (self = [super init]) {
         backend = bp;
         _backendUri = backend.backendUri;
+        _isConnected = backend.isConnected;
     }
     return self;
     
@@ -47,7 +49,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
   configService = [deps objectForKey:[SCConfigService serviceId]];
   sensorService = [deps objectForKey:[SCSensorService serviceId]];
   dataService = [deps objectForKey:[SCDataService serviceId]];
-  DDLogInfo(@"Starting Backend Service...");
   [backend start:deps];
   DDLogInfo(@"Backend Service Started");
   return [super start:nil];
@@ -56,10 +57,6 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 - (BOOL)stop {
   [backend stop];
   return [super stop];
-}
-
-- (RACBehaviorSubject *)isConnected {
-    return [backend isConnected];
 }
 
 - (NSArray *)requires {

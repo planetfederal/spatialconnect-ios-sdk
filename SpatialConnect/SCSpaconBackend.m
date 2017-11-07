@@ -66,17 +66,10 @@ options:NSNumericSearch] != NSOrderedAscending)
     configService = [deps objectForKey:[SCConfigService serviceId]];
     sensorService = [deps objectForKey:[SCSensorService serviceId]];
     dataService = [deps objectForKey:[SCDataService serviceId]];
-    @try {
-        [self loadCachedConfig];
-        [self listenForNetworkConnection];
-    }
-    @catch (NSException *e) {
-        // deal with the exception
-        DDLogInfo(@"ERROR %@", e.reason);
-    }
     
-
-    //[self registerForLocalNotifications];
+    [self loadCachedConfig];
+    [self listenForNetworkConnection];
+    
     return [super start:nil];
 }
 
@@ -95,7 +88,7 @@ options:NSNumericSearch] != NSOrderedAscending)
     return nil;
 }
 
-- (RACBehaviorSubject *)connected {
+- (RACBehaviorSubject *)isConnected {
     return connectedToBroker;
 }
 

@@ -37,7 +37,6 @@
     id<SCBackendProtocol> backend;
 }
 
-
 /*!
  Upon initialization you will inject the server type to use for your
  application
@@ -48,7 +47,14 @@
 - (id)initWithBackend:(id<SCBackendProtocol>)bp;
 
 /*!
- Endpoint running SpatialConnect Server
+ A way to register/update a device token required for push notificaiton
+ 
+ @param token device token required for push notificaitons
+ */
+- (void)updateDeviceToken:(NSString *)token;
+
+/*!
+ Endpoint running backend Server
  */
 @property(readonly, strong) NSString *backendUri;
 
@@ -57,8 +63,10 @@
  */
 @property(readonly, strong) RACSignal *notifications;
 
-- (void)updateDeviceToken:(NSString *)token;
+/*!
+ Behavior subject return YES for Internet access, NO for offline
+ */
+@property(nonatomic, readonly) RACBehaviorSubject *isConnected;
 
-- (RACBehaviorSubject *) isConnected;
 
 @end
