@@ -30,17 +30,17 @@
 #import <UserNotifications/UserNotifications.h>
 
 @interface SCBackendService : SCService <SCServiceLifecycle> {
-    SCConfigService *configService;
-    SCAuthService *authService;
-    SCDataService *dataService;
-    SCSensorService *sensorService;
-    id<SCBackendProtocol> backend;
+  SCConfigService *configService;
+  SCAuthService *authService;
+  SCDataService *dataService;
+  SCSensorService *sensorService;
+  id<SCBackendProtocol> backend;
 }
 
 /*!
  Upon initialization you will inject the server type to use for your
  application
- 
+
  @param bp any banckend server that implements the SCBackendServiceProtocol
  @return id Instance of SCBackendService
  */
@@ -48,7 +48,7 @@
 
 /*!
  A way to register/update a device token required for push notificaiton
- 
+
  @param token device token required for push notificaitons
  */
 - (void)updateDeviceToken:(NSString *)token;
@@ -67,6 +67,5 @@
  Behavior subject return YES for Internet access, NO for offline
  */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnected;
-
 
 @end

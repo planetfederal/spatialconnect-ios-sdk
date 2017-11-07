@@ -14,10 +14,10 @@
  * limitations under the License
  */
 
+#import "SCRemoteConfig.h"
+#import "SCServiceLifecycle.h"
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "SCServiceLifecycle.h"
-#import "SCRemoteConfig.h"
 
 @protocol SCBackendProtocol <NSObject>
 
@@ -31,7 +31,6 @@
 
 - (void)updateDeviceToken:(NSString *)token;
 
-- (RACBehaviorSubject *) isConnected;
+- (RACBehaviorSubject *)isConnected;
 
 @end
-

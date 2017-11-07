@@ -29,25 +29,23 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <UserNotifications/UserNotifications.h>
 
-
 @interface SCSpaconBackend
-: SCService <SCBackendProtocol, UNUserNotificationCenterDelegate> {
-    NSString *mqttEndpoint;
-    NSString *mqttPort;
-    NSString *mqttProtocol;
-    NSString *httpProtocol;
-    NSString *httpEndpoint;
-    NSString *httpPort;
-    MQTTSessionManager *sessionManager;
-    RACSignal *multicast;
-    SCConfigService *configService;
-    SCAuthService *authService;
-    SCDataService *dataService;
-    SCSensorService *sensorService;
-    SCRemoteConfig *remoteConfig;
-    NSString *backendUri;
+    : SCService <SCBackendProtocol, UNUserNotificationCenterDelegate> {
+  NSString *mqttEndpoint;
+  NSString *mqttPort;
+  NSString *mqttProtocol;
+  NSString *httpProtocol;
+  NSString *httpEndpoint;
+  NSString *httpPort;
+  MQTTSessionManager *sessionManager;
+  RACSignal *multicast;
+  SCConfigService *configService;
+  SCAuthService *authService;
+  SCDataService *dataService;
+  SCSensorService *sensorService;
+  SCRemoteConfig *remoteConfig;
+  NSString *backendUri;
 }
-
 
 @property(readonly, strong) RACBehaviorSubject *configReceived;
 
@@ -57,6 +55,5 @@
 @property(readonly, strong) RACBehaviorSubject *connectedToBroker;
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
-
 
 @end

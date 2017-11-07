@@ -46,4 +46,3 @@ extern NSString *const API_UPDATE_LAYER;
 extern NSString *const API_DELETE_LAYER;
 extern NSString *const API_PUBLISH_LAYER;
 extern NSString *const API_REGISTER_LAYER;
-

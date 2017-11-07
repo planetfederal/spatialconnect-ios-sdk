@@ -14,45 +14,42 @@
  * limitations under the License
  */
 
-#import <Foundation/Foundation.h>
 #import "SCExchangeBackend.h"
 #import "SCConfig.h"
+#import <Foundation/Foundation.h>
 
 @implementation SCExchangeBackend
 
-
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg {
-    self = [super init];
-    if (self){
-        remoteConfig = cfg;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    remoteConfig = cfg;
+  }
+  return self;
 }
 
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)svcs {
-    sensorService = [svcs objectForKey:[SCSensorService serviceId]];
-    return YES;
+  sensorService = [svcs objectForKey:[SCSensorService serviceId]];
+  return YES;
 }
 
 - (BOOL)stop {
-    return YES;
+  return YES;
 }
 
 - (NSString *)backendUri {
-    return remoteConfig.httpUri;
+  return remoteConfig.httpUri;
 }
 
 - (RACSignal *)notifications {
-    return nil;
+  return nil;
 }
 
 - (void)updateDeviceToken:(NSString *)token {
-    
 }
 
 - (RACBehaviorSubject *)isConnected {
-    return sensorService.isConnected;
+  return sensorService.isConnected;
 }
-
 
 @end

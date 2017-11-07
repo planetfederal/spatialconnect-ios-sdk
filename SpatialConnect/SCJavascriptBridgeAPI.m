@@ -105,7 +105,7 @@
 }
 
 - (void)storeList:(id<RACSubscriber>)subscriber {
-    
+
   NSArray *arr =
       [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
   [subscriber sendNext:@{@"stores" : arr}];
@@ -370,9 +370,9 @@
   SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
   [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
-          [[bs notifications] subscribeNext:^(SCNotification *n) {
-              [subscriber sendNext:[n dictionary]];
-          }];
+        [[bs notifications] subscribeNext:^(SCNotification *n) {
+          [subscriber sendNext:[n dictionary]];
+        }];
       }];
 }
 
@@ -411,22 +411,20 @@
   [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-        [subscriber sendNext:@{
-          @"backendUri" : [bs backendUri]
-        }];
+        [subscriber sendNext:@{@"backendUri" : [bs backendUri]}];
       }];
 
   [subscriber sendCompleted];
 }
 
 - (void)backendConnected:(id<RACSubscriber>)subscriber {
-    [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
-     subscribeNext:^(id value) {
-         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-         [[bs isConnected] subscribeNext:^(id x) {
-             [subscriber sendNext:@{@"connected" : x}];
-         }];
-     }];
+  [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
+      subscribeNext:^(id value) {
+        SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
+        [[bs isConnected] subscribeNext:^(id x) {
+          [subscriber sendNext:@{@"connected" : x}];
+        }];
+      }];
 }
 
 @end

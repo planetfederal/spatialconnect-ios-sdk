@@ -134,13 +134,12 @@
  */
 - (void)restartService:(NSString *)serviceId;
 
-
 /*!
- @discussion Regier backend. Passing in a remote configuration object and backend type will use the info
- to start the connection to the backend.
- 
+ @discussion Regier backend. Passing in a remote configuration object and
+ backend type will use the info to start the connection to the backend.
+
  @brief Connects to a backend server
- 
+
  @param bp backend protocol
  */
 - (void)connectBackend:(id<SCBackendProtocol>)bp;

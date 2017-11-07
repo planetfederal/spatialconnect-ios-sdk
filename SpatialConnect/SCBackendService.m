@@ -24,24 +24,22 @@
 
 static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
-
 @implementation SCBackendService
 
 @synthesize backendUri = _backendUri;
 @synthesize isConnected = _isConnected;
 
 - (id)initWithBackend:(id<SCBackendProtocol>)bp {
-    if (self = [super init]) {
-        backend = bp;
-        _backendUri = backend.backendUri;
-        _isConnected = backend.isConnected;
-    }
-    return self;
-    
+  if (self = [super init]) {
+    backend = bp;
+    _backendUri = backend.backendUri;
+    _isConnected = backend.isConnected;
+  }
+  return self;
 }
 
 - (void)updateDeviceToken:(NSString *)token {
-    [backend updateDeviceToken:token];
+  [backend updateDeviceToken:token];
 }
 
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)deps {
