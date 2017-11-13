@@ -14,7 +14,9 @@
  * limitations under the License
  */
 
+#import "SCAuthService.h"
 #import "SCBackendProtocol.h"
+#import "SCConfigService.h"
 #import "SCRemoteConfig.h"
 #import "SCSensorService.h"
 #import "SCServiceLifecycle.h"
@@ -24,6 +26,10 @@
 @interface SCExchangeBackend : NSObject <SCBackendProtocol> {
   SCRemoteConfig *remoteConfig;
   SCSensorService *sensorService;
+  SCAuthService *authService;
+  SCConfigService *configService;
+  NSMutableArray *stores;
+  NSMutableArray *forms;
 }
 
 - (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;

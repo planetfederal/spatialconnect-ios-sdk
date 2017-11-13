@@ -40,6 +40,15 @@ static NSString *const JSON = @"application/json; charset=utf-8";
  *  @brief Blocking request to fetch an JSON Response
  *
  *  @param url http/https resource with JSON Response
+ *  @param auth HTTP Basic Auth
+ *  @return NSDictionary of a JSON Response
+ */
++ (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url auth:auth;
+
+/*!
+ *  @brief Blocking request to fetch an JSON Response
+ *
+ *  @param url http/https resource with JSON Response
  *
  *  @return NSDictionary of a JSON Response
  */

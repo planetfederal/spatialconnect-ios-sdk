@@ -99,7 +99,8 @@
 }
 
 - (NSString *)xAccessToken {
-  return jwt;
+  SCCache *c = [[SpatialConnect sharedInstance] cache];
+  return [c valueForKey:TOKEN];
 }
 
 - (void)logout {

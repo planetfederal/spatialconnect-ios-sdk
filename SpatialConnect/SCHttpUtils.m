@@ -47,14 +47,25 @@
       }];
 }
 
-+ (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url {
-  NSData *data = [self getRequestURLAsDataBLOCKING:url];
++ (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url
+                                         auth:(NSString *)auth {
+  NSData *data = [self getRequestURLAsDataBLOCKING:url auth:auth];
   NSDictionary *dict = [[JSONDecoder decoder] objectWithData:data];
   return dict;
 }
 
-+ (NSData *)getRequestURLAsDataBLOCKING:(NSURL *)url {
-  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
++ (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url {
+  NSData *data = [self getRequestURLAsDataBLOCKING:url auth:nil];
+  NSDictionary *dict = [[JSONDecoder decoder] objectWithData:data];
+  return dict;
+}
+
++ (NSData *)getRequestURLAsDataBLOCKING:(NSURL *)url auth:(NSString *)auth {
+  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+  if (auth) {
+    [request addValue:auth forHTTPHeaderField:@"Authorization"];
+  }
+
   NSURLResponse *response = nil;
   NSError *error = nil;
   NSData *data = [NSURLConnection sendSynchronousRequest:request

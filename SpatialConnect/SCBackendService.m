@@ -28,12 +28,15 @@ static NSString *const kBackendServiceName = @"SC_BACKEND_SERVICE";
 
 @synthesize backendUri = _backendUri;
 @synthesize isConnected = _isConnected;
+@synthesize configReceived = _configReceived;
 
 - (id)initWithBackend:(id<SCBackendProtocol>)bp {
   if (self = [super init]) {
     backend = bp;
     _backendUri = backend.backendUri;
     _isConnected = backend.isConnected;
+    _configReceived =
+        [RACBehaviorSubject behaviorSubjectWithDefaultValue:@(NO)];
   }
   return self;
 }

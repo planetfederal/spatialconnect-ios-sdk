@@ -68,4 +68,9 @@
  */
 @property(nonatomic, readonly) RACBehaviorSubject *isConnected;
 
+/*!
+ Behavior Observable emitting YES when the SCConfig has been received
+ */
+@property(readonly, strong) RACBehaviorSubject *configReceived;
+
 @end
