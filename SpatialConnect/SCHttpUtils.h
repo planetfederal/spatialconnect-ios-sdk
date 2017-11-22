@@ -18,8 +18,9 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-static NSString *const XML = @"application/x-www-form-urlencoded";
+static NSString *const FORM = @"application/x-www-form-urlencoded";
 static NSString *const JSON = @"application/json; charset=utf-8";
+static NSString *const XML = @"text/xml";
 
 @interface SCHttpUtils : NSObject
 

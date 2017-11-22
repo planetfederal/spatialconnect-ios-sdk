@@ -36,6 +36,7 @@
   sensorService = [svcs objectForKey:[SCSensorService serviceId]];
   authService = [svcs objectForKey:[SCAuthService serviceId]];
   configService = [svcs objectForKey:[SCConfigService serviceId]];
+  dataService = [svcs objectForKey:[SCDataService serviceId]];
 
   // load the config from cache if any is present
   [self loadCachedConfig];
@@ -105,9 +106,6 @@
   }
 }
 
-- (void)listenForSyncEvents {
-}
-
 - (NSMutableArray *)fetchLayerNames {
   NSMutableArray *layerNames = [NSMutableArray new];
   NSURL *url =
@@ -151,9 +149,17 @@
   NSMutableArray *fields = [NSMutableArray new];
   [attributes enumerateObjectsUsingBlock:^(NSDictionary *attribute,
                                            NSUInteger idx, BOOL *stop) {
+
+    NSString *t = attribute[@"attribute_type"];
+    BOOL *visible = YES;
+    if ([t containsString:@"gml"]) {
+      visible = NO;
+    }
+
     NSDictionary *fieldDict = @{
       @"field_key" : attribute[@"attribute"],
       @"field_label" : attribute[@"attribute"],
+      @"field_visible" : [NSNumber numberWithBool:visible],
       @"type" : [self fieldType:attribute],
       @"position" : attribute[@"display_order"]
     };
@@ -171,7 +177,7 @@
 
 - (NSString *)fieldType:(NSDictionary *)attribute {
 
-  if ([attribute[@"attribute"] isEqualToString:@"photo"]) {
+  if ([attribute[@"attribute"] isEqualToString:@"photos"]) {
     return @"photo";
   }
   NSString *t = attribute[@"attribute_type"];
@@ -184,9 +190,164 @@
   } else if ([t isEqualToString:@"xsd:dateTime"] ||
              [t isEqualToString:@"xsd:date"]) {
     return @"date";
+  } else if ([t containsString:@"gml"]) {
+    return @"geometry";
   } else {
     return @"string";
   }
 }
+
+- (void)listenForSyncEvents {
+
+  RACSignal *syncableStores =
+      [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:YES];
+
+  RACSignal *storeEditSync =
+      [[syncableStores flattenMap:^RACSignal *(SCDataStore *ds) {
+        id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+        RACMulticastConnection *rmcc = [ss storeEdited];
+        [rmcc connect];
+        return rmcc.signal;
+      }] flattenMap:^RACSignal *(SCSpatialFeature *f) {
+        SCDataStore *store = [dataService storeByIdentifier:[f storeId]];
+        return [self syncStore:store];
+      }];
+
+  RACSignal *onlineSync = [[[self isConnected] filter:^BOOL(NSNumber *v) {
+    return v.boolValue;
+  }] flattenMap:^RACSignal *(id value) {
+    return [self syncStores];
+  }];
+
+  RACSignal *sync = [RACSignal merge:@[ storeEditSync, onlineSync ]];
+
+  [[sync subscribeOn:[RACScheduler
+                         schedulerWithPriority:RACSchedulerPriorityBackground]]
+      subscribeError:^(NSError *error) {
+        DDLogError(@"Store syncing error %@", error.localizedFailureReason);
+      }
+      completed:^{
+        DDLogInfo(@"Store syncing complete");
+      }];
+}
+
+- (RACSignal *)syncStores {
+  RACSignal *syncableStores =
+      [dataService storesByProtocol:@protocol(SCSyncableStore) onlyRunning:YES];
+  return [syncableStores flattenMap:^RACSignal *(id<SCSyncableStore> store) {
+    return [self syncStore:store];
+  }];
+}
+
+- (RACSignal *)syncStore:(SCDataStore *)ds {
+  id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
+  return [ss.unSent flattenMap:^RACSignal *(SCSpatialFeature *f) {
+    return [self send:f];
+  }];
+}
+
+- (RACSignal *)send:(SCSpatialFeature *)feature {
+
+  return [[[self isConnected] take:1] flattenMap:^RACStream *(NSNumber *n) {
+    if (n.boolValue) {
+
+      NSURL *url = [NSURL
+          URLWithString:[NSString stringWithFormat:@"%@/geoserver/wfs",
+                                                   remoteConfig.httpUri]];
+      NSString *wfsInsert = [self buildWFSTInsertPayload:feature];
+      NSData *wfsInsertBody =
+          [wfsInsert dataUsingEncoding:NSUTF8StringEncoding];
+      NSString *authHeader =
+          [NSString stringWithFormat:@"Bearer %@", [authService xAccessToken]];
+
+      NSData *res = [SCHttpUtils postDataRequestBLOCKING:url
+                                                    body:wfsInsertBody
+                                                    auth:authHeader
+                                             contentType:XML];
+
+      NSString *responseString =
+          [[NSString alloc] initWithData:res encoding:NSUTF8StringEncoding];
+
+      SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
+      id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
+      if ([responseString containsString:@"SUCCESS"]) {
+        return [ss updateAuditTable:feature];
+      } else {
+        return [RACSignal empty];
+      }
+
+    } else {
+      return [RACSignal empty];
+    }
+  }];
+}
+
+- (NSString *)buildWFSTInsertPayload:(SCSpatialFeature *)feature {
+
+  NSString *featureTypeUrl = [NSString
+      stringWithFormat:@"%@/geoserver/wfs/DescribeFeatureType?typename=%@:%@",
+                       remoteConfig.httpUri, @"geonode", feature.layerId];
+
+  return [NSString stringWithFormat:wfstInsertTemplate, featureTypeUrl,
+                                    feature.layerId,
+                                    [self buildPropertiesXml:feature],
+                                    [self buildGeometryXml:feature]];
+}
+
+- (NSString *)buildPropertiesXml:(SCSpatialFeature *)feature {
+  NSMutableString *properties = [NSMutableString new];
+  [feature.properties enumerateKeysAndObjectsUsingBlock:^(
+                          NSString *key, NSObject *obj, BOOL *stop) {
+    if (![obj isEqual:[NSNull null]]) {
+      [properties appendString:[NSString stringWithFormat:@"<%1$@>%2$@</%1$@>",
+                                                          key, obj]];
+    }
+
+  }];
+  return properties;
+}
+
+- (NSString *)buildGeometryXml:(SCSpatialFeature *)feature {
+  NSDictionary *geoJson = feature.JSONDict;
+  NSDictionary *geometry = [geoJson objectForKey:@"geometry"];
+  NSArray *coordinate = [geometry objectForKey:@"coordinates"];
+  NSString *geometryXml;
+
+  if (![geometry isEqual:[NSNull null]]) {
+    // need to find geometry property instead of hard coding it
+    NSString *geomColumn = @"wkb_geometry";
+    geometryXml =
+        [NSString stringWithFormat:wfstPointTemplate, geomColumn,
+                                   [[coordinate objectAtIndex:0] doubleValue],
+                                   [[coordinate objectAtIndex:1] doubleValue]];
+  } else {
+    geometryXml = @"";
+  }
+
+  return geometryXml;
+}
+
+static NSString *wfstInsertTemplate =
+    @"<wfs:Transaction service=\"WFS\" version=\"1.0.0\"\n"
+     "xmlns:wfs=\"http://www.opengis.net/wfs\"\n"
+     "xmlns:gml=\"http://www.opengis.net/gml\"\n"
+     "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+     "xsi:schemaLocation=\"http://www.opengis.net/wfs "
+     "http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd %1$@\">\n"
+     "<wfs:Insert>\n"
+     "<%2$@>\n"
+     "%3$@"
+     "%4$@"
+     "</%2$@>\n"
+     "</wfs:Insert>\n"
+     "</wfs:Transaction>";
+
+static NSString *wfstPointTemplate =
+    @"<%1$@>\n"
+     "<gml:Point srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n"
+     "<gml:coordinates decimal=\".\" cs=\",\" ts=\" "
+     "\">%2$f,%3$f</gml:coordinates>\n"
+     "</gml:Point>\n"
+     "</%1$@>\n";
 
 @end

@@ -17,6 +17,7 @@
 #import "SCAuthService.h"
 #import "SCBackendProtocol.h"
 #import "SCConfigService.h"
+#import "SCDataService.h"
 #import "SCRemoteConfig.h"
 #import "SCSensorService.h"
 #import "SCServiceLifecycle.h"
@@ -28,6 +29,7 @@
   SCSensorService *sensorService;
   SCAuthService *authService;
   SCConfigService *configService;
+  SCDataService *dataService;
   NSMutableArray *stores;
   NSMutableArray *forms;
 }

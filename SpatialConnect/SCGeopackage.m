@@ -157,18 +157,27 @@
         }
       } else {
         [db beginTransaction];
+        // DDLogError(@"Creating layer:: %@", name);
+
         NSMutableString *createSql = [NSMutableString
             stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (id INTEGER "
                              @"PRIMARY KEY AUTOINCREMENT",
                              name];
 
+        // DDLogError(@"Types for:: %@", types);
+
+        __block NSString *geometryColumn = @"geom";
         [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
                                                    BOOL *stop) {
           NSString *type = [t lowercaseString];
-          if (![[k lowercaseString] isEqualToString:@"geom"]) {
+          if (![[type lowercaseString] isEqualToString:@"geometry"]) {
             [createSql appendFormat:@",%@ %@", k, type];
+          } else {
+            DDLogError(@"Type is geometry for :%@", k);
+            geometryColumn = k;
           }
         }];
+
         [createSql appendString:@")"];
         BOOL success = [db executeStatements:createSql];
         if (!success) {
@@ -177,11 +186,12 @@
           [subscriber sendError:db.lastError];
           return;
         }
+
         NSString *addColSql =
             [NSString stringWithFormat:@"SELECT "
-                                       @"AddGeometryColumn('%@','geom','"
+                                       @"AddGeometryColumn('%@','%@','"
                                        @"Geometry',4326)",
-                                       name];
+                                       name, geometryColumn];
         BOOL geomAdded = [db executeStatements:addColSql];
         if (!geomAdded) {
           DDLogError(@"Error:%@", db.lastError.description);
@@ -286,13 +296,17 @@
         [auditTypes setObject:@"DATETIME" forKey:@"sent"];
         [auditTypes setObject:@"DATETIME" forKey:@"received"];
 
+        __block NSString *geometryColumn = @"geom";
         [auditTypes enumerateKeysAndObjectsUsingBlock:^(
                         NSString *k, NSString *t, BOOL *stop) {
           NSString *type = [t lowercaseString];
-          if (![[k lowercaseString] isEqualToString:@"geom"]) {
+          if (![[type lowercaseString] isEqualToString:@"geometry"]) {
             [createAuditSql appendFormat:@",%@ %@", k, type];
+          } else {
+            geometryColumn = k;
           }
         }];
+
         [createAuditSql appendString:@")"];
         [db beginTransaction];
         BOOL success = [db executeStatements:createAuditSql];
@@ -304,9 +318,9 @@
         }
         NSString *addGeomSql =
             [NSString stringWithFormat:@"SELECT "
-                                       @"AddGeometryColumn('%@','geom','"
+                                       @"AddGeometryColumn('%@','%@','"
                                        @"Geometry',4326)",
-                                       auditTableName];
+                                       auditTableName, geometryColumn];
         success = [db executeStatements:addGeomSql];
         if (success) {
           [db commit];
