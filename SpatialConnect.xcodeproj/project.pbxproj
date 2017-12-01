@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		445964961FD05D6700E8085E /* WFSTParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 445964951FD05D6700E8085E /* WFSTParser.h */; };
+		4459649C1FD05D7F00E8085E /* WFSTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4459649B1FD05D7F00E8085E /* WFSTParser.m */; };
 		44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */; };
 		44B5E6121FAB5A0000BC49DD /* SCSpaconBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */; };
 		44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -471,6 +473,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		445964951FD05D6700E8085E /* WFSTParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFSTParser.h; sourceTree = "<group>"; };
+		4459649B1FD05D7F00E8085E /* WFSTParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFSTParser.m; sourceTree = "<group>"; };
 		44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCSpaconBackend.h; sourceTree = "<group>"; };
 		44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCSpaconBackend.m; sourceTree = "<group>"; };
 		44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCBackendProtocol.h; sourceTree = "<group>"; };
@@ -1086,6 +1090,8 @@
 				5649B4EF1BE280D5009947EF /* SCFileUtils.m */,
 				56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */,
 				56FCFBD21D6FD6D5008A0B8C /* SCHttpUtils.m */,
+				445964951FD05D6700E8085E /* WFSTParser.h */,
+				4459649B1FD05D7F00E8085E /* WFSTParser.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1765,6 +1771,7 @@
 				56554E671D54EA03000D77E7 /* SCFormStore.h in Headers */,
 				567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */,
 				56D5AD391D5D037800597300 /* SCBackendService.h in Headers */,
+				445964961FD05D6700E8085E /* WFSTParser.h in Headers */,
 				56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */,
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
 				5616860E1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.h in Headers */,
@@ -2305,6 +2312,7 @@
 				561686011C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.m in Sources */,
 				5649B5961BE280D6009947EF /* SCFilter.m in Sources */,
 				5649B5C81BE280D6009947EF /* SCJavascriptBridgeAPI.m in Sources */,
+				4459649C1FD05D7F00E8085E /* WFSTParser.m in Sources */,
 				5649B5B11BE280D6009947EF /* SCGeoFilter.m in Sources */,
 				5649B5B51BE280D6009947EF /* SCGeoFilterDisjoint.m in Sources */,
 				5649B59A1BE280D6009947EF /* SCFilterEqual.m in Sources */,

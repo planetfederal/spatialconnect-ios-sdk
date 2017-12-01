@@ -18,7 +18,10 @@
 #import "SCConfig.h"
 #import "SCHttpUtils.h"
 #import "SpatialConnect.h"
+#import "WFSTParser.h"
 #import <Foundation/Foundation.h>
+
+static NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
 
 @implementation SCExchangeBackend
 
@@ -46,6 +49,7 @@
 
   // listen for sync events from data service
   [self listenForSyncEvents];
+
   return YES;
 }
 
@@ -151,7 +155,7 @@
                                            NSUInteger idx, BOOL *stop) {
 
     NSString *t = attribute[@"attribute_type"];
-    BOOL *visible = YES;
+    BOOL *visible = [attribute[@"visible"] boolValue];
     if ([t containsString:@"gml"]) {
       visible = NO;
     }
@@ -165,6 +169,16 @@
     };
     [fields addObject:fieldDict];
   }];
+
+  // add id to indentify feature
+  NSDictionary *fieldDict = @{
+    @"field_key" : LOCAL_FEATURE_ID_COL,
+    @"field_label" : LOCAL_FEATURE_ID_COL,
+    @"field_visible" : [NSNumber numberWithBool:NO],
+    @"type" : @"string"
+  };
+  [fields addObject:fieldDict];
+
   [d setObject:fields forKey:@"fields"];
 
   return [[SCFormConfig alloc] initWithDict:d];
@@ -265,12 +279,30 @@
                                                     auth:authHeader
                                              contentType:XML];
 
+      WFSTParser *wfstParser = [[WFSTParser alloc] initWithData:res];
+
       NSString *responseString =
           [[NSString alloc] initWithData:res encoding:NSUTF8StringEncoding];
-
+      // TODO: Need to re-work the way we get the unsent items from the audit
+      // table to include the
+      // audit operation, only save the featureId if its a create audit_op = 1
       SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
+      id<SCSpatialStore> gkpgStore = (id<SCSpatialStore>)store;
+      NSMutableDictionary *featureIdDict = [[NSMutableDictionary alloc] init];
+      [featureIdDict setObject:wfstParser.featureId
+                        forKey:LOCAL_FEATURE_ID_COL];
+
+      feature.properties = featureIdDict;
+      [[gkpgStore update:feature] subscribeError:^(NSError *error) {
+        DDLogError(@"Error Updating featureId error %@",
+                   error.localizedFailureReason);
+      }
+          completed:^{
+            DDLogInfo(@"Updating featureId succesfully from exchange");
+          }];
+
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
-      if ([responseString containsString:@"SUCCESS"]) {
+      if (wfstParser.success) {
         return [ss updateAuditTable:feature];
       } else {
         return [RACSignal empty];
@@ -349,5 +381,9 @@ static NSString *wfstPointTemplate =
      "\">%2$f,%3$f</gml:coordinates>\n"
      "</gml:Point>\n"
      "</%1$@>\n";
+
+static NSString *wfstDeleteTemplate = @"";
+
+static NSString *wfstUpdateTemplate = @"";
 
 @end

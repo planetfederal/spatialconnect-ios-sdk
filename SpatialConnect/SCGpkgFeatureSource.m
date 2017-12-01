@@ -269,7 +269,13 @@ NSString *const kAuditIdColName = @"audit_id";
                                                  [f.identifier longLongValue]]];
 
     [self.pool inDatabase:^(FMDatabase *db) {
-      BOOL success = [db executeUpdate:sql withArgumentsInArray:vals];
+      NSError *err;
+      BOOL success = [db executeUpdate:sql values:vals error:&err];
+      if (err) {
+        DDLogError(@"%@", err.description);
+        [subscriber sendError:err];
+        return;
+      }
       if (success) {
         dispatch_async(
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

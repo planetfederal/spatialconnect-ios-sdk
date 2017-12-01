@@ -115,9 +115,9 @@
   return [formIds objectForKey:layer];
 }
 
-- (RACSignal *)update:(SCSpatialFeature *)feature {
-  return nil;
-}
+//- (RACSignal *)update:(SCSpatialFeature *)feature {
+//  return nil;
+//}
 
 - (RACSignal *) delete:(SCKeyTuple *)tuple {
   return nil;
