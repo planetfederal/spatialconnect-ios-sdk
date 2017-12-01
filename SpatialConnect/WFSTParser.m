@@ -42,7 +42,7 @@
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-  DDLogError(@"Store syncing error %@", parseError.localizedFailureReason);
+  DDLogError(@"WFST parse error %@", parseError.localizedFailureReason);
 }
 
 @end
