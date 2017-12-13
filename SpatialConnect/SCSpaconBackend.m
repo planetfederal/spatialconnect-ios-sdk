@@ -366,29 +366,35 @@
 
 - (RACSignal *)syncStore:(SCDataStore *)ds {
   id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
-  return [ss.unSent flattenMap:^RACSignal *(SCSpatialFeature *f) {
-    return [self send:f];
+  return [ss.unSent flattenMap:^RACSignal *(SyncItem *syncItem) {
+    return [self send:syncItem];
   }];
 }
 
-- (RACSignal *)send:(SCSpatialFeature *)feature {
+- (RACSignal *)send:(SyncItem *)syncItem {
   return [[connectedToBroker take:1] flattenMap:^RACStream *(NSNumber *n) {
     if (n.boolValue) {
-      SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
-      id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
-      Msg *msg = [[Msg alloc] init];
-      msg.payload = [[ss generateSendPayload:feature] JSONString];
-      msg.action = DATASERVICE_CREATEFEATURE;
-      return [[self publishReplyTo:msg onTopic:[ss syncChannel]]
-          flattenMap:^RACSignal *(Msg *m) {
-            NSString *json = m.payload;
-            NSDictionary *dict = [json objectFromJSONString];
-            if (dict[@"result"]) {
-              return [ss updateAuditTable:feature];
-            } else {
-              return [RACSignal empty];
-            }
-          }];
+      if (syncItem.operation == 1) {
+        SCDataStore *store =
+            [dataService storeByIdentifier:[syncItem.feature storeId]];
+        id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
+        Msg *msg = [[Msg alloc] init];
+        msg.payload = [[ss generateSendPayload:syncItem.feature] JSONString];
+        msg.action = DATASERVICE_CREATEFEATURE;
+        return [[self publishReplyTo:msg onTopic:[ss syncChannel]]
+            flattenMap:^RACSignal *(Msg *m) {
+              NSString *json = m.payload;
+              NSDictionary *dict = [json objectFromJSONString];
+              if (dict[@"result"]) {
+                return [ss updateAuditTable:syncItem.feature];
+              } else {
+                return [RACSignal empty];
+              }
+            }];
+      } else {
+        return [RACSignal empty];
+      }
+
     } else {
       return [RACSignal empty];
     }

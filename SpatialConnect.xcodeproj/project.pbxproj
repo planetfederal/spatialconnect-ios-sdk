@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		440153DE1FDB270300D06901 /* SyncItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 440153DD1FDB270300D06901 /* SyncItem.h */; };
+		440153E01FDB271E00D06901 /* SyncItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 440153DF1FDB271E00D06901 /* SyncItem.m */; };
 		445964961FD05D6700E8085E /* WFSTParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 445964951FD05D6700E8085E /* WFSTParser.h */; };
 		4459649C1FD05D7F00E8085E /* WFSTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4459649B1FD05D7F00E8085E /* WFSTParser.m */; };
 		44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */; };
@@ -473,6 +475,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		440153DD1FDB270300D06901 /* SyncItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SyncItem.h; sourceTree = "<group>"; };
+		440153DF1FDB271E00D06901 /* SyncItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SyncItem.m; sourceTree = "<group>"; };
 		445964951FD05D6700E8085E /* WFSTParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFSTParser.h; sourceTree = "<group>"; };
 		4459649B1FD05D7F00E8085E /* WFSTParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFSTParser.m; sourceTree = "<group>"; };
 		44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCSpaconBackend.h; sourceTree = "<group>"; };
@@ -909,6 +913,15 @@
 				5678FC891CF652ED00D502C3 /* ZipZap.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		440153D81FDB26D900D06901 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				440153DD1FDB270300D06901 /* SyncItem.h */,
+				440153DF1FDB271E00D06901 /* SyncItem.m */,
+			);
+			name = Sync;
 			sourceTree = "<group>";
 		};
 		5406C9C71F94F08700B076F3 /* Recovered References */ = {
@@ -1660,6 +1673,7 @@
 		56CC07971C6E92EF00407D4A /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				440153D81FDB26D900D06901 /* Sync */,
 				560B10E31C77C15200BA15B8 /* Base */,
 				560AFB231C7E26F9006A060F /* RasterSource */,
 				561686141C752F4F00FC7FA6 /* FeatureSource */,
@@ -1891,6 +1905,7 @@
 				5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */,
 				5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */,
 				5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */,
+				440153DE1FDB270300D06901 /* SyncItem.h in Headers */,
 				561686001C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.h in Headers */,
 				5649B5F71BE280D6009947EF /* SCPolygon.h in Headers */,
 				566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */,
@@ -2365,6 +2380,7 @@
 				560B10E71C77C16000BA15B8 /* SCGpkgTable.m in Sources */,
 				563F426B1DB0622B005022A7 /* JSONKit.m in Sources */,
 				5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */,
+				440153E01FDB271E00D06901 /* SyncItem.m in Sources */,
 				5649B5BA1BE280D6009947EF /* SCGeometry.m in Sources */,
 				5649B5D51BE280D6009947EF /* SCLineString+MapKit.m in Sources */,
 				56A23B061D79EFEA00AB258B /* SCBoundingBox+GeoJSON.m in Sources */,

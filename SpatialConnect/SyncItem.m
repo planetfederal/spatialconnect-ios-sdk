@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2017 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +14,22 @@
  * limitations under the License
  */
 
-#import "SCAuthService.h"
-#import "SCBackendProtocol.h"
-#import "SCConfigService.h"
-#import "SCDataService.h"
-#import "SCRemoteConfig.h"
-#import "SCSensorService.h"
-#import "SCServiceLifecycle.h"
 #import "SyncItem.h"
-#import <Foundation/Foundation.h>
-#import <ReactiveCocoa/ReactiveCocoa.h>
 
-@interface SCExchangeBackend : NSObject <SCBackendProtocol> {
-  SCRemoteConfig *remoteConfig;
-  SCSensorService *sensorService;
-  SCAuthService *authService;
-  SCConfigService *configService;
-  SCDataService *dataService;
-  NSMutableArray *stores;
-  NSMutableArray *forms;
+@interface SyncItem ()
+@property(nonatomic, readwrite) NSInteger operation;
+@property(strong, readwrite) SCSpatialFeature *feature;
+@end
+
+@implementation SyncItem
+
+@synthesize operation, feature;
+
+- (id)initWithFeature:(SCSpatialFeature *)rs operation:(NSInteger)fs {
+  self = [super init];
+  if (self) {
+  }
+  return self;
 }
-
-- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 @end

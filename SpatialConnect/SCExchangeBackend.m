@@ -21,7 +21,10 @@
 #import "WFSTParser.h"
 #import <Foundation/Foundation.h>
 
-static NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
+NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
+NSInteger *const AUDIT_OP_CREATE = 1;
+NSInteger *const AUDIT_OP_UPDATE = 2;
+NSInteger *const AUDIT_OP_DELETE = 3;
 
 @implementation SCExchangeBackend
 
@@ -255,45 +258,48 @@ static NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
 
 - (RACSignal *)syncStore:(SCDataStore *)ds {
   id<SCSyncableStore> ss = (id<SCSyncableStore>)ds;
-  return [ss.unSent flattenMap:^RACSignal *(SCSpatialFeature *f) {
-    return [self send:f];
+  return [ss.unSent flattenMap:^RACSignal *(SyncItem *syncItem) {
+    return [self send:syncItem];
   }];
 }
 
-- (RACSignal *)send:(SCSpatialFeature *)feature {
-
+- (RACSignal *)send:(SyncItem *)syncItem {
   return [[[self isConnected] take:1] flattenMap:^RACStream *(NSNumber *n) {
     if (n.boolValue) {
-
       NSURL *url = [NSURL
           URLWithString:[NSString stringWithFormat:@"%@/geoserver/wfs",
                                                    remoteConfig.httpUri]];
-      NSString *wfsInsert = [self buildWFSTInsertPayload:feature];
-      NSData *wfsInsertBody =
-          [wfsInsert dataUsingEncoding:NSUTF8StringEncoding];
       NSString *authHeader =
           [NSString stringWithFormat:@"Bearer %@", [authService xAccessToken]];
+      NSString *wfsPayload;
+      if (syncItem.operation == AUDIT_OP_CREATE) {
+        wfsPayload = [self buildWFSTInsertPayload:syncItem.feature];
+      } else if (syncItem.operation == AUDIT_OP_UPDATE) {
+        wfsPayload = [self buildWFSTUpdatePayload:syncItem.feature];
+      } else if (syncItem.operation == AUDIT_OP_DELETE) {
+        wfsPayload = [self buildWFSTDeletePayload:syncItem.feature];
+      }
 
+      NSData *wfsPayloadBody =
+          [wfsPayload dataUsingEncoding:NSUTF8StringEncoding];
       NSData *res = [SCHttpUtils postDataRequestBLOCKING:url
-                                                    body:wfsInsertBody
+                                                    body:wfsPayloadBody
                                                     auth:authHeader
                                              contentType:XML];
 
       WFSTParser *wfstParser = [[WFSTParser alloc] initWithData:res];
-
       NSString *responseString =
           [[NSString alloc] initWithData:res encoding:NSUTF8StringEncoding];
-      // TODO: Need to re-work the way we get the unsent items from the audit
-      // table to include the
-      // audit operation, only save the featureId if its a create audit_op = 1
-      SCDataStore *store = [dataService storeByIdentifier:[feature storeId]];
+
+      SCDataStore *store =
+          [dataService storeByIdentifier:[syncItem.feature storeId]];
       id<SCSpatialStore> gkpgStore = (id<SCSpatialStore>)store;
       NSMutableDictionary *featureIdDict = [[NSMutableDictionary alloc] init];
       [featureIdDict setObject:wfstParser.featureId
                         forKey:LOCAL_FEATURE_ID_COL];
 
-      feature.properties = featureIdDict;
-      [[gkpgStore update:feature] subscribeError:^(NSError *error) {
+      syncItem.feature.properties = featureIdDict;
+      [[gkpgStore update:syncItem.feature] subscribeError:^(NSError *error) {
         DDLogError(@"Error Updating featureId error %@",
                    error.localizedFailureReason);
       }
@@ -303,7 +309,7 @@ static NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
 
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       if (wfstParser.success) {
-        return [ss updateAuditTable:feature];
+        return [ss updateAuditTable:syncItem.feature];
       } else {
         return [RACSignal empty];
       }
@@ -324,6 +330,19 @@ static NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
                                     feature.layerId,
                                     [self buildPropertiesXml:feature],
                                     [self buildGeometryXml:feature]];
+}
+
+- (NSString *)buildWFSTUpdatePayload:(SCSpatialFeature *)feature {
+
+  return [NSString stringWithFormat:wfstUpdateTemplate, feature.layerId,
+                                    [self buildPropertiesXml:feature],
+                                    [self buildFilterXml:feature]];
+}
+
+- (NSString *)buildWFSTDeletePayload:(SCSpatialFeature *)feature {
+
+  return [NSString stringWithFormat:wfstDeleteTemplate, feature.layerId,
+                                    [self buildFilterXml:feature]];
 }
 
 - (NSString *)buildPropertiesXml:(SCSpatialFeature *)feature {
@@ -359,6 +378,16 @@ static NSString *const LOCAL_FEATURE_ID_COL = @"_fid_";
   return geometryXml;
 }
 
+- (NSString *)buildFilterXml:(SCSpatialFeature *)feature {
+  NSString *ogcFilter = @"<ogc:Filter>\n"
+                         "   <ogc:FeatureId fid=\"%1$@\"/>\n"
+                         "</ogc:Filter>\n";
+  NSString *filterXml =
+      [NSString stringWithFormat:ogcFilter, feature.identifier];
+
+  return filterXml;
+}
+
 static NSString *wfstInsertTemplate =
     @"<wfs:Transaction service=\"WFS\" version=\"1.0.0\"\n"
      "xmlns:wfs=\"http://www.opengis.net/wfs\"\n"
@@ -382,8 +411,29 @@ static NSString *wfstPointTemplate =
      "</gml:Point>\n"
      "</%1$@>\n";
 
-static NSString *wfstDeleteTemplate = @"";
+static NSString *wfstDeleteTemplate =
+    @"<wfs:Transaction service=\"WFS\" version=\"1.0.0\"\n"
+     "xmlns:wfs=\"http://www.opengis.net/wfs\"\n"
+     "xmlns:gml=\"http://www.opengis.net/gml\"\n"
+     "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+     "  xsi:schemaLocation=\"http://www.opengis.net/wfs "
+     "http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd \">\n"
+     "  <wfs:Delete typeName=\"%1$@\">\n"
+     "   %2$@\n"
+     "  </wfs:Delete>\n"
+     "</wfs:Transaction>";
 
-static NSString *wfstUpdateTemplate = @"";
+static NSString *wfstUpdateTemplate =
+    @"<wfs:Transaction service=\"WFS\" version=\"1.0.0\"\n"
+     "  xmlns:wfs=\"http://www.opengis.net/wfs\"\n"
+     "  xmlns:gml=\"http://www.opengis.net/gml\"\n"
+     "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+     "  xsi:schemaLocation=\"http://www.opengis.net/wfs "
+     "http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd \">\n"
+     "  <wfs:Update typeName=\"%1$@\">\n"
+     "      %2$@\n"
+     "      %3$@\n"
+     "  </wfs:Update>\n"
+     "</wfs:Transaction>";
 
 @end
