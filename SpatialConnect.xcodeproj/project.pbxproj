@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		440153DE1FDB270300D06901 /* SyncItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 440153DD1FDB270300D06901 /* SyncItem.h */; };
 		440153E01FDB271E00D06901 /* SyncItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 440153DF1FDB271E00D06901 /* SyncItem.m */; };
+		4401542D1FE3081700D06901 /* WFSTUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4401542C1FE3081700D06901 /* WFSTUtils.h */; };
+		4401542F1FE3083F00D06901 /* WFTSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4401542E1FE3083F00D06901 /* WFTSUtils.m */; };
 		445964961FD05D6700E8085E /* WFSTParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 445964951FD05D6700E8085E /* WFSTParser.h */; };
 		4459649C1FD05D7F00E8085E /* WFSTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4459649B1FD05D7F00E8085E /* WFSTParser.m */; };
 		44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */; };
@@ -477,6 +479,8 @@
 /* Begin PBXFileReference section */
 		440153DD1FDB270300D06901 /* SyncItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SyncItem.h; sourceTree = "<group>"; };
 		440153DF1FDB271E00D06901 /* SyncItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SyncItem.m; sourceTree = "<group>"; };
+		4401542C1FE3081700D06901 /* WFSTUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFSTUtils.h; sourceTree = "<group>"; };
+		4401542E1FE3083F00D06901 /* WFTSUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFTSUtils.m; sourceTree = "<group>"; };
 		445964951FD05D6700E8085E /* WFSTParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFSTParser.h; sourceTree = "<group>"; };
 		4459649B1FD05D7F00E8085E /* WFSTParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFSTParser.m; sourceTree = "<group>"; };
 		44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCSpaconBackend.h; sourceTree = "<group>"; };
@@ -1105,6 +1109,8 @@
 				56FCFBD21D6FD6D5008A0B8C /* SCHttpUtils.m */,
 				445964951FD05D6700E8085E /* WFSTParser.h */,
 				4459649B1FD05D7F00E8085E /* WFSTParser.m */,
+				4401542C1FE3081700D06901 /* WFSTUtils.h */,
+				4401542E1FE3083F00D06901 /* WFTSUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1797,6 +1803,7 @@
 				5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */,
 				5649B5CC1BE280D6009947EF /* SCLinearRing+GeoJSON.h in Headers */,
 				566F6E421CE3B5680043FF0C /* SCFormConfig.h in Headers */,
+				4401542D1FE3081700D06901 /* WFSTUtils.h in Headers */,
 				5649B5D21BE280D6009947EF /* SCLineString+GeoJSON.h in Headers */,
 				5649B5AB1BE280D6009947EF /* SCFilterNotIn.h in Headers */,
 				56DC516D1BFD22AB002C71B3 /* SCServiceStatusEvent.h in Headers */,
@@ -2319,6 +2326,7 @@
 				5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */,
 				5649B5F01BE280D6009947EF /* SCOpenStreetMapSource.m in Sources */,
 				56F4375C1CA0955200EA1344 /* FMDatabase.m in Sources */,
+				4401542F1FE3083F00D06901 /* WFTSUtils.m in Sources */,
 				56F4375E1CA0955200EA1344 /* FMResultSet.m in Sources */,
 				5649B5FA1BE280D6009947EF /* SCPolygon+GeoJSON.m in Sources */,
 				44C2C63F1FA813D900A4CEBC /* SCExchangeBackend.m in Sources */,

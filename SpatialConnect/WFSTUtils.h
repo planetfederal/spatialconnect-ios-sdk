@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2017 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +14,13 @@
  * limitations under the License
  */
 
-#import "SCAuthService.h"
-#import "SCBackendProtocol.h"
-#import "SCConfigService.h"
-#import "SCDataService.h"
-#import "SCRemoteConfig.h"
-#import "SCSensorService.h"
-#import "SCServiceLifecycle.h"
-#import "SyncItem.h"
-#import "WFSTUtils.h"
+#import "SCSpatialFeature.h"
 #import <Foundation/Foundation.h>
-#import <ReactiveCocoa/ReactiveCocoa.h>
 
-@interface SCExchangeBackend : NSObject <SCBackendProtocol> {
-  SCRemoteConfig *remoteConfig;
-  SCSensorService *sensorService;
-  SCAuthService *authService;
-  SCConfigService *configService;
-  SCDataService *dataService;
-  NSMutableArray *stores;
-  NSMutableArray *forms;
-}
+@interface WFSTUtils : NSObject
 
-- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
-
++ (NSString *)buildWFSTInsertPayload:(SCSpatialFeature *)feature url:(NSString *)remoteUrl;
++ (NSString *)buildWFSTUpdatePayload:(SCSpatialFeature *)feature url:(NSString *)remoteUrl;
++ (NSString *)buildWFSTDeletePayload:(SCSpatialFeature *)feature url:(NSString *)remoteUrl;
 @end
+
