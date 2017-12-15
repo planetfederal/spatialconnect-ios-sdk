@@ -21,16 +21,22 @@
 
 @protocol SCBackendProtocol <NSObject>
 
+@required
 - (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)svcs;
 
+@optional
 - (BOOL)stop;
 
+@required
 - (NSString *)backendUri;
 
+@optional
 - (RACSignal *)notifications;
 
+@optional
 - (void)updateDeviceToken:(NSString *)token;
 
-- (RACBehaviorSubject *)isConnected;
+@required
+- (RACSignal *)isConnected;
 
 @end

@@ -88,7 +88,7 @@
   return nil;
 }
 
-- (RACBehaviorSubject *)isConnected {
+- (RACSignal *)isConnected {
   return connectedToBroker;
 }
 

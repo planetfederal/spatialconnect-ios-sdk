@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		440153DE1FDB270300D06901 /* SyncItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 440153DD1FDB270300D06901 /* SyncItem.h */; };
+		440153DE1FDB270300D06901 /* SyncItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 440153DD1FDB270300D06901 /* SyncItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		440153E01FDB271E00D06901 /* SyncItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 440153DF1FDB271E00D06901 /* SyncItem.m */; };
 		4401542D1FE3081700D06901 /* WFSTUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4401542C1FE3081700D06901 /* WFSTUtils.h */; };
 		4401542F1FE3083F00D06901 /* WFTSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4401542E1FE3083F00D06901 /* WFTSUtils.m */; };
@@ -1912,7 +1912,6 @@
 				5649B5861BE280D6009947EF /* SCBoundingBox+MapKit.h in Headers */,
 				5649B59D1BE280D6009947EF /* SCFilterGreaterThanEqual.h in Headers */,
 				5649B5A51BE280D6009947EF /* SCFilterLike.h in Headers */,
-				440153DE1FDB270300D06901 /* SyncItem.h in Headers */,
 				561686001C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.h in Headers */,
 				5649B5F71BE280D6009947EF /* SCPolygon.h in Headers */,
 				566B1AF81D91B72F00A545A4 /* WFSDataStore.h in Headers */,
@@ -1932,6 +1931,7 @@
 				56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */,
 				563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */,
 				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
+				440153DE1FDB270300D06901 /* SyncItem.h in Headers */,
 				56A23B0D1D7B1BB300AB258B /* SCMapkitTileGridSource.h in Headers */,
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,

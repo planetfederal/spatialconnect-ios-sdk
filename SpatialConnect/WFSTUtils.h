@@ -19,8 +19,10 @@
 
 @interface WFSTUtils : NSObject
 
-+ (NSString *)buildWFSTInsertPayload:(SCSpatialFeature *)feature url:(NSString *)remoteUrl;
-+ (NSString *)buildWFSTUpdatePayload:(SCSpatialFeature *)feature url:(NSString *)remoteUrl;
-+ (NSString *)buildWFSTDeletePayload:(SCSpatialFeature *)feature url:(NSString *)remoteUrl;
++ (NSString *)buildWFSTInsertPayload:(SCSpatialFeature *)feature
+                                 url:(NSString *)remoteUrl;
++ (NSString *)buildWFSTUpdatePayload:(SCSpatialFeature *)feature
+                                 url:(NSString *)remoteUrl;
++ (NSString *)buildWFSTDeletePayload:(SCSpatialFeature *)feature
+                                 url:(NSString *)remoteUrl;
 @end
-

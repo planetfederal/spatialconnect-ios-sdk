@@ -64,14 +64,7 @@ NSInteger *const AUDIT_OP_DELETE = 3;
   return remoteConfig.httpUri;
 }
 
-- (RACSignal *)notifications {
-  return nil;
-}
-
-- (void)updateDeviceToken:(NSString *)token {
-}
-
-- (RACBehaviorSubject *)isConnected {
+- (RACSignal *)isConnected {
   return sensorService.isConnected;
 }
 
@@ -123,11 +116,7 @@ NSInteger *const AUDIT_OP_DELETE = 3;
       [NSString stringWithFormat:@"Bearer %@", [authService xAccessToken]];
   NSDictionary *res =
       [SCHttpUtils getRequestURLAsDictBLOCKING:url auth:authHeader];
-
-  NSMutableArray *rw = res[@"rw"];
-  [rw enumerateObjectsUsingBlock:^(NSString *l, NSUInteger idx, BOOL *stop) {
-    [layerNames addObject:l];
-  }];
+  [layerNames addObjectsFromArray:res[@"rw"]];
 
   return layerNames;
 }
@@ -145,44 +134,41 @@ NSInteger *const AUDIT_OP_DELETE = 3;
       [SCHttpUtils getRequestURLAsDictBLOCKING:url auth:authHeader];
 
   NSMutableArray *attributes = res[@"attributes"];
-  NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
-  [d setObject:layerName forKey:@"form_key"];
-  [d setObject:res[@"title"] forKey:@"form_label"];
-  [d setObject:[NSNumber numberWithInteger:1] forKey:@"version"];
-  [d setObject:[NSNumber numberWithInteger:[self randomNumberBetween:1
-                                                           maxNumber:100000]]
-         forKey:@"id"];
+  NSArray *fields = [[[[attributes rac_sequence] signal]
+      map:^NSDictionary *(NSDictionary *attribute) {
+        NSString *t = attribute[@"attribute_type"];
+        BOOL *visible = [attribute[@"visible"] boolValue];
+        if ([t containsString:@"gml"]) {
+          visible = NO;
+        }
 
-  NSMutableArray *fields = [NSMutableArray new];
-  [attributes enumerateObjectsUsingBlock:^(NSDictionary *attribute,
-                                           NSUInteger idx, BOOL *stop) {
+        NSDictionary *fieldDict = @{
+          @"field_key" : attribute[@"attribute"],
+          @"field_label" : attribute[@"attribute"],
+          @"field_visible" : [NSNumber numberWithBool:visible],
+          @"type" : [self fieldType:attribute],
+          @"position" : attribute[@"display_order"]
+        };
+        return fieldDict;
+      }] toArray];
 
-    NSString *t = attribute[@"attribute_type"];
-    BOOL *visible = [attribute[@"visible"] boolValue];
-    if ([t containsString:@"gml"]) {
-      visible = NO;
-    }
+  // TODO: TBD at this moment on how to indentiy featuers
+  //  NSDictionary *fieldDict = @{
+  //    @"field_key" : LOCAL_FEATURE_ID_COL,
+  //    @"field_label" : LOCAL_FEATURE_ID_COL,
+  //    @"field_visible" : [NSNumber numberWithBool:NO],
+  //    @"type" : @"string"
+  //  };
+  //  [fields addObject:fieldDict];
 
-    NSDictionary *fieldDict = @{
-      @"field_key" : attribute[@"attribute"],
-      @"field_label" : attribute[@"attribute"],
-      @"field_visible" : [NSNumber numberWithBool:visible],
-      @"type" : [self fieldType:attribute],
-      @"position" : attribute[@"display_order"]
-    };
-    [fields addObject:fieldDict];
-  }];
-
-  // add id to indentify feature
-  NSDictionary *fieldDict = @{
-    @"field_key" : LOCAL_FEATURE_ID_COL,
-    @"field_label" : LOCAL_FEATURE_ID_COL,
-    @"field_visible" : [NSNumber numberWithBool:NO],
-    @"type" : @"string"
+  NSDictionary *d = @{
+    @"form_key" : layerName,
+    @"form_label" : res[@"title"],
+    @"version" : [NSNumber numberWithInteger:1],
+    @"id" : [NSNumber
+        numberWithInteger:[self randomNumberBetween:1 maxNumber:100000]],
+    @"fields" : fields
   };
-  [fields addObject:fieldDict];
-
-  [d setObject:fields forKey:@"fields"];
 
   return [[SCFormConfig alloc] initWithDict:d];
   ;
@@ -273,11 +259,14 @@ NSInteger *const AUDIT_OP_DELETE = 3;
           [NSString stringWithFormat:@"Bearer %@", [authService xAccessToken]];
       NSString *wfsPayload;
       if (syncItem.operation == AUDIT_OP_CREATE) {
-        wfsPayload = [WFSTUtils buildWFSTInsertPayload:syncItem.feature url:remoteConfig.httpUri];
+        wfsPayload = [WFSTUtils buildWFSTInsertPayload:syncItem.feature
+                                                   url:remoteConfig.httpUri];
       } else if (syncItem.operation == AUDIT_OP_UPDATE) {
-        wfsPayload = [WFSTUtils buildWFSTUpdatePayload:syncItem.feature url:remoteConfig.httpUri];
+        wfsPayload = [WFSTUtils buildWFSTUpdatePayload:syncItem.feature
+                                                   url:remoteConfig.httpUri];
       } else if (syncItem.operation == AUDIT_OP_DELETE) {
-        wfsPayload = [WFSTUtils buildWFSTDeletePayload:syncItem.feature url:remoteConfig.httpUri];
+        wfsPayload = [WFSTUtils buildWFSTDeletePayload:syncItem.feature
+                                                   url:remoteConfig.httpUri];
       }
 
       NSData *wfsPayloadBody =
@@ -299,13 +288,16 @@ NSInteger *const AUDIT_OP_DELETE = 3;
                         forKey:LOCAL_FEATURE_ID_COL];
 
       syncItem.feature.properties = featureIdDict;
-      [[gkpgStore update:syncItem.feature] subscribeError:^(NSError *error) {
-        DDLogError(@"Error Updating featureId error %@",
-                   error.localizedFailureReason);
-      }
-          completed:^{
-            DDLogInfo(@"Updating featureId succesfully from exchange");
-          }];
+      // TODO: updating the feature's unique ID from the WFST request is TBD at
+      // this time
+      //      [[gkpgStore update:syncItem.feature] subscribeError:^(NSError
+      //      *error) {
+      //        DDLogError(@"Error Updating featureId error %@",
+      //                   error.localizedFailureReason);
+      //      }
+      //          completed:^{
+      //            DDLogInfo(@"Updating featureId succesfully from exchange");
+      //          }];
 
       id<SCSyncableStore> ss = (id<SCSyncableStore>)store;
       if (wfstParser.success) {
