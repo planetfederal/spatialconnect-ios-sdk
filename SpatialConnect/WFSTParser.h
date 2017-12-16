@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2017 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,36 +16,11 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol SCAuthProtocol <NSObject>
+@interface WFSTParser : NSObject <NSXMLParserDelegate>
 
-- (BOOL)authFromCache;
+@property(nonatomic) NSString *featureId;
+@property(nonatomic) BOOL *success;
 
-/*!
- *  @brief sets the token and auth status in the library for the
- *  user and pass
- *
- *  @param u user's email address
- *  @param p clear text password
- */
-- (BOOL)authenticate:(NSString *)u password:(NSString *)p;
-
-/*!
- *  @brief this will void the x-access-token
- */
-- (void)logout;
-
-/*!
- *  @brief JSONWebToken from auth server
- *
- *  @return NSString
- */
-- (NSString *)xAccessToken;
-
-/*!
- The user's email address
-
- @return NSString email
- */
-- (NSString *)username;
+- (id)initWithData:(NSData *)d;
 
 @end

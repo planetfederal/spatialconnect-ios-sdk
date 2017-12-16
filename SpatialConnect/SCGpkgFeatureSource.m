@@ -19,6 +19,7 @@
 #import "SCGeoFilterContains.h"
 #import "SCGeometry+GPKG.h"
 #import "SCPoint+GPKG.h"
+#import "SyncItem.h"
 #import "sqlite3.h"
 
 @interface SCGpkgFeatureSource ()
@@ -36,6 +37,7 @@
 NSString *const kSentColName = @"sent";
 NSString *const kReceivedColName = @"received";
 NSString *const kAuditIdColName = @"audit_id";
+NSString *const kAuditOp = @"audit_op";
 
 @implementation SCGpkgFeatureSource
 
@@ -269,7 +271,13 @@ NSString *const kAuditIdColName = @"audit_id";
                                                  [f.identifier longLongValue]]];
 
     [self.pool inDatabase:^(FMDatabase *db) {
-      BOOL success = [db executeUpdate:sql withArgumentsInArray:vals];
+      NSError *err;
+      BOOL success = [db executeUpdate:sql values:vals error:&err];
+      if (err) {
+        DDLogError(@"%@", err.description);
+        [subscriber sendError:err];
+        return;
+      }
       if (success) {
         dispatch_async(
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -375,6 +383,7 @@ NSString *const kAuditIdColName = @"audit_id";
   [dict removeObjectForKey:kSentColName];
   [dict removeObjectForKey:kReceivedColName];
   [dict removeObjectForKey:kAuditIdColName];
+  [dict removeObjectForKey:kAuditOp];
   f.properties = dict;
   f.layerId = self.name;
   return f;
@@ -385,7 +394,8 @@ NSString *const kAuditIdColName = @"audit_id";
       stringWithFormat:@"SELECT * FROM %@ WHERE sent IS NULL", self.auditName];
   return
       [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [self query:sql toSubscriber:subscriber];
+        //[self query:sql toSubscriber:subscriber];
+        [self queryUnsentItems:sql toSubscriber:subscriber];
         return nil;
       }];
 }
@@ -417,6 +427,53 @@ NSString *const kAuditIdColName = @"audit_id";
         }];
         return nil;
       }];
+}
+
+- (void)queryUnsentItems:(NSString *)sql
+            toSubscriber:(id<RACSubscriber>)subscriber {
+  [self.pool inDatabase:^(FMDatabase *db) {
+    FMResultSet *rs = [db executeQuery:sql];
+    while ([rs next]) {
+      SCSpatialFeature *f;
+      long long ident = [rs longLongIntForColumn:self.pkColName];
+      if (self.geomColName) {
+        @try {
+          NSData *bytes = [rs dataForColumn:self.geomColName];
+          if (bytes) {
+            f = [SCGeometry fromGeometryBinary:bytes crs:self.crs];
+          }
+        } @catch (NSException *exception) {
+          DDLogError(@"Error Parsing Geometry binary");
+        } @finally {
+          if (!f) {
+            f = [SCSpatialFeature new];
+          }
+        }
+      } else {
+        f = [SCSpatialFeature new];
+      }
+      f.identifier = [NSString stringWithFormat:@"%lld", ident];
+      NSMutableDictionary *dict = [[rs resultDictionary] mutableCopy];
+      [dict removeObjectForKey:self.pkColName];
+      [dict removeObjectForKey:self.geomColName];
+      [dict removeObjectForKey:kSentColName];
+      [dict removeObjectForKey:kReceivedColName];
+      [dict removeObjectForKey:kAuditIdColName];
+      [dict removeObjectForKey:kAuditOp];
+      f.properties = dict;
+      f.layerId = self.name;
+
+      SyncItem *syncItem =
+          [[SyncItem alloc] initWithFeature:f
+                                  operation:[rs intForColumn:kAuditOp]];
+      [subscriber sendNext:syncItem];
+    }
+    [rs close];
+    dispatch_async(
+        dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+          [subscriber sendCompleted];
+        });
+  }];
 }
 
 @end

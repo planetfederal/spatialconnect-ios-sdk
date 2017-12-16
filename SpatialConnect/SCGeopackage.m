@@ -100,7 +100,9 @@
 - (void)addFeatureSource:(NSString *)name withTypes:(NSDictionary *)types {
   [[RACSignal concat:@[
     [self addContentsTable:name withTypes:types], [self addAuditTable:name],
-    [self addAuditTrigger:name]
+    [self addAuditTrigger:name triggerType:@"insert"],
+    [self addAuditTrigger:name triggerType:@"update"],
+    [self addAuditTrigger:name triggerType:@"delete"]
   ]] subscribeError:^(NSError *error) {
     NSLog(@"addFeatureSource error: %@", error.localizedDescription);
   }
@@ -162,13 +164,18 @@
                              @"PRIMARY KEY AUTOINCREMENT",
                              name];
 
+        __block NSString *geometryColumn = @"geom";
         [types enumerateKeysAndObjectsUsingBlock:^(NSString *k, NSString *t,
                                                    BOOL *stop) {
           NSString *type = [t lowercaseString];
-          if (![[k lowercaseString] isEqualToString:@"geom"]) {
+          if (![[type lowercaseString] isEqualToString:@"geometry"]) {
             [createSql appendFormat:@",%@ %@", k, type];
+          } else {
+            DDLogError(@"Type is geometry for :%@", k);
+            geometryColumn = k;
           }
         }];
+
         [createSql appendString:@")"];
         BOOL success = [db executeStatements:createSql];
         if (!success) {
@@ -177,11 +184,12 @@
           [subscriber sendError:db.lastError];
           return;
         }
+
         NSString *addColSql =
             [NSString stringWithFormat:@"SELECT "
-                                       @"AddGeometryColumn('%@','geom','"
+                                       @"AddGeometryColumn('%@','%@','"
                                        @"Geometry',4326)",
-                                       name];
+                                       name, geometryColumn];
         BOOL geomAdded = [db executeStatements:addColSql];
         if (!geomAdded) {
           DDLogError(@"Error:%@", db.lastError.description);
@@ -285,14 +293,19 @@
 
         [auditTypes setObject:@"DATETIME" forKey:@"sent"];
         [auditTypes setObject:@"DATETIME" forKey:@"received"];
+        [auditTypes setObject:@"INTEGER" forKey:@"audit_op"];
 
+        __block NSString *geometryColumn = @"geom";
         [auditTypes enumerateKeysAndObjectsUsingBlock:^(
                         NSString *k, NSString *t, BOOL *stop) {
           NSString *type = [t lowercaseString];
-          if (![[k lowercaseString] isEqualToString:@"geom"]) {
+          if (![[type lowercaseString] isEqualToString:@"geometry"]) {
             [createAuditSql appendFormat:@",%@ %@", k, type];
+          } else {
+            geometryColumn = k;
           }
         }];
+
         [createAuditSql appendString:@")"];
         [db beginTransaction];
         BOOL success = [db executeStatements:createAuditSql];
@@ -304,9 +317,9 @@
         }
         NSString *addGeomSql =
             [NSString stringWithFormat:@"SELECT "
-                                       @"AddGeometryColumn('%@','geom','"
+                                       @"AddGeometryColumn('%@','%@','"
                                        @"Geometry',4326)",
-                                       auditTableName];
+                                       auditTableName, geometryColumn];
         success = [db executeStatements:addGeomSql];
         if (success) {
           [db commit];
@@ -325,13 +338,31 @@
   }];
 }
 
-- (RACSignal *)addAuditTrigger:(NSString *)name {
+- (RACSignal *)addAuditTrigger:(NSString *)layer triggerType:(NSString *)type {
   return [RACSignal createSignal:^RACDisposable *(
                         id<RACSubscriber> subscriber) {
     [self.pool inDatabase:^(FMDatabase *db) {
-      NSString *auditTableName = [NSString stringWithFormat:@"%@_audit", name];
-      NSString *triggerName =
-          [NSString stringWithFormat:@"%@_insert", auditTableName];
+      NSString *auditTableName = [NSString stringWithFormat:@"%@_audit", layer];
+      NSString *triggerName;
+      NSString *auditOp;
+      NSString *triggerEvent;
+      NSString *columnPrefix;
+      if ([type isEqualToString:@"insert"]) {
+        triggerName = [NSString stringWithFormat:@"%@_insert", auditTableName];
+        auditOp = @"1";
+        triggerEvent = @"INSERT";
+        columnPrefix = @"NEW";
+      } else if ([type isEqualToString:@"update"]) {
+        triggerName = [NSString stringWithFormat:@"%@_update", auditTableName];
+        auditOp = @"2";
+        triggerEvent = @"UPDATE";
+        columnPrefix = @"NEW";
+      } else if ([type isEqualToString:@"delete"]) {
+        triggerName = [NSString stringWithFormat:@"%@_delete", auditTableName];
+        auditOp = @"3";
+        triggerEvent = @"DELETE";
+        columnPrefix = @"OLD";
+      }
 
       NSMutableString *dropTriggerSql = [NSMutableString
           stringWithFormat:@"DROP TRIGGER IF EXISTS %@", triggerName];
@@ -344,7 +375,7 @@
         return;
       }
 
-      FMResultSet *rs = [db getTableSchema:name];
+      FMResultSet *rs = [db getTableSchema:layer];
       NSMutableDictionary *auditTypes = [NSMutableDictionary new];
       while ([rs next]) {
         [auditTypes setObject:[rs stringForColumn:@"type"]
@@ -354,6 +385,7 @@
 
       [auditTypes setObject:@"DATETIME" forKey:@"sent"];
       [auditTypes setObject:@"DATETIME" forKey:@"received"];
+      [auditTypes setObject:@"INTEGER" forKey:@"audit_op"];
 
       NSString *cols = [[auditTypes allKeys] componentsJoinedByString:@","];
       NSString *vals = [[[[[[auditTypes allKeys] rac_sequence] signal]
@@ -362,13 +394,17 @@
                 [value isEqualToString:@"received"]) {
               return @"NULL";
             }
-            return [NSString stringWithFormat:@"NEW.'%@'", value];
+            if ([value isEqualToString:@"audit_op"]) {
+              return auditOp;
+            }
+            return [NSString stringWithFormat:@"%@.'%@'", columnPrefix, value];
           }] toArray] componentsJoinedByString:@","];
 
       NSMutableString *triggerSql = [NSMutableString
-          stringWithFormat:@"CREATE TRIGGER %@ AFTER INSERT ON %@ BEGIN "
+          stringWithFormat:@"CREATE TRIGGER %@ AFTER %@ ON %@ BEGIN "
                            @"INSERT INTO %@ (%@) VALUES (%@); END",
-                           triggerName, name, auditTableName, cols, vals];
+                           triggerName, triggerEvent, layer, auditTableName,
+                           cols, vals];
 
       success = [db executeStatements:triggerSql];
       if (success) {
@@ -417,83 +453,64 @@
 }
 
 - (RACSignal *)updateAuditTable:(SCGpkgFeatureSource *)fs {
-  return [RACSignal createSignal:^RACDisposable *(
-                        id<RACSubscriber> subscriber) {
-    [self.pool inDatabase:^(FMDatabase *db) {
-      // add sent and received columns to audit table
-      FMResultSet *rs = [db getTableSchema:fs.auditName];
-      NSMutableArray *existingCols = [NSMutableArray new];
-      while ([rs next]) {
-        NSString *colName = [rs stringForColumn:@"name"];
-        [existingCols addObject:colName];
-      }
-      [rs close];
-      NSMutableString *stmts = [NSMutableString new];
 
-      if ([existingCols indexOfObject:@"sent"] == NSNotFound) {
-        NSString *sql =
-            [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@;",
-                                       fs.auditName, @"sent", @"DATETIME"];
-        [stmts appendString:sql];
-      }
-      if ([existingCols indexOfObject:@"received"] == NSNotFound) {
-        NSString *sql =
-            [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@;",
-                                       fs.auditName, @"received", @"DATETIME"];
-        [stmts appendString:sql];
-      }
-      [db beginTransaction];
-      BOOL success = [db executeStatements:stmts];
-      if (!success) {
-        DDLogError(@"Error:%@", db.lastError.description);
-        [db rollback];
-        [subscriber sendError:db.lastError];
-        return;
-      }
+  return
+      [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self.pool inDatabase:^(FMDatabase *db) {
+          // add sent and received columns to audit table
+          FMResultSet *rs = [db getTableSchema:fs.auditName];
+          NSMutableArray *existingCols = [NSMutableArray new];
+          while ([rs next]) {
+            NSString *colName = [rs stringForColumn:@"name"];
+            [existingCols addObject:colName];
+          }
+          [rs close];
+          NSMutableString *stmts = [NSMutableString new];
 
-      // add sent and received to insert trigger
-      NSString *triggerName =
-          [NSString stringWithFormat:@"%@_insert", fs.auditName];
-      rs = [db getTableSchema:fs.name];
-      NSMutableDictionary *auditTypes = [NSMutableDictionary new];
-      while ([rs next]) {
-        [auditTypes setObject:[rs stringForColumn:@"type"]
-                       forKey:[rs stringForColumn:@"name"]];
-      }
-      [rs close];
-      [auditTypes setObject:@"DATETIME" forKey:@"sent"];
-      [auditTypes setObject:@"DATETIME" forKey:@"received"];
-      NSString *cols = [[auditTypes allKeys] componentsJoinedByString:@","];
-      NSString *vals = [[[[[[auditTypes allKeys] rac_sequence] signal]
-          map:^NSString *(NSString *value) {
-            if ([value isEqualToString:@"sent"] ||
-                [value isEqualToString:@"received"]) {
-              return @"NULL";
-            }
-            return [NSString stringWithFormat:@"NEW.'%@'", value];
-          }] toArray] componentsJoinedByString:@","];
+          if ([existingCols indexOfObject:@"sent"] == NSNotFound) {
+            NSString *sql =
+                [NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@;",
+                                           fs.auditName, @"sent", @"DATETIME"];
+            [stmts appendString:sql];
+          }
+          if ([existingCols indexOfObject:@"received"] == NSNotFound) {
+            NSString *sql = [NSString
+                stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@;",
+                                 fs.auditName, @"received", @"DATETIME"];
+            [stmts appendString:sql];
+          }
+          if ([existingCols indexOfObject:@"audit_op"] == NSNotFound) {
+            NSString *sql = [NSString
+                stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@;",
+                                 fs.auditName, @"audit_op", @"INTEGER"];
+            [stmts appendString:sql];
+          }
+          [db beginTransaction];
+          BOOL success = [db executeStatements:stmts];
+          if (success) {
+            [db commit];
+          } else {
+            DDLogError(@"Error:%@", db.lastError.description);
+            [db rollback];
+            [subscriber sendError:db.lastError];
+            return;
+          }
 
-      NSMutableString *triggerSql = [NSMutableString
-          stringWithFormat:
-              @"DROP TRIGGER %@; CREATE TRIGGER %@ AFTER INSERT ON %@ BEGIN "
-              @"INSERT INTO %@ (%@) VALUES (%@); END",
-              triggerName, triggerName, fs.name, fs.auditName, cols, vals];
-
-      success = [db executeStatements:triggerSql];
-      if (success) {
-        [db commit];
-        dispatch_async(
-            dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-              [subscriber sendCompleted];
-            });
-      } else {
-        [db rollback];
-        DDLogError(@"%@", db.lastError);
-        [subscriber sendError:db.lastError];
-      }
-    }];
-    return nil;
-  }];
+          // add sent, receive, and or audit_op to create,update,delete triggers
+          [[RACSignal concat:@[
+            [self addAuditTrigger:fs.name triggerType:@"insert"],
+            [self addAuditTrigger:fs.name triggerType:@"update"],
+            [self addAuditTrigger:fs.name triggerType:@"delete"]
+          ]] subscribeError:^(NSError *error) {
+            NSLog(@"updating exisiting audit table trigers error: %@",
+                  error.localizedDescription);
+          }
+              completed:^{
+                [subscriber sendCompleted];
+              }];
+        }];
+        return nil;
+      }];
 }
 
 - (void)removeFeatureSource:(NSString *)name {

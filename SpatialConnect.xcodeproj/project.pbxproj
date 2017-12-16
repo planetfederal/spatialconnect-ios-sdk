@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		440153DE1FDB270300D06901 /* SyncItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 440153DD1FDB270300D06901 /* SyncItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		440153E01FDB271E00D06901 /* SyncItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 440153DF1FDB271E00D06901 /* SyncItem.m */; };
+		4401542D1FE3081700D06901 /* WFSTUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4401542C1FE3081700D06901 /* WFSTUtils.h */; };
+		4401542F1FE3083F00D06901 /* WFTSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4401542E1FE3083F00D06901 /* WFTSUtils.m */; };
+		445964961FD05D6700E8085E /* WFSTParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 445964951FD05D6700E8085E /* WFSTParser.h */; };
+		4459649C1FD05D7F00E8085E /* WFSTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4459649B1FD05D7F00E8085E /* WFSTParser.m */; };
+		44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */; };
+		44B5E6121FAB5A0000BC49DD /* SCSpaconBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */; };
+		44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44C2C63D1FA812D600A4CEBC /* SCExchangeBackend.h in Headers */ = {isa = PBXBuildFile; fileRef = 44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */; };
+		44C2C63F1FA813D900A4CEBC /* SCExchangeBackend.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */; };
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
 		5406C9CE1F94F1FA00B076F3 /* SCExchangeAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */; };
 		5406C9CF1F94F1FA00B076F3 /* SCExchangeAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */; };
@@ -466,6 +477,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		440153DD1FDB270300D06901 /* SyncItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SyncItem.h; sourceTree = "<group>"; };
+		440153DF1FDB271E00D06901 /* SyncItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SyncItem.m; sourceTree = "<group>"; };
+		4401542C1FE3081700D06901 /* WFSTUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFSTUtils.h; sourceTree = "<group>"; };
+		4401542E1FE3083F00D06901 /* WFTSUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFTSUtils.m; sourceTree = "<group>"; };
+		445964951FD05D6700E8085E /* WFSTParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WFSTParser.h; sourceTree = "<group>"; };
+		4459649B1FD05D7F00E8085E /* WFSTParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WFSTParser.m; sourceTree = "<group>"; };
+		44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCSpaconBackend.h; sourceTree = "<group>"; };
+		44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCSpaconBackend.m; sourceTree = "<group>"; };
+		44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCBackendProtocol.h; sourceTree = "<group>"; };
+		44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCExchangeBackend.h; sourceTree = "<group>"; };
+		44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCExchangeBackend.m; sourceTree = "<group>"; };
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
 		5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCExchangeAuthMethod.h; sourceTree = "<group>"; };
 		5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCExchangeAuthMethod.m; sourceTree = "<group>"; };
@@ -897,6 +919,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		440153D81FDB26D900D06901 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				440153DD1FDB270300D06901 /* SyncItem.h */,
+				440153DF1FDB271E00D06901 /* SyncItem.m */,
+			);
+			name = Sync;
+			sourceTree = "<group>";
+		};
 		5406C9C71F94F08700B076F3 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -1076,6 +1107,10 @@
 				5649B4EF1BE280D5009947EF /* SCFileUtils.m */,
 				56FCFBD11D6FD6D5008A0B8C /* SCHttpUtils.h */,
 				56FCFBD21D6FD6D5008A0B8C /* SCHttpUtils.m */,
+				445964951FD05D6700E8085E /* WFSTParser.h */,
+				4459649B1FD05D7F00E8085E /* WFSTParser.m */,
+				4401542C1FE3081700D06901 /* WFSTUtils.h */,
+				4401542E1FE3083F00D06901 /* WFTSUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1644,6 +1679,7 @@
 		56CC07971C6E92EF00407D4A /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				440153D81FDB26D900D06901 /* Sync */,
 				560B10E31C77C15200BA15B8 /* Base */,
 				560AFB231C7E26F9006A060F /* RasterSource */,
 				561686141C752F4F00FC7FA6 /* FeatureSource */,
@@ -1674,6 +1710,11 @@
 			children = (
 				56D5AD371D5D037800597300 /* SCBackendService.h */,
 				56D5AD381D5D037800597300 /* SCBackendService.m */,
+				44C2C6361FA810D500A4CEBC /* SCBackendProtocol.h */,
+				44C2C63C1FA812D600A4CEBC /* SCExchangeBackend.h */,
+				44C2C63E1FA813D900A4CEBC /* SCExchangeBackend.m */,
+				44B5E60B1FAB59E800BC49DD /* SCSpaconBackend.h */,
+				44B5E6111FAB5A0000BC49DD /* SCSpaconBackend.m */,
 			);
 			name = BackendService;
 			sourceTree = "<group>";
@@ -1745,10 +1786,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				563F426A1DB0622B005022A7 /* JSONKit.h in Headers */,
+				44C2C6371FA810D500A4CEBC /* SCBackendProtocol.h in Headers */,
 				56554E681D54EA03000D77E7 /* SCLocationStore.h in Headers */,
 				56554E671D54EA03000D77E7 /* SCFormStore.h in Headers */,
 				567D7A051D6380FF00BDC3CC /* SCNotification.h in Headers */,
 				56D5AD391D5D037800597300 /* SCBackendService.h in Headers */,
+				445964961FD05D6700E8085E /* WFSTParser.h in Headers */,
 				56DBFA061D2F0CC600FFE4FF /* SCAuthService.h in Headers */,
 				5649B5921BE280D6009947EF /* SCDataStoreLifeCycle.h in Headers */,
 				5616860E1C7511CD00FC7FA6 /* SCGpkgDataColumnConstraintsTable.h in Headers */,
@@ -1760,6 +1803,7 @@
 				5649B5D41BE280D6009947EF /* SCLineString+MapKit.h in Headers */,
 				5649B5CC1BE280D6009947EF /* SCLinearRing+GeoJSON.h in Headers */,
 				566F6E421CE3B5680043FF0C /* SCFormConfig.h in Headers */,
+				4401542D1FE3081700D06901 /* WFSTUtils.h in Headers */,
 				5649B5D21BE280D6009947EF /* SCLineString+GeoJSON.h in Headers */,
 				5649B5AB1BE280D6009947EF /* SCFilterNotIn.h in Headers */,
 				56DC516D1BFD22AB002C71B3 /* SCServiceStatusEvent.h in Headers */,
@@ -1770,6 +1814,7 @@
 				560E31CF1BF23F83009DA680 /* SCKeyTuple.h in Headers */,
 				5649B60F1BE280D6009947EF /* SCSpatialFeature.h in Headers */,
 				563BEC6E1BE6F42800778EDA /* GeopackageStore.h in Headers */,
+				44C2C63D1FA812D600A4CEBC /* SCExchangeBackend.h in Headers */,
 				56F4375A1CA0955200EA1344 /* FMDB.h in Headers */,
 				5649B6161BE280D6009947EF /* SCTileMapSource.h in Headers */,
 				5649B5F31BE280D6009947EF /* SCPoint+GeoJSON.h in Headers */,
@@ -1841,6 +1886,7 @@
 				5649B5CE1BE280D6009947EF /* SCLinearRing+MapKit.h in Headers */,
 				5645C4E41BED5BA1006E4128 /* SCPoint+GPKG.h in Headers */,
 				5649B5C31BE280D6009947EF /* SCGeometryCollection+MapKit.h in Headers */,
+				44B5E60C1FAB59E800BC49DD /* SCSpaconBackend.h in Headers */,
 				5649B5D81BE280D6009947EF /* SCLoggingAssertionHandler.h in Headers */,
 				56F4375D1CA0955200EA1344 /* FMResultSet.h in Headers */,
 				5649B6041BE280D6009947EF /* SCRasterSource.h in Headers */,
@@ -1885,6 +1931,7 @@
 				56285CE21E36BC13002D9934 /* SCServerAuthMethod.h in Headers */,
 				563296451E37B40F002D1F07 /* SCAuthProtocol.h in Headers */,
 				566B1AF61D91B72F00A545A4 /* SCHttpUtils.h in Headers */,
+				440153DE1FDB270300D06901 /* SyncItem.h in Headers */,
 				56A23B0D1D7B1BB300AB258B /* SCMapkitTileGridSource.h in Headers */,
 				566B1AF41D91B72F00A545A4 /* XMLDictionary.h in Headers */,
 				5649B5E31BE280D6009947EF /* SCMultiPoint+GeoJSON.h in Headers */,
@@ -2275,16 +2322,20 @@
 				5415E5471F19600D00F59008 /* SCNoAuthMethod.m in Sources */,
 				5649B5C41BE280D6009947EF /* SCGeometryCollection+MapKit.m in Sources */,
 				5649B6051BE280D6009947EF /* SCRasterSource.m in Sources */,
+				44B5E6121FAB5A0000BC49DD /* SCSpaconBackend.m in Sources */,
 				5649B5AA1BE280D6009947EF /* SCFilterNotEqual.m in Sources */,
 				5649B5F01BE280D6009947EF /* SCOpenStreetMapSource.m in Sources */,
 				56F4375C1CA0955200EA1344 /* FMDatabase.m in Sources */,
+				4401542F1FE3083F00D06901 /* WFTSUtils.m in Sources */,
 				56F4375E1CA0955200EA1344 /* FMResultSet.m in Sources */,
 				5649B5FA1BE280D6009947EF /* SCPolygon+GeoJSON.m in Sources */,
+				44C2C63F1FA813D900A4CEBC /* SCExchangeBackend.m in Sources */,
 				56A23B0E1D7B1BB300AB258B /* SCMapkitTileGridSource.m in Sources */,
 				563F42691DB0622B005022A7 /* CHANGELOG.md in Sources */,
 				561686011C74EBCD00FC7FA6 /* SCGpkgGeometryColumn.m in Sources */,
 				5649B5961BE280D6009947EF /* SCFilter.m in Sources */,
 				5649B5C81BE280D6009947EF /* SCJavascriptBridgeAPI.m in Sources */,
+				4459649C1FD05D7F00E8085E /* WFSTParser.m in Sources */,
 				5649B5B11BE280D6009947EF /* SCGeoFilter.m in Sources */,
 				5649B5B51BE280D6009947EF /* SCGeoFilterDisjoint.m in Sources */,
 				5649B59A1BE280D6009947EF /* SCFilterEqual.m in Sources */,
@@ -2337,6 +2388,7 @@
 				560B10E71C77C16000BA15B8 /* SCGpkgTable.m in Sources */,
 				563F426B1DB0622B005022A7 /* JSONKit.m in Sources */,
 				5649B5AE1BE280D6009947EF /* SCFilterNotLike.m in Sources */,
+				440153E01FDB271E00D06901 /* SyncItem.m in Sources */,
 				5649B5BA1BE280D6009947EF /* SCGeometry.m in Sources */,
 				5649B5D51BE280D6009947EF /* SCLineString+MapKit.m in Sources */,
 				56A23B061D79EFEA00AB258B /* SCBoundingBox+GeoJSON.m in Sources */,

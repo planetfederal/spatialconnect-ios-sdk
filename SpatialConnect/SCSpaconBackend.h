@@ -29,48 +29,31 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <UserNotifications/UserNotifications.h>
 
-@interface SCBackendService : SCService <SCServiceLifecycle> {
+@interface SCSpaconBackend
+    : SCService <SCBackendProtocol, UNUserNotificationCenterDelegate> {
+  NSString *mqttEndpoint;
+  NSString *mqttPort;
+  NSString *mqttProtocol;
+  NSString *httpProtocol;
+  NSString *httpEndpoint;
+  NSString *httpPort;
+  MQTTSessionManager *sessionManager;
+  RACSignal *multicast;
   SCConfigService *configService;
   SCAuthService *authService;
   SCDataService *dataService;
   SCSensorService *sensorService;
-  id<SCBackendProtocol> backend;
+  SCRemoteConfig *remoteConfig;
+  NSString *backendUri;
 }
 
-/*!
- Upon initialization you will inject the server type to use for your
- application
-
- @param bp any banckend server that implements the SCBackendServiceProtocol
- @return id Instance of SCBackendService
- */
-- (id)initWithBackend:(id<SCBackendProtocol>)bp;
-
-/*!
- A way to register/update a device token required for push notificaiton
-
- @param token device token required for push notificaitons
- */
-- (void)updateDeviceToken:(NSString *)token;
-
-/*!
- Endpoint running backend Server
- */
-@property(readonly, strong) NSString *backendUri;
-
-/*!
- Observable emiting SCNotifications
- */
-@property(readonly, strong) RACSignal *notifications;
-
-/*!
- Behavior subject return YES for Internet access, NO for offline
- */
-@property(nonatomic, readonly) RACBehaviorSubject *isConnected;
-
-/*!
- Behavior Observable emitting YES when the SCConfig has been received
- */
 @property(readonly, strong) RACBehaviorSubject *configReceived;
+
+/*!
+ Behavior Observable emitting YES when Connected, NO when the Connection is down
+ */
+@property(readonly, strong) RACBehaviorSubject *connectedToBroker;
+
+- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 @end

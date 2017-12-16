@@ -18,8 +18,9 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
-static NSString *const XML = @"application/x-www-form-urlencoded";
+static NSString *const FORM = @"application/x-www-form-urlencoded";
 static NSString *const JSON = @"application/json; charset=utf-8";
+static NSString *const XML = @"text/xml";
 
 @interface SCHttpUtils : NSObject
 
@@ -35,6 +36,15 @@ static NSString *const JSON = @"application/json; charset=utf-8";
 + (RACSignal *)getRequestURLAsDict:(NSURL *)url
                            headers:
                                (NSDictionary<NSString *, NSString *> *)header;
+
+/*!
+ *  @brief Blocking request to fetch an JSON Response
+ *
+ *  @param url http/https resource with JSON Response
+ *  @param auth HTTP Basic Auth
+ *  @return NSDictionary of a JSON Response
+ */
++ (NSDictionary *)getRequestURLAsDictBLOCKING:(NSURL *)url auth:auth;
 
 /*!
  *  @brief Blocking request to fetch an JSON Response

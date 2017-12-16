@@ -57,16 +57,30 @@ static NSString *const CLIENT_ID = @"client_id";
 }
 
 - (NSDictionary *)dictionary {
-  return @{
-    HTTP_PROTOCOL : _httpProtocol,
-    HTTP_HOST : _httpHost,
-    HTTP_PORT : _httpPort,
-    MQTT_PROTOCOL : _mqttProtocol,
-    MQTT_HOST : _mqttHost,
-    MQTT_PORT : _mqttPort,
-    AUTH_METHOD : _auth,
-    CLIENT_ID : _clientId
-  };
+
+  NSDictionary *returnDict;
+
+  if (_mqttHost) {
+    returnDict = @{
+      HTTP_PROTOCOL : _httpProtocol,
+      HTTP_HOST : _httpHost,
+      HTTP_PORT : _httpPort,
+      MQTT_PROTOCOL : _mqttProtocol,
+      MQTT_HOST : _mqttHost,
+      MQTT_PORT : _mqttPort,
+      AUTH_METHOD : _auth,
+      CLIENT_ID : _clientId
+    };
+  } else {
+    returnDict = @{
+      HTTP_PROTOCOL : _httpProtocol,
+      HTTP_HOST : _httpHost,
+      HTTP_PORT : _httpPort,
+      AUTH_METHOD : _auth,
+      CLIENT_ID : _clientId
+    };
+  }
+  return returnDict;
 }
 
 @end

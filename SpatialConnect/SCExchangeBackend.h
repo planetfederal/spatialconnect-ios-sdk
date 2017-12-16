@@ -14,38 +14,28 @@
  * limitations under the License
  */
 
+#import "SCAuthService.h"
+#import "SCBackendProtocol.h"
+#import "SCConfigService.h"
+#import "SCDataService.h"
+#import "SCRemoteConfig.h"
+#import "SCSensorService.h"
+#import "SCServiceLifecycle.h"
+#import "SyncItem.h"
+#import "WFSTUtils.h"
 #import <Foundation/Foundation.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
-@protocol SCAuthProtocol <NSObject>
+@interface SCExchangeBackend : NSObject <SCBackendProtocol> {
+  SCRemoteConfig *remoteConfig;
+  SCSensorService *sensorService;
+  SCAuthService *authService;
+  SCConfigService *configService;
+  SCDataService *dataService;
+  NSMutableArray *stores;
+  NSMutableArray *forms;
+}
 
-- (BOOL)authFromCache;
-
-/*!
- *  @brief sets the token and auth status in the library for the
- *  user and pass
- *
- *  @param u user's email address
- *  @param p clear text password
- */
-- (BOOL)authenticate:(NSString *)u password:(NSString *)p;
-
-/*!
- *  @brief this will void the x-access-token
- */
-- (void)logout;
-
-/*!
- *  @brief JSONWebToken from auth server
- *
- *  @return NSString
- */
-- (NSString *)xAccessToken;
-
-/*!
- The user's email address
-
- @return NSString email
- */
-- (NSString *)username;
+- (id)initWithRemoteConfig:(SCRemoteConfig *)cfg;
 
 @end

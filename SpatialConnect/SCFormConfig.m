@@ -118,6 +118,8 @@ static NSString *const FIELDS = @"fields";
     return SCFORM_TYPE_COUNTER;
   } else if ([s containsString:@"select"]) {
     return SCFORM_TYPE_SELECT;
+  } else if ([s containsString:@"geometry"]) {
+    return SCFORM_TYPE_GEOMETRY;
   }
   return -1;
 }
@@ -148,6 +150,8 @@ static NSString *const FIELDS = @"fields";
     return @"counter";
   } else if (t == SCFORM_TYPE_SELECT) {
     return @"select";
+  } else if (t == SCFORM_TYPE_GEOMETRY) {
+    return @"geometry";
   }
   return nil;
 }
@@ -177,6 +181,8 @@ static NSString *const FIELDS = @"fields";
     return @"INTEGER";
   } else if (t == SCFORM_TYPE_SELECT) {
     return @"TEXT";
+  } else if (t == SCFORM_TYPE_GEOMETRY) {
+    return @"GEOMETRY";
   }
   return @"NULL";
 }
@@ -204,6 +210,8 @@ static NSString *const FIELDS = @"fields";
     return @"INTEGER";
   } else if ([t isEqualToString:@"select"]) {
     return @"TEXT";
+  } else if ([t isEqualToString:@"geometry"]) {
+    return @"GEOMETRY";
   }
   return @"NULL";
 }

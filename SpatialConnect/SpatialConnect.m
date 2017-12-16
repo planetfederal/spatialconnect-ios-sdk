@@ -53,13 +53,19 @@
 
 - (id)init {
   if (self = [super init]) {
-    _cache = [SCCache new];
-    _serviceGraph = [SCServiceGraph new];
-    _sensorService = [SCSensorService new];
-    _dataService = [SCDataService new];
-    _configService = [SCConfigService new];
-    [self addDefaultServices];
-    [self setupLogger];
+    DDLogInfo(@"Initialzing sdk......");
+    @try {
+      _cache = [SCCache new];
+      _serviceGraph = [SCServiceGraph new];
+      _sensorService = [SCSensorService new];
+      _dataService = [SCDataService new];
+      _configService = [SCConfigService new];
+      [self addDefaultServices];
+      [self setupLogger];
+    } @catch (NSException *e) {
+      // deal with the exception
+      DDLogInfo(@"ERROR %@", e.reason);
+    }
   }
   return self;
 }
@@ -137,9 +143,9 @@
   [_serviceGraph restartAllServices];
 }
 
-- (void)connectBackend:(SCRemoteConfig *)r {
+- (void)connectBackend:(id<SCBackendProtocol>)bp {
   if (![_serviceGraph nodeById:[SCBackendService serviceId]]) {
-    _backendService = [[SCBackendService alloc] initWithRemoteConfig:r];
+    _backendService = [[SCBackendService alloc] initWithBackend:bp];
     [self addService:_backendService];
     [self startService:[SCBackendService serviceId]];
   } else {

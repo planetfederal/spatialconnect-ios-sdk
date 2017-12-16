@@ -24,6 +24,7 @@
 #import "SCSpatialStore.h"
 #import "SCStoreConfig.h"
 #import "SCSyncableStore.h"
+#import "SyncItem.h"
 #import <Foundation/Foundation.h>
 
 extern NSString *const SCGeopackageErrorDomain;

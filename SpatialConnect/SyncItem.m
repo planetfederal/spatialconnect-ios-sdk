@@ -1,4 +1,4 @@
-/**
+/*!
  * Copyright 2017 Boundless http://boundlessgeo.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,38 +14,22 @@
  * limitations under the License
  */
 
-#import <Foundation/Foundation.h>
+#import "SyncItem.h"
 
-@protocol SCAuthProtocol <NSObject>
+@interface SyncItem ()
+@property(nonatomic, readwrite) NSInteger operation;
+@property(strong, readwrite) SCSpatialFeature *feature;
+@end
 
-- (BOOL)authFromCache;
+@implementation SyncItem
 
-/*!
- *  @brief sets the token and auth status in the library for the
- *  user and pass
- *
- *  @param u user's email address
- *  @param p clear text password
- */
-- (BOOL)authenticate:(NSString *)u password:(NSString *)p;
+@synthesize operation, feature;
 
-/*!
- *  @brief this will void the x-access-token
- */
-- (void)logout;
-
-/*!
- *  @brief JSONWebToken from auth server
- *
- *  @return NSString
- */
-- (NSString *)xAccessToken;
-
-/*!
- The user's email address
-
- @return NSString email
- */
-- (NSString *)username;
+- (id)initWithFeature:(SCSpatialFeature *)rs operation:(NSInteger)fs {
+  self = [super init];
+  if (self) {
+  }
+  return self;
+}
 
 @end

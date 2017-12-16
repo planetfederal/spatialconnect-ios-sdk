@@ -14,38 +14,29 @@
  * limitations under the License
  */
 
+#import "SCRemoteConfig.h"
+#import "SCServiceLifecycle.h"
 #import <Foundation/Foundation.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
-@protocol SCAuthProtocol <NSObject>
+@protocol SCBackendProtocol <NSObject>
 
-- (BOOL)authFromCache;
+@required
+- (BOOL)start:(NSDictionary<NSString *, id<SCServiceLifecycle>> *)svcs;
 
-/*!
- *  @brief sets the token and auth status in the library for the
- *  user and pass
- *
- *  @param u user's email address
- *  @param p clear text password
- */
-- (BOOL)authenticate:(NSString *)u password:(NSString *)p;
+@optional
+- (BOOL)stop;
 
-/*!
- *  @brief this will void the x-access-token
- */
-- (void)logout;
+@required
+- (NSString *)backendUri;
 
-/*!
- *  @brief JSONWebToken from auth server
- *
- *  @return NSString
- */
-- (NSString *)xAccessToken;
+@optional
+- (RACSignal *)notifications;
 
-/*!
- The user's email address
+@optional
+- (void)updateDeviceToken:(NSString *)token;
 
- @return NSString email
- */
-- (NSString *)username;
+@required
+- (RACSignal *)isConnected;
 
 @end

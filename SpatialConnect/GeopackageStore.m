@@ -283,9 +283,9 @@ NSString *const SCGeopackageErrorDomain = @"SCGeopackageErrorDomain";
 
 - (RACSignal *)unSent {
   RACSignal *unSentFeatures = [[[self.gpkg unSent] rac_sequence] signal];
-  return [unSentFeatures map:^SCSpatialFeature *(SCSpatialFeature *f) {
-    f.storeId = self.storeId;
-    return f;
+  return [unSentFeatures map:^SyncItem *(SyncItem *syncItem) {
+    syncItem.feature.storeId = self.storeId;
+    return syncItem;
   }];
 }
 

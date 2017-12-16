@@ -92,8 +92,8 @@
       [self postRequest:action[@"payload"] responseSubscriber:subscriber];
     else if ([actionType isEqualToString:BACKENDSERVICE_HTTP_URI])
       [self getBackendUri:subscriber];
-    else if ([actionType isEqualToString:BACKENDSERVICE_MQTT_CONNECTED])
-      [self mqttConnected:subscriber];
+    else if ([actionType isEqualToString:BACKENDSERVICE_CONNECTED])
+      [self backendConnected:subscriber];
 
     return nil;
   }];
@@ -105,6 +105,7 @@
 }
 
 - (void)storeList:(id<RACSubscriber>)subscriber {
+
   NSArray *arr =
       [[[SpatialConnect sharedInstance] dataService] storeListDictionary];
   [subscriber sendNext:@{@"stores" : arr}];
@@ -369,12 +370,8 @@
   SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
   [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
-        [[[[bs configReceived] filter:^BOOL(NSNumber *received) {
-          return received.boolValue;
-        }] take:1] subscribeNext:^(id x) {
-          [[bs notifications] subscribeNext:^(SCNotification *n) {
-            [subscriber sendNext:[n dictionary]];
-          }];
+        [[bs notifications] subscribeNext:^(SCNotification *n) {
+          [subscriber sendNext:[n dictionary]];
         }];
       }];
 }
@@ -414,19 +411,17 @@
   [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-        [subscriber sendNext:@{
-          @"backendUri" : [bs.backendUri stringByAppendingString:@"/api/"]
-        }];
+        [subscriber sendNext:@{@"backendUri" : [bs backendUri]}];
       }];
 
   [subscriber sendCompleted];
 }
 
-- (void)mqttConnected:(id<RACSubscriber>)subscriber {
+- (void)backendConnected:(id<RACSubscriber>)subscriber {
   [[[SpatialConnect sharedInstance] serviceRunning:[SCBackendService serviceId]]
       subscribeNext:^(id value) {
         SCBackendService *bs = [[SpatialConnect sharedInstance] backendService];
-        [[bs connectedToBroker] subscribeNext:^(id x) {
+        [[bs isConnected] subscribeNext:^(id x) {
           [subscriber sendNext:@{@"connected" : x}];
         }];
       }];

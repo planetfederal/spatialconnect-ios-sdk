@@ -80,7 +80,7 @@
   NSDictionary *res = [SCHttpUtils postDataRequestAsDictBLOCKING:url
                                                             body:authBody
                                                             auth:authHeader
-                                                     contentType:XML];
+                                                     contentType:FORM];
   if (res && (jwt = res[@"access_token"])) {
     SpatialConnect *sc = [SpatialConnect sharedInstance];
     SCCache *c = sc.cache;
@@ -99,7 +99,8 @@
 }
 
 - (NSString *)xAccessToken {
-  return jwt;
+  SCCache *c = [[SpatialConnect sharedInstance] cache];
+  return [c valueForKey:TOKEN];
 }
 
 - (void)logout {
@@ -127,7 +128,7 @@
   NSDictionary *res = [SCHttpUtils postDataRequestAsDictBLOCKING:url
                                                             body:authBody
                                                             auth:authHeader
-                                                     contentType:XML];
+                                                     contentType:FORM];
   if (res && (jwt = res[@"access_token"])) {
     SpatialConnect *sc = [SpatialConnect sharedInstance];
     SCCache *c = sc.cache;
