@@ -19,7 +19,7 @@
 
 #import "SCPredicate.h"
 #import "SCBoundingBox.h"
-#import "SCFIlterEqual.h"
+#import "SCFilterEqual.h"
 #import "SCFilter.h"
 #import "SCFilterBetween.h"
 #import "SCFilterGreaterThan.h"
