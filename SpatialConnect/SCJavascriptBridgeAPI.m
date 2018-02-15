@@ -94,6 +94,8 @@
       [self getBackendUri:subscriber];
     else if ([actionType isEqualToString:BACKENDSERVICE_MQTT_CONNECTED])
       [self mqttConnected:subscriber];
+    else if ([actionType isEqualToString:CONFIG_ADD_STORE])
+      [self addStore:action[@"payload"] responseSubscriber:subscriber];
 
     return nil;
   }];
@@ -432,4 +434,14 @@
       }];
 }
 
+- (void)addStore:(NSDictionary *)storeConfig
+      responseSubscriber:(id<RACSubscriber>)subscriber {
+  SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
+  SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  SCConfig *cachedConfig = cs.cachedConfig;
+  SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:storeConfig];
+  [cachedConfig addStore:config];
+  [ds registerAndStartStoreByConfig:config];
+}
+  
 @end

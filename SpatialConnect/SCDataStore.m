@@ -97,6 +97,7 @@
         [[SCHttpUtils getRequestURLAsData:u] subscribeNext:^(RACTuple *t) {
           data = t.first;
           self.downloadProgress = t.second;
+          DDLogWarn(@"Download progress at %@ ", self.downloadProgress);
           [subscriber sendNext:t];
         }
             error:^(NSError *error) {
