@@ -15,9 +15,10 @@
  */
 
 /*!
- * A list of actions that don't belong in the schema project because they are only relevant
- * to the mobile SDK domain.  If more than one service will send the action, then move it to the
- * schema repo so it can be accessed from com.boundlessgeo.schema.Actions.
+ * A list of actions that don't belong in the schema project because they are
+ * only relevant to the mobile SDK domain.  If more than one service will send
+ * the action, then move it to the schema repo so it can be accessed from
+ * com.boundlessgeo.schema.Actions.
  */
 
 extern NSString *const DELETE_SC_DATASTORE;

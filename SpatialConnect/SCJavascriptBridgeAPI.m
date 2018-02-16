@@ -440,11 +440,12 @@
 }
 
 - (void)addStore:(NSDictionary *)storeConfig
-      responseSubscriber:(id<RACSubscriber>)subscriber {
+    responseSubscriber:(id<RACSubscriber>)subscriber {
   SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
   SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
   SCConfig *cachedConfig = cs.cachedConfig;
-  SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:storeConfig];
+  SCStoreConfig *config =
+      [[SCStoreConfig alloc] initWithDictionary:storeConfig];
   [cachedConfig addStore:config];
   [ds registerAndStartStoreByConfig:config];
   [subscriber sendCompleted];
@@ -453,8 +454,8 @@
 - (void)deleteAllDataStores:(id<RACSubscriber>)subscriber {
   SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
   NSArray *storeList = [ds storeList];
-  [storeList enumerateObjectsUsingBlock:^(SCDataStore *store,
-                                    NSUInteger idx, BOOL *stop) {
+  [storeList enumerateObjectsUsingBlock:^(SCDataStore *store, NSUInteger idx,
+                                          BOOL *stop) {
     [ds unregisterStore:store];
   }];
   [subscriber sendCompleted];
@@ -463,11 +464,11 @@
 - (void)deleteDataStore:(NSDictionary *)value
      responseSubscriber:(id<RACSubscriber>)subscriber {
   SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
-  SCDataStore *store =
-    [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:value[@"storeId"]];
+  SCDataStore *store = [[[SpatialConnect sharedInstance] dataService]
+      storeByIdentifier:value[@"storeId"]];
   [ds unregisterStore:store];
   DDLogWarn(@"---->>>>> Deleted data store");
   [subscriber sendCompleted];
 }
-  
+
 @end
