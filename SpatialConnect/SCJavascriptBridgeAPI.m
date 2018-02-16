@@ -19,6 +19,7 @@
 
 #import "SCJavascriptBridgeAPI.h"
 #import "Actions.h"
+#import "SCActions.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCHttpUtils.h"
@@ -96,6 +97,10 @@
       [self mqttConnected:subscriber];
     else if ([actionType isEqualToString:CONFIG_ADD_STORE])
       [self addStore:action[@"payload"] responseSubscriber:subscriber];
+    else if ([actionType isEqualToString:DELETE_SC_DATASTORE])
+      [self deleteDataStore:action[@"payload"] responseSubscriber:subscriber];
+    else if ([actionType isEqualToString:DELETE_ALL_SC_DATASTORES])
+      [self deleteAllDataStores:subscriber];
 
     return nil;
   }];
@@ -442,6 +447,27 @@
   SCStoreConfig *config = [[SCStoreConfig alloc] initWithDictionary:storeConfig];
   [cachedConfig addStore:config];
   [ds registerAndStartStoreByConfig:config];
+  [subscriber sendCompleted];
+}
+
+- (void)deleteAllDataStores:(id<RACSubscriber>)subscriber {
+  SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  NSArray *storeList = [ds storeList];
+  [storeList enumerateObjectsUsingBlock:^(SCDataStore *store,
+                                    NSUInteger idx, BOOL *stop) {
+    [ds unregisterStore:store];
+  }];
+  [subscriber sendCompleted];
+}
+
+- (void)deleteDataStore:(NSDictionary *)value
+     responseSubscriber:(id<RACSubscriber>)subscriber {
+  SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  SCDataStore *store =
+    [[[SpatialConnect sharedInstance] dataService] storeByIdentifier:value[@"storeId"]];
+  [ds unregisterStore:store];
+  DDLogWarn(@"---->>>>> Deleted data store");
+  [subscriber sendCompleted];
 }
   
 @end
