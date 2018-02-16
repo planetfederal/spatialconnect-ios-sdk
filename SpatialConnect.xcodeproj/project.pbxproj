@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44D89B002036780B000B0A5E /* SCActions.h in Headers */ = {isa = PBXBuildFile; fileRef = 44D89AFF2036780B000B0A5E /* SCActions.h */; };
+		44D89B0620367823000B0A5E /* SCAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D89B0520367823000B0A5E /* SCAction.m */; };
 		44DF99571DFFA05800AAAAA0 /* SCWFSTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */; };
 		5406C9CE1F94F1FA00B076F3 /* SCExchangeAuthMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */; };
 		5406C9CF1F94F1FA00B076F3 /* SCExchangeAuthMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */; };
@@ -466,6 +468,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		44D89AFF2036780B000B0A5E /* SCActions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCActions.h; sourceTree = "<group>"; };
+		44D89B0520367823000B0A5E /* SCAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCAction.m; sourceTree = "<group>"; };
 		44DF99561DFFA05800AAAAA0 /* SCWFSTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCWFSTest.m; sourceTree = "<group>"; };
 		5406C9CC1F94F1FA00B076F3 /* SCExchangeAuthMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCExchangeAuthMethod.h; sourceTree = "<group>"; };
 		5406C9CD1F94F1FA00B076F3 /* SCExchangeAuthMethod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SCExchangeAuthMethod.m; sourceTree = "<group>"; };
@@ -1558,6 +1562,8 @@
 			children = (
 				562EC6561E901B8B003D9F2C /* Actions.h */,
 				562EC6571E901B8B003D9F2C /* Actions.m */,
+				44D89AFF2036780B000B0A5E /* SCActions.h */,
+				44D89B0520367823000B0A5E /* SCAction.m */,
 			);
 			name = Actions;
 			sourceTree = "<group>";
@@ -1874,6 +1880,7 @@
 				566B1AF31D91B72F00A545A4 /* SCRemoteConfig.h in Headers */,
 				5649B5881BE280D6009947EF /* SCComparisonPredicate.h in Headers */,
 				56FB3EB91CF6A2BD00C3DA4B /* FMDatabaseAdditions.h in Headers */,
+				44D89B002036780B000B0A5E /* SCActions.h in Headers */,
 				56A23B051D79EFEA00AB258B /* SCBoundingBox+GeoJSON.h in Headers */,
 				56DBFA0C1D2F269C00FFE4FF /* KeychainItemWrapper.h in Headers */,
 				565E9ECE1DB7C49F00AEAB60 /* SCCache.h in Headers */,
@@ -2255,6 +2262,7 @@
 				5649B5B31BE280D6009947EF /* SCGeoFilterContains.m in Sources */,
 				5649B5AC1BE280D6009947EF /* SCFilterNotIn.m in Sources */,
 				5649B6081BE280D6009947EF /* SCSensorService.m in Sources */,
+				44D89B0620367823000B0A5E /* SCAction.m in Sources */,
 				561685FD1C74E69D00FC7FA6 /* SCGpkgGeometryColumnsTable.m in Sources */,
 				561686131C75194D00FC7FA6 /* SCGpkgDataColumnConstraint.m in Sources */,
 				566F6E431CE3B5680043FF0C /* SCFormConfig.m in Sources */,

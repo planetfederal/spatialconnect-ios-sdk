@@ -19,6 +19,7 @@
 
 #import "SCJavascriptBridgeAPI.h"
 #import "Actions.h"
+#import "SCActions.h"
 #import "SCFileUtils.h"
 #import "SCGeoJSONExtensions.h"
 #import "SCHttpUtils.h"
@@ -94,6 +95,12 @@
       [self getBackendUri:subscriber];
     else if ([actionType isEqualToString:BACKENDSERVICE_MQTT_CONNECTED])
       [self mqttConnected:subscriber];
+    else if ([actionType isEqualToString:CONFIG_ADD_STORE])
+      [self addStore:action[@"payload"]];
+    else if ([actionType isEqualToString:DELETE_SC_DATASTORE])
+      [self deleteDataStore:action[@"payload"]];
+    else if ([actionType isEqualToString:DELETE_ALL_SC_DATASTORES])
+      [self deleteAllDataStores];
 
     return nil;
   }];
@@ -430,6 +437,39 @@
           [subscriber sendNext:@{@"connected" : x}];
         }];
       }];
+}
+
+- (void)addStore:(NSDictionary *)storeConfig {
+  SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
+  SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  SCConfig *cachedConfig = cs.cachedConfig;
+  SCStoreConfig *config =
+      [[SCStoreConfig alloc] initWithDictionary:storeConfig];
+  [cachedConfig addStore:config];
+  [ds registerAndStartStoreByConfig:config];
+}
+
+- (void)deleteAllDataStores {
+  SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
+  SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  SCConfig *cachedConfig = cs.cachedConfig;
+
+  NSArray *storeList = [ds storeList];
+  [storeList enumerateObjectsUsingBlock:^(SCDataStore *store, NSUInteger idx,
+                                          BOOL *stop) {
+    [ds unregisterStore:store];
+    [cachedConfig removeStore:store.storeId];
+  }];
+}
+
+- (void)deleteDataStore:(NSDictionary *)value {
+  SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
+  SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  SCDataStore *store = [[[SpatialConnect sharedInstance] dataService]
+      storeByIdentifier:value[@"storeId"]];
+  SCConfig *cachedConfig = cs.cachedConfig;
+  [cachedConfig removeStore:value[@"storeId"]];
+  [ds unregisterStore:store];
 }
 
 @end
