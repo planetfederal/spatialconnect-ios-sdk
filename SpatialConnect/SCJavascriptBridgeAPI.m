@@ -96,11 +96,11 @@
     else if ([actionType isEqualToString:BACKENDSERVICE_MQTT_CONNECTED])
       [self mqttConnected:subscriber];
     else if ([actionType isEqualToString:CONFIG_ADD_STORE])
-      [self addStore:action[@"payload"] responseSubscriber:subscriber];
+      [self addStore:action[@"payload"]];
     else if ([actionType isEqualToString:DELETE_SC_DATASTORE])
-      [self deleteDataStore:action[@"payload"] responseSubscriber:subscriber];
+      [self deleteDataStore:action[@"payload"]];
     else if ([actionType isEqualToString:DELETE_ALL_SC_DATASTORES])
-      [self deleteAllDataStores:subscriber];
+      [self deleteAllDataStores];
 
     return nil;
   }];
@@ -439,8 +439,7 @@
       }];
 }
 
-- (void)addStore:(NSDictionary *)storeConfig
-    responseSubscriber:(id<RACSubscriber>)subscriber {
+- (void)addStore:(NSDictionary *)storeConfig {
   SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
   SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
   SCConfig *cachedConfig = cs.cachedConfig;
@@ -448,27 +447,29 @@
       [[SCStoreConfig alloc] initWithDictionary:storeConfig];
   [cachedConfig addStore:config];
   [ds registerAndStartStoreByConfig:config];
-  [subscriber sendCompleted];
 }
 
-- (void)deleteAllDataStores:(id<RACSubscriber>)subscriber {
+- (void)deleteAllDataStores {
+  SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
   SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
+  SCConfig *cachedConfig = cs.cachedConfig;
+
   NSArray *storeList = [ds storeList];
   [storeList enumerateObjectsUsingBlock:^(SCDataStore *store, NSUInteger idx,
                                           BOOL *stop) {
     [ds unregisterStore:store];
+    [cachedConfig removeStore:store.storeId];
   }];
-  [subscriber sendCompleted];
 }
 
-- (void)deleteDataStore:(NSDictionary *)value
-     responseSubscriber:(id<RACSubscriber>)subscriber {
+- (void)deleteDataStore:(NSDictionary *)value {
+  SCConfigService *cs = [[SpatialConnect sharedInstance] configService];
   SCDataService *ds = [[SpatialConnect sharedInstance] dataService];
   SCDataStore *store = [[[SpatialConnect sharedInstance] dataService]
       storeByIdentifier:value[@"storeId"]];
+  SCConfig *cachedConfig = cs.cachedConfig;
+  [cachedConfig removeStore:value[@"storeId"]];
   [ds unregisterStore:store];
-  DDLogWarn(@"---->>>>> Deleted data store");
-  [subscriber sendCompleted];
 }
 
 @end
